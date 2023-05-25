@@ -41,7 +41,7 @@ import java.util.function.Consumer;
 public class Main extends JavaPlugin {
 
 	private static Main instance;
-	public static int id = 13932;
+	public static int id = 110059;
 	public static String latestVersion;
 
 

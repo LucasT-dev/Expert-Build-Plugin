@@ -65,14 +65,10 @@ public class GeneralListener implements Listener {
 
 		//update system
 		Main.updateChecker(version -> {
-			if (Main.getVersion().equals(version)) {
-				p.sendMessage(Main.prefix + "There is not a new update available.");
-			} else {
+			if (!Main.getVersion().equals(version)) {
 				p.sendMessage(Main.prefix + "There is a new update available, you are running on version " + Main.getVersion() + ", version " + Main.latestVersion + " is available ");
 			}
 		},Main.id);
-
-		p.sendMessage(Main.prefix + "This version of Expert-Build is custom, a newer version is available !");
 
 		//patch Fawe bug
 		if (p.getInventory().contains(Material.WOODEN_AXE)) {
