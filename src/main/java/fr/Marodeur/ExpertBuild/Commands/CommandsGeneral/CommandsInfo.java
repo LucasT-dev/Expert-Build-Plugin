@@ -1,0 +1,118 @@
+package fr.Marodeur.ExpertBuild.Commands.CommandsGeneral;
+
+import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
+import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
+import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class CommandsInfo implements CommandExecutor, TabCompleter {
+
+	private final List<String> list = Arrays.asList("info", "version", "help", "reload", "sel_mode");
+
+	@Override
+	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, String @NotNull [] args) {
+		if (args.length <= 1) {
+			List<String> l = new ArrayList<>();
+			StringUtil.copyPartialMatches(args[0], this.list, l);
+			return l;
+		}
+		return null;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, String[] args) {
+
+		if (!sender.isOp() | !sender.hasPermission("expbuild.use")) {
+			new UtilsFAWE().sendMessage(sender, MsgEnum.NOT_PERM);
+			return false;
+		}
+
+		if (cmd.getName().equalsIgnoreCase("expbuild")) {
+			if (args.length == 0) {
+				sender.sendMessage(Main.prefix + " Usages : /expbuild");
+				sender.sendMessage("  §7Arguments : <info/version/help/reload>");
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("info")) {
+				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
+
+				TextComponent URL_Discord = new TextComponent("§1Discord §7link : click here");
+				URL_Discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+						new ComponentBuilder("§7Open Discord URL").create()));
+				URL_Discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/rJeJu8AcmB"));
+				sender.spigot().sendMessage(URL_Discord);
+
+				TextComponent URL_Youtube = new TextComponent("§8GitHub §7link : click here");
+				URL_Youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+						new ComponentBuilder("§7Open GitHub report bug").create()));
+				URL_Youtube.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+						"https://github.com/Marodeurun/Expert-Build-Doc/blob/main/SECURITY.md"));
+				sender.spigot().sendMessage(URL_Youtube);
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("version")) {
+				sender.sendMessage(Main.prefix + " Version : " + Main.getInstance().getDescription().getVersion());
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("help")) {
+
+				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
+				TextComponent github_doc = new TextComponent("§5EXP-Build §7Doc : click here");
+				github_doc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+						new ComponentBuilder("§7Open documentation URL").create()));
+				github_doc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+						"https://github.com/Marodeurun/Expert-Build-Doc"));
+				sender.spigot().sendMessage(github_doc);
+				return false;
+			}
+			if (args[0].equalsIgnoreCase("reload")) {
+
+				Main.getInstance().reloadConfig();
+
+				sender.sendMessage(Main.prefix + "Expert-Build config reload");
+			}
+
+			if (args[0].equalsIgnoreCase("sel_mode")) {
+				if (sender instanceof Player p) {
+
+					BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+
+					if (bb.getSelMode().equals(false)) {
+						bb.setSelMode(true)
+								.sendMessage("Shift click executing /sel disable")
+								.Build(bb);
+						return false;
+					} else {
+						bb.setSelMode(false)
+								.sendMessage("Shift click executing /sel enable")
+								.Build(bb);
+						return false;
+					}
+
+				} else {
+					new UtilsFAWE().sendMessage(sender, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+					return false;
+				}
+
+			}
+
+		}
+		return false;
+	}
+}
