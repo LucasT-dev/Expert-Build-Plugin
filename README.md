@@ -7,7 +7,7 @@ Minecraft build plugin, Expert-Build Documentation
 
 [![Discord](https://img.shields.io/discord/268444645527126017.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=122a7a)](https://discord.gg/wNxF7ud)
 [![GitHub](https://img.shields.io/github/watchers/Marodeurun/Expert-Build-Doc?style=social)](https://github.com/Marodeurun/Expert-Build-Doc)
-[![Spigot](https://img.shields.io/badge/Download-Expert_Build-blue)](https://www.spigotmc.org/)
+[![Spigot](https://img.shields.io/badge/Download-Expert_Build-blue)](https://www.spigotmc.org/resources/expert-build.110059/)
 ![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.2.Alpha-blue)
 
 ------------------
