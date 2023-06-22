@@ -5,15 +5,14 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockState;
-
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -59,7 +58,15 @@ public class BlockVec4 {
     }
 
     public BlockVec4(@NotNull Location loc, Material mat) {
-        this(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc, mat, null, new UtilsFAWE().getPattern(mat.toString()));
+        this(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc, mat, null, null);
+    }
+
+    public BlockVec4(@NotNull Location loc, Material mat, Player p) {
+        this(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc, mat, null, new UtilsFAWE(p).getPattern(mat.toString()));
+    }
+
+    public BlockVec4(@NotNull Location loc, Pattern pattern) {
+        this(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ(), loc, null, null, pattern);
     }
 
     public BlockVec4(@NotNull Location loc, @NotNull BlockState blockState) {
@@ -86,7 +93,7 @@ public class BlockVec4 {
     }
 
     public BlockVec4(@NotNull BlockVector3 bv3, BaseBlock baseBlock) {
-        this(bv3.getX(), bv3.getY(), bv3.getZ(), null,BukkitAdapter.adapt(baseBlock.getBlockType()), baseBlock.toBaseBlock(), null);
+        this(bv3.getX(), bv3.getY(), bv3.getZ(), null, BukkitAdapter.adapt(baseBlock.getBlockType()), baseBlock.toBaseBlock(), null);
     }
 
     public BlockVec4(Material mat) {
@@ -274,14 +281,23 @@ public class BlockVec4 {
         return bv4;
     }
 
-    public ArrayList<BlockVec4> getPointInSphere(Location center, int radius, Material mat) {
+    public ArrayList<BlockVec4> getPointInSphere(Location center, int radius, Object... mat) {
 
         ArrayList<BlockVec4> bv4 = new ArrayList<>();
         for (int x = center.getBlockX() - radius; x <= center.getBlockX() + radius; x++) {
             for (int y = center.getBlockY() - radius; y <= center.getBlockY() + radius; y++) {
                 for (int z = center.getBlockZ() - radius; z <= center.getBlockZ() + radius; z++) {
                     if (new BlockVec4().toBlockVector4(center).distance(new BlockVec4(x,y,z)) < radius) {
-                        bv4.add(new BlockVec4(x, y, z, mat));
+
+                        if (mat.length == 0) {
+                            bv4.add(new BlockVec4(x, y, z, (Material) null));
+                        }
+                        if (mat[0] instanceof Material material) {
+                            bv4.add(new BlockVec4(x, y, z, material));
+                        }
+                        if (mat[0] instanceof Pattern pattern) {
+                            bv4.add(new BlockVec4(x, y, z, pattern));
+                        }
                     }
                 }
             }
@@ -510,4 +526,16 @@ public class BlockVec4 {
     public boolean getCoordinateEquals(@NotNull BlockVec4 bv4) {
         return this.x == bv4.x && this.y == bv4.y && this.z == bv4.z;
     }
+
+    public BlockVec4 add(int x, int y, int z) {
+        this.x += x;
+        this.y += y;
+        this.z += z;
+
+        return this;
+    }
 }
+
+
+
+

@@ -7,10 +7,10 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.Region;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import fr.Marodeur.ExpertBuild.Utils.LineVisualize;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -28,6 +28,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class FAWEListener implements Listener {
+
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
 	@EventHandler
 	public void CLickAirWand(@NotNull PlayerInteractEvent event) {
@@ -48,15 +50,25 @@ public class FAWEListener implements Listener {
 			if (!conf.isWand_click_in_air()) { return; }
 
 			if (action == Action.LEFT_CLICK_AIR && !p.isSneaking()) {
+
 				new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
 								p.getLocation().getX(),
 								p.getLocation().getY(),
-								p.getLocation().getZ()))
-						.sendMessage(MsgEnum.SET_PRIMARY_POS,
-								"<pos>",
-								"(" + (int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ() + ")");
+								p.getLocation().getZ()));
+
+				if (new UtilsFAWE(p).isCompleteSelection()) {
+
+					bb.sendMessage(message.getSetPos1WithArea(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+				} else {
+
+					bb.sendMessage(message.getSetPos1(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ()));
+				}
 			}
 
 			if (action == Action.RIGHT_CLICK_AIR && !p.isSneaking()) {
@@ -64,22 +76,29 @@ public class FAWEListener implements Listener {
 				new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
 								p.getLocation().getX(),
 								p.getLocation().getY(),
-								p.getLocation().getZ()))
-						.sendMessage(MsgEnum.SET_SECONDARY_POS,
-								"<pos>",
-								"(" + (int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ() + ")");
+								p.getLocation().getZ()));
+
+				if (new UtilsFAWE(p).isCompleteSelection()) {
+
+					bb.sendMessage(message.getSetPos2WithArea(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+				} else {
+
+					bb.sendMessage(message.getSetPos2(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ()));
+				}
 
 				try {
+
 					Region region = actor.getSelection();
 
 					if (region instanceof ConvexPolyhedralRegion) {
 
 						List<BlockVector3> BlockVector3 = new ArrayList<>(((ConvexPolyhedralRegion) region).getVertices());
-
-						/*BlockVector3.addAll(((ConvexPolyhedralRegion) region).getVertices());
-						BlockVector3 = ((ConvexPolyhedralRegion) region).getVertices().stream().toList();*/
 
 						LineVisualize.generate_line(p,
 								BlockVector3.get(BlockVector3.size() - 1),
@@ -95,20 +114,21 @@ public class FAWEListener implements Listener {
 
 				} catch (IncompleteRegionException e) {
 
-					log.info("Region error n°1 " + e);
+					log.info(message.getErrorRegion("1", e.toString()));
 
-					List<BlockVector3> BlockVector3 = new ArrayList<>(new ConvexPolyhedralRegion(actor.getWorld()).getVertices());
+					List<BlockVector3> bv3 = new ArrayList<>(new ConvexPolyhedralRegion(actor.getWorld()).getVertices());
 
 					try {
 						new UtilsFAWE(p).getPrimaryPos();
 					} catch (IncompleteRegionException e1) {
-						log.info("Region error n°3 " + e);
+
+						log.info(message.getErrorRegion("2", e.toString()));
 						return;
 					}
 
-					if (BlockVector3.size() == 0) {
+					if (bv3.size() == 0) {
 
-						LineVisualize.generate_line(p, new UtilsFAWE(p).toBlockVector3(
+						LineVisualize.generate_line(p, BlockVector3.at(
 								p.getLocation().getX(),
 								p.getLocation().getY(),
 								p.getLocation().getZ()), new UtilsFAWE(p).getPrimaryPos());
@@ -123,7 +143,7 @@ public class FAWEListener implements Listener {
 					actor.getSelection();
 
 				} catch (IncompleteRegionException e) {
-					log.info("Region error n°2 " + e);
+					log.info(message.getErrorRegion("3", e.toString()));
 				}
 			}
 		}
@@ -131,7 +151,8 @@ public class FAWEListener implements Listener {
 		if (action == Action.RIGHT_CLICK_AIR && p.isSneaking() && it.getType() == mat) {
 			if (!conf.isSihft_click_with_wand() || bb.getSelMode().equals(false)) { return; }
 
-			new UtilsFAWE(p).clearSelection().sendMessage(MsgEnum.SELECTION_CLEAR);
+			new UtilsFAWE(p).clearSelection();
+			bb.sendMessage(message.getSelectionClear());
 		}
 	}
 

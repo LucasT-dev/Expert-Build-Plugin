@@ -1,7 +1,6 @@
 package fr.Marodeur.ExpertBuild.Commands.CommandsBrush;
 
 import com.fastasyncworldedit.core.command.SuggestInputParseException;
-
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.command.util.SuggestionHelper;
 import com.sk89q.worldedit.extension.factory.PatternFactory;
@@ -11,15 +10,13 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.world.biome.BiomeType;
 import com.sk89q.worldedit.world.block.BlockType;
-
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
-
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -29,17 +26,20 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class BrushCommand implements CommandExecutor, TabCompleter {
 
     private static final Configuration conf = Main.getInstance().getConfig();
+    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
     private final List<String> customBrush = Arrays
             .asList("<erosion faces> <erosion recursion> <fill faces> <fill recursion>");
@@ -53,7 +53,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
     private final List<String> multiClipboardDisable = Arrays
             .asList("add", "clear", "disable");
 
-    private final List<String> Ints = List.of("0");
+    private final List<String> Ints = List.of("<radius>");
 
     public List<String> getBiomeList(final String @NotNull [] args, final boolean space, int indexArg) {
         return SuggestionHelper.getNamespacedRegistrySuggestions(BiomeType.REGISTRY, args[indexArg])
@@ -141,6 +141,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                         args[0].equalsIgnoreCase("overlay") |
                         args[0].equalsIgnoreCase("spike") |
                         args[0].equalsIgnoreCase("cube") |
+                        args[0].equalsIgnoreCase("line") |
                         args[0].equalsIgnoreCase("rot2Dcube"))) {
             List<String> l2 = new ArrayList<>();
             StringUtil.copyPartialMatches(args[1], this.getPatternFactoryList(args), l2);
@@ -199,8 +200,6 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             return l;
         }
 
-
-
         return null;
     }
 
@@ -208,19 +207,19 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (! (s instanceof Player p)) {
-            new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
             return false;
         }
 
         if (!p.isOp()) {
-            new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+            p.sendMessage(Main.prefix + message.getDontPerm());
             return false;
         }
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         if (args.length < 1) {
-            p.sendMessage(Main.prefix + "Use /fw <brush>");
+            brushBuilder.sendMessage(message.getBrushEnable("/fw <brush> [material] [radius]"));
             return false;
         }
 
@@ -229,65 +228,67 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             case "drain" -> brushBuilder.setBrushType(BrushEnum.DRAIN)
                     .setRayon(getRayon(p, args, 1))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Drain"))
                     .Build(brushBuilder);
 
             case "overlay" -> brushBuilder.setBrushType(BrushEnum.OVERLAY)
-                    .setRayon(getRayon(p, args, 1))
+                    .setPattern(getPattern(brushBuilder, args, 1))
+                    .setRayon(getRayon(p, args, 2))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Overlay"))
                     .Build(brushBuilder);
 
             case "none" -> brushBuilder.setBrushType(BrushEnum.NONE)
                     .setEnable(false)
-                    .sendMessage(MsgEnum.BRUSH_DISABLE)
+                    .sendMessage(message.getBrushDisable())
                     .Build(brushBuilder);
 
             case "update" -> brushBuilder.setBrushType(BrushEnum.UPDATECHUNK)
                     .setRayon(getRayon(p, args, 1))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("UpdateChunk"))
                     .Build(brushBuilder);
 
             case "rot2Dcube" -> brushBuilder.setBrushType(BrushEnum.ROT2DCUBE)
-                    .setPattern(getPattern(p, args, 1))
+                    .setPattern(getPattern(brushBuilder, args, 1))
                     .setRayon(getRayon(p, args, 2))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Rot2Dcube"))
                     .Build(brushBuilder);
 
             case "line" -> brushBuilder.setBrushType(BrushEnum.LINE)
+                    .setPattern(getPattern(brushBuilder, args, 1))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Line"))
                     .Build(brushBuilder);
 
             case "spike" -> brushBuilder.setBrushType(BrushEnum.SPIKE)
-                    .setPattern(getPattern(p, args, 1))
+                    .setPattern(getPattern(brushBuilder, args, 1))
                     .setRayon(getRayon(p, args, 2))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Spike"))
                     .Build(brushBuilder);
 
             case "biome" -> brushBuilder.setBrushType(BrushEnum.BIOME)
-                    .setBiome(getBiome(p, args, 1))
+                    .setBiome(getBiome(brushBuilder, args, 1))
                     .setRayon(getRayon(p, args, 2))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Biome"))
                     .Build(brushBuilder);
 
             case "clipboard" -> clipboardCommand(p, args);
 
             case "cube" -> brushBuilder.setBrushType(BrushEnum.CUBE)
-                    .setPattern(getPattern(p, args, 1))
+                    .setPattern(getPattern(brushBuilder, args, 1))
                     .setRayon(getRayon(p, args, 2))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Cube"))
                     .Build(brushBuilder);
 
             case "degrade" -> brushBuilder.setBrushType(BrushEnum.DEGRADE)
                     .setRayon(getRayon(p, args, 1))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Degrade"))
                     .Build(brushBuilder);
 
             /*NONE(new ErosionPreset(0, 1, 0, 1)),
@@ -310,7 +311,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setFillFaces(1)
                     .setFillRecursion(1)
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE + "OK")
+                    .sendMessage(message.getBrushEnable("Lift"))
                     .Build(brushBuilder);
 
             case "melt" -> brushBuilder.setBrushType(BrushEnum.MELT)
@@ -320,7 +321,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setFillFaces(5)
                     .setFillRecursion(1)
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Melt"))
                     .Build(brushBuilder);
 
             case "fill" -> brushBuilder.setBrushType(BrushEnum.FILL)
@@ -330,7 +331,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setFillFaces(2)
                     .setFillRecursion(1)
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Fill"))
                     .Build(brushBuilder);
 
             case "smooth" -> brushBuilder.setBrushType(BrushEnum.SMOOTH)
@@ -340,7 +341,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setFillFaces(3)
                     .setFillRecursion(1)
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Smooth"))
                     .Build(brushBuilder);
 
             case "floatclean" -> brushBuilder.setBrushType(BrushEnum.FLOATCLEAN)
@@ -350,7 +351,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setFillFaces(6)
                     .setFillRecursion(1)
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("FloatClean"))
                     .Build(brushBuilder);
 
             case "custom" -> brushBuilder.setBrushType(BrushEnum.CUSTOM)
@@ -360,7 +361,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setFillFaces(getInteger(p, args[3]))
                     .setFillRecursion(getInteger(p, args[4]))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("Custom"))
                     .Build(brushBuilder);
 
             case "eb" -> {
@@ -375,7 +376,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             .setFillFaces(1)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(MsgEnum.BRUSH_ENABLE + "OK")
+                            .sendMessage(message.getBrushEnable("Lift"))
                             .Build(brushBuilder);
 
                     case "melt" -> brushBuilder.setBrushType(BrushEnum.MELT)
@@ -386,7 +387,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             .setFillFaces(5)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(MsgEnum.BRUSH_ENABLE)
+                            .sendMessage(message.getBrushEnable("Melt"))
                             .Build(brushBuilder);
 
                     case "fill" -> brushBuilder.setBrushType(BrushEnum.FILL)
@@ -397,7 +398,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             .setFillFaces(2)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(MsgEnum.BRUSH_ENABLE)
+                            .sendMessage(message.getBrushEnable("Fill"))
                             .Build(brushBuilder);
 
                     case "smooth" -> brushBuilder.setBrushType(BrushEnum.SMOOTH)
@@ -408,7 +409,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             .setFillFaces(3)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(MsgEnum.BRUSH_ENABLE)
+                            .sendMessage(message.getBrushEnable("Smooth"))
                             .Build(brushBuilder);
 
                     case "floatclean" -> brushBuilder.setBrushType(BrushEnum.FLOATCLEAN)
@@ -419,7 +420,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             .setFillFaces(6)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(MsgEnum.BRUSH_ENABLE)
+                            .sendMessage(message.getBrushEnable("FloatClean"))
                             .Build(brushBuilder);
 
                     case "custom" -> brushBuilder.setBrushType(BrushEnum.CUSTOM)
@@ -429,7 +430,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             .setFillFaces(getInteger(p, args[3]))
                             .setFillRecursion(getInteger(p, args[4]))
                             .setEnable(true)
-                            .sendMessage(MsgEnum.BRUSH_ENABLE)
+                            .sendMessage(message.getBrushEnable("Custom"))
                             .Build(brushBuilder);
 
                 }
@@ -438,18 +439,23 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             case "blendball" -> brushBuilder.setBrushType(BrushEnum.BLENDBALL)
                     .setRayon(getRayon(p, args, 1))
                     .setEnable(true)
-                    .sendMessage(MsgEnum.BRUSH_ENABLE)
+                    .sendMessage(message.getBrushEnable("BlendBall"))
                     .Build(brushBuilder);
-
 
 
             case "register" -> registerCommand(p, args);
 
-            case "material" -> brushBuilder.setPattern(getPattern(p, args, 1)).Build(brushBuilder);
+            case "material" -> brushBuilder
+                    .setPattern(getPattern(brushBuilder, args, 1))
+                    .sendMessage(message.getMaterialSet())
+                    .Build(brushBuilder);
 
-            case "radius" -> brushBuilder.setRayon(getRayon(p, args, 1)).Build(brushBuilder);
+            case "radius" -> brushBuilder
+                    .setRayon(getRayon(p, args, 1))
+                    .sendMessage(message.getRadiusSet())
+                    .Build(brushBuilder);
 
-            default -> p.sendMessage(Main.prefix + "Use /flower <brush>");
+            default -> brushBuilder.sendMessage(message.getUse("Use /flower <brush>"));
         }
         return false;
     }
@@ -465,7 +471,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
         }
     }
 
-    private static Biome getBiome(Player p, String @NotNull [] s, int index) {
+    private static Biome getBiome(BrushBuilder brushBuilder, String @NotNull [] s, int index) {
 
         try {
 
@@ -474,15 +480,16 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                 return Biome.valueOf(s[index]);
 
             } else {
-                p.sendMessage(Main.prefix + "Invalid Biome, biome set : " + BrushBuilder.getBrushBuilderPlayer(p).getBiome());
-                return BrushBuilder.getBrushBuilderPlayer(p).getBiome();
+
+                brushBuilder.sendMessage(message.getInvalidBiomeSet(brushBuilder.getBiome().name()));
+                return brushBuilder.getBiome();
             }
         } catch (ArrayIndexOutOfBoundsException err) {
-            return BrushBuilder.getBrushBuilderPlayer(p).getBiome();
+            return brushBuilder.getBiome();
         }
     }
 
-    private static Material getMaterial(Player p, String @NotNull [] s, int index) {
+    private static Material getMaterial(BrushBuilder brushBuilder, String @NotNull [] s, int index) {
 
         try {
 
@@ -491,23 +498,23 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                 return Material.valueOf(s[index]);
 
             } else {
-                p.sendMessage(Main.prefix + "Invalid material, material set : " + BrushBuilder.getBrushBuilderPlayer(p).getMaterial());
-                return BrushBuilder.getBrushBuilderPlayer(p).getMaterial();
+                brushBuilder.sendMessage(message.getInvalidMaterialSet(brushBuilder.getMaterial().toString()));
+                return brushBuilder.getMaterial();
             }
         } catch (ArrayIndexOutOfBoundsException err) {
-            return BrushBuilder.getBrushBuilderPlayer(p).getMaterial();
+            return brushBuilder.getMaterial();
         }
     }
 
-    private static Pattern getPattern(Player p, String[] s, int index) {
+    private static Pattern getPattern(BrushBuilder brushBuilder, String[] s, int index) {
 
         try {
-            Pattern pattern = new UtilsFAWE(p).getPattern(s[index]);
-            p.sendMessage(Main.prefix + "Pattern set");
+            Pattern pattern = new UtilsFAWE(brushBuilder.getPlayer()).getPattern(s[index]);
             return pattern;
 
         } catch (NullPointerException | SuggestInputParseException | ArrayIndexOutOfBoundsException err) {
-            return BrushBuilder.getBrushBuilderPlayer(p).getPattern();
+            brushBuilder.sendMessage(message.getInvalidMaterialSet(brushBuilder.getPattern().toString()));
+            return brushBuilder.getPattern();
         }
     }
 
@@ -516,10 +523,9 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
         try {
             return Integer.parseInt(s);
         } catch (NumberFormatException | NullPointerException err) {
-            p.sendMessage(Main.prefix + "Invalid number : " + s);
+            p.sendMessage(message.getInvalidNumberIntegerUpper0());
             return 0;
         }
-
     }
 
     private static void clipboardCommand(Player p, String @NotNull [] args) {
@@ -579,13 +585,13 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
                 brushBuilder.setEnable(false)
                         .setBrushType(BrushEnum.NONE)
-                        .sendMessage(p, MsgEnum.BRUSH_DISABLE)
+                        .sendMessage(message.getBrushDisable())
                         .Build(brushBuilder);
 
             } else {
                 brushBuilder.setEnable(true)
                         .setBrushType(BrushEnum.CLIPBOARD)
-                        .sendMessage(p,MsgEnum.BRUSH_ENABLE)
+                        .sendMessage(message.getBrushEnable("Clipboard"))
                         .Build(brushBuilder);
             }
         }
@@ -602,7 +608,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             Bukkit.getOnlinePlayers().stream()
                     .filter(player -> player.getName().equals(args[1]))
                     .forEach(player ->
-                            p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player).toString()));
+                        p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player).toString()));
 
         }
     }

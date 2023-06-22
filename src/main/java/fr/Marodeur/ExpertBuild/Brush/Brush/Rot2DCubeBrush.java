@@ -7,7 +7,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Polygonal2DRegion;
-
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
@@ -15,7 +14,6 @@ import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -74,7 +72,7 @@ public class Rot2DCubeBrush implements BrushOperation {
 
                     //Les 4 coins du carré
                     Location l1 = ldir.add(dz1, l.getBlockY(), -dx1);
-    
+
                     int dx2 = l1.getBlockX() - l.getBlockX();
                     int dz2 = l1.getBlockZ() - l.getBlockZ();
 
@@ -92,11 +90,11 @@ public class Rot2DCubeBrush implements BrushOperation {
                     polygonal2DRegion.forEach(blockVector3 -> {
 
                         for (int i = l.getBlockY(); i < l.getBlockY()+(2*radiusCube); i++) {
-                            bv4.add(new BlockVec4(blockVector3.getBlockX(), i, blockVector3.getBlockZ()));
+                            bv4.add(new BlockVec4(blockVector3.getBlockX(), i, blockVector3.getBlockZ(), brushBuilder.getPattern()));
                         }
                     });
 
-                    new UtilsFAWE(p).setBlockListSimple(p, bv4);
+                    new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -106,12 +104,12 @@ public class Rot2DCubeBrush implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
         ExecuteBrushOnHoney(p, obj1);
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
         ExecuteBrushOnHoney(p, obj1);
     }
 }

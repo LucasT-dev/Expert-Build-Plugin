@@ -5,10 +5,10 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -25,8 +25,9 @@ import java.util.List;
 
 public class CommandAutoFlip implements TabCompleter, CommandExecutor {
 
-    private final List<String> args1 = Arrays
-            .asList("disable", "enable");
+
+    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
+    private final List<String> args1 = Arrays.asList("disable", "enable");
 
     @Nullable
     @Override
@@ -44,22 +45,22 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (! (s instanceof Player p)) {
-            new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
             return false;
         }
         if (!p.isOp() | !p.hasPermission("expautoflip.use")) {
-            new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+            p.sendMessage(Main.prefix + message.getDontPerm());
             return false;
         }
+
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         if (cmd.getName().equalsIgnoreCase("autoflip")) {
 
             if (args.length < 1) {
-                p.sendMessage(Main.prefix + "Use /autoflip <enable | disable | set>");
+                brushBuilder.sendMessage(message.getUse("/autoflip <enable | disable>"));
                 return false;
             }
-
-            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
             if (args[0].equalsIgnoreCase("disable")) {
                 if (brushBuilder.getBrushType().equals(BrushEnum.AUTOFLIP)) {
@@ -68,6 +69,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                             .setEnable(false)
                             .setRegion(null)
                             .setBlockFace(null)
+                            .sendMessage(message.getBrushDisable())
                             .Build(brushBuilder);
                 }
             }
@@ -87,7 +89,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                                 .setBlockVec4(Arrays.asList(
                                         new BlockVec4(brushBuilder.getRegion().getMaximumPoint()),
                                         new BlockVec4(brushBuilder.getRegion().getMinimumPoint())))
-                                .sendMessage(p, MsgEnum.SET_AUTOFLIP)
+                                .sendMessage(message.getBrushEnable("autoflip"))
                                 .Build(brushBuilder);
                         return false;
                     }
@@ -99,7 +101,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                                 .setBlockVec4(Arrays.asList(
                                         new BlockVec4(brushBuilder.getRegion().getMaximumPoint()),
                                         new BlockVec4(brushBuilder.getRegion().getMinimumPoint())))
-                                .sendMessage(p, MsgEnum.SET_AUTOFLIP)
+                                .sendMessage(message.getBrushEnable("autoflip"))
                                 .Build(brushBuilder);
                         return false;
                     }
@@ -111,7 +113,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                                 .setBlockVec4(Arrays.asList(
                                         new BlockVec4(brushBuilder.getRegion().getMaximumPoint()),
                                         new BlockVec4(brushBuilder.getRegion().getMinimumPoint())))
-                                .sendMessage(p, MsgEnum.SET_AUTOFLIP)
+                                .sendMessage(message.getBrushEnable("autoflip"))
                                 .Build(brushBuilder);
                         return false;
                     }

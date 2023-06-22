@@ -20,21 +20,20 @@ import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.Vector3;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-import fr.Marodeur.ExpertBuild.API.GlueList;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,6 +45,8 @@ import java.util.List;
 
 public class UtilsFAWE {
 
+    private final MessageBuilder message = Main.getInstance().getMessageConfig();
+
     private BukkitPlayer bukkitPlayer;
     private RegionSelector regionSelector;
     private RegionSelectorType regionSelectorType;
@@ -55,9 +56,6 @@ public class UtilsFAWE {
     private LocalSession session;
     private Region region;
     private World world;
-    private double x;
-    private double y;
-    private double z;
     private BlockVector3 bv3;
 
     public UtilsFAWE() {
@@ -72,9 +70,11 @@ public class UtilsFAWE {
         this.world = bukkitPlayer.getWorld();
         this.session = bukkitPlayer.getSession();
         this.regionSelector = this.session.getRegionSelector(world);
-        this.b = BrushBuilder.getBrushBuilderPlayer(p);
 
-        //System.out.println("this.bukkitPlayer + this.session + this.region = " + this.bukkitPlayer + this.session);
+        if (Main.containsBrushBuilder(p)) {
+            this.b = BrushBuilder.getBrushBuilderPlayer(p);
+        }
+
     }
 
     public UtilsFAWE setSelectionType(@NotNull RegionSelectorType regionSelectorType) {
@@ -87,6 +87,11 @@ public class UtilsFAWE {
     public UtilsFAWE setPrimaryPos(BlockVector3 bv3) {
         this.session.getRegionSelector(world).selectPrimary(bv3, ActorSelectorLimits.forActor(bukkitPlayer));
         return this;
+    }
+
+    public Boolean isCompleteSelection() {
+        return this.session.getRegionSelector(world).isDefined();
+        
     }
 
     public BlockVector3 getPrimaryPos() {
@@ -156,11 +161,11 @@ public class UtilsFAWE {
     }
 
     @Deprecated
-    public void setCuboidRegion(Player p, Region region) {
+    public void setCuboidRegion(Player p, CuboidRegion cuboidRegion) {
 
         BukkitPlayer actor = BukkitAdapter.adapt(p);
 
-        //Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
             LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
 
@@ -168,105 +173,132 @@ public class UtilsFAWE {
                 try {
                     editsession.setFastMode(false);
 
-                    editsession.setBlocks(region, BrushBuilder.getBrushBuilderPlayer(p).getPattern());
+                    editsession.setBlocks((Region) cuboidRegion, BrushBuilder.getBrushBuilderPlayer(p).getPattern());
 
                 } finally {
                     localSession.remember(editsession);
                 }
             }
-        //});
+        });
     }
 
     @Deprecated
-    public void setBlockList(Player p, @NotNull List<BlockVec4> blocks) {
+    public void setBlockList(Player p, @NotNull List<BlockVec4> blocks, Boolean sendMessageBlock) {
 
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         EditSession editsession = localSession.createEditSession(actor);
+        long startTime = System.currentTimeMillis();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        try {
+            editsession.setFastMode(false);
 
-            try {
-                editsession.setFastMode(false);
+            blocks.forEach(block -> {
 
-                blocks.forEach(block -> {
+                try {
+                    editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
+                            block.getBaseblock());
 
-                    try {
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            });
+            localSession.remember(editsession);
 
-                        editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
-                                block.getBaseblock());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-                });
-                localSession.remember(editsession);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        long endTime = System.currentTimeMillis();
+        float r = (endTime - startTime);
 
+        if (sendMessageBlock & r > 1000) {
+            float t = r / 1000;
+            float d = (blocks.size() / t);
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+        } else {
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+        }
     }
 
     @Deprecated
-    public void setBlockListSimple(Player p, @NotNull List<BlockVec4> blocks) {
+    public void setBlockListSimple(Player p, @NotNull List<BlockVec4> blocks, boolean sendMessageBlock) {
 
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         EditSession editsession = localSession.createEditSession(actor);
+        long startTime = System.currentTimeMillis();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        try {
+            editsession.setFastMode(false);
 
-            try {
-                editsession.setFastMode(false);
+            blocks.forEach(block -> {
 
-                blocks.forEach(block -> {
+                try {
 
-                    try {
+                    editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
+                            BrushBuilder.getBrushBuilderPlayer(p).getPattern());
 
-                        editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
-                                BrushBuilder.getBrushBuilderPlayer(p).getPattern());
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            });
+            localSession.remember(editsession);
 
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-                });
-                localSession.remember(editsession);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        long endTime = System.currentTimeMillis();
+        float r = (endTime - startTime);
+
+        if (sendMessageBlock & r > 1000) {
+            float t = r / 1000;
+            float d = (blocks.size() / t);
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+        } else {
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+        }
     }
 
     @Deprecated
-    public void setBlockAnyPattern(Player p, @NotNull List<BlockVec4> blocks) {
+    public void setBlockAnyPattern(Player p, @NotNull List<BlockVec4> blocks, boolean sendMessageBlock) {
 
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         EditSession editsession = localSession.createEditSession(actor);
+        long startTime = System.currentTimeMillis();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        try {
+            editsession.setFastMode(false);
 
-            try {
-                editsession.setFastMode(false);
+            blocks.forEach(block -> {
 
-                blocks.forEach(block -> {
+                try {
+                    editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
+                            BukkitAdapter.asBlockType(block.getMat()).getDefaultState()
+                    );
 
-                    try {
-                        editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
-                                BukkitAdapter.asBlockType(block.getMat()).getDefaultState()
-                        );
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            });
+            localSession.remember(editsession);
 
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-                });
-                localSession.remember(editsession);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        long endTime = System.currentTimeMillis();
+        float r = (endTime - startTime);
+
+        if (sendMessageBlock & r > 1000) {
+            float t = r / 1000;
+            float d = (blocks.size() / t);
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+        } else {
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+        }
     }
 
     public void setBlockPersonnalBlockPattern(Player p, List<BlockVec4> blocks) {
@@ -295,7 +327,6 @@ public class UtilsFAWE {
                 e.printStackTrace();
             }
         });
-
     }
 
     public Pattern getPattern(String s) {
@@ -341,14 +372,6 @@ public class UtilsFAWE {
             }
         }
         return 999;
-    }
-
-    public BlockVector3 toBlockVector3(double x, double y, double z)
-    {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        return BlockVector3.at(x, y, z);
     }
 
     public @NotNull List<String> getFileList() {
@@ -409,31 +432,6 @@ public class UtilsFAWE {
 
     public final String getFawePrefix() {
         return Main.FawePrefix;
-    }
-
-    public UtilsFAWE sendMessage(@NotNull MsgEnum msgEnum) {
-
-        this.p.sendMessage(getMainPrefix() + msgEnum.getPrefix());
-        return this;
-
-    }
-    public UtilsFAWE sendMessage(@NotNull CommandSender s, @NotNull MsgEnum msgEnum) {
-
-        s.sendMessage(getMainPrefix() + msgEnum.getPrefix());
-        return this;
-
-    }
-    public UtilsFAWE sendMessage(@NotNull MsgEnum msgEnum, String oldChar, String newChar) {
-
-        this.p.sendMessage(getMainPrefix() + msgEnum.getPrefix().replace(oldChar, newChar));
-        return this;
-
-    }
-    public UtilsFAWE sendMessage(String msg) {
-
-        this.p.sendMessage(getMainPrefix() + msg);
-        return this;
-
     }
 
 

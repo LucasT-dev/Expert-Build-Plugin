@@ -3,7 +3,6 @@ package fr.Marodeur.ExpertBuild.Listeners;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -12,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
 
 public class BrushListener implements Listener {
@@ -40,12 +38,12 @@ public class BrushListener implements Listener {
 
             if (it.getType() == conf.getTerraforming_tool_1()) {
 
-                brushBuilder.executeArrowBrush(brushBuilder, loc);
+                brushBuilder.executeArrowBrush(brushBuilder, loc, p.getLocation());
             }
 
             if (it.getType() == conf.getTerraforming_tool_2()) {
 
-                brushBuilder.executeGunPowderBrush(brushBuilder, loc);
+                brushBuilder.executeGunPowderBrush(brushBuilder, loc, p.getLocation());
             }
         }
     }

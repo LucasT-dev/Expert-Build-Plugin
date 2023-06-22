@@ -1,13 +1,12 @@
 package fr.Marodeur.ExpertBuild.Utils;
 
 import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.Region;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.GOHA_Builder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ public class LineVisualize {
 
 	private static final int space = 1;
 	private static final Logger logger = Logger.getLogger("Expert-Build");
-
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	public static void generate_line(@NotNull Player p, @NotNull BlockVector3 Bv1, @NotNull BlockVector3 Bv2) {
 
 		Location l1 = new Location(p.getWorld(), Bv1.getX(), Bv1.getY(), Bv1.getZ());
@@ -46,7 +45,7 @@ public class LineVisualize {
 						length += space;
 					}
 				} catch (IncompleteRegionException e) {
-					logger.info("Incomplete Selection; Particle Stopped, this is normal");
+					logger.info(message.getIncompleteSelection());
 					cancel();
 				}
 			}
@@ -68,7 +67,7 @@ public class LineVisualize {
 					Region region = actor.getSession().getSelection();
 
 				} catch (IncompleteRegionException e) {
-					logger.info("Incomplete Selection; Particle Stopped, this is normal");
+					logger.info(message.getIncompleteSelection());
 					cancel();
 				}
 
@@ -114,9 +113,9 @@ public class LineVisualize {
 
 				double distance = Pos1.distance(Pos2);
 
-				org.bukkit.util.Vector p1 = Pos1.toVector();
-				org.bukkit.util.Vector p2 = Pos2.toVector();
-				org.bukkit.util.Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
+				Vector p1 = Pos1.toVector();
+				Vector p2 = Pos2.toVector();
+				Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
 				double length = 0;
 				for (; length < distance; p1.add(vector)) {
 					p.spawnParticle(Particle.FLAME, p1.getX(), p1.getY(), p1.getZ(), (int) 0.01);

@@ -1,7 +1,6 @@
 package fr.Marodeur.ExpertBuild.Listeners;
 
 import com.google.common.collect.Lists;
-
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.block.data.Rotatable;
@@ -11,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

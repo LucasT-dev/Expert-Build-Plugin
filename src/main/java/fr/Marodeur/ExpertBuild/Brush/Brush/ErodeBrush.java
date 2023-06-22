@@ -70,7 +70,7 @@ public class ErodeBrush implements BrushOperation {
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -116,13 +116,12 @@ public class ErodeBrush implements BrushOperation {
                 for (int i = 0; i < erorionParameter[3]; ++i) {
                     fillIteration(iterationBlockManager);
                 }
-                System.out.println("bv4.size() = " + bv4.size());
 
                 /*if (bb.isErodeBlend()) {
                     blend(l, false, radius);
                 }*/
 
-                new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
 
                 spherePoint.clear();
 
@@ -134,7 +133,7 @@ public class ErodeBrush implements BrushOperation {
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -184,7 +183,7 @@ public class ErodeBrush implements BrushOperation {
                     blend(l, false, radius);
                 }*/
 
-                new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
 
                 spherePoint.clear();
 

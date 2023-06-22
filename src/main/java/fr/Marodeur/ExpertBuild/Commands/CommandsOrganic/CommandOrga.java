@@ -1,8 +1,9 @@
 package fr.Marodeur.ExpertBuild.Commands.CommandsOrganic;
 
-import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
+import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.GOHA_Builder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -15,10 +16,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static fr.Marodeur.ExpertBuild.Main.prefix;
-
 public class CommandOrga implements CommandExecutor, TabCompleter {
 
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	private final List<String> list = Arrays.asList("pregen", "clear", "generate");
 
 	@Override
@@ -41,21 +41,22 @@ public class CommandOrga implements CommandExecutor, TabCompleter {
 	public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, String[] args) {
 
 		if (!(s instanceof Player p)) {
-			new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+			s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
 			return false;
 		}
 
 		if (!p.isOp() | !p.hasPermission("exporga.use")) {
-			new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+			p.sendMessage(Main.prefix + message.getDontPerm());
 			return false;
 		}
 
 		if (cmd.getName().equalsIgnoreCase("organic")) {
 
 			GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+			BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
 			if (args.length == 0) {
-				p.sendMessage(prefix + "Use /goha <material/pregen/clear/debug/generate>");
+				brushBuilder.sendMessage(message.getUse("/goha <material/pregen/clear/debug/generate>"));
 				return false;
 			}
 
@@ -69,7 +70,7 @@ public class CommandOrga implements CommandExecutor, TabCompleter {
 						.getAllPoint()
 						.generateAllParticle();
 
-				p.sendMessage(prefix + "Running pregen...");
+				brushBuilder.sendMessage(message.getPregeneration());
 			}
 
 			if (args[0].equalsIgnoreCase("clear")) {
@@ -78,7 +79,7 @@ public class CommandOrga implements CommandExecutor, TabCompleter {
 						.setStartLoc(null)
 						.buildGoha(goha_builder);
 
-				p.sendMessage(prefix + "particle clear");
+				brushBuilder.sendMessage(message.getSelectionClear());
 			}
 
 			if (args[0].equalsIgnoreCase("generate")) {

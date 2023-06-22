@@ -26,11 +26,11 @@ public class OverlayBrush implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return false;
+        return brushBuilder.getEnable();
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -57,18 +57,27 @@ public class OverlayBrush implements BrushOperation {
                         Location floc = new Location(l.getWorld(), x, y, z);
 
                         if (!new UtilsFAWE(p).ignoredBlock(floc.getBlock())) {
-                            bv4.add(new BlockVec4(floc, brushBuilder.getMaterial()));
+                            bv4.add(new BlockVec4(floc, brushBuilder.getPattern()));
                             break;
                         }
                     }
                 }
             }
         }
-        new UtilsFAWE(p).setBlockListSimple(p, bv4);
+        new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
+
+        if (!hasPermission(p)) {
+            return;
+        }
+
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+            return;
+        }
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
         int brushSize = brushBuilder.getRayon();
@@ -87,13 +96,13 @@ public class OverlayBrush implements BrushOperation {
 
                         if (!new UtilsFAWE(p).ignoredBlock(floc.getBlock())) {
                             floc.setY(y+1);
-                            bv4.add(new BlockVec4(floc, brushBuilder.getMaterial()));
+                            bv4.add(new BlockVec4(floc, brushBuilder.getPattern()));
                             break;
                         }
                     }
                 }
             }
         }
-        new UtilsFAWE(p).setBlockListSimple(p, bv4);
+        new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
     }
 }

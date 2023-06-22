@@ -63,7 +63,7 @@ public class FlowerBrush implements BrushOperation {
 
                     bv4.addAll(new BlockVec4().getPointInSphere(l, radius, Material.STONE));
 
-                    new UtilsFAWE().setBlockListSimple(p, bv4);
+                    new UtilsFAWE().setBlockListSimple(p, bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();

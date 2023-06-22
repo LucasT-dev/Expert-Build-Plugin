@@ -1,7 +1,6 @@
 package fr.Marodeur.ExpertBuild.Listeners;
 
 import com.sk89q.worldedit.math.BlockVector3;
-
 import fr.Marodeur.ExpertBuild.Commands.CommandAutoCb;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Enum.FaceDirection;
@@ -9,10 +8,9 @@ import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
 import fr.Marodeur.ExpertBuild.Object.GOHA_Builder;
-
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -36,14 +34,14 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 public class GeneralListener implements Listener {
 
-	Configuration conf = Main.getInstance().getConfig();
+	private final Configuration conf = Main.getInstance().getConfig();
+	private final MessageBuilder message = Main.getInstance().getMessageConfig();
 
 	@EventHandler
 	public void onJoin(@NotNull PlayerJoinEvent e) {
@@ -57,16 +55,18 @@ public class GeneralListener implements Listener {
 		}
 
 		if (!Main.containsBrushBuilder(p)) {
-			BrushBuilder.registerPlayer(p);
-			p.sendMessage(Main.prefix + "Builder profile register");
+			BrushBuilder bb = BrushBuilder.registerPlayer(p);
+			bb.sendMessage(message.getBuilderProfileRegistered());
 		}
 
 		Main.Slab.add(p.getUniqueId());
 
 		//update system
 		Main.updateChecker(version -> {
-			if (!Main.getVersion().equals(version)) {
-				p.sendMessage(Main.prefix + "There is a new update available, you are running on version " + Main.getVersion() + ", version " + Main.latestVersion + " is available ");
+			if (Main.getVersion().equals(version)) {
+				p.sendMessage(Main.prefix + message.getNotNewUpdate());
+			} else {
+				p.sendMessage(Main.prefix + message.getNewUpdateAvailable(Main.getVersion(), Main.latestVersion));
 			}
 		},Main.id);
 
@@ -93,7 +93,6 @@ public class GeneralListener implements Listener {
 
 		Player p = e.getPlayer();
 
-		Main.Autogm.remove(p.getUniqueId());
 		Main.Slab.remove(p.getUniqueId());
 	}
 
@@ -133,42 +132,6 @@ public class GeneralListener implements Listener {
 			getblock.add(p.getLocation().getDirection().multiply(0.05));
 		}
 		return getblock.getY() % 1 > 0.5;
-	}
-
-	@EventHandler
-	public void autoGameMode(@NotNull PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-
-		if (!p.isOp() || !Main.Autogm.contains(p.getUniqueId()))
-			return;
-		if (!p.isFlying())
-			return;
-
-		if (p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR) {
-			if (getFaceBlock(p)) {
-				p.setGameMode(GameMode.SPECTATOR);
-			} else {
-				p.setGameMode(GameMode.CREATIVE);
-			}
-		}
-	}
-
-	public boolean getFaceBlock(@NotNull Player p) {
-		boolean ProcheBlock = false;
-		BlockFace[] surrounding = new BlockFace[]{BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.EAST,
-				BlockFace.SOUTH_EAST, BlockFace.SOUTH, BlockFace.SOUTH_WEST, BlockFace.WEST, BlockFace.NORTH_WEST,
-				// BlockFace.UP,
-				BlockFace.DOWN};
-		Location[] LocationCheck = new Location[]{p.getLocation(), p.getLocation().add(0.0D, 1.0D, 0.0D)};
-
-		for (Location location : LocationCheck) {
-			for (BlockFace blockFace : surrounding) {
-				if (!location.getBlock().getRelative(blockFace, 1).isEmpty()) {
-					ProcheBlock = true;
-				}
-			}
-		}
-		return ProcheBlock;
 	}
 
 	@EventHandler

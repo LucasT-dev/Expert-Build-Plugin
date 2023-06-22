@@ -41,7 +41,7 @@ public class BlendBall implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -68,14 +68,14 @@ public class BlendBall implements BrushOperation {
                     blend(l, false, radius);
 
                 } finally {
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
                 }
             }
         });
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -102,7 +102,7 @@ public class BlendBall implements BrushOperation {
                     blend(l, true, radius);
 
                 } finally {
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
                 }
             }
         });

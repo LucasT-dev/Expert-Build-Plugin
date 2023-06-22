@@ -14,7 +14,7 @@ public interface BrushOperation {
 
     default void ExecuteBrushOnHoney(Player p, Object obj1) {}
 
-    default void ExecuteBrushOnArrow(Player p, Object obj1) {}
+    default void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {}
 
-    default void ExecuteBrushOnGunpowder(Player p, Object obj1) {}
+    default void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {}
 }

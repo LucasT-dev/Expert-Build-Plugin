@@ -35,13 +35,13 @@ public class CubeBrush implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
-        ExecuteBrushOnGunpowder(p, obj1);
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
+        ExecuteBrushOnGunpowder(p, obj1, loc);
     }
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;

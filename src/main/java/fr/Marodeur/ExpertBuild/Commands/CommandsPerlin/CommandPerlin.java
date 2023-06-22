@@ -4,13 +4,12 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
-
 import fr.Marodeur.ExpertBuild.API.Exception.IncompleteSelectionException;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
-
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -21,15 +20,18 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.bukkit.util.Vector;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class CommandPerlin implements CommandExecutor, TabCompleter {
 
+    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     private static List<BlockVec4> bv4 = new ArrayList<>();
 
     private final List<String> list = Arrays
@@ -79,14 +81,16 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (!(s instanceof Player p)) {
-            new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
             return false;
         }
 
         if (!p.isOp() || !p.hasPermission("expperlin.use")) {
-            new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+            p.sendMessage(Main.prefix + message.getDontPerm());
             return false;
         }
+
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         if (cmd.getName().equalsIgnoreCase("perlin")) {
 
@@ -106,24 +110,24 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
                             Integer.parseInt(args[0]), Integer.parseInt(args[1]), Integer.parseInt(args[2]),
                             Integer.parseInt(args[3]), p);
 
-                    new UtilsFAWE(p).setBlockListSimple(p, bv4);
+                    new UtilsFAWE(p).setBlockListSimple(p, bv4, true);
 
                 } catch (NumberFormatException e) {
-                    p.sendMessage(Main.prefix + "Invalide number, ");
+                    brushBuilder.sendMessage(message.getInvalidNumberIntegerUpper0());
                 }
 
-                p.sendMessage(Main.prefix + "perlin generate");
+                p.sendMessage(message.getBlockModified(String.valueOf(bv4.size())));
                 return false;
             }
 
-            if (args.length == 7) {
+            else if (args.length == 7) {
 
                 BukkitPlayer actor = BukkitAdapter.adapt(p);
                 bv4.clear();
 
                 try {
                     if (!new UtilsFAWE(p).isValidSelection(RegionSelectorType.CUBOID)) throw
-                            new IncompleteSelectionException(p, MsgEnum.ERROR_SELECTION.getPrefix(), RegionSelectorType.CUBOID);
+                            new IncompleteSelectionException(p, RegionSelectorType.CUBOID);
                 } catch (IncompleteSelectionException e) {
                     return false;
                 }
@@ -139,13 +143,13 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
 
                 ArrayList<BlockVector3> arrays = new ArrayList<>();
 
-                for (int x = Xmin; x <= Xmax; x++) {
-                    for (int y = Ymin; y <= Ymax; y++) {
-                        for (int z = Zmin; z <= Zmax; z++) {
-                            arrays.add(BlockVector3.at(x, y, z));
+                    for (int x = Xmin; x <= Xmax; x++) {
+                        for (int y = Ymin; y <= Ymax; y++) {
+                            for (int z = Zmin; z <= Zmax; z++) {
+                                arrays.add(BlockVector3.at(x, y, z));
+                            }
                         }
                     }
-                }
 
                 arrays.forEach(array1 -> {
 
@@ -179,18 +183,16 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
                     }
 
                 });
-                new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, true);
+
+                return false;
+            } else {
+                brushBuilder.sendMessage(message.getUse("/perlin <length> <height> <rayon> or /perlin <min-length> <max-length> <min-height> <max-height> <start-rayon> <end-rayon> <[o-1], proba to start point>"));
             }
-            p.sendMessage(Main.prefix + "Generation finish");
-            return false;
-        } else {
-            System.out.println(args.length);
-            p.sendMessage(Main.prefix + "Use /perlin <length> <height> <rayon>, ");
-            p.sendMessage(Main.prefix + "or /perlin <min-length> <max-length> <min-height> <max-height> <start-rayon> <end-rayon> <[o-1], proba to start point>");
         }
         return false;
     }
-    //  return false;
+      //  return false;
     //}
 
     public static void genVeine(World world, int x0, int y0, int z0, float length, float height, long seed, int rayon, Player p){
@@ -239,7 +241,7 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
 
                     if (loc.distance(middlePoint) < (rayon)) {
 
-                        bv4.add(new BlockVec4(loc, Material.DIAMOND_BLOCK));
+                        bv4.add(new BlockVec4(loc, Material.DIAMOND_BLOCK, p));
 
                     }
                 }

@@ -15,20 +15,16 @@ import fr.Marodeur.ExpertBuild.Commands.CommandsGivenTools.Terraforming_Painting
 import fr.Marodeur.ExpertBuild.Commands.CommandsOrganic.CommandOrga;
 import fr.Marodeur.ExpertBuild.Commands.CommandsPerlin.CommandPerlin;
 import fr.Marodeur.ExpertBuild.Commands.CommandsTimeLapse.CommandTimeLapse;
-import fr.Marodeur.ExpertBuild.Listeners.BrushListener;
-import fr.Marodeur.ExpertBuild.Listeners.FAWEListener;
-import fr.Marodeur.ExpertBuild.Listeners.GeneralListener;
-import fr.Marodeur.ExpertBuild.Listeners.RotationEntity;
+import fr.Marodeur.ExpertBuild.Listeners.*;
 import fr.Marodeur.ExpertBuild.Object.*;
 import fr.Marodeur.ExpertBuild.Utils.BrushOperationManager;
-import fr.Marodeur.ExpertBuild.Listeners.GUI_Manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -51,12 +47,11 @@ public class Main extends JavaPlugin {
 	private Map<Class<? extends BrushOperation>, BrushOperation> registeredBrush;
 
 	private static Configuration configuration;
+	private static MessageBuilder messageBuilder;
 
-	public static List<UUID> Autogm = new ArrayList<>();
 	public static List<UUID> getCommand = new ArrayList<>();
 	public static List<UUID> Slab = new ArrayList<>();
 
-	public static HashMap<String, MazeBuilder> Maze = new HashMap<>();
 	private static final HashMap<UUID, GOHA_Builder> GOHA = new HashMap<>();
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
 
@@ -71,9 +66,13 @@ public class Main extends JavaPlugin {
 		instance = this;
 
 		saveDefaultConfig();
-		
-		getServer().getConsoleSender().sendMessage(prefix + "Plugin Enable");
-		getLogger().info(" ____         ___  ");
+
+		reloadConfig();
+
+		loadMessageConfig();
+
+		getServer().getConsoleSender().sendMessage(prefix + messageBuilder.getPluginEnable());
+		getLogger().info(" ____          ___  ");
 		getLogger().info("|      \\  /  |   ) ");
 		getLogger().info("|__     \\/   |___) ");
 		getLogger().info("|       /\\   |     ");
@@ -92,11 +91,8 @@ public class Main extends JavaPlugin {
 		try {
 			serverFileBuilder();
 		} catch (IOException e) {
-			getLogger().severe("Configuration files in ExpertBuild folder is wrong or corrupt " +
-					"repair the file or delete all the files, so that the plugin recreates them");
+			getLogger().severe(messageBuilder.getFileConfigurationError());
 		}
-
-		reloadConfig();
 
 		loadBrushOperation();
 
@@ -108,7 +104,7 @@ public class Main extends JavaPlugin {
 
 		updateChecker(version -> {
 			if (!this.getDescription().getVersion().equals(version)) {
-				getServer().getConsoleSender().sendMessage(Main.prefix + "There is a new update available, you are running on version " + this.getDescription().getVersion() + ", version " + latestVersion + " is available ");
+				getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getNewUpdateAvailable(this.getDescription().getVersion(), latestVersion));
 			}
 		},id);
 	}
@@ -131,7 +127,7 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new RotationEntity(), this);
 		pm.registerEvents(new BrushListener(), this);
 
-		getLogger().info("Listeners load");
+		getLogger().info(messageBuilder.getListenersLoad());
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -165,7 +161,7 @@ public class Main extends JavaPlugin {
 		getCommand("autoflip").setExecutor(new CommandAutoFlip());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
 
-		getLogger().info("Commands load");
+		getLogger().info(messageBuilder.getCommandsLoad());
 
 	}
 
@@ -175,23 +171,32 @@ public class Main extends JavaPlugin {
 	public void registerPlayerBuilder() {
 
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			fr.Marodeur.ExpertBuild.Object.BrushBuilder.registerPlayer(player);
-			GOHA_Builder.registerPlayer(player);
-			Slab.add(player.getUniqueId());
+			if (player.isOp() || player.hasPermission("expertbuild.use")) {
+				fr.Marodeur.ExpertBuild.Object.BrushBuilder.registerPlayer(player);
+				GOHA_Builder.registerPlayer(player);
+				Slab.add(player.getUniqueId());
 
-			getLogger().info(player.getName() + " registered");
+				getLogger().info(messageBuilder.getPlayerRegistered(player.getName()));
+			}
 		});
 	}
 
 	public void reloadConfig() {
-		configuration = null;
+
 		configuration = new Configuration().loadConfiguration();
 
-		getLogger().info("Config load");
+		getLogger().info("Configuration load");
+	}
+
+	private void loadMessageConfig() {
+		messageBuilder = new MessageBuilder().loadConfiguration();
 	}
 
 	//BrushBuilder
-	public @NotNull Configuration getConfig() {return configuration;}
+	public @NotNull Configuration getConfig() { return configuration; }
+
+    public MessageBuilder getMessageConfig() { return messageBuilder; }
+
 
 	public static BrushBuilder getBrushBuilder(@NotNull Player p) {
 		return BrushBuilder.get(p.getUniqueId());
@@ -201,8 +206,10 @@ public class Main extends JavaPlugin {
 		BrushBuilder.replace(brushBuilder.getPlayer().getUniqueId(), brushBuilder);
 	}
 
-	public static void registerBrushBuilder(BrushBuilder brushBuilder) {
+	@Contract("_ -> param1")
+	public static @NotNull BrushBuilder registerBrushBuilder(BrushBuilder brushBuilder) {
 		BrushBuilder.put(brushBuilder.getPlayer().getUniqueId(), brushBuilder);
+		return brushBuilder;
 	}
 
 	public static @NotNull Boolean containsBrushBuilder(@NotNull Player p) {
@@ -260,7 +267,7 @@ public class Main extends JavaPlugin {
 		guiManager.addMenu(new GUI_Armure());
 		guiManager.addMenu(new GUI_GOHA());
 
-		getLogger().info("-- All GUI load --");
+		getLogger().info(messageBuilder.getGuiLoad());
 	}
 
 	public Map<Class<? extends BrushOperation>, BrushOperation> getRegisteredBrush() {
@@ -289,7 +296,7 @@ public class Main extends JavaPlugin {
 		brushManager.addBrush(new BlendBall());
 		brushManager.addBrush(new FlowerBrush());
 
-		getLogger().info("-- All brush registered --");
+		getLogger().info(messageBuilder.getBrushLoad());
 
 	}
 
@@ -310,7 +317,7 @@ public class Main extends JavaPlugin {
 				c.set("Server.port", 1234);
 				c.save(new File("plugins/ExpertBuild", "Server" + i + ".yml"));
 
-				getLogger().info("Schematic file create : Server" + i + ".yml");
+				getLogger().info(messageBuilder.getSchematicTransfertFile(String.valueOf(i)));
 			}
 		}
 	}
@@ -328,7 +335,8 @@ public class Main extends JavaPlugin {
 	public static void updateChecker(final Consumer<String> consumer, int id) {
 
 		Bukkit.getScheduler().runTaskAsynchronously(getInstance(), () -> {
-			Main.getInstance().getServer().getConsoleSender().sendMessage(Main.prefix + "Checking for updates...");
+			Main.getInstance().getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getCheckingUpdate());
+
 			try {
 
 				InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + id)).openStream();
@@ -342,7 +350,7 @@ public class Main extends JavaPlugin {
 				}
 
 			} catch (IOException e) {
-				Main.getInstance().getLogger().severe("Unable to check for updates" + e.getMessage());
+				Main.getInstance().getLogger().severe(messageBuilder.getUnableCheckUpdate(e.getMessage()));
 			}
 		});
 	}
@@ -364,6 +372,6 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getServer().getConsoleSender().sendMessage(prefix + "Plugin Disable");
+		getServer().getConsoleSender().sendMessage(prefix + messageBuilder.getPluginDisable());
 	}
 }

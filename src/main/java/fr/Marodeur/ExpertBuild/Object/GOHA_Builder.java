@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public class GOHA_Builder {
 
 	private final Player player;
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
 	private int Height;
 	private String MaterialOrga;
@@ -819,7 +820,8 @@ public class GOHA_Builder {
 		}
 
 		public void buildBlock() {
-			new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+
+			new UtilsFAWE(p).setBlockAnyPattern(p, bv4, true);
 		}
 	}
 }

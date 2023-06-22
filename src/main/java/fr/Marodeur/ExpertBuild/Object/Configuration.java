@@ -1,12 +1,10 @@
 package fr.Marodeur.ExpertBuild.Object;
 
 import com.sk89q.worldedit.WorldEdit;
-
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -37,6 +35,8 @@ public class Configuration extends FileConfiguration {
     private Double arm_correction_factor;
     private String default_material;
     private int default_orga_height;
+
+    private String lang;
 
     private boolean state_server_1;
     private String server_name_1;
@@ -77,6 +77,8 @@ public class Configuration extends FileConfiguration {
             this.default_material = this.yml.getString("build.GOHA.default_material");
             this.default_orga_height = this.yml.getInt("build.GOHA.default_orga_height");
 
+            this.lang = this.yml.getString("build.lang");
+
             /*
              *
              * get state and name of server
@@ -93,6 +95,10 @@ public class Configuration extends FileConfiguration {
 
             this.state_server_4 = this.yml.getBoolean("build.server_4.statserver");
             this.server_name_4 = this.yml.getString("build.server_4.name");
+
+
+            System.out.println("!!!!!" + this.yml.getString("build.lang"));
+
 
         } catch (NullPointerException | IllegalStateException e) {
 
@@ -158,6 +164,10 @@ public class Configuration extends FileConfiguration {
     }
     public int getDefault_orga_height() {
         return default_orga_height;
+    }
+
+    public String getLang() {
+        return lang;
     }
 
     public Boolean getStateServer1() {

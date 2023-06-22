@@ -8,15 +8,14 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
-
 import fr.Marodeur.ExpertBuild.API.Exception.IncompleteSelectionException;
 import fr.Marodeur.ExpertBuild.API.FAWE.BlockChanger;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
-
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -32,6 +31,7 @@ import java.util.List;
 
 public class CommandTimeLapse extends Thread implements CommandExecutor {
 
+    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     public static List<String> BrokenBlock = new ArrayList<>();
 
     private static int Xmin;
@@ -54,27 +54,29 @@ public class CommandTimeLapse extends Thread implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (!(s instanceof Player p)) {
-            new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
             return false;
         }
 
         if (!p.isOp() || !p.hasPermission("exptimelapse.use")) {
-            new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+            p.sendMessage(Main.prefix + message.getDontPerm());
             return false;
         }
+
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         if (cmd.getName().equalsIgnoreCase("timelapse")) {
 
             try {
                 if (!new UtilsFAWE(p).isValidSelection(RegionSelectorType.CUBOID)) throw
-                        new IncompleteSelectionException(p, MsgEnum.ERROR_SELECTION.getPrefix(), RegionSelectorType.CUBOID);
+                        new IncompleteSelectionException(p, RegionSelectorType.CUBOID);
             } catch (IncompleteSelectionException e) {
                 return false;
             }
 
             if (args.length < 1)
             {
-                p.sendMessage(Main.prefix + "Use /timelapse <delay> <iteration>");
+                brushBuilder.sendMessage(message.getUse("/timelapse <delay> <iteration>"));
             }
 
             if (args[0].equalsIgnoreCase("stop")) {
@@ -86,7 +88,7 @@ public class CommandTimeLapse extends Thread implements CommandExecutor {
                 try {
                     ExecuteTimeLapse(p, Long.parseLong(args[0]), Integer.parseInt(args[1]));
                 } catch (NumberFormatException e) {
-                    p.sendMessage(Main.prefix + "Use /timelapse <delay> <iteration>");
+                    brushBuilder.sendMessage(message.getUse("/timelapse <delay> <iteration>"));
                 }
             }
         }
@@ -221,7 +223,7 @@ public class CommandTimeLapse extends Thread implements CommandExecutor {
                     l.setX(x);
                 }
 
-                //int zs = l.getBlockZ();
+                    //int zs = l.getBlockZ();
                 if (x != Xmin) {
                     for (int i = 0; i < iter; i++) {
 

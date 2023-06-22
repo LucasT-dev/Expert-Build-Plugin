@@ -1,13 +1,15 @@
 package fr.Marodeur.ExpertBuild.Commands.CommandsGivenTools;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.ItemBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -38,15 +40,19 @@ public class Terraforming_Painting implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, String[] args) {
 
+		MessageBuilder message = Main.getInstance().getMessageConfig();
+
 		if (!(s instanceof Player p)) {
-			new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+			s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
 			return false;
 		}
 
 		if (!p.isOp() || !p.hasPermission("exptool.use")) {
-			new UtilsFAWE().sendMessage(s, MsgEnum.NOT_PERM);
+			p.sendMessage(Main.prefix + message.getDontPerm());
 			return false;
 		}
+
+		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 
 		ItemStack itArrow = new ItemBuilder(Material.ARROW, 1, 1).build();
 		ItemStack itGunPowder = new ItemBuilder(Material.GUNPOWDER, 1, 1).build();
@@ -74,18 +80,21 @@ public class Terraforming_Painting implements CommandExecutor {
 
 				p.getInventory().setItem(0, itArrow);
 				p.getInventory().setItem(1, itGunPowder);
-				new UtilsFAWE(p)
-						.sendMessage(MsgEnum.GIVE_TOOL, "<tool_type>", "Voxel/FAVS");
+
+				bb.sendMessage(message.getGiveTool("Voxel/FAVS"));
+
 			}
 			case "plume" -> {
 
 				p.getInventory().setItem(0, itFeather);
-				p.sendMessage(Main.prefix + "GoPaint tools given");
+
+				bb.sendMessage(message.getGiveTool("GoPaint"));
 			}
 			case "silex" -> {
 
 				p.getInventory().setItem(0, itFlint);
-				p.sendMessage(Main.prefix + "GoBrush tools given");
+
+				bb.sendMessage(message.getGiveTool("GoBrush"));
 			}
 			case "terra" -> {
 
@@ -94,27 +103,56 @@ public class Terraforming_Painting implements CommandExecutor {
 				p.getInventory().setItem(2, itFeather);
 				p.getInventory().setItem(3, itFlint);
 				p.getInventory().setItem(4, itHoney);
-				p.sendMessage(Main.prefix + "Terraforming and painting tools given");
-			}
-			case "1" -> new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
-					p.getLocation().getX(),
-					p.getLocation().getY(),
-					p.getLocation().getZ()))
-					.sendMessage(MsgEnum.SET_PRIMARY_POS,
-							"<pos>",
-							"(" + (int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ() + ")");
 
-			case "2" -> new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
-					p.getLocation().getX(),
-					p.getLocation().getY(),
-					p.getLocation().getZ()))
-					.sendMessage(MsgEnum.SET_SECONDARY_POS,
-							"<pos>",
-							"(" + (int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ() + ")");
+				bb.sendMessage(message.getGiveTool("terraforming and painting"));
+			}
+			case "1" -> {
+
+				new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
+						p.getLocation().getX(),
+						p.getLocation().getY(),
+						p.getLocation().getZ()));
+
+				if (new UtilsFAWE(p).isCompleteSelection()) {
+
+					BukkitPlayer actor = BukkitAdapter.adapt(p);
+
+					bb.sendMessage(message.getSetPos1WithArea(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+				} else {
+
+					bb.sendMessage(message.getSetPos1(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ()));
+				}
+			}
+
+			case "2" -> {
+
+				new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
+						p.getLocation().getX(),
+						p.getLocation().getY(),
+						p.getLocation().getZ()));
+
+				if (new UtilsFAWE(p).isCompleteSelection()) {
+
+					BukkitPlayer actor = BukkitAdapter.adapt(p);
+
+					bb.sendMessage(message.getSetPos2WithArea(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+				} else {
+
+					bb.sendMessage(message.getSetPos2(
+							(int) p.getLocation().getX() + ", "
+									+ (int) p.getLocation().getY() + ", "
+									+ (int) p.getLocation().getZ()));
+				}
+			}
 
 			case "c" -> new UtilsFAWE(p).CopySelection();
 
@@ -122,17 +160,26 @@ public class Terraforming_Painting implements CommandExecutor {
 
 			case "pa" -> new UtilsFAWE(p).pasteClipboardIgnoreAir();
 
-			case "cube" -> new UtilsFAWE(p).setSelectionType(RegionSelectorType.CUBOID)
-					.sendMessage(MsgEnum.SET_SELECTION, "<selection_type>", "cuboid");
+			case "cube" -> {
+				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CUBOID);
+				bb.sendMessage(message.getSetSelection("cuboid"));
 
-			case "convex" -> new UtilsFAWE(p).setSelectionType(RegionSelectorType.CONVEX_POLYHEDRON)
-					.sendMessage(MsgEnum.SET_SELECTION, "<selection_type>", "convex");
+			}
 
-			case "poly" -> new UtilsFAWE(p).setSelectionType(RegionSelectorType.POLYGON)
-					.sendMessage(MsgEnum.SET_SELECTION, "<selection_type>", "polygon");
+			case "convex" -> {
+				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CONVEX_POLYHEDRON);
+				bb.sendMessage(message.getSetSelection("convex"));
+			}
 
-			case "sel" -> new UtilsFAWE(p).clearSelection()
-					.sendMessage(MsgEnum.SELECTION_CLEAR);
+			case "poly" -> {
+				new UtilsFAWE(p).setSelectionType(RegionSelectorType.POLYGON);
+				bb.sendMessage(message.getSetSelection("polygon"));
+			}
+
+			case "sel" -> {
+				new UtilsFAWE(p).clearSelection();
+				bb.sendMessage(message.getSelectionClear());
+			}
 
 			case "f" -> {
 
@@ -200,7 +247,7 @@ public class Terraforming_Painting implements CommandExecutor {
 				} else {
 					brushBuilder.setBrushType(BrushEnum.NONE)
 							.setEnable(false)
-							.sendMessage(p, MsgEnum.BRUSH_DISABLE)
+							.sendMessage(message.getBrushDisable())
 							.Build(brushBuilder);
 				}
 			}

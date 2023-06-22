@@ -1,8 +1,7 @@
 package fr.Marodeur.ExpertBuild.Commands;
 
-import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,7 +18,7 @@ import java.util.UUID;
 
 public class CommandAutoCb implements CommandExecutor {
 
-
+    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     public static List<String> list = new ArrayList<>();
     public static int state;
 
@@ -40,12 +39,12 @@ public class CommandAutoCb implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (! (s instanceof Player p)) {
-            new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
             return false;
         }
 
         if (!p.isOp() | !p.hasPermission("expautocb.use")) {
-            new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+            p.sendMessage(Main.prefix + message.getDontPerm());
             return false;
         }
 

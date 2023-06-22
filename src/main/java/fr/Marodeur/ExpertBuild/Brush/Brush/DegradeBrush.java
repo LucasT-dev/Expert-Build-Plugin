@@ -96,7 +96,7 @@ public class DegradeBrush implements BrushOperation {
 
                     });
 
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
                 } finally {
                     localSession.remember(editsession);
                 }

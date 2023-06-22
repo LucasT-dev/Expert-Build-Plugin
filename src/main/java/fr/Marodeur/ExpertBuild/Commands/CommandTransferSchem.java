@@ -2,9 +2,10 @@ package fr.Marodeur.ExpertBuild.Commands;
 
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.TransferSchema;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -21,6 +22,7 @@ import java.util.List;
 
 public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	private final Configuration conf = Main.getInstance().getConfig();
 
 	private final List<String> serv =
@@ -50,27 +52,29 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 	public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, String[] args) {
 
 		if (!(s instanceof Player p)) {
-			new UtilsFAWE().sendMessage(s, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+			s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
 			return false;
 		}
 
 		if (!p.isOp() || !p.hasPermission("expschemtrans.use")) {
-			new UtilsFAWE(p).sendMessage(MsgEnum.NOT_PERM);
+			p.sendMessage(Main.prefix + message.getDontPerm());
 			return false;
 		}
+
+		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
 		if (cmd.getName().equalsIgnoreCase("schemtrans")) {
 
 			if (args.length < 1) {
 
-				p.sendMessage(Main.prefix + "Use : /schemtrans <schem> <server>");
+				brushBuilder.sendMessage(message.getUse("/schemtrans <schem> <server>"));
 				return false;
 
 			}
 
 			if (args.length == 1) {
 
-				p.sendMessage(Main.prefix + "Use : /schemtrans " + args[0] + " <server>");
+				brushBuilder.sendMessage(message.getUse("/schemtrans " + args[0] + " <server>"));
 				return false;
 
 			}
@@ -82,19 +86,19 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 				File file1 = new File("plugins/FastAsyncWorldEdit/schematics/"+args[0]);
 
 				if (!file.exists() && !file1.exists()) {
-					p.sendMessage(Main.prefix + "this file : " + args[0] + " doesn't exist");
+					brushBuilder.sendMessage(message.getFileNotExist(args[0]));
 					return false;
 				}
 
 				if ((file.length()/1024) > conf.getMax_file_size() && conf.getMax_file_size() != -1) {
-					p.sendMessage(Main.prefix + "The file is too large, Increase the parameter to transfer larger files");
+					brushBuilder.sendMessage(message.getFileTooLarge());
 					return false;
 				}
 
 				if (args[1].equalsIgnoreCase(conf.getServerName1())) {
 
 					if (conf.getStateServer1().equals(false)) {
-						new UtilsFAWE(p).sendMessage(MsgEnum.SERVER_OFF);
+						brushBuilder.sendMessage(message.getServerOff());
 						return false;
 					}
 
@@ -108,7 +112,7 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 				if (args[1].equalsIgnoreCase(conf.getServerName2())) {
 
 					if (conf.getStateServer2().equals(false)) {
-						new UtilsFAWE(p).sendMessage(MsgEnum.SERVER_OFF);
+						brushBuilder.sendMessage(message.getServerOff());
 						return false;
 					}
 
@@ -121,7 +125,7 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 				if (args[1].equalsIgnoreCase(conf.getServerName3())) {
 
 					if (conf.getStateServer3().equals(false)) {
-						new UtilsFAWE(p).sendMessage(MsgEnum.SERVER_OFF);
+						brushBuilder.sendMessage(message.getServerOff());
 						return false;
 					}
 
@@ -134,7 +138,7 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 				if (args[1].equalsIgnoreCase(conf.getServerName4())) {
 
 					if (conf.getStateServer4().equals(false)) {
-						new UtilsFAWE(p).sendMessage(MsgEnum.SERVER_OFF);
+						brushBuilder.sendMessage(message.getServerOff());
 						return false;
 					}
 
@@ -144,7 +148,7 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 
 					return false;
 				} else {
-					p.sendMessage(Main.prefix + "Unknown server, please try again with valid server name");
+					brushBuilder.sendMessage(message.getUnknownServer());
 				}
 			}
 		}
@@ -152,7 +156,9 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 	}
 	private void getConfig(@NotNull Player p, @NotNull YamlConfiguration c, String file, String server) {
 
-		p.sendMessage(Main.prefix + "Running...");
+		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+
+		brushBuilder.sendMessage(message.getTransfert());
 
 		String user = c.getString("Server.user");
 		String addressServer = c.getString("Server.ServerAddress");

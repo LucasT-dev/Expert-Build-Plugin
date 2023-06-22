@@ -1,9 +1,8 @@
 package fr.Marodeur.ExpertBuild.Commands.CommandsGeneral;
 
-import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -22,6 +21,7 @@ import java.util.List;
 
 public class CommandsInfo implements CommandExecutor, TabCompleter {
 
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	private final List<String> list = Arrays.asList("info", "version", "help", "reload", "sel_mode");
 
 	@Override
@@ -39,14 +39,13 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, String[] args) {
 
 		if (!sender.isOp() | !sender.hasPermission("expbuild.use")) {
-			new UtilsFAWE().sendMessage(sender, MsgEnum.NOT_PERM);
+			sender.sendMessage(Main.prefix + message.getDontPerm());
 			return false;
 		}
 
 		if (cmd.getName().equalsIgnoreCase("expbuild")) {
 			if (args.length == 0) {
-				sender.sendMessage(Main.prefix + " Usages : /expbuild");
-				sender.sendMessage("  §7Arguments : <info/version/help/reload>");
+				sender.sendMessage(Main.prefix + message.getUse("/expbuild <info/version/help/reload>"));
 				return false;
 			}
 			if (args[0].equalsIgnoreCase("info")) {
@@ -85,7 +84,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 				Main.getInstance().reloadConfig();
 
-				sender.sendMessage(Main.prefix + "Expert-Build config reload");
+				sender.sendMessage(Main.prefix + message.getConfigLoad());
 			}
 
 			if (args[0].equalsIgnoreCase("sel_mode")) {
@@ -106,12 +105,10 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 					}
 
 				} else {
-					new UtilsFAWE().sendMessage(sender, MsgEnum.CONSOLE_NOT_EXECUTE_CMD);
+					sender.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
 					return false;
 				}
-
 			}
-
 		}
 		return false;
 	}

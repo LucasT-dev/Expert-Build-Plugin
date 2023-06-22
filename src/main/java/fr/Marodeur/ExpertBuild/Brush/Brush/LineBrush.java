@@ -47,7 +47,7 @@ public class LineBrush implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -90,7 +90,7 @@ public class LineBrush implements BrushOperation {
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -112,24 +112,22 @@ public class LineBrush implements BrushOperation {
                 try {
                     editsession.setFastMode(false);
 
-                    ExecuteBrushOnArrow(p, obj1);
+                    ExecuteBrushOnArrow(p, obj1, loc);
 
                     if (point.containsKey(p.getUniqueId())) {
 
                         ArrayList<BlockVec4> bv41 = point.get(p.getUniqueId());
 
                         for (int i = 0; i <= bv41.size(); i++) {
-                            System.out.println("i = " + i);
 
                             if (i == bv41.size()-1) {
-                                System.out.println("return = ");
 
                                 point.get(p.getUniqueId()).stream().forEach(blockVec4 -> {
 
                                     blockVec4.setMat(brushBuilder.getMaterial());
                                     bv4.add(blockVec4);
 
-                                    new UtilsFAWE(p).setBlockListSimple(p, bv4);
+                                    new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
 
                                     point.remove(p.getUniqueId());
 
@@ -147,12 +145,7 @@ public class LineBrush implements BrushOperation {
                                             brushBuilder.getMaterial()
                                             ));
                         }
-
-
                     }
-
-
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

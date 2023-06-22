@@ -36,8 +36,8 @@ public class DrainBrush implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
-        ExecuteBrushOnArrow(p, obj1);
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
+        ExecuteBrushOnArrow(p, obj1, loc);
     }
 
     public DrainBrush() {
@@ -45,7 +45,7 @@ public class DrainBrush implements BrushOperation {
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -80,19 +80,19 @@ public class DrainBrush implements BrushOperation {
                         for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
                             for (int z = loc1.getBlockZ(); z <= loc2.getBlockZ(); z++) {
 
-                                Location loc = new Location(p.getWorld(), x, y, z);
+                                Location bloc = new Location(p.getWorld(), x, y, z);
 
-                                if (l.distance(loc) <= radius) {
+                                if (l.distance(bloc) <= radius) {
 
-                                    if (loc.getBlock().isLiquid()) {
-                                        bv4.add(new BlockVec4(loc, Material.AIR));
+                                    if (bloc.getBlock().isLiquid()) {
+                                        bv4.add(new BlockVec4(bloc, Material.AIR, p));
                                     }
                                 }
                             }
                         }
                     }
 
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4);
+                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();

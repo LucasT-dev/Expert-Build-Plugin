@@ -4,20 +4,23 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.regions.Region;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
-import fr.Marodeur.ExpertBuild.Enum.MsgEnum;
 import fr.Marodeur.ExpertBuild.Main;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.block.BlockFace;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class BrushBuilder {
+
+    private static final Logger log = Logger.getLogger("Expert-Build");
+    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
     private final Player p;
     private BrushEnum brushEnum;
@@ -327,20 +330,20 @@ public class BrushBuilder {
                 .forEach(brushOperation -> brushOperation.ExecuteBrushOnHoney(p, obj));
     }
 
-    public void executeArrowBrush(BrushBuilder brushBuilder, Object obj) {
+    public void executeArrowBrush(BrushBuilder brushBuilder, Object obj, Object loc) {
 
         Main.getInstance().getRegisteredBrush()
                 .values().stream()
                 .filter(brushOperation -> brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnArrow(p, obj));
+                .forEach(brushOperation -> brushOperation.ExecuteBrushOnArrow(p, obj, loc));
     }
 
-    public void executeGunPowderBrush(BrushBuilder brushBuilder, Object obj) {
+    public void executeGunPowderBrush(BrushBuilder brushBuilder, Object obj, Object loc) {
 
         Main.getInstance().getRegisteredBrush()
                 .values().stream()
                 .filter(brushOperation ->  brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnGunpowder(p, obj));
+                .forEach(brushOperation -> brushOperation.ExecuteBrushOnGunpowder(p, obj, loc));
     }
 
     //MESSAGE:
@@ -353,30 +356,6 @@ public class BrushBuilder {
         return Main.FawePrefix;
     }*/
 
-    public BrushBuilder sendMessage(@NotNull MsgEnum msgEnum) {
-
-        this.p.sendMessage(getMainPrefix() + msgEnum.getPrefix());
-        return this;
-
-    }
-    public BrushBuilder sendMessage(@NotNull CommandSender s, @NotNull MsgEnum msgEnum) {
-
-        s.sendMessage(getMainPrefix() + msgEnum.getPrefix());
-        return this;
-
-    }
-    public BrushBuilder sendMessage(@NotNull MsgEnum msgEnum, String oldChar, String newChar) {
-
-        this.p.sendMessage(getMainPrefix() + msgEnum.getPrefix().replace(oldChar, newChar));
-        return this;
-
-    }
-    public BrushBuilder sendMessage(@NotNull MsgEnum msgEnum, String oldChar, String newChar, String oldChar2, String newChar2) {
-
-        this.p.sendMessage(getMainPrefix() + msgEnum.getPrefix().replace(oldChar, newChar).replace(oldChar2, newChar2));
-        return this;
-
-    }
     public BrushBuilder sendMessage(String msg) {
 
         this.p.sendMessage(getMainPrefix() + msg);
@@ -390,16 +369,15 @@ public class BrushBuilder {
      * @param p Player
      *
      */
-    public static void registerPlayer(@NotNull Player p) {
+    public static BrushBuilder registerPlayer(@NotNull Player p) {
 
         if (Main.containsBrushBuilder(p)) {
-            p.sendMessage(Main.prefix + "You are already registered");
-            return;
+            p.sendMessage(message.getPlayerAlreadyRegistered());
+            return getBrushBuilderPlayer(p);
         }
 
         Configuration conf = Main.getInstance().getConfig();
-
-        Main.registerBrushBuilder(new BrushBuilder(p, BrushEnum.NONE, false, true, conf.getDefault_material_brush(), "",
+        return Main.registerBrushBuilder(new BrushBuilder(p, BrushEnum.NONE, false, true, conf.getDefault_material_brush(), "",
                 conf.getDefault_biome_brush(), conf.getDefault_air_brush(), conf.getDefaultBrushRayon(),
                 "lower", false, 1, 4,
                 null, new ArrayList<>(), null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
@@ -413,8 +391,15 @@ public class BrushBuilder {
      * @param p Player
      *
      */
-    public static BrushBuilder getBrushBuilderPlayer(@NotNull Player p) {
-        return Main.getBrushBuilder(p);
+    public static @Nullable BrushBuilder getBrushBuilderPlayer(@NotNull Player p) {
+
+        if (Main.containsBrushBuilder(p)) {
+            return Main.getBrushBuilder(p);
+
+        } else {
+            log.severe(message.getErrorBrushbuilder(p.getName()));
+            return null;
+        }
     }
 
     /**

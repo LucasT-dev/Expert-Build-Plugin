@@ -54,6 +54,6 @@ public class ClipboardsBrush implements BrushOperation {
         brushBuilder.getClipboards().get(index)
                 .iterator()
                 .forEachRemaining(bv3 -> bv4.add(new BlockVec4(l.clone().add(bv3.getX(), bv3.getY(), bv3.getZ()), bv3.getBaseblock())));
-        new UtilsFAWE(p).setBlockList(p, bv4);
+        new UtilsFAWE(p).setBlockList(p, bv4, false);
     }
 }

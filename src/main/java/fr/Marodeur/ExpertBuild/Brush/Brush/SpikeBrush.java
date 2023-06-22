@@ -38,7 +38,7 @@ public class SpikeBrush implements BrushOperation {
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1) {
+    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -50,7 +50,7 @@ public class SpikeBrush implements BrushOperation {
         }
 
         Location l = (Location) obj1;
-        Location ploc = p.getLocation();
+        Location ploc = (Location) loc;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
@@ -68,10 +68,9 @@ public class SpikeBrush implements BrushOperation {
                     sphere.addAll(new BlockVec4().getPointInSphere(ploc, radius, bb.getMaterial()));
 
                     sphere.forEach(blockVec4 ->
-                        bv4.addAll(blockVec4
-                                .getPointInto2Point(blockVec4.toLocation(l.getWorld()), l, 1, bb.getMaterial())));
+                        bv4.addAll(blockVec4.getPointInto2Point(blockVec4.toLocation(l.getWorld()), l, 1, bb.getMaterial())));
 
-                    new UtilsFAWE(p).setBlockListSimple(p, bv4);
+                    new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -82,7 +81,7 @@ public class SpikeBrush implements BrushOperation {
 
     @Deprecated
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1) {
+    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
 
         if (!hasPermission(p)) {
             return;
@@ -94,7 +93,8 @@ public class SpikeBrush implements BrushOperation {
         }
 
         Location l = (Location) obj1;
-        Location ploc = p.getLocation();
+        Location ploc = (Location) loc;
+        //Location loc = p.getLocation();
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
@@ -109,19 +109,12 @@ public class SpikeBrush implements BrushOperation {
 
                     ArrayList<BlockVec4> sphere = new ArrayList<>();
 
-                    sphere.addAll(new BlockVec4().getPointInSphere(l, radius, bb.getMaterial()));
+                    sphere.addAll(new BlockVec4().getPointInSphere(l, radius, bb.getPattern()));
 
-                    sphere.stream().forEach(blockVec4 -> {
+                    sphere.stream().forEach(blockVec4 ->
+                            bv4.addAll(blockVec4.getPointInto2Point(blockVec4.toLocation(l.getWorld()), ploc, 1, bb.getPattern())));
 
-                        bv4.addAll(blockVec4.getPointInto2Point(blockVec4.toLocation(l.getWorld()), ploc, 1, bb.getMaterial()));
-
-                    });
-
-
-                    //bv4.forEach(bv41 -> bv41.setMat(bb.getMaterial()));
-
-
-                    new UtilsFAWE(p).setBlockListSimple(p, bv4);
+                    new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();
