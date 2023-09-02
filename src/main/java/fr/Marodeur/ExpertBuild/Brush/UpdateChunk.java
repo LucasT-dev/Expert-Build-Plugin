@@ -1,4 +1,4 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
@@ -22,7 +22,7 @@ public class UpdateChunk implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return brushBuilder.getEnable();
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Override

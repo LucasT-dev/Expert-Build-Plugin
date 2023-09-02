@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
@@ -1497,7 +1497,7 @@ public class BlockChanger {
         return null;
     }
 
-    private static Object getNMSWorld(@Nonnull World world) {
+    private static @Nullable Object getNMSWorld(World world) {
         try {
             return WORLD_GET_HANDLE.invoke(world);
         } catch (Throwable e) {
@@ -1531,7 +1531,7 @@ public class BlockChanger {
         return true;
     }
 
-    public static Object getTileEntity(Block block) {
+    public static @Nullable Object getTileEntity(Block block) {
         try {
             return GET_NMS_TILE_ENTITY.invoke(block.getState());
         } catch (Throwable e) {
@@ -1541,7 +1541,7 @@ public class BlockChanger {
     }
 
     // 1.12+ only
-    public static Object getSnapshotNBT(Block block) {
+    public static @Nullable Object getSnapshotNBT(Block block) {
         try {
             return GET_SNAPSHOT_NBT.invoke(block.getState());
         } catch (Throwable e) {
@@ -1568,7 +1568,7 @@ public class BlockChanger {
     }
 
     // 1.12+ only
-    public static Object getSnapshot(Block block) {
+    public static @Nullable Object getSnapshot(Block block) {
         try {
             return GET_SNAPSHOT.invoke(block.getState());
         } catch (Throwable e) {
@@ -1578,7 +1578,7 @@ public class BlockChanger {
     }
 
     // 1.12+ only
-    public static String debugStoredSnapshot(Block block) {
+    public static @NotNull String debugStoredSnapshot(Block block) {
         try {
             return GET_SNAPSHOT.invoke(block.getState()).toString() + " (Tile Entity)";
         } catch (Throwable e) {
@@ -1607,7 +1607,7 @@ public class BlockChanger {
      * @param z     point
      * @return constructs an unmodifiable block position
      */
-    public static Object newBlockPosition(@Nullable Object world, Object x, Object y, Object z) {
+    public static @Nullable Object newBlockPosition(@Nullable Object world, Object x, Object y, Object z) {
         try {
             return BLOCK_POSITION_CONSTRUCTOR.newBlockPosition(world, x, y, z);
         } catch (Throwable e) {
@@ -1659,7 +1659,7 @@ public class BlockChanger {
      * @return modified MutableBlockPosition (no need to set the variable to the
      *         returned MutableBlockPosition)
      */
-    public static Object setBlockPosition(Object mutableBlockPosition, Object x, Object y, Object z) {
+    public static @Nullable Object setBlockPosition(Object mutableBlockPosition, Object x, Object y, Object z) {
         try {
             return BLOCK_POSITION_CONSTRUCTOR.set(mutableBlockPosition, x, y, z);
         } catch (Throwable e) {
@@ -1674,7 +1674,7 @@ public class BlockChanger {
      * @return nms block data from bukkit item stack
      * @throws IllegalArgumentException if material is not a block
      */
-    public static @Nonnull Object getBlockData(@Nonnull ItemStack itemStack) {
+    public static Object getBlockData(ItemStack itemStack) {
         Object blockData = BLOCK_DATA_GETTER.fromItemStack(itemStack);
         if (blockData == null) throw new IllegalArgumentException("Couldn't convert specified itemstack to block data");
         return blockData;
@@ -1685,7 +1685,7 @@ public class BlockChanger {
      * @param material to get block data for
      * @return stored nms block data for the specified material
      */
-    public static @Nullable Object getBlockData(@Nullable Material material) {
+    public static Object getBlockData(Material material) {
         return NMS_BLOCK_MATERIALS.get(material);
     }
 
@@ -1699,7 +1699,7 @@ public class BlockChanger {
      * @param block bukkit block to cast to nms block data
      * @return nms block data from bukkit block
      */
-    public static @Nonnull Object getBlockData(Block block) {
+    public static Object getBlockData(Block block) {
         Object blockData = BLOCK_DATA_GETTER.fromBlock(block);
         return blockData != null ? blockData : AIR_BLOCK_DATA;
     }
@@ -2768,7 +2768,7 @@ final class ReflectionUtils {
      * @since 4.0.0
      */
     @Nullable
-    public static Class<?> getNMSClass(@Nonnull String newPackage, @Nonnull String name) {
+    public static Class<?> getNMSClass(String newPackage, String name) {
         if (supports(17)) name = newPackage + '.' + name;
         return getNMSClass(name);
     }
@@ -2782,7 +2782,7 @@ final class ReflectionUtils {
      * @since 1.0.0
      */
     @Nullable
-    public static Class<?> getNMSClass(@Nonnull String name) {
+    public static Class<?> getNMSClass(String name) {
         try {
             return Class.forName(NMS + name);
         } catch (ClassNotFoundException ex) {
@@ -2802,8 +2802,7 @@ final class ReflectionUtils {
      * @see #sendPacketSync(Player, Object...)
      * @since 1.0.0
      */
-    @Nonnull
-    public static CompletableFuture<Void> sendPacket(@Nonnull Player player, @Nonnull Object... packets) {
+    public static CompletableFuture<Void> sendPacket(Player player, Object... packets) {
         return CompletableFuture.runAsync(() -> sendPacketSync(player, packets)).exceptionally(ex -> {
             ex.printStackTrace();
             return null;
@@ -2819,7 +2818,7 @@ final class ReflectionUtils {
      * @see #sendPacket(Player, Object...)
      * @since 2.0.0
      */
-    public static void sendPacketSync(@Nonnull Player player, @Nonnull Object... packets) {
+    public static void sendPacketSync(Player player, Object... packets) {
         try {
             Object handle = GET_HANDLE.invoke(player);
             Object connection = PLAYER_CONNECTION.invoke(handle);
@@ -2836,7 +2835,7 @@ final class ReflectionUtils {
     }
 
     @Nullable
-    public static Object getHandle(@Nonnull Player player) {
+    public static Object getHandle(Player player) {
         Objects.requireNonNull(player, "Cannot get handle of null player");
         try {
             return GET_HANDLE.invoke(player);
@@ -2846,8 +2845,7 @@ final class ReflectionUtils {
         }
     }
 
-    @Nullable
-    public static Object getConnection(@Nonnull Player player) {
+    public static @Nullable Object getConnection(Player player) {
         Objects.requireNonNull(player, "Cannot get connection of null player");
         try {
             Object handle = GET_HANDLE.invoke(player);
@@ -2867,7 +2865,7 @@ final class ReflectionUtils {
      * @since 1.0.0
      */
     @Nullable
-    public static Class<?> getCraftClass(@Nonnull String name) {
+    public static Class<?> getCraftClass(String name) {
         try {
             return Class.forName(CRAFTBUKKIT + name);
         } catch (ClassNotFoundException ex) {

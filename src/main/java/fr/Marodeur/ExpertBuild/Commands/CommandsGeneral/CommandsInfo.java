@@ -83,6 +83,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("reload")) {
 
 				Main.getInstance().reloadConfig();
+				Main.getInstance().reloadMessageConfig();
 
 				sender.sendMessage(Main.prefix + message.getConfigLoad());
 			}
@@ -94,13 +95,11 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 					if (bb.getSelMode().equals(false)) {
 						bb.setSelMode(true)
-								.sendMessage("Shift click executing /sel disable")
-								.Build(bb);
+								.sendMessage("Shift click executing /sel disable");
 						return false;
 					} else {
 						bb.setSelMode(false)
-								.sendMessage("Shift click executing /sel enable")
-								.Build(bb);
+								.sendMessage("Shift click executing /sel enable");
 						return false;
 					}
 

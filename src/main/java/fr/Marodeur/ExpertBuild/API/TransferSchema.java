@@ -37,6 +37,8 @@ package fr.Marodeur.ExpertBuild.API;
 
 import com.jcraft.jsch.*;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.ServerOperator;
@@ -46,10 +48,13 @@ import java.util.logging.Logger;
 
 public class TransferSchema {
 
-	public TransferSchema(final @NotNull Player p, String NameFile, String ip, int Port, String User,
-						  String PassWord, String ServerName) {
+	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
+
+	public TransferSchema(final @NotNull Player p, String nameFile, String ip, int Port, String User,
+						  String PassWord, String serverName) {
 
 		final Logger log = Logger.getLogger("Expert-Build");
+		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
 		Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
@@ -59,36 +64,34 @@ public class TransferSchema {
 
 				Bukkit.getOnlinePlayers().stream()
 						.filter(ServerOperator::isOp)
-						.forEach(player -> player.sendMessage(Main.prefix + "Connection to the server... please, don't reload ExpertBuild, don't restart the serveur"));
+						.forEach(player -> player.sendMessage(Main.prefix + message.getDontRestart()));
 
 				session = jsch.getSession(User, ip, Port);
 				session.setConfig("StrictHostKeyChecking", "no");
 				session.setPassword(PassWord);
 				session.connect();
 
-				p.sendMessage(Main.prefix + "schematics transfer...");
-
 				Channel channel = session.openChannel("sftp");
 				channel.connect();
 				ChannelSftp sftpChannel = (ChannelSftp) channel;
 
-				sftpChannel.put("plugins/FastAsyncWorldEdit/schematics/" + p.getUniqueId() + "/" + NameFile, "plugins/FastAsyncWorldEdit/schematics/" + p.getUniqueId() + "/Imported-" + NameFile);
+				sftpChannel.put("plugins/FastAsyncWorldEdit/schematics/" + p.getUniqueId() + "/" + nameFile, "plugins/FastAsyncWorldEdit/schematics/Imported-" + nameFile);
 
 				//sftpChannel.get("plugins/FastAsyncWorldEdit/" + NameFile);
 
 				sftpChannel.exit();
 				session.disconnect();
-				p.sendMessage(Main.prefix + "Transfer finish, successful upload file : Imported-" + NameFile + " on server : " + ServerName);
+				brushBuilder.sendMessage(message.getSuccesTransfert(nameFile, serverName));
 
-				log.info("NameFile imported Exported with succes by " + p + " on : " + ServerName);
+				log.info(message.getTransfertLog(nameFile, p.getName(), serverName));
 
 			} catch (JSchException e) {
 				e.printStackTrace();
-				p.sendMessage(Main.prefix + "Error JSch-Exception, please see console");
+				brushBuilder.sendMessage(message.getErrorJschException());
 
 			} catch (SftpException e) {
 				e.printStackTrace();
-				p.sendMessage(Main.prefix + "Error Sftp-Exception, please see console");
+				brushBuilder.sendMessage(message.getErrorSftpException());
 			}
 		});
 	}

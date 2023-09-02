@@ -66,9 +66,9 @@ build:
   wand_click_in_air: true
 
   #Player can clear selection using shift click with wand
-  #Default : true
+  #Default : false
   #Use boolean value (true / false)
-  sihft_click_with_wand: true
+  sihft_click_with_wand: false
 
   #Max point number save for Brush line
   #Default : 20
@@ -78,12 +78,12 @@ build:
   #Terraforming Tool 1
   #Default : ARROW
   #Use item name
-  terraforming_tool_1: ARROW
+  terraforming_tool_1: SPECTRAL_ARROW
 
   #Terraforming Tool 2
   #Default : GUNPOWDER
   #Use item name
-  terraforming_tool_2: GUNPOWDER
+  terraforming_tool_2: CLAY_BALL
 
 
   GOHA:
@@ -150,8 +150,8 @@ build:
         selection_clear: Selection clear
         set_selection: Selection 'selection' set
 
-        block_modified: a'num' block have been modified
-        block_modified_with_time: a'num' block have ben modified ('num2' blocks/s)
+        block_modified: "'num' block have been modified"
+        block_modified_with_time: "'num' block have ben modified ('num2' blocks/s)"
 
       error:
         error_region: Region error n° 'num' ! 'error'
@@ -174,7 +174,8 @@ build:
 
       commands:
         use: Use 'cmd'
-        pregeneration: pregeneration
+        pregeneration: Pre-generate
+        generate: Generate
 
         file_not_exist: This file 'file' doesn't exist
         file_too_large: The file is too large, Increase the parameter to transfer larger files
@@ -184,6 +185,65 @@ build:
         dont_restart: Connection to the server... please, don't reload ExpertBuild, don't restart the server
         succes_transfert: Transfer finish, successful upload file Imported-'file' on server 'server'
         transfert_log: The file 'file' Exported with succes by 'player' on 'server'
+
+      gui:
+        back: Back
+        exit: Exit
+        main_gui_title: Main
+        main_item_1: Welcome to Exp_Build x)
+        main_item_2: Click on the items to discover all
+        main_item_3: the possibilities
+
+        leather_gui_title: Leather
+        leather_item: Custom Leather
+        leather_helmet: Leather helmet
+        leather_chestplate: Leather chestplate
+        leather_leggings: Leather leggings
+        leather_boots: Leather boots
+        red_color: §8RED color
+        green_color: §8GREEN color
+        blue_color: §8BLUE color
+        red: RED§7 'level'
+        green: GREEN§7 'level'
+        blue: BLUE§7 'level'
+
+        organic_gui_title: Organic generator
+        organic_item: Humanoid-Organic-Generator
+        pitch_angle_conf: Pitch angle configuration
+        yaw_angle_conf: Yaw angle configuration
+        click_change_angle: Click for change 'type' angle
+        click_enable_disable: Click for enable / disable member
+        click_pregen: Click for pregenerate the organic
+        click_generate: Click for generate the organic
+        click_clear_particle: Click for clear particle
+        member_conf: Member configuration
+        height: Height
+        organic_height: "Organic Height :§7 'value'"
+        interact_member: Right Click, Left click or Shift Click
+        switch_member: "'type' :§7 'state'"
+        pitch_level: "Pitch :§7 'level'"
+        yaw_level: "Yaw :§7 'level'"
+
+
+        flower_gui_title: Flower Brush
+        flower_item: Create your flower brush
+        brush_enable: §a Enable
+        brush_disable: §4 Disable
+        radius_text: Radius
+        radius_value: "Radius :§7 'value'"
+        air_text: Air
+        air_value: "Air :§7 'value'"
+        total: "Total :§7 'value'"
+        right_arrow: ">§7 'value'"
+        click_for_change: Click for change percentage
+        property_key: "PropertyKey : §7'value'"
+        value_propertykey : "Value : §7'value'"
+        click_for_change_property: Click for change property
+
+
+
+
+
 
     fr:
       main:
@@ -232,8 +292,8 @@ build:
         selection_clear: Selection effacé
         set_selection: Selection 'selection' défini
 
-        block_modified: a'num' block ont été modifé
-        block_modified_with_time: a'num' block ont été modifé ('num2' blocks/s)
+        block_modified: "'num' blocs ont été modifé"
+        block_modified_with_time: "'num' blocs ont été modifé ('num2' blocks/s)"
 
       error:
         error_region: Erreur région n° 'num' ! 'error'
@@ -256,7 +316,8 @@ build:
 
       commands:
         use: Utilisez 'cmd'
-        pregeneration: pré-génération
+        pregeneration: pré-générer
+        generate: Générer
 
         file_not_exist: Le fichier 'file' n'existe pas
         file_too_large: Le fichier est trop volumineux, Augmentez le parametre de tranfert dans le fichier de configuration
@@ -266,3 +327,57 @@ build:
         dont_restart: Connection au serveur... svp, ne re-chargé pas ExpertBuild, ne re-démarré pas le serveur
         succes_transfert: Transfer fini, Fichier envoya avec succès Imported-'file' sur le serveur 'server'
         transfert_log: Le fichier 'file' exporté avec succes par 'player' sur le serveur 'server'
+
+      gui:
+        back: Retour
+        exit: Quitté
+        main_gui_title: Menu principal
+        main_item_1: Bienvenue sur Exp_Build gui x)
+        main_item_2: Click sur les items pour découvrir toutes
+        main_item_3: les possibilitées
+
+        leather_gui_title: Leather
+        leather_item: Custom Leather
+        leather_helmet: Casque en cuir
+        leather_chestplate: Tunique en cuir
+        leather_leggings: Pantalon en cuir
+        leather_boots: Bottes en cuir
+        red_color: §8Couleur ROUGE
+        green_color: §8Couleur VERT
+        blue_color: §8Couleur BLEUE
+        red: ROUGE§7 'level'
+        green: VERT§7  'level'
+        blue: BLEUE§7 'level'
+
+        organic_gui_title: Generateur d'organique
+        organic_item: Humanoid-Organic-Generator
+        pitch_angle_conf: Pitch angle configuration
+        yaw_angle_conf: Yaw angle configuration
+        click_change_angle: Clic pour changer l'angle 'type'
+        click_enable_disable: Clic pour Activer / Désactiver un membre
+        click_pregen: Clic pour pre-generer l'organic
+        click_generate: Clic pour generer l'organic
+        click_clear_particle: Clic pour supprimer les particules
+        member_conf: configuration des membres
+        height: Hauteur
+        organic_height: "Hauteur organique :§7 'value'"
+        interact_member: Clic droit, Clic gauche ou Shift clic
+        switch_member: "'type' :§7 'state'"
+        pitch_level: "Pitch :§7 'level'"
+        yaw_level: "Yaw :§7 'level'"
+
+
+        flower_gui_title: Brush Fleur
+        flower_item: Créer ton brush
+        brush_enable: §a Activé
+        brush_disable: §4 Désactivé
+        radius_text: Rayon
+        radius_value: "Rayon :§7 'value'"
+        air_text: Air
+        air_value: "Air :§7 'value'"
+        total: "Total :§7 'value'"
+        right_arrow: ">§7 'value'"
+        click_for_change: Clic pour changer le pourcentage
+        property_key: "PropertyKey :§7 'value'"
+        value_propertykey: "Valeur :§7 'value'"
+        click_for_change_property: Clic pour changer la propriété

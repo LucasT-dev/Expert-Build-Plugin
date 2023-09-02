@@ -1,4 +1,4 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ErodeBrush implements BrushOperation {
+public class ErodeBlendBrush implements BrushOperation {
 
     private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
@@ -37,35 +37,19 @@ public class ErodeBrush implements BrushOperation {
 
     private int[] erorionParameter;
 
-
-    /*NONE(new ErosionPreset(0, 1, 0, 1)),
-    MELT(new ErosionPreset(2, 1, 5, 1)),
-    FILL(new ErosionPreset(5, 1, 2, 1)),
-    SMOOTH(new ErosionPreset(3, 1, 3, 1)),
-    LIFT(new ErosionPreset(6, 0, 1, 1)),
-    FLOATCLEAN(new ErosionPreset(6, 1, 6, 1));
-
-    0 > Erosion face
-    1 > Erosion erosionRecursion
-    2 > fill Faces
-    3 > fill Recursion
-
-    */
-
-
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() || p.hasPermission("experode.use");
+        return p.isOp() | p.hasPermission("experode.use");
     }
 
     @Override
     public BrushEnum getTypeOfBrush() {
-        return BrushEnum.LIFT;
+        return BrushEnum.ERODEBLEND;
     }
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return brushBuilder.getEnable();
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Deprecated
@@ -76,7 +60,7 @@ public class ErodeBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p))) {
+        if(!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p))) {
             return;
         }
 
@@ -85,17 +69,19 @@ public class ErodeBrush implements BrushOperation {
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
-        int radius = bb.getRayon();
+        int radius = bb.getRadius();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
 
             try {
                 editsession.setFastMode(false);
 
-                long tstart = System.currentTimeMillis();
+                blend(l, false, false, radius);
+                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
+                bv4.clear();
+
 
                 erorionParameter = new int[]{bb.getErosionFaces(), bb.getErosionRecursion(), bb.getFillFaces(), bb.getFillRecursion()};
-
                 final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
 
@@ -116,10 +102,6 @@ public class ErodeBrush implements BrushOperation {
                 for (int i = 0; i < erorionParameter[3]; ++i) {
                     fillIteration(iterationBlockManager);
                 }
-
-                /*if (bb.isErodeBlend()) {
-                    blend(l, false, radius);
-                }*/
 
                 new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
 
@@ -148,16 +130,18 @@ public class ErodeBrush implements BrushOperation {
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
-        int radius = bb.getRayon();
+        int radius = bb.getRadius();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
             try {
                 editsession.setFastMode(false);
 
-                long tstart = System.currentTimeMillis();
+                blend(l, false, false, radius);
+                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
+                bv4.clear();
+
 
                 erorionParameter = new int[]{bb.getFillFaces(), bb.getFillRecursion(), bb.getErosionFaces(), bb.getErosionRecursion()};
-
                 final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
 
@@ -179,10 +163,6 @@ public class ErodeBrush implements BrushOperation {
                     fillIteration(blockChangeTracker);
                 }
 
-                /*if (bb.isErodeBlend()) {
-                    blend(l, false, radius);
-                }*/
-
                 new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
 
                 spherePoint.clear();
@@ -193,7 +173,7 @@ public class ErodeBrush implements BrushOperation {
         }
     }
 
-    private void erosionIteration(final @NotNull IterationBlockManager iterationBlockManager) {
+    private void erosionIteration(final @NotNull ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
 
         final int currentIteration = iterationBlockManager.nextIteration();
 
@@ -223,16 +203,14 @@ public class ErodeBrush implements BrushOperation {
         });
     }
 
-    private void fillIteration(final @NotNull IterationBlockManager iterationBlockManager) {
+    private void fillIteration(final @NotNull ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
 
         final int currentIteration = iterationBlockManager.nextIteration();
 
         spherePoint.forEach(currentPosition -> {
 
             final BlockVec4 currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
-
             int count = 0;
-
             final Map<BlockVec4, Integer> blockCount = new HashMap<>();
 
             for (final Vector vector : CHECK_FACES) {
@@ -317,68 +295,20 @@ public class ErodeBrush implements BrushOperation {
         }
     }
 
+    public void blend(Location l, boolean excludeAir, boolean excludeWater, int radius) {
 
-    /*public void blend(Location l, boolean excludeAir, int radius) {
 
-        boolean excludeWater = false;
-
-        int size = 2 * (radius + 1) + 1;
         final int brushSizeDoubled = 2 * radius;
         // Array that holds the original materials plus a buffer
-        final Material[][][] oldMaterials = new Material[size][size][size];
+        final Material[][][] oldMaterials = new Material[2 * (radius + 1) + 1][2 * (radius + 1) + 1][2 * (radius + 1) + 1];
         // Array that holds the blended materials
         final Material[][][] newMaterials = new Material[brushSizeDoubled + 1][brushSizeDoubled + 1][brushSizeDoubled + 1];
 
-        spherePoint.forEach(pos -> {
-
-            bv4.stream().forEach(blockVec4 -> {
-
-                if (blockVec4.getcoordonateEquals(pos.getBlockX(), pos.getBlockY(), pos.getBlockZ())) {
-                    oldMaterials[pos.getBlockX()][pos.getBlockY()][pos.getBlockZ()] = blockVec4.getMat();
-
-                } else {
-                    oldMaterials[pos.getBlockX()][pos.getBlockY()][pos.getBlockZ()] = new BlockVec4()
-                            .getMaterial(l.getWorld(),
-                                    l.getBlockX() - radius - 1 + pos.getBlockX(),
-                                    l.getBlockY() - radius - 1 + pos.getBlockY(),
-                                    l.getBlockZ() - radius - 1 + pos.getBlockZ());
-                }
-            });
-        });
-
-
-        //Log current materials into oldmats
+        // Log current materials into oldmats
         for (int x = 0; x <= 2 * (radius + 1); x++) {
             for (int y = 0; y <= 2 * (radius + 1); y++) {
                 for (int z = 0; z <= 2 * (radius + 1); z++) {
-
-                    int finalX = x;
-                    int finalY = y;
-                    int finalZ = z;
-
-                    bv4.stream().forEach(blockVec4 -> {
-
-                        if (blockVec4.getcoordonateEquals(l.getBlockX() - radius - 1 + finalX,
-                                l.getBlockY() - radius - 1 + finalY,
-                                l.getBlockZ() - radius - 1 + finalZ)) {
-
-                            oldMaterials[finalX][finalY][finalZ] = blockVec4.getMat();
-
-                        } else {
-                            oldMaterials[finalX][finalY][finalZ] = new BlockVec4()
-                                    .getMaterial(l.getWorld(),
-                                            l.getBlockX() - radius - 1 + finalX,
-                                            l.getBlockY() - radius - 1 + finalY,
-                                            l.getBlockZ() - radius - 1 + finalZ);
-
-                            //System.out.println("NOT use espion block ");
-                        }
-                    });
-
-                    //Calc
-
-                    //oldMaterials[x][y][z] = new BlockVec4().getMaterial(l.getWorld(), l.getBlockX() - radius - 1 + x, l.getBlockY() - radius - 1 + y, l.getBlockZ() - radius - 1 + z);
-
+                    oldMaterials[x][y][z] = new BlockVec4().getMaterial(l.getWorld(), l.getBlockX() - radius - 1 + x, l.getBlockY() - radius - 1 + y, l.getBlockZ() - radius - 1 + z);
                 }
             }
         }
@@ -386,7 +316,9 @@ public class ErodeBrush implements BrushOperation {
         // Log current materials into newmats
         for (int x = 0; x <= brushSizeDoubled; x++) {
             for (int y = 0; y <= brushSizeDoubled; y++) {
-                System.arraycopy(oldMaterials[x + 1][y + 1], 1, newMaterials[x][y], 0, brushSizeDoubled + 1);
+                for (int z = 0; z <= brushSizeDoubled; z++) {
+                    newMaterials[x][y][z] = oldMaterials[x + 1][y + 1][z + 1];
+                }
             }
         }
 
@@ -424,9 +356,10 @@ public class ErodeBrush implements BrushOperation {
 
                     // Make sure that there's no tie in highest material
                     for (Map.Entry<Material, Integer> e : materialFrequency.entrySet()) {
-                        if (e.getValue() == highestMaterialCount && !(excludeAir && e.getKey() == Material.AIR) && !(excludeWater && e.getKey() == Material.WATER)) {                                        if (e.getKey() == highestMaterial) {
-                            continue;
-                        }
+                        if (e.getValue() == highestMaterialCount && !(excludeAir && e.getKey() == Material.AIR) && !(excludeWater && e.getKey() == Material.WATER)) {
+                            if (e.getKey() == highestMaterial) {
+                                continue;
+                            }
                             tiecheck = false;
                         }
                     }
@@ -451,16 +384,14 @@ public class ErodeBrush implements BrushOperation {
                 for (int z = brushSizeDoubled; z >= 0; z--) {
                     if (xSquared + ySquared + Math.pow(z - radius - 1, 2) <= rSquared) {
 
-                        if (!(excludeAir && newMaterials[x][y][z] == Material.STONE) && !(excludeWater && (newMaterials[x][y][z] == Material.WATER))) {
+                        if (!(excludeAir && newMaterials[x][y][z] == Material.AIR) && !(excludeWater && (newMaterials[x][y][z] == Material.WATER))) {
 
-                            if (!bv4.contains(new BlockVec4(l.getBlockX() - radius + x, l.getBlockY() - radius + y, l.getBlockZ() - radius + z, oldMaterials[x][y][z]))) {
+                            bv4.add(new BlockVec4(l.getBlockX() - radius + x, l.getBlockY() - radius + y, l.getBlockZ() - radius + z, newMaterials[x][y][z]));
 
-                                bv4.add(new BlockVec4(l.getBlockX() - radius + x, l.getBlockY() - radius + y, l.getBlockZ() - radius + z, newMaterials[x][y][z]));
-                            }
                         }
                     }
                 }
             }
         }
-    }*/
+    }
 }

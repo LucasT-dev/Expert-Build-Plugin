@@ -2,9 +2,14 @@ package fr.Marodeur.ExpertBuild.Object;
 
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockTypes;
+
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -13,63 +18,56 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class BrushBuilder {
 
     private static final Logger log = Logger.getLogger("Expert-Build");
     private static final MessageBuilder message = Main.getInstance().getMessageConfig();
+    private static final Configuration conf = Main.getInstance().getConfig();
 
-    private final Player p;
+    private final UUID uuid;
     private BrushEnum brushEnum;
     private Boolean isEnable;
     private Boolean SelMode;
     private Material material;
-    private String flowerMaterial;
+    private List<BaseBlock> flowerMaterial;
+    private List<Integer> flowerMaterialTaux;
     private Biome biome;
     private int airBrush;
-    private Integer rayon;
-    private String upperLower; // flower constitued 2 blocks
-    private Boolean isWaterlog; // coral is waterlog
-    private int years; // age of plant
+    private Integer radius;
     private int tickRT; // tick repeater
     private Region region; //autoFlip
     private ArrayList<List<BlockVec4>> clipboards; //Multi Clipboard
     private BlockFace blockFace;
-    private List<BlockVec4> bv4; //using for undo goha and autoflip
+    private List<BlockVec4> bv4; //using autoflip
     private Pattern pattern;
 
     private int erosionFaces;
     private int erosionRecursion;
     private int fillFaces;
     private int fillRecursion;
-    private boolean isErodeBlend;
 
     /**
-     *
      * Create objet BrushBuilder
-     *
      */
-    public BrushBuilder(Player p, BrushEnum brushEnum, Boolean isEnable, Boolean SelMode, Material material,
-                        String flowerMaterial, Biome biome, int airBrush, Integer rayon,
-                        String upperLower, Boolean isWaterlog, int years, int tickRT, Region region,
-                        ArrayList<List<BlockVec4>> clipboards, BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
-                        int erosionFaces, int erosionRecursion, int fillFaces, int fillRecursion, boolean isErodeBlend) {
+    public BrushBuilder(UUID uuid, BrushEnum brushEnum, Boolean isEnable, Boolean SelMode, Material material,
+                        List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
+                        Integer rayon, int tickRT, Region region, ArrayList<List<BlockVec4>> clipboards,
+                        BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
+                        int erosionFaces, int erosionRecursion, int fillFaces, int fillRecursion) {
 
-        this.p = p;
+        this.uuid = uuid;
         this.brushEnum = brushEnum;
         this.isEnable = isEnable;
         this.SelMode = SelMode;
         this.material = material;
         this.flowerMaterial = flowerMaterial;
+        this.flowerMaterialTaux = flowerMaterialTaux;
         this.biome = biome;
         this.airBrush = airBrush;
-        this.rayon = rayon;
-        this.upperLower = upperLower;
-        this.isWaterlog = isWaterlog;
-        this.years = years;
+        this.radius = rayon;
         this.tickRT = tickRT;
         this.region = region;
         this.clipboards = clipboards;
@@ -81,14 +79,14 @@ public class BrushBuilder {
         this.erosionRecursion = erosionRecursion;
         this.fillFaces = fillFaces;
         this.fillRecursion = fillRecursion;
-        this.isErodeBlend = isErodeBlend;
     }
-    public Player getPlayer() {
-        return p;
+
+    public UUID getUUID() {
+        return uuid;
     }
 
     public World getWorld() {
-        return this.p.getWorld();
+        return Bukkit.getWorld(this.uuid);
     }
 
     public BrushEnum getBrushType() {
@@ -107,8 +105,12 @@ public class BrushBuilder {
         return material;
     }
 
-    public String getFlowerMaterial() {
+    public List<BaseBlock> getFlowerMaterial() {
         return flowerMaterial;
+    }
+
+    public List<Integer> getFlowerMaterialTaux() {
+        return flowerMaterialTaux;
     }
 
     public Biome getBiome() {
@@ -119,20 +121,8 @@ public class BrushBuilder {
         return airBrush;
     }
 
-    public Integer getRayon() {
-        return rayon;
-    }
-
-    public String getUpperLower() {
-        return upperLower;
-    }
-
-    public Boolean getWaterlog() {
-        return isWaterlog;
-    }
-
-    public int getYears() {
-        return years;
+    public Integer getRadius() {
+        return radius;
     }
 
     public int getTickRT() {
@@ -175,10 +165,6 @@ public class BrushBuilder {
         return fillRecursion;
     }
 
-    public boolean isErodeBlend() {
-        return isErodeBlend;
-    }
-
     public BrushBuilder setBrushType(BrushEnum brushEnum) {
         this.brushEnum = brushEnum;
         return this;
@@ -190,7 +176,7 @@ public class BrushBuilder {
     }
 
     public BrushBuilder setSelMode(Boolean selMode) {
-        SelMode = selMode;
+        this.SelMode = selMode;
         return this;
     }
 
@@ -199,8 +185,54 @@ public class BrushBuilder {
         return this;
     }
 
-    public BrushBuilder setFlowerMaterial(String flowerMaterial) {
+    public BrushBuilder setFlowerMaterial(List<BaseBlock> flowerMaterial) {
         this.flowerMaterial = flowerMaterial;
+        return this;
+    }
+
+    public BrushBuilder addFlowerMaterial(BaseBlock flowerMaterial, int index) {
+        this.flowerMaterial.set(index, flowerMaterial);
+        return this;
+    }
+
+    public BrushBuilder setFlowerMaterialTaux(List<Integer> flowerMaterialTaux) {
+        this.flowerMaterialTaux = flowerMaterialTaux;
+        return this;
+    }
+
+    public BrushBuilder addFlowerMaterialTaux(Integer flowerMaterialTaux, int index) {
+        this.flowerMaterialTaux.set(index, flowerMaterialTaux);
+        return this;
+    }
+
+    public BrushBuilder addFlowerMaterialTaux(int index, boolean isShiftClick, boolean isRightClick) {
+
+        int maxRadius = 100;
+        int minRadius = 1;
+        int n =  this.flowerMaterialTaux.get(index);
+        int num;
+
+        if (isShiftClick) {
+            if (isRightClick) {
+                num = -10;
+            } else {
+                num = 10;
+            }
+        } else {
+            if (isRightClick) {
+                num = -1;
+            } else {
+                num = 1;
+            }
+        }
+
+        if (n + num > maxRadius) {
+            this.flowerMaterialTaux.set(index, maxRadius);
+        } else if (n + num < minRadius) {
+            this.flowerMaterialTaux.set(index, minRadius);
+        } else {
+            this.flowerMaterialTaux.set(index, n + num);
+        }
         return this;
     }
 
@@ -214,21 +246,70 @@ public class BrushBuilder {
         return this;
     }
 
-    public BrushBuilder setRayon(Integer rayon) {
-        this.rayon = rayon;
+    public BrushBuilder setAirBrush(boolean isShiftClick, boolean isRightClick) {
+
+        int maxRotation = 100;
+        int minRotation = 0;
+        int n = this.airBrush;
+        int num;
+
+        if (isShiftClick) {
+            if (isRightClick) {
+                num = -10;
+            } else {
+                num = 10;
+            }
+        } else {
+            if (isRightClick) {
+                num = -1;
+            } else {
+                num = 1;
+            }
+        }
+
+        if (n + num > maxRotation) {
+            this.airBrush = maxRotation;
+        } else if (n + num < minRotation) {
+            this.airBrush = minRotation;
+        } else {
+            this.airBrush = n + num;
+        }
         return this;
     }
 
-    public void setUpperLower(String upperLower) {
-        this.upperLower = upperLower;
+    public BrushBuilder setRadius(Integer radius) {
+        this.radius = radius;
+        return this;
     }
 
-    public void setWaterlog(Boolean waterlog) {
-        this.isWaterlog = waterlog;
-    }
+    public BrushBuilder setRadius(boolean isShiftClick, boolean isRightClick) {
 
-    public BrushBuilder setYears(int years) {
-        this.years = years;
+        int maxRadius = conf.getMaxRayonBrush();
+        int minRadius = 0;
+        int n = this.radius;
+        int num;
+
+        if (isShiftClick) {
+            if (isRightClick) {
+                num = -10;
+            } else {
+                num = 10;
+            }
+        } else {
+            if (isRightClick) {
+                num = -1;
+            } else {
+                num = 1;
+            }
+        }
+
+        if (n + num > maxRadius) {
+            this.radius = maxRadius;
+        } else if (n + num < minRadius) {
+            this.radius = minRadius;
+        } else {
+            this.radius = n + num;
+        }
         return this;
     }
 
@@ -287,26 +368,20 @@ public class BrushBuilder {
         return this;
     }
 
-    public BrushBuilder setErodeBlend(boolean erodeBlend) {
-        isErodeBlend = erodeBlend;
-        return this;
-    }
 
     @Override
     public String toString() {
         return "BrushBuilder{" +
-                "p=" + p +
+                "p=" + uuid +
                 ", brushEnum=" + brushEnum +
                 ", isEnable=" + isEnable +
                 ", SelMode=" + SelMode +
                 ", material=" + material +
-                ", flowerMaterial='" + flowerMaterial + '\'' +
+                ", flowerMaterial=" + flowerMaterial +
+                ", flowerMaterialTaux=" + flowerMaterialTaux +
                 ", biome=" + biome +
                 ", airBrush=" + airBrush +
-                ", rayon=" + rayon +
-                ", upperLower='" + upperLower + '\'' +
-                ", isWaterlog=" + isWaterlog +
-                ", years=" + years +
+                ", rayon=" + radius +
                 ", tickRT=" + tickRT +
                 ", region=" + region +
                 ", clipboards=" + clipboards +
@@ -317,33 +392,54 @@ public class BrushBuilder {
                 ", erosionRecursion=" + erosionRecursion +
                 ", fillFaces=" + fillFaces +
                 ", fillRecursion=" + fillRecursion +
-                ", isErodeBlend=" + isErodeBlend +
                 '}';
     }
+
     //OPERATION
 
+    /**
+     *
+     * Find Brush enable of player and execute function on honeycomb
+     *
+     * @param brushBuilder
+     * @param obj
+     */
     public void executeHoneyBrush(BrushBuilder brushBuilder, Object obj) {
 
         Main.getInstance().getRegisteredBrush()
                 .values().stream()
                 .filter(brushOperation -> brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnHoney(p, obj));
+                .forEach(brushOperation -> brushOperation.ExecuteBrushOnHoney(Bukkit.getPlayer(this.uuid), obj));
     }
 
+    /**
+     *
+     * Find Brush enable of player and execute function on first item builder
+     *
+     * @param brushBuilder
+     * @param obj
+     */
     public void executeArrowBrush(BrushBuilder brushBuilder, Object obj, Object loc) {
 
         Main.getInstance().getRegisteredBrush()
                 .values().stream()
                 .filter(brushOperation -> brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnArrow(p, obj, loc));
+                .forEach(brushOperation -> brushOperation.ExecuteBrushOnArrow(Bukkit.getPlayer(this.uuid), obj, loc));
     }
 
+    /**
+     *
+     * Find Brush enable of player and execute function on second item builder
+     *
+     * @param brushBuilder
+     * @param obj
+     */
     public void executeGunPowderBrush(BrushBuilder brushBuilder, Object obj, Object loc) {
 
         Main.getInstance().getRegisteredBrush()
                 .values().stream()
                 .filter(brushOperation ->  brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnGunpowder(p, obj, loc));
+                .forEach(brushOperation -> brushOperation.ExecuteBrushOnGunpowder(Bukkit.getPlayer(this.uuid), obj, loc));
     }
 
     //MESSAGE:
@@ -358,7 +454,8 @@ public class BrushBuilder {
 
     public BrushBuilder sendMessage(String msg) {
 
-        this.p.sendMessage(getMainPrefix() + msg);
+        Bukkit.getPlayer(this.uuid).sendMessage(getMainPrefix() + msg);
+
         return this;
 
     }
@@ -372,16 +469,21 @@ public class BrushBuilder {
     public static BrushBuilder registerPlayer(@NotNull Player p) {
 
         if (Main.containsBrushBuilder(p)) {
-            p.sendMessage(message.getPlayerAlreadyRegistered());
+            p.sendMessage(Main.prefix + message.getPlayerAlreadyRegistered());
             return getBrushBuilderPlayer(p);
         }
 
-        Configuration conf = Main.getInstance().getConfig();
-        return Main.registerBrushBuilder(new BrushBuilder(p, BrushEnum.NONE, false, true, conf.getDefault_material_brush(), "",
-                conf.getDefault_biome_brush(), conf.getDefault_air_brush(), conf.getDefaultBrushRayon(),
-                "lower", false, 1, 4,
-                null, new ArrayList<>(), null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
-                0, 0, 0, 0, false));
+        BaseBlock ib = Objects.requireNonNull(BlockTypes.BARRIER).getDefaultState().toBaseBlock();
+        List<BaseBlock> it = new ArrayList<>(Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib));
+
+        List<Integer> flowerMaterialTaux = Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1);
+
+
+        return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(), BrushEnum.NONE, false, true,
+                conf.getDefault_material_brush(), it, flowerMaterialTaux, conf.getDefault_biome_brush(),
+                conf.getDefault_air_brush(), conf.getDefaultBrushRayon(), 4, null, new ArrayList<>(),
+                null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
+                0, 0, 0, 0));
     }
 
     /**
@@ -402,16 +504,4 @@ public class BrushBuilder {
         }
     }
 
-    /**
-     *
-     * save objet BrushBuilder in hashMap
-     *
-     * @param brushBuilder modified BrushBuilder
-     *
-     */
-    public void Build(BrushBuilder brushBuilder) {
-        Main.updateBrushBuilder(brushBuilder);
-    }
 }
-
-

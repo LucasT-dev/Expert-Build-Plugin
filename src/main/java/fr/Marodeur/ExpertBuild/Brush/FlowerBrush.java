@@ -1,4 +1,4 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
@@ -32,7 +32,7 @@ public class FlowerBrush implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return brushBuilder.getEnable();
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Override
@@ -52,7 +52,7 @@ public class FlowerBrush implements BrushOperation {
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         GlueList<BlockVec4> bv4 = new GlueList<>();
-        int radius = bb.getRayon();
+        int radius = bb.getRadius();
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 

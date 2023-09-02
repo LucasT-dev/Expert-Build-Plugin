@@ -1,6 +1,5 @@
 package fr.Marodeur.ExpertBuild.Listeners;
 
-import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.block.*;
 import org.bukkit.block.data.Rotatable;
@@ -12,7 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RotationEntity implements Listener {
 
@@ -26,7 +26,7 @@ public class RotationEntity implements Listener {
 
         if(!p.isOp()) return;
 
-        final ArrayList<BlockFace> skullfaces = Lists.newArrayList(BlockFace.NORTH, BlockFace.NORTH_NORTH_WEST,
+        final List<BlockFace> skullfaces = Arrays.asList(BlockFace.NORTH, BlockFace.NORTH_NORTH_WEST,
                 BlockFace.NORTH_WEST, BlockFace.WEST_NORTH_WEST, BlockFace.WEST, BlockFace.WEST_SOUTH_WEST,
                 BlockFace.SOUTH_WEST, BlockFace.SOUTH_SOUTH_WEST, BlockFace.SOUTH, BlockFace.SOUTH_SOUTH_EAST,
                 BlockFace.SOUTH_EAST, BlockFace.EAST_SOUTH_EAST, BlockFace.EAST, BlockFace.EAST_NORTH_EAST,

@@ -83,6 +83,7 @@ public class MessageBuilder {
 
     private String use;
     private String pregeneration;
+    private String generate;
 
     private String fileNotExist;
     private String fileTooLarge;
@@ -93,11 +94,62 @@ public class MessageBuilder {
     private String succesTransfert;
     private String transfertLog;
 
+
+    private String back;
+    private String exit;
+    private String main_gui_title;
+    private String main_item_1;
+    private String main_item_2;
+    private String main_item_3;
+
+    private String leather_gui_title;
+    private String leather_item;
+    private String leather_helmet;
+    private String leather_chestplate;
+    private String leather_leggings;
+    private String leather_boots;
+    private String red_color;
+    private String green_color;
+    private String blue_color;
+    private String red;
+    private String green;
+    private String blue;
+
+    private String organic_gui_title;
+    private String organic_item;
+    private String pitch_angle_conf;
+    private String yaw_angle_conf;
+    private String click_change_angle;
+    private String click_enable_disable;
+    private String clickPregen;
+    private String clickGenerate;
+    private String clickClearParticle;
+
+    private String member_conf;
+    private String height;
+    private String organic_height;
+    private String interact_member;
+    private String switch_member;
+    private String pitch_level;
+    private String yaw_level;
+
+    private String flowerGuiTitle;
+    private String flowerItem;
+    private String brushEnable2;
+    private String brushDisable2;
+    private String radiusText;
+    private String radiusValue;
+    private String airText;
+    private String airValue;
+    private String total;
+    private String rightArrow;
+    private String clickForChange;
+    private String propertyKey;
+    private String valuePropertykey;
+    private String clickForChangeProperty;
+
+
     public MessageBuilder() {
-
-        String lang = config.getLang();
-
-        System.out.println("pluginEnable = " + lang);
 
         File file = new File("plugins/ExpertBuild/config.yml");
         this.yml = YamlConfiguration.loadConfiguration(file);
@@ -106,8 +158,6 @@ public class MessageBuilder {
     public MessageBuilder loadConfiguration() {
 
         String lang = config.getLang();
-
-        System.out.println("lang = " + lang);
 
         try {
 
@@ -182,6 +232,8 @@ public class MessageBuilder {
 
             this.use = this.yml.getString("build.message." + lang + ".commands.use");
             this.pregeneration = this.yml.getString("build.message." + lang + ".commands.pregeneration");
+            this.generate = this.yml.getString("build.message." + lang + ".commands.generate");
+
 
             this.fileNotExist = this.yml.getString("build.message." + lang + ".commands.file_not_exist");
             this.fileTooLarge = this.yml.getString("build.message." + lang + ".commands.file_too_large");
@@ -191,6 +243,58 @@ public class MessageBuilder {
             this.dontRestart = this.yml.getString("build.message." + lang + ".commands.dont_restart");
             this.succesTransfert = this.yml.getString("build.message." + lang + ".commands.succes_transfert");
             this.transfertLog = this.yml.getString("build.message." + lang + ".commands.transfert_log");
+
+            this.back = this.yml.getString("build.message." + lang + ".gui.back");
+            this.exit = this.yml.getString("build.message." + lang + ".gui.exit");
+            this.main_gui_title = this.yml.getString("build.message." + lang + ".commands.main_gui_title");
+            this.main_item_1 = this.yml.getString("build.message." + lang + ".gui.main_item_1");
+            this.main_item_2 = this.yml.getString("build.message." + lang + ".gui.main_item_2");
+            this.main_item_3 = this.yml.getString("build.message." + lang + ".gui.main_item_3");
+
+            this.leather_gui_title = this.yml.getString("build.message." + lang + ".gui.leather_gui_title");
+            this.leather_item = this.yml.getString("build.message." + lang + ".gui.leather_item");
+            this.leather_helmet = this.yml.getString("build.message." + lang + ".gui.leather_helmet");
+            this.leather_chestplate = this.yml.getString("build.message." + lang + ".gui.leather_chestplate");
+            this.leather_leggings = this.yml.getString("build.message." + lang + ".gui.leather_leggings");
+            this.leather_boots = this.yml.getString("build.message." + lang + ".gui.leather_boots");
+            this.red_color = this.yml.getString("build.message." + lang + ".gui.red_color");
+            this.green_color = this.yml.getString("build.message." + lang + ".gui.green_color");
+            this.blue_color = this.yml.getString("build.message." + lang + ".gui.blue_color");
+            this.red = this.yml.getString("build.message." + lang + ".gui.red");
+            this.green = this.yml.getString("build.message." + lang + ".gui.green");
+            this.blue = this.yml.getString("build.message." + lang + ".gui.blue");
+
+            this.organic_gui_title = this.yml.getString("build.message." + lang + ".gui.organic_gui_title");
+            this.organic_item = this.yml.getString("build.message." + lang + ".gui.organic_item");
+            this.pitch_angle_conf = this.yml.getString("build.message." + lang + ".gui.pitch_angle_conf");
+            this.yaw_angle_conf = this.yml.getString("build.message." + lang + ".gui.yaw_angle_conf");
+            this.click_change_angle = this.yml.getString("build.message." + lang + ".gui.click_change_angle");
+            this.click_enable_disable = this.yml.getString("build.message." + lang + ".gui.click_enable_disable");
+            this.clickPregen = this.yml.getString("build.message." + lang + ".gui.click_pregen");
+            this.clickGenerate = this.yml.getString("build.message." + lang + ".gui.click_generate");
+            this.clickClearParticle = this.yml.getString("build.message." + lang + ".gui.click_clear_particle");
+            this.member_conf = this.yml.getString("build.message." + lang + ".gui.member_conf");
+            this.height = this.yml.getString("build.message." + lang + ".gui.height");
+            this.organic_height = this.yml.getString("build.message." + lang + ".gui.organic_height");
+            this.interact_member = this.yml.getString("build.message." + lang + ".gui.interact_member");
+            this.switch_member = this.yml.getString("build.message." + lang + ".gui.switch_member");
+            this.pitch_level = this.yml.getString("build.message." + lang + ".gui.pitch_level");
+            this.yaw_level = this.yml.getString("build.message." + lang + ".gui.yaw_level");
+
+            this.flowerGuiTitle = this.yml.getString("build.message." + lang + ".gui.flower_gui_title");
+            this.flowerItem = this.yml.getString("build.message." + lang + ".gui.flower_item");
+            this.brushEnable2 = this.yml.getString("build.message." + lang + ".gui.brush_enable");
+            this.brushDisable2 = this.yml.getString("build.message." + lang + ".gui.brush_disable");
+            this.radiusText = this.yml.getString("build.message." + lang + ".gui.radius_text");
+            this.radiusValue = this.yml.getString("build.message." + lang + ".gui.radius_value");
+            this.airText = this.yml.getString("build.message." + lang + ".gui.air_text");
+            this.airValue = this.yml.getString("build.message." + lang + ".gui.air_value");
+            this.total = this.yml.getString("build.message." + lang + ".gui.total");
+            this.rightArrow = this.yml.getString("build.message." + lang + ".gui.right_arrow");
+            this.clickForChange = this.yml.getString("build.message." + lang + ".gui.click_for_change");
+            this.propertyKey = this.yml.getString("build.message." + lang + ".gui.property_key");
+            this.valuePropertykey = this.yml.getString("build.message." + lang + ".gui.value_propertykey");
+            this.clickForChangeProperty = this.yml.getString("build.message." + lang + ".gui.click_for_change_property");
 
 
         } catch (NullPointerException | IllegalStateException e) {
@@ -339,11 +443,11 @@ public class MessageBuilder {
     }
 
     public String getBlockModified(String num) {
-        return blockModified.replace("a'num'", num);
+        return blockModified.replace("'num'", num);
     }
 
     public String getBlockModifiedWithTime(String num1, String num2) {
-        return blockModifiedWithTime.replace("a'num'", num1).replace("'num2'", num2);
+        return blockModifiedWithTime.replace("'num'", num1).replace("'num2'", num2);
     }
 
     public String getErrorRegion(String num, String error) {
@@ -414,6 +518,10 @@ public class MessageBuilder {
         return pregeneration;
     }
 
+    public String getGenerate() {
+        return generate;
+    }
+
     public String getFileNotExist(String file) {
         return fileNotExist.replace("'file'", file);
     }
@@ -444,6 +552,199 @@ public class MessageBuilder {
 
     public String getTransfertLog(String file, String player, String server) {
         return transfertLog.replace("'file'", file).replace("'player'", player).replace("'server'", server);
+    }
+
+    public String getBack() {
+        return back;
+    }
+
+    public String getExit() {
+        return exit;
+    }
+
+    public String getMainGuiTitle() {
+        return main_gui_title;
+    }
+
+    public String getMainItem1() {
+        return main_item_1;
+    }
+
+    public String getMainItem2() {
+        return main_item_2;
+    }
+
+    public String getMainItem3() {
+        return main_item_3;
+    }
+
+    public String getLeatherGuiTitle() {
+        return leather_gui_title;
+    }
+
+    public String getLeatherItem() {
+        return leather_item;
+    }
+
+    public String getLeatherHelmet() {
+        return leather_helmet;
+    }
+
+    public String getLeatherChestplate() {
+        return leather_chestplate;
+    }
+
+    public String getLeatherLeggings() {
+        return leather_leggings;
+    }
+
+    public String getLeatherBoots() {
+        return leather_boots;
+    }
+
+    public String getRedColor() {
+        return red_color;
+    }
+
+    public String getGreenColor() {
+        return green_color;
+    }
+
+    public String getBlueColor() {
+        return blue_color;
+    }
+
+    public String getRed(String level) {
+        return red.replace("'level'", level);
+    }
+
+    public String getGreen(String level) {
+        return green.replace("'level'", level);
+    }
+
+    public String getBlue(String level) {
+        return blue.replace("'level'", level);
+    }
+
+    public String getOrganicGuiTitle() {
+        return organic_gui_title;
+    }
+
+    public String getOrganicItem() {
+        return organic_item;
+    }
+
+    public String getPitchAngleConf() {
+        return pitch_angle_conf;
+    }
+
+    public String getYawAngleConf() {
+        return yaw_angle_conf;
+    }
+
+    public String getClickChangeAngle(String type) {
+        return click_change_angle.replace("'type'", type);
+    }
+
+    public String getClickEnableDisable() {
+        return click_enable_disable;
+    }
+
+    public String getClickPregen() {
+        return this.clickPregen;
+    }
+
+    public String getClickGenerate() {
+        return this.clickGenerate;
+    }
+
+    public String getClickClearParticle() {
+        return this.clickClearParticle;
+    }
+
+    public String getMemberConf() {
+        return member_conf;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public String getOrganicHeight(String value) {
+        return organic_height.replace("'value'", value);
+    }
+
+    public String getInteractMember() {
+        return interact_member;
+    }
+
+    public String getSwitchMember(String type, String state) {
+        return switch_member.replace("'type'", type).replace("'state'", state);
+    }
+
+    public String getPitchLevel(String level) {
+        return pitch_level.replace("'level'", level);
+    }
+
+    public String getYawLevel(String level) {
+        return yaw_level.replace("'level'", level);
+    }
+
+
+    public String getFlowerGuiTitle() {
+        return flowerGuiTitle;
+    }
+
+    public String getFlowerItem() {
+        return flowerItem;
+    }
+
+    public String getBrushEnable2() {
+        return brushEnable2;
+    }
+
+    public String getBrushDisable2() {
+        return brushDisable2;
+    }
+
+    public String getRadiusText() {
+        return radiusText;
+    }
+
+    public String getRadiusValue(String value) {
+        return radiusValue.replace("'value'", value);
+    }
+
+    public String getAirText() {
+        return airText;
+    }
+
+    public String getAirValue(String value) {
+        return airValue.replace("'value'", value);
+    }
+
+    public String getTotal(String value) {
+        return total.replace("'value'", value);
+    }
+
+    public String getRightArrow(String value) {
+        return rightArrow.replace("'value'", value);
+    }
+
+    public String getClickForChange() {
+        return clickForChange;
+    }
+
+    public String getPropertyKey(String value) {
+        return propertyKey.replace("'value'", value);
+    }
+
+    public String getValuePropertykey(String value) {
+        return valuePropertykey.replace("'value'", value);
+    }
+
+    public String getClickForChangeProperty() {
+        return clickForChangeProperty;
     }
 
     @Override
@@ -512,6 +813,53 @@ public class MessageBuilder {
                 ", dontRestart='" + dontRestart + '\'' +
                 ", succesTransfert='" + succesTransfert + '\'' +
                 ", transfertLog='" + transfertLog + '\'' +
+                ", back='" + back + '\'' +
+                ", exit='" + exit + '\'' +
+                ", main_gui_title='" + main_gui_title + '\'' +
+                ", main_item_1='" + main_item_1 + '\'' +
+                ", main_item_2='" + main_item_2 + '\'' +
+                ", main_item_3='" + main_item_3 + '\'' +
+                ", leather_gui_title='" + leather_gui_title + '\'' +
+                ", leather_item='" + leather_item + '\'' +
+                ", leather_helmet='" + leather_helmet + '\'' +
+                ", leather_chestplate='" + leather_chestplate + '\'' +
+                ", leather_leggings='" + leather_leggings + '\'' +
+                ", leather_boots='" + leather_boots + '\'' +
+                ", red_color='" + red_color + '\'' +
+                ", green_color='" + green_color + '\'' +
+                ", blue_color='" + blue_color + '\'' +
+                ", red='" + red + '\'' +
+                ", green='" + green + '\'' +
+                ", blue='" + blue + '\'' +
+                ", organic_gui_title='" + organic_gui_title + '\'' +
+                ", organic_item='" + organic_item + '\'' +
+                ", pitch_angle_conf='" + pitch_angle_conf + '\'' +
+                ", yaw_angle_conf='" + yaw_angle_conf + '\'' +
+                ", click_change_angle='" + click_change_angle + '\'' +
+                ", click_enable_disable='" + click_enable_disable + '\'' +
+                ", clickPregen='" + clickPregen + '\'' +
+                ", clickGenerate='" + clickGenerate + '\'' +
+                ", clickClearParticle='" + clickClearParticle + '\'' +
+                ", member_conf='" + member_conf + '\'' +
+                ", height='" + height + '\'' +
+                ", organic_height='" + organic_height + '\'' +
+                ", interact_member='" + interact_member + '\'' +
+                ", switch_member='" + switch_member + '\'' +
+                ", pitch_level='" + pitch_level + '\'' +
+                ", yaw_level='" + yaw_level + '\'' +
+                ", flowerGuiTitle='" + flowerGuiTitle + '\'' +
+                ", flowerItem='" + flowerItem + '\'' +
+                ", brushEnable2='" + brushEnable2 + '\'' +
+                ", brushDisable2='" + brushDisable2 + '\'' +
+                ", radiusText='" + radiusText + '\'' +
+                ", radiusValue='" + radiusValue + '\'' +
+                ", airText='" + airText + '\'' +
+                ", airValue='" + airValue + '\'' +
+                ", total='" + total + '\'' +
+                ", rightArrow='" + rightArrow + '\'' +
+                ", clickForChange='" + clickForChange + '\'' +
+                ", propertyKey='" + propertyKey + '\'' +
+                ", clickForChangeProperty='" + clickForChangeProperty + '\'' +
                 '}';
     }
 }

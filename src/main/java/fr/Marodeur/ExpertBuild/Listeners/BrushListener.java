@@ -1,8 +1,11 @@
 package fr.Marodeur.ExpertBuild.Listeners;
 
+import fr.Marodeur.ExpertBuild.GUI.MainGUI;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
+import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,6 +14,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
 
 public class BrushListener implements Listener {
@@ -23,6 +27,7 @@ public class BrushListener implements Listener {
         ItemStack it = e.getItem();
         Location loc;
         Configuration conf = Main.getInstance().getConfig();
+        MessageBuilder msg = Main.getInstance().getMessageConfig();
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         if (it == null || brushBuilder.getBrushType().getBclass() == null) return;
@@ -32,6 +37,11 @@ public class BrushListener implements Listener {
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
 
             if (it.getType() == Material.HONEYCOMB) {
+
+                if (!brushBuilder.getEnable()) {
+                    brushBuilder.sendMessage(msg.getBrushDisable());
+                    return;
+                }
 
                 brushBuilder.executeHoneyBrush(brushBuilder, loc);
             }
@@ -45,6 +55,15 @@ public class BrushListener implements Listener {
 
                 brushBuilder.executeGunPowderBrush(brushBuilder, loc, p.getLocation());
             }
+        }
+
+        if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
+
+            if (!Main.containsBrushBuilder(p)) {
+                p.sendMessage(Main.prefix + "You are not registered, execute: /fw register");
+                return;
+            }
+            new MainGUI().openMainInventory(p);
         }
     }
 }

@@ -3,8 +3,7 @@ package fr.Marodeur.ExpertBuild;
 import com.sk89q.worldedit.WorldEdit;
 
 import fr.Marodeur.ExpertBuild.API.Metrics.Metrics;
-import fr.Marodeur.ExpertBuild.Brush.Brush.*;
-import fr.Marodeur.ExpertBuild.Brush.GUI.*;
+import fr.Marodeur.ExpertBuild.Brush.*;
 import fr.Marodeur.ExpertBuild.Commands.CommandAutoCb;
 import fr.Marodeur.ExpertBuild.Commands.CommandConvertSlab.CommandConvertSlab;
 import fr.Marodeur.ExpertBuild.Commands.CommandTransferSchem;
@@ -12,18 +11,23 @@ import fr.Marodeur.ExpertBuild.Commands.CommandsAutoFlips.CommandAutoFlip;
 import fr.Marodeur.ExpertBuild.Commands.CommandsBrush.BrushCommand;
 import fr.Marodeur.ExpertBuild.Commands.CommandsGeneral.CommandsInfo;
 import fr.Marodeur.ExpertBuild.Commands.CommandsGivenTools.Terraforming_Painting;
-import fr.Marodeur.ExpertBuild.Commands.CommandsOrganic.CommandOrga;
 import fr.Marodeur.ExpertBuild.Commands.CommandsPerlin.CommandPerlin;
 import fr.Marodeur.ExpertBuild.Commands.CommandsTimeLapse.CommandTimeLapse;
-import fr.Marodeur.ExpertBuild.Listeners.*;
+import fr.Marodeur.ExpertBuild.Listeners.BrushListener;
+import fr.Marodeur.ExpertBuild.Listeners.FAWEListener;
+import fr.Marodeur.ExpertBuild.Listeners.GeneralListener;
+import fr.Marodeur.ExpertBuild.Listeners.RotationEntity;
 import fr.Marodeur.ExpertBuild.Object.*;
 import fr.Marodeur.ExpertBuild.Utils.BrushOperationManager;
+
+import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,16 +45,12 @@ public class Main extends JavaPlugin {
 	public static String latestVersion;
 
 
-	private GUI_Manager guiManager;
-	private Map<Class<? extends GUI_Builder>, GUI_Builder> registeredMenus;
-
 	private Map<Class<? extends BrushOperation>, BrushOperation> registeredBrush;
 
 	private static Configuration configuration;
 	private static MessageBuilder messageBuilder;
 
 	public static List<UUID> getCommand = new ArrayList<>();
-	public static List<UUID> Slab = new ArrayList<>();
 
 	private static final HashMap<UUID, GOHA_Builder> GOHA = new HashMap<>();
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
@@ -59,6 +59,9 @@ public class Main extends JavaPlugin {
 	public static String FawePrefix = "§8(§4FAWE§8) §7";
 
 	public static String help = ("§8[§5§oEXP-Build§8] §l(§l§5§ohelp§o§8§l)§l§8 §l>§l§7 ");
+
+	private final InventoryManager inventoryManager = new InventoryManager(this);
+
 
 	@Override
 	public void onEnable() {
@@ -69,7 +72,7 @@ public class Main extends JavaPlugin {
 
 		reloadConfig();
 
-		loadMessageConfig();
+		reloadMessageConfig();
 
 		getServer().getConsoleSender().sendMessage(prefix + messageBuilder.getPluginEnable());
 		getLogger().info(" ____          ___  ");
@@ -79,6 +82,7 @@ public class Main extends JavaPlugin {
 		getLogger().info("|___   /  \\  |     ");
 		getLogger().info("Version : " + Main.getInstance().getDescription().getVersion()+ " / by Marodeur");
 		getLogger().info("FAWE server version : " + WorldEdit.getVersion());
+		getLogger().info("This plugin is not affiliated with Mojang Studios");
 
 		//bstat
 		bstatsManager(new Metrics(this, 16755));
@@ -86,7 +90,7 @@ public class Main extends JavaPlugin {
 		// Check if server is in safe environments
 		isJavaSixteenMin();
 
-		loadGui();
+		inventoryManager.invoke();
 
 		try {
 			serverFileBuilder();
@@ -114,15 +118,6 @@ public class Main extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 
 		pm.registerEvents(new GeneralListener(), this);
-		pm.registerEvents(new Gestion_GUI(), this);
-		pm.registerEvents(new Switch_Main(), this);
-		//pm.registerEvent(new Switch_Gmask());
-		pm.registerEvents(new Switch_Armure(), this);
-		pm.registerEvents(new Switch_nether(), this);
-		pm.registerEvents(new Switch_coral(), this);
-		pm.registerEvents(new Switch_Overworld(), this);
-		pm.registerEvents(new Switch_food(), this);
-		pm.registerEvents(new Switch_GOHA(), this);
 		pm.registerEvents(new FAWEListener(), this);
 		pm.registerEvents(new RotationEntity(), this);
 		pm.registerEvents(new BrushListener(), this);
@@ -153,7 +148,6 @@ public class Main extends JavaPlugin {
 		getCommand("repeater").setExecutor(new Terraforming_Painting());
 		getCommand("flower").setExecutor(new BrushCommand());
 		getCommand("expbuild").setExecutor(new CommandsInfo());
-		getCommand("organic").setExecutor(new CommandOrga());
 		getCommand("schemtrans").setExecutor(new CommandTransferSchem());
 		getCommand("timelapse").setExecutor(new CommandTimeLapse());
 		getCommand("perlin").setExecutor(new CommandPerlin());
@@ -174,13 +168,15 @@ public class Main extends JavaPlugin {
 			if (player.isOp() || player.hasPermission("expertbuild.use")) {
 				fr.Marodeur.ExpertBuild.Object.BrushBuilder.registerPlayer(player);
 				GOHA_Builder.registerPlayer(player);
-				Slab.add(player.getUniqueId());
 
 				getLogger().info(messageBuilder.getPlayerRegistered(player.getName()));
 			}
 		});
 	}
 
+	/**
+	 * Load and reload plugin configuration file (config.yml)
+	 */
 	public void reloadConfig() {
 
 		configuration = new Configuration().loadConfiguration();
@@ -188,8 +184,14 @@ public class Main extends JavaPlugin {
 		getLogger().info("Configuration load");
 	}
 
-	private void loadMessageConfig() {
+	/**
+	 * Load and reload message file (config.yml)
+	 */
+	public void reloadMessageConfig() {
+
 		messageBuilder = new MessageBuilder().loadConfiguration();
+
+		getLogger().info("Message load");
 	}
 
 	//BrushBuilder
@@ -197,18 +199,17 @@ public class Main extends JavaPlugin {
 
     public MessageBuilder getMessageConfig() { return messageBuilder; }
 
-
-	public static BrushBuilder getBrushBuilder(@NotNull Player p) {
+	public static fr.Marodeur.ExpertBuild.Object.BrushBuilder getBrushBuilder(@NotNull Player p) {
 		return BrushBuilder.get(p.getUniqueId());
 	}
 
-	public static void updateBrushBuilder(BrushBuilder brushBuilder) {
-		BrushBuilder.replace(brushBuilder.getPlayer().getUniqueId(), brushBuilder);
-	}
-
+	/**
+	 * @param brushBuilder register player
+	 * @return brushBuilder
+	 */
 	@Contract("_ -> param1")
 	public static @NotNull BrushBuilder registerBrushBuilder(BrushBuilder brushBuilder) {
-		BrushBuilder.put(brushBuilder.getPlayer().getUniqueId(), brushBuilder);
+		BrushBuilder.put(brushBuilder.getUUID(), brushBuilder);
 		return brushBuilder;
 	}
 
@@ -216,6 +217,9 @@ public class Main extends JavaPlugin {
 		return BrushBuilder.containsKey(p.getUniqueId());
 	}
 
+	public static void removeBrushBuilder(@NotNull Player p) {
+		BrushBuilder.remove(p.getUniqueId());
+	}
 
 	//goha Builder
 	public static GOHA_Builder getGohaBuilder(@NotNull Player p) {
@@ -242,34 +246,6 @@ public class Main extends JavaPlugin {
 		return Main.getInstance().getDescription().getVersion();
 	}
 
-	public GUI_Manager getGUI_Manager() {
-		return guiManager;
-	}
-
-	public Map<Class<? extends GUI_Builder>, GUI_Builder> getRegisteredMenus() {
-		return registeredMenus;
-	}
-
-	private void loadGui() {
-
-		guiManager = new GUI_Manager();
-
-		Bukkit.getPluginManager().registerEvents(guiManager, this);
-
-		registeredMenus = new HashMap<>();
-
-		guiManager.addMenu(new GUI_Main());
-		guiManager.addMenu(new GUI_Nether());
-		guiManager.addMenu(new GUI_Coraux());
-		guiManager.addMenu(new GUI_Overworld());
-		guiManager.addMenu(new GUI_Food());
-		guiManager.addMenu(new GUI_Gmask());
-		guiManager.addMenu(new GUI_Armure());
-		guiManager.addMenu(new GUI_GOHA());
-
-		getLogger().info(messageBuilder.getGuiLoad());
-	}
-
 	public Map<Class<? extends BrushOperation>, BrushOperation> getRegisteredBrush() {
 		return registeredBrush;
 	}
@@ -293,8 +269,10 @@ public class Main extends JavaPlugin {
 		brushManager.addBrush(new SpikeBrush());
 		brushManager.addBrush(new CubeBrush());
 		brushManager.addBrush(new ErodeBrush());
-		brushManager.addBrush(new BlendBall());
+		brushManager.addBrush(new BlendBallBrush());
 		brushManager.addBrush(new FlowerBrush());
+		brushManager.addBrush(new ErodeBlendBrush());
+		brushManager.addBrush(new EraserBrush());
 
 		getLogger().info(messageBuilder.getBrushLoad());
 

@@ -21,7 +21,7 @@ public class IncompleteSelectionException extends Exception{
         log.info(Main.prefix + error);
     }
 
-    public IncompleteSelectionException(@NotNull Player p, @NotNull RegionSelectorType regionSelectorType) {
+    public IncompleteSelectionException (@NotNull Player p, @NotNull RegionSelectorType regionSelectorType) {
         p.sendMessage(Main.prefix + message.getErrorSelection(regionSelectorType.name()));
     }
 }

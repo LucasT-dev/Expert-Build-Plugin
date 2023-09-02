@@ -59,8 +59,6 @@ public class GeneralListener implements Listener {
 			bb.sendMessage(message.getBuilderProfileRegistered());
 		}
 
-		Main.Slab.add(p.getUniqueId());
-
 		//update system
 		Main.updateChecker(version -> {
 			if (Main.getVersion().equals(version)) {
@@ -93,45 +91,9 @@ public class GeneralListener implements Listener {
 
 		Player p = e.getPlayer();
 
-		Main.Slab.remove(p.getUniqueId());
-	}
-
-	@EventHandler
-	public void breakSlab(@NotNull BlockBreakEvent e) {
-
-		Block block = e.getBlock();
-		Player p = e.getPlayer();
-
-		if (!p.isOp() || !Main.Slab.contains(p.getUniqueId()))
-			return;
-
-		if (block.getType().name().contains("SLAB")) {
-			if (p.getGameMode() != GameMode.SURVIVAL) {
-				if (slabTop(e.getPlayer(), e.getBlock())) {
-					Slab blockdata = (Slab) e.getBlock().getBlockData();
-					if (blockdata.getType().equals(Slab.Type.DOUBLE)) {
-						blockdata.setType(Slab.Type.BOTTOM);
-						e.getBlock().setBlockData(blockdata, true);
-						e.setCancelled(true);
-					}
-				} else {
-					Slab blockdata = (Slab) e.getBlock().getBlockData();
-					if (blockdata.getType().equals(Slab.Type.DOUBLE)) {
-						blockdata.setType(Slab.Type.TOP);
-						e.getBlock().setBlockData(blockdata, true);
-						e.setCancelled(true);
-					}
-				}
-			}
+		if (Main.containsBrushBuilder(p)) {
+			Main.removeBrushBuilder(p);
 		}
-	}
-
-	private static boolean slabTop(@NotNull Player p, Block block) {
-		Location getblock = p.getEyeLocation().clone();
-		while ((!getblock.getBlock().equals(block)) && getblock.distance(p.getEyeLocation()) < 6) {
-			getblock.add(p.getLocation().getDirection().multiply(0.05));
-		}
-		return getblock.getY() % 1 > 0.5;
 	}
 
 	@EventHandler

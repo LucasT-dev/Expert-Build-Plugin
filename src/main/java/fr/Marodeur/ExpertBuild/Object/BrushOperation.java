@@ -10,7 +10,9 @@ public interface BrushOperation {
 
     BrushEnum getTypeOfBrush();
 
-    boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder);
+    default boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
+        return brushBuilder.getEnable();
+    }
 
     default void ExecuteBrushOnHoney(Player p, Object obj1) {}
 

@@ -1,4 +1,5 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
+
 
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
@@ -26,7 +27,7 @@ public class OverlayBrush implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return brushBuilder.getEnable();
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class OverlayBrush implements BrushOperation {
         }
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
-        int brushSize = brushBuilder.getRayon();
+        int brushSize = brushBuilder.getRadius();
         Location l = (Location) obj1;
         List<BlockVec4> bv4 = new ArrayList<>();
 
@@ -80,7 +81,7 @@ public class OverlayBrush implements BrushOperation {
         }
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
-        int brushSize = brushBuilder.getRayon();
+        int brushSize = brushBuilder.getRadius();
         Location l = (Location) obj1;
         List<BlockVec4> bv4 = new ArrayList<>();
 

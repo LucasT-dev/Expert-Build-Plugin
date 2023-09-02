@@ -96,10 +96,6 @@ public class Configuration extends FileConfiguration {
             this.state_server_4 = this.yml.getBoolean("build.server_4.statserver");
             this.server_name_4 = this.yml.getString("build.server_4.name");
 
-
-            System.out.println("!!!!!" + this.yml.getString("build.lang"));
-
-
         } catch (NullPointerException | IllegalStateException e) {
 
             log.severe("Configuration files in ExpertBuild folder is wrong or corrupt " +

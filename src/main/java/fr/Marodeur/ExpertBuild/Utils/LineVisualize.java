@@ -1,6 +1,7 @@
 package fr.Marodeur.ExpertBuild.Utils;
 
 import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
@@ -23,6 +24,7 @@ public class LineVisualize {
 	private static final int space = 1;
 	private static final Logger logger = Logger.getLogger("Expert-Build");
 	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
+
 	public static void generate_line(@NotNull Player p, @NotNull BlockVector3 Bv1, @NotNull BlockVector3 Bv2) {
 
 		Location l1 = new Location(p.getWorld(), Bv1.getX(), Bv1.getY(), Bv1.getZ());
@@ -33,6 +35,8 @@ public class LineVisualize {
 			public void run() {
 
 				try {
+
+					Region region = BukkitAdapter.adapt(p).getSession().getSelection();
 
 					double distance = l1.distance(l2);
 					Vector p1 = l1.toVector();
@@ -106,7 +110,7 @@ public class LineVisualize {
 
 				GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
 
-				if (goha_builder.getPregen().equals(false)) {
+				if (goha_builder.getMomentallyParticleStop().equals(false) || goha_builder.getPregen().equals(false)) {
 					cancel();
 					return;
 				}
@@ -134,7 +138,7 @@ public class LineVisualize {
 
 				GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
 
-				if (goha_builder.getPregen().equals(false)) {
+				if (goha_builder.getMomentallyParticleStop().equals(false) || goha_builder.getPregen().equals(false)) {
 					cancel();
 					return;
 				}

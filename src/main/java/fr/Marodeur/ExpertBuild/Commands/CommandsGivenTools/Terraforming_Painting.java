@@ -54,11 +54,13 @@ public class Terraforming_Painting implements CommandExecutor {
 
 		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 
-		ItemStack itArrow = new ItemBuilder(Material.ARROW, 1, 1).build();
-		ItemStack itGunPowder = new ItemBuilder(Material.GUNPOWDER, 1, 1).build();
-		ItemStack itFeather = new ItemBuilder(Material.FEATHER, 1, 1).build();
-		ItemStack itFlint = new ItemBuilder(Material.FLINT, 1, 1).build();
-		ItemStack itHoney = new ItemBuilder(Material.HONEYCOMB, 1, 1).build();
+		ItemStack itArrow = new ItemBuilder(Material.ARROW, 1).build();
+		ItemStack itGunPowder = new ItemBuilder(Material.GUNPOWDER, 1).build();
+		ItemStack itFeather = new ItemBuilder(Material.FEATHER, 1).build();
+		ItemStack itFlint = new ItemBuilder(Material.FLINT, 1).build();
+		ItemStack itHoney = new ItemBuilder(Material.HONEYCOMB, 1).build();
+		ItemStack itClayBall = new ItemBuilder(Material.CLAY_BALL, 1).build();
+		ItemStack itSpectralArrow = new ItemBuilder(Material.SPECTRAL_ARROW, 1).build();
 
 
 		switch (cmd.getName()) {
@@ -98,8 +100,8 @@ public class Terraforming_Painting implements CommandExecutor {
 			}
 			case "terra" -> {
 
-				p.getInventory().setItem(0, itArrow);
-				p.getInventory().setItem(1, itGunPowder);
+				p.getInventory().setItem(0, itSpectralArrow);
+				p.getInventory().setItem(1, itClayBall);
 				p.getInventory().setItem(2, itFeather);
 				p.getInventory().setItem(3, itFlint);
 				p.getInventory().setItem(4, itHoney);
@@ -232,8 +234,7 @@ public class Terraforming_Painting implements CommandExecutor {
 
 						brushBuilder.setTickRT(Integer.parseInt(args[0]))
 								.setBrushType(BrushEnum.TICK_REPEATER)
-								.setEnable(true)
-								.Build(brushBuilder);
+								.setEnable(true);
 
 						ItemStack itemBuilder = new ItemBuilder("Intelligence repeater", Material.REPEATER, 1)
 								.addLore("Delay : " + brushBuilder.getTickRT())
@@ -247,8 +248,7 @@ public class Terraforming_Painting implements CommandExecutor {
 				} else {
 					brushBuilder.setBrushType(BrushEnum.NONE)
 							.setEnable(false)
-							.sendMessage(message.getBrushDisable())
-							.Build(brushBuilder);
+							.sendMessage(message.getBrushDisable());
 				}
 			}
 		}

@@ -1,7 +1,7 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
-import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
@@ -24,7 +24,7 @@ public class NoneBrush implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return false;
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Override
@@ -37,14 +37,14 @@ public class NoneBrush implements BrushOperation {
     @Override
     public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
         if (hasPermission(p)) {
-            //new UtilsFAWE(p).sendMessage(MsgEnum.BRUSH_DISABLE);
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBrushDisable());
         }
     }
 
     @Override
     public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
         if (hasPermission(p)) {
-            //new UtilsFAWE(p).sendMessage(MsgEnum.BRUSH_DISABLE);
+            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBrushDisable());
         }
     }
 }

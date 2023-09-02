@@ -26,10 +26,12 @@ import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
+
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -40,6 +42,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -152,7 +155,6 @@ public class UtilsFAWE {
 
                     editsession.setBlocks(r, BrushBuilder.getBrushBuilderPlayer(p).getPattern());
 
-
                 } finally {
                     localSession.remember(editsession);
                 }
@@ -216,7 +218,7 @@ public class UtilsFAWE {
             float t = r / 1000;
             float d = (blocks.size() / t);
             BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
-        } else {
+        } else if (sendMessageBlock) {
             BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
         }
     }
@@ -256,7 +258,7 @@ public class UtilsFAWE {
             float t = r / 1000;
             float d = (blocks.size() / t);
             BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
-        } else {
+        } else if (sendMessageBlock) {
             BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
         }
     }
@@ -296,7 +298,7 @@ public class UtilsFAWE {
             float t = r / 1000;
             float d = (blocks.size() / t);
             BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
-        } else {
+        } else if (sendMessageBlock) {
             BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
         }
     }
@@ -351,7 +353,7 @@ public class UtilsFAWE {
 
     public int getHeight(int x, int z, @NotNull Location l) {
         int y = l.getBlockY();
-        for (int i = y+b.getRayon(); i >= y-b.getRayon(); i--) {
+        for (int i = y+b.getRadius(); i >= y-b.getRadius(); i--) {
             //System.out.println(i);
             if (!new Location(l.getWorld(), x, i, z).getBlock().getType().isAir()) {
                 return i;
@@ -363,7 +365,7 @@ public class UtilsFAWE {
     public int getLowest(int x, int z, @NotNull Location l) {
         int y = l.getBlockY();
 
-        for (int i = y-b.getRayon(); i <= y+b.getRayon(); i++) {
+        for (int i = y-b.getRadius(); i <= y+b.getRadius(); i++) {
             //System.out.println(i);
             if (!new Location(l.getWorld(), x, i, z).getBlock().getType().isAir()) {
                 //System.out.println("i = " + i);

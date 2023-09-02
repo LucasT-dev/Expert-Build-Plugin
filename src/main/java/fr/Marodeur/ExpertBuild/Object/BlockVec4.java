@@ -16,6 +16,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -237,7 +238,7 @@ public class BlockVec4 {
         return new Location(world, x, y, z).getBlock().getType();
     }
 
-    public Location getPointAngle(float pitch, float yaw, int distance, World world) {
+    public Location getPointAngle(float pitch, float yaw, double distance, World world) {
 
         double pitch1 = ((pitch + 90) * Math.PI) / 180;
         double yaw1 = ((yaw + 90) * Math.PI) / 180;
@@ -491,7 +492,7 @@ public class BlockVec4 {
                 ", z=" + z +
                 ", loc=" + loc +
                 ", mat=" + mat +
-                ", patter=" + pattern +
+                ", pattern=" + pattern +
                 '}';
     }
 
@@ -509,6 +510,11 @@ public class BlockVec4 {
 
     public boolean isEmpty(Object obj) {
         return obj == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z, mat, baseblock, loc, pattern);
     }
 
     public boolean getMaterialEquals(@NotNull Material mat) {

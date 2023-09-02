@@ -1,4 +1,4 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
@@ -36,7 +36,7 @@ public class DegradeBrush implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return brushBuilder.getEnable();
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Deprecated
@@ -56,7 +56,7 @@ public class DegradeBrush implements BrushOperation {
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = bb.getRayon();
+        int radius = bb.getRadius();
         List<BlockVec4> bv4 = new ArrayList<>();
         List<BlockVec4> bv4block = new ArrayList<>();
 

@@ -1,44 +1,72 @@
-# Expert-Build-Doc
+# Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest Version : 1.18.4
+* Latest Version : 1.18.1.5
 * Author : Marodeur
+* Contributor : Lison, Cancri
 * Depend : FAWE
 
-[![Discord](https://img.shields.io/discord/268444645527126017.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=122a7a)](https://discord.gg/wNxF7ud)
-[![GitHub](https://img.shields.io/github/watchers/Marodeurun/Expert-Build-Doc?style=social)](https://github.com/Marodeurun/Expert-Build-Doc)
-[![Spigot](https://img.shields.io/badge/Download-Expert_Build-blue)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.2.Alpha-blue)
+![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
+[![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.5-purple)
 
 ------------------
 <p align="center">
 <img src="https://imgur.com/h5NrDR2.png" title="Image_1" alt="deco">
 </p>
 
+
 ------------------
+# News
+
+-> * [NewBrush, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+
+-> * [New inventory, open with left click using honeycomb ! click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Inventory)
+
+------------------
+
+# Supported Versions
+
+| Mc Version | Supported          |
+|------------|--------------------|
+| 1.18.x     | :white_check_mark: |
+| 1.19.x     | :white_check_mark: |
+| 1.20.x     | :white_check_mark: |
+
+------------------
+# Summary
+
+* [**INSTALLATION**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Installation)
+
+* [**COMMANDS**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Commands)
+
+* [**BRUSH**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+
+* [**INVENTORY**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Inventory)
+
+* [**CONFIGURATION**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Configuration)
+
+------------------
+
 # Installation
 
 ``` 
 Insert plugin in folder plugins,
 
 Use FAWE plugin : 
+
+Java version : 16 minimum
 ```
 
 [![FAWE](https://img.shields.io/badge/Download-FAWE-red)](https://ci.athion.net/job/FastAsyncWorldEdit/)
 
-## Supported Versions
-
-| Mc Version | Supported         |
-|-------|----------------------  |
-| 1.18  | :white_check_mark:     |
-| 1.19  | :white_check_mark:     |
-| 1.20  | :white_check_mark:     |  
-
-
 ------------------
+
 # Usage
 
-###All commands and brush using Fawe editSession, All commands and brush can be //undo, //redo !!!
+## Commands
+
+- **All commands and brush using Fawe editSession, All commands and brush can be //undo, //redo !!!**
 
 
 `/1` or `right click using wand` :
@@ -143,21 +171,6 @@ preset a tick to the repeater when you set it
 *permission : exptool.use*
 
 ------------------
-`/organic` or `orga`:
-
-human organic generator, use honeycomb menu
-
-pregenerate particle using : /organic pregen
-
-generate block using : /organic generate
-
-*permission : exporga.use*
-
-<img src="https://imgur.com/4Ff6Fxj.png" title="Image_1" alt="deco">
-
-<img src="https://imgur.com/iUUfUkz.png" title="Image_1" alt="deco">
-
-------------------
 `/schemtrans` :
 
 transfer schematic on other sftp server
@@ -194,9 +207,21 @@ Use your selection as a plane of symmetry
 *permission : expautoflip.use*
 
 ------------------
+`/expbuild` aliases `/exp` :
+
+general command for reload config, need help, and more
+
+*permission : expbuild.use*
+
+
+## Brush
+
+------------------
 `/flower` aliases `fw`:
 
-argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball`, `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`
+argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball`, `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend`
+
+Defaut tool : CLAY_BALL, SPECTRAL_ARROW and HONEYCOMB
 
 General brush command,
 
@@ -208,7 +233,7 @@ General brush command,
 *permission : expflower.use*
 
 
-- melt, fill, fill, smooth, floatclean : voxel brush,
+- melt, fill, fill, smooth, floatclean, erodeblend : voxel brush,
   *permission : experode.use*
 
 
@@ -217,10 +242,12 @@ General brush command,
 
 
 - cube : cube brush
+
   *permission : expcube.use*
 
 
 - 2dCube : place a cube with an angle corresponding to the angle that the player has
+
   *permission : exp2dcube.use.use*
 
 <img src="https://imgur.com/EqbP1cz.png" title="Image_1" alt="deco">
@@ -243,6 +270,10 @@ General brush command,
 
   *permission : expdrain.use*
 
+- drain : drain brush
+
+  *permission : experaser.use*
+
 
 - biome : biome brush
 
@@ -259,33 +290,89 @@ General brush command,
 
   *permission : expblendball.use*
 
+
 - updatechunk : update chunk
 
   *permission : expupdatechunk.use*
 
-- flower : flower brush using flower gui
-
-  *permission : expflower.use*
-
-<img src="https://imgur.com/i350PM5.png" title="Image_1" alt="deco">
-
 - none : disable brush
 
   *permission : expnone.use*
-
-
-------------------
-`/expbuild` aliases `/exp` :
-
-general command for reload config, need help, and more
-
-*permission : expbuild.use*
 
 ------------------
 
 If you are an operator on the server, you will still be able to execute all commands
 
 ------------------
+
+## Inventory
+
+Open the inventory with a left click on the honeycomb
+
+- By selecting the bone you open the configuration interface of humanoid organics
+
+*permission : exporga.use*
+
+
+By default the switch is on the BARRIER_BLOCK > in mode: Activation / deactivation of members
+
+<img src="https://imgur.com/X72XXhK.png" title="Image_1" alt="deco">
+
+This allows you to choose to deactivate / activate certain body parts (by default all parts are activated)
+
+By clicking on the X head (Switch to X) you can modify the pitch of each member of the organic,
+and you can do the same thing by clicking on the Y head, which will change the yaw of the members of the organic
+
+<img src="https://imgur.com/sQmFi4w.png" title="Image_1" alt="deco">
+
+Now you are ready to pregenerate your organic, by clicking on the first ARMOR_STAND.
+Of course you can modify the direction of the members at any time and see the modification live!!!
+
+
+<img src="https://imgur.com/4Ff6Fxj.png" title="Image_1" alt="deco">
+
+Finally by clicking on the second ARMOR_STAND you can generate your organic!!! Congratulations
+
+<img src="https://imgur.com/iUUfUkz.png" title="Image_1" alt="deco">
+
+------------------
+
+- By selecting the leather chest-plate you open the configuration interface of custom leather
+
+<img src="https://imgur.com/bU2Ht53.png" title="Image_1" alt="deco">
+
+Click or shift click on the dyes to change the colors of the tonics,
+
+Click on the tunic to be able to put them in your inventory
+
+------------------
+
+- By selecting the sunflower you open the configuration interface of flower brush
+
+Place the items present in your inventory in place of the barrier blocks
+
+By clicking on the yellow flags, you can modify the properties of the block or the item
+
+For example if you want to put the upper part of the rose_bush, or modify (upper / lower / double) the slabs, or put persistent leaves, or choose the number of candles to put...
+
+<img src="https://imgur.com/Tgdu8dy.png" title="Image_1" alt="deco">
+
+By clicking on the black_glass present above, you can modify the quantity of the item in the brush
+
+<img src="https://imgur.com/XqYI3kj.png" title="Image_1" alt="deco">
+
+Clicking on the bottle modifies the amount of air present in the brush,
+
+<img src="https://imgur.com/wyez9qw.png" title="Image_1" alt="deco">
+
+Finally, don't forget to click on the honeycomb to activate the brush;
+You can now apply your brush by right-clicking with the honeycomb
+
+And press a second time on the honeycomb to deactivate the brush
+
+<img src="https://imgur.com/i350PM5.png" title="Image_1" alt="deco">
+
+
 # Configuration
 
 execute /expbuild reload ; to reload the config file.
@@ -363,7 +450,7 @@ build:
   #Player can clear selection using shift click with wand
   #Default : true
   #Use boolean value (true / false)
-  sihft_click_with_wand: true
+  sihft_click_with_wand: false
 
   #Max point number save for Brush line
   #Default : 20
@@ -373,12 +460,12 @@ build:
   #Terraforming Tool 1
   #Default : ARROW
   #Use item name
-  terraforming_tool_1: ARROW
+  terraforming_tool_1: SPECTRAL_ARROW
 
   #Terraforming Tool 2
   #Default : GUNPOWDER
   #Use item name
-  terraforming_tool_2: GUNPOWDER
+  terraforming_tool_2: CLAY_BALL
 
 
   GOHA:
@@ -396,169 +483,4 @@ build:
   #possibilité (fr / en )
 
   lang: en
-
-  message:
-    en:
-      main:
-        plugin_enable: Plugin enable
-        plugin_disable: Plugin disable
-
-        listeners_load: Listeners load
-        commands_load: Commands load
-        config_load: Config load
-        gui_load: Gui registered
-        brush_load: brush registered
-        schematic_transfert_file: Transfert Schematic file Server'num'.yml create
-
-        checking_update: Checking for updates...
-        not_new_update: There is not a new update available
-        new_update_available: There is a new update available, you are running on version 'v1' , version 'v2' is available
-        unable_check_update: Unable to check for updates 'error'
-
-      brush:
-        brush_enable: Brush 'brush' enable
-        brush_enable_with_radius: Brush 'brush' enable, radius = 'radius'
-        brush_enable_with_material: Brush 'brush' enable, pattern = 'pattern'
-        brush_enable_with_radius_pattern: Brush 'brush' enable, radius = 'radius', pattern = 'pattern'
-        brush_disable: Brush disable
-        brush_registered: Brush 'brush' registered
-        material_set: Material set
-        radius_set: Radius set
-
-        player_registered: Player 'player' registered
-        builder_profile_registered: Builder profile registered
-        player_already_registered: You have already registered
-
-        point_add: Point add at ('point')
-        point_not_save: Limite size, point not save
-
-      permission:
-        dont_perm: You don't have the permission
-        console_not_execute_cmd: Console cannot use this command
-
-      selection:
-        set_pos_1: Pos 1 set to ('pos')
-        set_pos_1_with_area: Pos 1 set to ('pos') ('area')
-        set_pos_2: Pos 2 set to ('pos')
-        set_pos_2_with_area: Pos 2 set to ('pos') ('area')
-        add_vertex_pos: Vertex add ('pos')
-        selection_clear: Selection clear
-        set_selection: Selection 'selection' set
-
-        block_modified: a'num' block have been modified
-        block_modified_with_time: a'num' block have ben modified ('num2' blocks/s)
-
-      error:
-        error_region: Region error n° 'num' ! 'error'
-        error_selection: §4Error ! IncompleteRegionException; Use 'selection' selection and complete selection
-        error_brushbuilder: §4Error ! 'player' has not been registered as a builder, for this he must be an operator or have the expertbuild.use permission
-        error_jsch_exception: Error JSch-Exception, please see console
-        error_sftp_exception: Error Sftp-Exception, please see console
-        file_configuration_error: Configuration files in ExpertBuild folder is wrong or corrupt; Repair the file or delete all the files, so that the plugin recreates them
-        incomplete_selection: Incomplete Selection; Particle Stopped, this is normal
-        invalid_number: Invalid number format
-        invalid_number_integer: Invalid number format, use integer
-        invalid_number_integer_upper_0: Invalid number format, upper 0
-        invalid_material: Invalid pattern
-        invalid_material_set: Invalid pattern, pattern set 'pattern'
-        invalid_biome: Invalid biome
-        invalid_biome_set: Invalid biome, biome set 'biome'
-
-      tools:
-        give_tool: The 'tool' tools given
-
-      commands:
-        use: Use 'cmd'
-        pregeneration: pregeneration
-
-        file_not_exist: This file 'file' doesn't exist
-        file_too_large: The file is too large, Increase the parameter to transfer larger files
-        server_off: Server unregistered
-        unknown_server: Unknown server, please try again with valid server name
-        transfert: Tranfert running
-        dont_restart: Connection to the server... please, don't reload ExpertBuild, don't restart the server
-        succes_transfert: Transfer finish, successful upload file Imported-'file' on server 'server'
-        transfert_log: The file 'file' Exported with succes by 'player' on 'server'
-
-    fr:
-      main:
-        plugin_enable: Plugin on
-        plugin_disable: Plugin off
-
-        listeners_load: Listeners chargé
-        commands_load: Commands chargé
-        config_load: Config chargé
-        gui_load: Gui enregistré
-        brush_load: brush enregistré
-        schematic_transfert_file: Transfert Schematic file Server'num'.yml create
-
-        checking_update: Check updates...
-        not_new_update: Il n'y a pas de nouvelle mise à jour disponible actuellement
-        new_update_available: Une nouvelle mise a jour est disponible, vous utilisez la version 'v1' , version 'v2' disponible
-        unable_check_update: Inpossible de check les versions disponible 'error'
-
-      brush:
-        brush_enable: Brush 'brush' activé
-        brush_enable_with_radius: Brush 'brush' activé, rayon = 'radius'
-        brush_enable_with_material: Brush 'brush' activé, pattern = 'pattern'
-        brush_enable_with_radius_pattern: Brush 'brush' activé, rayon = 'radius', pattern = 'pattern'
-        brush_disable: Brush désactivé
-        brush_registered: Brush 'brush' enregistré
-        material_set: Material défini
-        radius_set: Radius défini
-
-        player_registered: Joueur 'player' enregistré
-        builder_profile_registered: Profile Builder enregistré
-        player_already_registered: Vous êtes déjà enregistré
-
-        point_add: Point ajouté à ('point')
-        point_not_save: Taille limite, point non sauvegardé
-
-      permission:
-        dont_perm: Vous n'avez pas la permission
-        console_not_execute_cmd: La console ne peux pas exécuter cette commande
-
-      selection:
-        set_pos_1: Pos 1 défini à ('pos')
-        set_pos_1_with_area: Pos 1 défini à ('pos') ('area')
-        set_pos_2: Pos 2 défini à ('pos')
-        set_pos_2_with_area: Pos 2 défini à ('pos') ('area')
-        add_vertex_pos: Vertex ajouté ('pos')
-        selection_clear: Selection effacé
-        set_selection: Selection 'selection' défini
-
-        block_modified: a'num' block ont été modifé
-        block_modified_with_time: a'num' block ont été modifé ('num2' blocks/s)
-
-      error:
-        error_region: Erreur région n° 'num' ! 'error'
-        error_selection: §4Error ! IncompleteRegionException; Utilisez 'selection' selection et completez votre selection
-        error_brushbuilder: §4Error ! 'player' n'eest pas enregistré en tant que Builder, il doit être opérateur ou avoir la permission expertbuild.use
-        error_jsch_exception: Error JSch-Exception, voir console
-        error_sftp_exception: Error Sftp-Exception, voir console
-        file_configuration_error: Le fichier de configuration dans le dossier ExpertBuild est erroné ou corrompu; Réparez le fichier ou supprimez tous les fichier pour que le plugin les re-créer
-        incomplete_selection: Selection incomplete; Particule stoppé, ceci est normal
-        invalid_number: Format du nombre invalide
-        invalid_number_integer: Format du nombre invalide, utilisé un chiffre
-        invalid_number_integer_upper_0: Format du nombre invalide, le chiffre doit être suppérieur à 0
-        invalid_material: Pattern invalide
-        invalid_material_set: Pattern invalide, pattern défini 'pattern'
-        invalid_biome: Biome invalide
-        invalid_biome_set: Biome invalide, biome défini 'biome'
-
-      tools:
-        give_tool: L' 'tool' donné
-
-      commands:
-        use: Utilisez 'cmd'
-        pregeneration: pré-génération
-
-        file_not_exist: Le fichier 'file' n'existe pas
-        file_too_large: Le fichier est trop volumineux, Augmentez le parametre de tranfert dans le fichier de configuration
-        server_off: Serveur non activé
-        unknown_server: Serveur inconnu, ré-essayé avec un nom de server valide
-        transfert: Tranfert en cours
-        dont_restart: Connection au serveur... svp, ne re-chargé pas ExpertBuild, ne re-démarré pas le serveur
-        succes_transfert: Transfer fini, Fichier envoya avec succès Imported-'file' sur le serveur 'server'
-        transfert_log: Le fichier 'file' exporté avec succes par 'player' sur le serveur 'server'
 ````

@@ -69,8 +69,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                             .setEnable(false)
                             .setRegion(null)
                             .setBlockFace(null)
-                            .sendMessage(message.getBrushDisable())
-                            .Build(brushBuilder);
+                            .sendMessage(message.getBrushDisable());
                 }
             }
             if (args[0].equalsIgnoreCase("enable")) {
@@ -89,8 +88,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                                 .setBlockVec4(Arrays.asList(
                                         new BlockVec4(brushBuilder.getRegion().getMaximumPoint()),
                                         new BlockVec4(brushBuilder.getRegion().getMinimumPoint())))
-                                .sendMessage(message.getBrushEnable("autoflip"))
-                                .Build(brushBuilder);
+                                .sendMessage(message.getBrushEnable("autoflip"));
                         return false;
                     }
                     if (brushBuilder.getRegion().getMaximumPoint().getX() == brushBuilder.getRegion().getMinimumPoint().getX()) {
@@ -101,8 +99,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                                 .setBlockVec4(Arrays.asList(
                                         new BlockVec4(brushBuilder.getRegion().getMaximumPoint()),
                                         new BlockVec4(brushBuilder.getRegion().getMinimumPoint())))
-                                .sendMessage(message.getBrushEnable("autoflip"))
-                                .Build(brushBuilder);
+                                .sendMessage(message.getBrushEnable("autoflip"));
                         return false;
                     }
                     if (brushBuilder.getRegion().getMaximumPoint().getZ() == brushBuilder.getRegion().getMinimumPoint().getZ()) {
@@ -113,8 +110,7 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
                                 .setBlockVec4(Arrays.asList(
                                         new BlockVec4(brushBuilder.getRegion().getMaximumPoint()),
                                         new BlockVec4(brushBuilder.getRegion().getMinimumPoint())))
-                                .sendMessage(message.getBrushEnable("autoflip"))
-                                .Build(brushBuilder);
+                                .sendMessage(message.getBrushEnable("autoflip"));
                         return false;
                     }
                 }

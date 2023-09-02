@@ -1,4 +1,4 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
@@ -7,8 +7,8 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
-import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
@@ -33,7 +33,7 @@ public class SpikeBrush implements BrushOperation {
 
     @Override
     public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return brushBuilder.getEnable();
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
     }
 
     @Deprecated
@@ -54,7 +54,7 @@ public class SpikeBrush implements BrushOperation {
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = bb.getRayon();
+        int radius = bb.getRadius();
         GlueList<BlockVec4> bv4 = new GlueList<>();
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
@@ -98,7 +98,7 @@ public class SpikeBrush implements BrushOperation {
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = bb.getRayon();
+        int radius = bb.getRadius();
         GlueList<BlockVec4> bv4 = new GlueList<>();
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {

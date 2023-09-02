@@ -1,6 +1,6 @@
 package fr.Marodeur.ExpertBuild.Enum;
 
-import fr.Marodeur.ExpertBuild.Brush.Brush.*;
+import fr.Marodeur.ExpertBuild.Brush.*;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
 
 public enum BrushEnum {
@@ -11,7 +11,9 @@ public enum BrushEnum {
     SMOOTH("smooth", ErodeBrush.class),
     MELT("smooth", ErodeBrush.class), //OK
     FLOATCLEAN("smooth", ErodeBrush.class),
-    BLENDBALL("blendball", BlendBall.class), //OK
+    BLENDBALL("blendball", BlendBallBrush.class), //OK
+    ERODEBLEND("erodeBlend", ErodeBlendBrush.class), //OK
+    ERASER("eraser", EraserBrush.class),
 
     OVERLAY("overlay", OverlayBrush.class), //OK
     DRAIN("drain", DrainBrush.class), //OK
