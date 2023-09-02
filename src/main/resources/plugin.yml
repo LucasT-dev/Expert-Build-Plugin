@@ -6,6 +6,8 @@ api-version: 1.18
 description: Builder plugin
 website: https://github.com/LucasT-dev
 depend: [ WorldEdit ]
+libraries:
+  - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.5.7
 
 commands:
 

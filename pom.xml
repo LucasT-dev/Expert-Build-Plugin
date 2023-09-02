@@ -166,7 +166,7 @@
             <groupId>io.github.rysefoxx.inventory</groupId>
             <artifactId>RyseInventory-Plugin</artifactId>
             <version>1.5.7</version>
-            <scope>provided</scope>
+                <scope>provided</scope>
         </dependency>
 
         <dependency>
