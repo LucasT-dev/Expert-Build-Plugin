@@ -219,7 +219,7 @@ general command for reload config, need help, and more
 ------------------
 `/flower` aliases `fw`:
 
-argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball`, `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend`
+argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball` (`bb`) `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend` (`eb`)
 
 Defaut tool : CLAY_BALL, SPECTRAL_ARROW and HONEYCOMB
 
