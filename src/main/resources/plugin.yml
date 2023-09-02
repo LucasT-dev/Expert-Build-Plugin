@@ -4,7 +4,7 @@ main: fr.Marodeur.ExpertBuild.Main
 version: '${version}'
 api-version: 1.18
 description: Builder plugin
-website: https://github.com/Marodeurun
+website: https://github.com/LucasT-dev
 depend: [ WorldEdit ]
 
 commands:
@@ -90,11 +90,6 @@ commands:
   timelapse:
     description: launch automatic timelapse
     permission: exptimelapse.use
-
-  organic:
-    aliases: orga
-    description: human organic generator
-    permission: exporga.use
 
   schemtrans:
     description: transfert schem on other serveur
