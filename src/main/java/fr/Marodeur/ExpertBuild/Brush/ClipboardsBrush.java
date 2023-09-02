@@ -1,9 +1,9 @@
-package fr.Marodeur.ExpertBuild.Brush.Brush;
+package fr.Marodeur.ExpertBuild.Brush;
 
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
-import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
@@ -24,7 +24,9 @@ public class ClipboardsBrush implements BrushOperation {
     public BrushEnum getTypeOfBrush() { return BrushEnum.CLIPBOARD; }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) { return brushBuilder.getEnable(); }
+    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
+        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    }
 
     @Override
     public void ExecuteBrushOnHoney(Player p, Object obj1) {
