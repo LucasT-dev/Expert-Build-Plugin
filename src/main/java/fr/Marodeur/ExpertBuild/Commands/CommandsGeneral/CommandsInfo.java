@@ -53,15 +53,15 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 				TextComponent URL_Discord = new TextComponent("§1Discord §7link : click here");
 				URL_Discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-						new ComponentBuilder("§7Open Discord URL").create()));
-				URL_Discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/rJeJu8AcmB"));
+						new ComponentBuilder("§7marodeur").create()));
+				URL_Discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "marodeur"));
 				sender.spigot().sendMessage(URL_Discord);
 
 				TextComponent URL_Youtube = new TextComponent("§8GitHub §7link : click here");
 				URL_Youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open GitHub report bug").create()));
 				URL_Youtube.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-						"https://github.com/Marodeurun/Expert-Build-Doc/blob/main/SECURITY.md"));
+						"https://github.com/LucasT-dev/Expert-Build-Plugin/issues"));
 				sender.spigot().sendMessage(URL_Youtube);
 				return false;
 			}
@@ -76,7 +76,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				github_doc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open documentation URL").create()));
 				github_doc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-						"https://github.com/Marodeurun/Expert-Build-Doc"));
+						"https://github.com/LucasT-dev/Expert-Build-Plugin/blob/master/README.md"));
 				sender.spigot().sendMessage(github_doc);
 				return false;
 			}
