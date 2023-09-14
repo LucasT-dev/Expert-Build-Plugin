@@ -246,7 +246,7 @@ public class MessageBuilder {
 
             this.back = this.yml.getString("build.message." + lang + ".gui.back");
             this.exit = this.yml.getString("build.message." + lang + ".gui.exit");
-            this.main_gui_title = this.yml.getString("build.message." + lang + ".commands.main_gui_title");
+            this.main_gui_title = this.yml.getString("build.message." + lang + ".gui.main_gui_title");
             this.main_item_1 = this.yml.getString("build.message." + lang + ".gui.main_item_1");
             this.main_item_2 = this.yml.getString("build.message." + lang + ".gui.main_item_2");
             this.main_item_3 = this.yml.getString("build.message." + lang + ".gui.main_item_3");
