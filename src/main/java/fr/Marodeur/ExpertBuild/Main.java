@@ -34,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Consumer;
@@ -43,6 +44,7 @@ public class Main extends JavaPlugin {
 	private static Main instance;
 	public static int id = 110059;
 	public static String latestVersion;
+	public static String lateVersion;
 
 
 	private Map<Class<? extends BrushOperation>, BrushOperation> registeredBrush;
@@ -72,7 +74,11 @@ public class Main extends JavaPlugin {
 
 		reloadConfig();
 
-		reloadMessageConfig();
+		try {
+			reloadMessageConfig();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
 
 		getServer().getConsoleSender().sendMessage(prefix + messageBuilder.getPluginEnable());
 		getLogger().info(" ____          ___  ");
@@ -108,7 +114,7 @@ public class Main extends JavaPlugin {
 
 		updateChecker(version -> {
 			if (!this.getDescription().getVersion().equals(version)) {
-				getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getNewUpdateAvailable(this.getDescription().getVersion(), latestVersion));
+				getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getNewUpdateAvailable(lateVersion, this.getDescription().getVersion(), latestVersion));
 			}
 		},id);
 	}
@@ -179,7 +185,11 @@ public class Main extends JavaPlugin {
 	 */
 	public void reloadConfig() {
 
-		configuration = new Configuration().loadConfiguration();
+		try {
+			configuration = new Configuration().loadConfiguration();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		getLogger().info("Configuration load");
 	}
@@ -187,7 +197,7 @@ public class Main extends JavaPlugin {
 	/**
 	 * Load and reload message file (config.yml)
 	 */
-	public void reloadMessageConfig() {
+	public void reloadMessageConfig() throws URISyntaxException {
 
 		messageBuilder = new MessageBuilder().loadConfiguration();
 
@@ -323,6 +333,8 @@ public class Main extends JavaPlugin {
 				if (scanner.hasNext()) {
 
 					latestVersion = scanner.next();
+
+					lateVersion = String.valueOf(Integer.parseInt(latestVersion.substring(latestVersion.length() - 1)) - Integer.parseInt(getVersion().substring(getVersion().length() - 1)));
 
 					consumer.accept(latestVersion);
 				}

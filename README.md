@@ -1,7 +1,7 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest Version : 1.18.1.5
+* Latest Version : 1.18.1.7
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
@@ -383,6 +383,11 @@ default file config :
 # EXP-Build
 
 build:
+
+  # Version of your configuration file, normally equivalent to the plugin version.
+  # For reasons of safety and proper operation, do not modify this value !!!
+  version: 1.18.1.6
+
   # Open or close the schematic transfer
   # Value : Boolean (true or false)
   server_1:
@@ -448,7 +453,7 @@ build:
   wand_click_in_air: true
 
   #Player can clear selection using shift click with wand
-  #Default : true
+  #Default : false
   #Use boolean value (true / false)
   sihft_click_with_wand: false
 

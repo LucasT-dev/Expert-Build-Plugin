@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -83,7 +84,11 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("reload")) {
 
 				Main.getInstance().reloadConfig();
-				Main.getInstance().reloadMessageConfig();
+				try {
+					Main.getInstance().reloadMessageConfig();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
 
 				sender.sendMessage(Main.prefix + message.getConfigLoad());
 			}

@@ -1,0 +1,132 @@
+#EXPERT-BUILD
+#Frensh lang file
+
+expbuild:
+  message:
+
+    main:
+      plugin_enable: Plugin on
+      plugin_disable: Plugin off
+      listeners_load: Listeners chargé
+      commands_load: Commands chargé
+      config_load: Config chargé
+      gui_load: Gui enregistré
+      brush_load: brush enregistré
+      schematic_transfert_file: Transfert Schematic file Server'num'.yml create
+      checking_update: Check updates...
+      not_new_update: Il n'y a pas de nouvelle mise à jour disponible actuellement
+      new_update_available: Une nouvelle mise a jour est disponible. Vous avez 'v' version(s) de retard, vous utilisez la version 'v1' , version 'v2' disponible !
+      unable_check_update: Inpossible de check les versions disponible 'error'
+
+    brush:
+      brush_enable: Brush 'brush' activé
+      brush_enable_with_radius: Brush 'brush' activé, rayon = 'radius'
+      brush_enable_with_material: Brush 'brush' activé, pattern = 'pattern'
+      brush_enable_with_radius_pattern: Brush 'brush' activé, rayon = 'radius', pattern = 'pattern'
+      brush_disable: Brush désactivé
+      brush_registered: Brush 'brush' enregistré
+      material_set: Material défini
+      radius_set: Radius défini
+      player_registered: Joueur 'player' enregistré
+      builder_profile_registered: Profile Builder enregistré
+      player_already_registered: Vous êtes déjà enregistré
+      point_add: Point ajouté à ('point')
+      point_not_save: Taille limite, point non sauvegardé
+
+    permission:
+      dont_perm: Vous n'avez pas la permission
+      console_not_execute_cmd: La console ne peux pas exécuter cette commande
+
+    selection:
+      set_pos_1: Pos 1 défini à ('pos')
+      set_pos_1_with_area: Pos 1 défini à ('pos') ('area')
+      set_pos_2: Pos 2 défini à ('pos')
+      set_pos_2_with_area: Pos 2 défini à ('pos') ('area')
+      add_vertex_pos: Vertex ajouté ('pos')
+      selection_clear: Selection effacé
+      set_selection: Selection 'selection' défini
+      block_modified: "'num' blocs ont été modifiés"
+      block_modified_with_time: "'num' blocs ont été modifiés ('num2' blocks/s)"
+      player_log_command: "'player' a executé 'cmd'"
+
+    error:
+      error_region: Erreur région n° 'num' ! 'error'
+      error_selection: §4Error ! IncompleteRegionException; Utilisez 'selection' selection et completez votre selection
+      error_brushbuilder: §4Error ! 'player' n'eest pas enregistré en tant que Builder, il doit être opérateur ou avoir la permission expertbuild.use
+      error_jsch_exception: Error JSch-Exception, voir console
+      error_sftp_exception: Error Sftp-Exception, voir console
+      file_configuration_error: Le fichier de configuration dans le dossier ExpertBuild est erroné ou corrompu; Réparez le fichier ou supprimez tous les fichier pour que le plugin les re-créer
+      incomplete_selection: Selection incomplete; Particule stoppé, ceci est normal
+      invalid_number: Format du nombre invalide
+      invalid_number_integer: Format du nombre invalide, utilisé un chiffre
+      invalid_number_integer_upper_0: Format du nombre invalide, le chiffre doit être suppérieur à 0
+      invalid_material: Pattern invalide
+      invalid_material_set: Pattern invalide, pattern défini 'pattern'
+      invalid_biome: Biome invalide
+      invalid_biome_set: Biome invalide, biome défini 'biome'
+
+    tools:
+      give_tool: L' 'tool' donné
+
+    commands:
+      use: Utilisez 'cmd'
+      pregeneration: pré-générer
+      generate: Générer
+      file_not_exist: Le fichier 'file' n'existe pas
+      file_too_large: Le fichier est trop volumineux, Augmentez le parametre de tranfert dans le fichier de configuration
+      server_off: Serveur non activé
+      unknown_server: Serveur inconnu, ré-essayé avec un nom de server valide
+      transfert: Tranfert en cours
+      dont_restart: Connection au serveur... svp, ne re-chargé pas ExpertBuild, ne re-démarré pas le serveur
+      succes_transfert: Transfer fini, Fichier envoya avec succès Imported-'file' sur le serveur 'server'
+      transfert_log: Le fichier 'file' exporté avec succes par 'player' sur le serveur 'server'
+
+    gui:
+      back: Retour
+      exit: Quitté
+      main_gui_title: Menu principal
+      main_item_1: Bienvenue sur Exp_Build gui x)
+      main_item_2: Click sur les items pour découvrir toutes
+      main_item_3: les possibilitées
+      leather_gui_title: Leather
+      leather_item: Custom Leather
+      leather_helmet: Casque en cuir
+      leather_chestplate: Tunique en cuir
+      leather_leggings: Pantalon en cuir
+      leather_boots: Bottes en cuir
+      red_color: §8Couleur ROUGE
+      green_color: §8Couleur VERT
+      blue_color: §8Couleur BLEUE
+      red: ROUGE§7 'level'
+      green: VERT§7  'level'
+      blue: BLEUE§7 'level'
+      organic_gui_title: Generateur d'organique
+      organic_item: Humanoid-Organic-Generator
+      pitch_angle_conf: Pitch angle configuration
+      yaw_angle_conf: Yaw angle configuration
+      click_change_angle: Clic pour changer l'angle 'type'
+      click_enable_disable: Clic pour Activer / Désactiver un membre
+      click_pregen: Clic pour pre-generer l'organic
+      click_generate: Clic pour generer l'organic
+      click_clear_particle: Clic pour supprimer les particules
+      member_conf: configuration des membres
+      height: Hauteur
+      organic_height: Hauteur organique :§7 'value'
+      interact_member: Clic droit, Clic gauche ou Shift clic
+      switch_member: "'type' :§7 'state'"
+      pitch_level: Pitch :§7 'level'
+      yaw_level: Yaw :§7 'level'
+      flower_gui_title: Brush Fleur
+      flower_item: Créer ton brush
+      brush_enable: §a Activé
+      brush_disable: §4 Désactivé
+      radius_text: Rayon
+      radius_value: Rayon :§7 'value'
+      air_text: Air
+      air_value: Air :§7 'value'
+      total: Total :§7 'value'
+      right_arrow: ">§7 'value'"
+      click_for_change: Clic pour changer le pourcentage
+      property_key: PropertyKey :§7 'value'
+      value_propertykey: Valeur :§7 'value'
+      click_for_change_property: Clic pour changer la propriété

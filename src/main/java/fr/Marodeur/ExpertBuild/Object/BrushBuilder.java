@@ -6,8 +6,8 @@ import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
 
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
-import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -44,10 +44,7 @@ public class BrushBuilder {
     private List<BlockVec4> bv4; //using autoflip
     private Pattern pattern;
 
-    private int erosionFaces;
-    private int erosionRecursion;
-    private int fillFaces;
-    private int fillRecursion;
+    private TerraParameter terraParameter;
 
     /**
      * Create objet BrushBuilder
@@ -56,7 +53,7 @@ public class BrushBuilder {
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region, ArrayList<List<BlockVec4>> clipboards,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
-                        int erosionFaces, int erosionRecursion, int fillFaces, int fillRecursion) {
+                        TerraParameter terraParameter) {
 
         this.uuid = uuid;
         this.brushEnum = brushEnum;
@@ -75,10 +72,8 @@ public class BrushBuilder {
         this.bv4 = bv4;
         this.pattern = pattern;
 
-        this.erosionFaces = erosionFaces;
-        this.erosionRecursion = erosionRecursion;
-        this.fillFaces = fillFaces;
-        this.fillRecursion = fillRecursion;
+        this.terraParameter = terraParameter;
+
     }
 
     public UUID getUUID() {
@@ -149,20 +144,24 @@ public class BrushBuilder {
         return pattern;
     }
 
+    public TerraParameter getTerraParameter() {
+        return this.terraParameter;
+    }
+
     public int getErosionFaces() {
-        return erosionFaces;
+        return this.terraParameter.getErosionFaces();
     }
 
     public int getErosionRecursion() {
-        return erosionRecursion;
+        return this.terraParameter.getErosionRecursion();
     }
 
     public int getFillFaces() {
-        return fillFaces;
+        return this.terraParameter.getFillFaces();
     }
 
     public int getFillRecursion() {
-        return fillRecursion;
+        return this.terraParameter.getFillRecursion();
     }
 
     public BrushBuilder setBrushType(BrushEnum brushEnum) {
@@ -348,23 +347,27 @@ public class BrushBuilder {
         return this;
     }
 
+    public void setTerraParameter(TerraParameter terraParameter) {
+        this.terraParameter = terraParameter;
+    }
+
     public BrushBuilder setErosionFaces(int erosionFaces) {
-        this.erosionFaces = erosionFaces;
+        this.terraParameter.setErosionFaces(erosionFaces);
         return this;
     }
 
     public BrushBuilder setErosionRecursion(int erosionRecursion) {
-        this.erosionRecursion = erosionRecursion;
+        this.terraParameter.setErosionRecursion(erosionRecursion);
         return this;
     }
 
     public BrushBuilder setFillFaces(int fillFaces) {
-        this.fillFaces = fillFaces;
+        this.terraParameter.setFillFaces(fillFaces);
         return this;
     }
 
     public BrushBuilder setFillRecursion(int fillRecursion) {
-        this.fillRecursion = fillRecursion;
+        this.terraParameter.setFillRecursion(fillRecursion);
         return this;
     }
 
@@ -388,10 +391,7 @@ public class BrushBuilder {
                 ", blockFace=" + blockFace +
                 ", bv4=" + bv4 +
                 ", pattern=" + pattern.toString() +
-                ", erosionFaces=" + erosionFaces +
-                ", erosionRecursion=" + erosionRecursion +
-                ", fillFaces=" + fillFaces +
-                ", fillRecursion=" + fillRecursion +
+                ", terraParameter=" + terraParameter +
                 '}';
     }
 
@@ -483,7 +483,7 @@ public class BrushBuilder {
                 conf.getDefault_material_brush(), it, flowerMaterialTaux, conf.getDefault_biome_brush(),
                 conf.getDefault_air_brush(), conf.getDefaultBrushRayon(), 4, null, new ArrayList<>(),
                 null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
-                0, 0, 0, 0));
+                new TerraParameter(0, 0, 0, 0)));
     }
 
     /**
@@ -504,4 +504,61 @@ public class BrushBuilder {
         }
     }
 
+
+    private static class TerraParameter {
+
+        private int erosionFaces;
+        private int erosionRecursion;
+        private int fillFaces;
+        private int fillRecursion;
+
+        public TerraParameter(int erosionFaces, int erosionRecursion, int fillFaces, int fillRecursion) {
+            this.erosionFaces = erosionFaces;
+            this.erosionRecursion = erosionRecursion;
+            this.fillFaces = fillFaces;
+            this.fillRecursion = fillRecursion;
+        }
+
+        public int getErosionFaces() {
+            return erosionFaces;
+        }
+
+        public void setErosionFaces(int erosionFaces) {
+            this.erosionFaces = erosionFaces;
+        }
+
+        public int getErosionRecursion() {
+            return erosionRecursion;
+        }
+
+        public void setErosionRecursion(int erosionRecursion) {
+            this.erosionRecursion = erosionRecursion;
+        }
+
+        public int getFillFaces() {
+            return fillFaces;
+        }
+
+        public void setFillFaces(int fillFaces) {
+            this.fillFaces = fillFaces;
+        }
+
+        public int getFillRecursion() {
+            return fillRecursion;
+        }
+
+        public void setFillRecursion(int fillRecursion) {
+            this.fillRecursion = fillRecursion;
+        }
+
+        @Override
+        public String toString() {
+            return "TerraParameter{" +
+                    "erosionFaces=" + erosionFaces +
+                    ", erosionRecursion=" + erosionRecursion +
+                    ", fillFaces=" + fillFaces +
+                    ", fillRecursion=" + fillRecursion +
+                    '}';
+        }
+    }
 }

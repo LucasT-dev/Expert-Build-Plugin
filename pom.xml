@@ -6,7 +6,7 @@
 
     <groupId>fr.Marodeur</groupId>
     <artifactId>ExpertBuild</artifactId>
-    <version>1.18.1.5</version>
+    <version>1.18.1.7</version>
     <name>Expert-Build</name>
 
     <build>

@@ -64,7 +64,7 @@ public class GeneralListener implements Listener {
 			if (Main.getVersion().equals(version)) {
 				p.sendMessage(Main.prefix + message.getNotNewUpdate());
 			} else {
-				p.sendMessage(Main.prefix + message.getNewUpdateAvailable(Main.getVersion(), Main.latestVersion));
+				p.sendMessage(Main.prefix + message.getNewUpdateAvailable(Main.lateVersion, Main.getVersion(), Main.latestVersion));
 			}
 		},Main.id);
 

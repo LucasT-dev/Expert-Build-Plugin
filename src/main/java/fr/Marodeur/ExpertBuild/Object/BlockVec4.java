@@ -5,7 +5,10 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockState;
+
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
+
+import fr.Marodeur.ExpertBuild.API.GlueList;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -13,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -282,9 +286,9 @@ public class BlockVec4 {
         return bv4;
     }
 
-    public ArrayList<BlockVec4> getPointInSphere(Location center, int radius, Object... mat) {
+    public GlueList<BlockVec4> getPointInSphere(@NotNull Location center, int radius, Object... mat) {
 
-        ArrayList<BlockVec4> bv4 = new ArrayList<>();
+        GlueList<BlockVec4> bv4 = new GlueList<>();
         for (int x = center.getBlockX() - radius; x <= center.getBlockX() + radius; x++) {
             for (int y = center.getBlockY() - radius; y <= center.getBlockY() + radius; y++) {
                 for (int z = center.getBlockZ() - radius; z <= center.getBlockZ() + radius; z++) {
@@ -306,33 +310,51 @@ public class BlockVec4 {
         return bv4;
     }
 
-    public ArrayList<BlockVec4> getPointInCylinder(Location center, int radius) {
+    public GlueList<BlockVec4> getPointInCylinder(@NotNull Location center, int radius, Object... mat) {
 
-        ArrayList<BlockVec4> bv4 = new ArrayList<>();
+        GlueList<BlockVec4> bv4 = new GlueList<>();
         for (int x = center.getBlockX() - radius; x <= center.getBlockX() + radius; x++) {
             for (int z = center.getBlockZ() - radius; z <= center.getBlockZ() + radius; z++) {
-                bv4.add(new BlockVec4(x, center.getBlockY(), z));
-            }
-        }
-        return bv4;
-    }
 
-    public ArrayList<BlockVec4> getPointInCube(Location center, int radius, Material mat) {
-
-        ArrayList<BlockVec4> bv4 = new ArrayList<>();
-        for (int x = center.getBlockX() - radius; x <= center.getBlockX() + radius; x++) {
-            for (int y = center.getBlockY() - radius; y <= center.getBlockY() + radius; y++) {
-                for (int z = center.getBlockZ() - radius; z <= center.getBlockZ() + radius; z++) {
-                    bv4.add(new BlockVec4(x, y, z, mat));
+                if (mat.length == 0) {
+                    bv4.add(new BlockVec4(x, center.getBlockY(), z, (Material) null));
+                }
+                if (mat[0] instanceof Material material) {
+                    bv4.add(new BlockVec4(x, center.getBlockY(), z, material));
+                }
+                if (mat[0] instanceof Pattern pattern) {
+                    bv4.add(new BlockVec4(x, center.getBlockY(), z, pattern));
                 }
             }
         }
         return bv4;
     }
 
-    public ArrayList<BlockVec4> getPointInRectangle(Location point, int length, int width, int heigth, Object... mat) {
+    public GlueList<BlockVec4> getPointInCube(@NotNull Location center, int radius, Object... mat) {
 
-        ArrayList<BlockVec4> bv4 = new ArrayList<>();
+        GlueList<BlockVec4> bv4 = new GlueList<>();
+        for (int x = center.getBlockX() - radius; x <= center.getBlockX() + radius; x++) {
+            for (int y = center.getBlockY() - radius; y <= center.getBlockY() + radius; y++) {
+                for (int z = center.getBlockZ() - radius; z <= center.getBlockZ() + radius; z++) {
+
+                    if (mat.length == 0) {
+                        bv4.add(new BlockVec4(x, y, z, (Material) null));
+                    }
+                    if (mat[0] instanceof Material material) {
+                        bv4.add(new BlockVec4(x, y, z, material));
+                    }
+                    if (mat[0] instanceof Pattern pattern) {
+                        bv4.add(new BlockVec4(x, y, z, pattern));
+                    }
+                }
+            }
+        }
+        return bv4;
+    }
+
+    public GlueList<BlockVec4> getPointInRectangle(Location point, int length, int width, int heigth, Object... mat) {
+
+        GlueList<BlockVec4> bv4 = new GlueList<>();
 
         for (int x = point.getBlockX(); x <= point.getBlockX() + length; x++) {
             for (int z = point.getBlockZ(); z <= point.getBlockZ() + width; z++) {
@@ -353,9 +375,9 @@ public class BlockVec4 {
         return bv4;
     }
 
-    public ArrayList<BlockVec4> getPointRectangleWall(Location point, int length, int width, int heigth, Object... mat) {
+    public GlueList<BlockVec4> getPointRectangleWall(Location point, int length, int width, int heigth, Object... mat) {
 
-        ArrayList<BlockVec4> bv4 = new ArrayList<>();
+        GlueList<BlockVec4> bv4 = new GlueList<>();
 
         for (int x = point.getBlockX(); x <= point.getBlockX() + length; x++) {
             for (int z = point.getBlockZ(); z <= point.getBlockZ() + width; z++) {

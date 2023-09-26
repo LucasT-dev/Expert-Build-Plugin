@@ -1,13 +1,18 @@
 package fr.Marodeur.ExpertBuild.Object;
 
 import com.sk89q.worldedit.WorldEdit;
+
+import fr.Marodeur.ExpertBuild.Main;
+
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -16,6 +21,7 @@ public class Configuration extends FileConfiguration {
     private final FileConfiguration yml;
     private final Logger log = Logger.getLogger("Expert-Build");
 
+    private String version;
     private int max_rayon_brush;
     private int default_brush_rayon;
     private int default_air_brush;
@@ -48,15 +54,21 @@ public class Configuration extends FileConfiguration {
     private String server_name_4;
 
 
-    public Configuration() {
+    public Configuration() throws IOException {
+
+
         File file = new File("plugins/ExpertBuild/config.yml");
         this.yml = YamlConfiguration.loadConfiguration(file);
+
+        if (getFileIsUpToDate()) updateFileConfig(file);
+
     }
 
     public Configuration loadConfiguration() {
 
         try {
 
+            this.version = this.yml.getString("build.version");
             this.max_rayon_brush = this.yml.getInt("build.max_brush_rayon");
             this.default_brush_rayon = this.yml.getInt("build.default_brush_rayon");
             this.default_air_brush = this.yml.getInt("build.default_air_brush");
@@ -106,6 +118,9 @@ public class Configuration extends FileConfiguration {
         return this;
     }
 
+    public String getVersion() {
+        return this.version;
+    }
     public int getMaxRayonBrush() {
         return this.max_rayon_brush;
     }
@@ -201,5 +216,53 @@ public class Configuration extends FileConfiguration {
     @Override
     public void loadFromString(@NotNull String contents) {
 
+    }
+
+    private boolean getFileIsUpToDate() {
+
+        //Convert old config version with no version information to new file config version
+        try {
+            Objects.requireNonNull(this.yml.getString("build.version"));
+
+            this.version = this.yml.getString("build.version");
+
+        } catch (NullPointerException ignorred) {
+            yml.set("build.version", "1.18.1.6");
+            this.version = "1.18.1.6";
+
+        }
+        return !this.version.equals(Main.getVersion());
+    }
+
+    private void updateFileConfig(File file) throws IOException {
+
+        if (this.version.equals("1.18.1.6")) {
+            //Update config file from 1.18.1.6 to 1.18.1.7
+
+            yml.set("build.logShortcut", true);
+
+            yml.set("build.version", "1.18.1.7");
+            this.version = "1.18.1.7";
+
+            yml.save(file);
+
+        }
+
+        if (this.version.equals("1.18.1.7")) {
+            //Update config file from 1.18.1.7 to 1.18.1.8
+
+            //for next update
+
+        }
+
+        if (this.version.equals("1.18.1.8")) {
+            //Update config file from 1.18.1.8 to 1.18.1.9
+
+            //for next update
+
+        }
+
+
+        log.info("File config update");
     }
 }
