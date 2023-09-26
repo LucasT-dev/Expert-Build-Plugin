@@ -327,7 +327,7 @@ public class Main extends JavaPlugin {
 
 			try {
 
-				InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + id)).openStream();
+				InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + id + "/~")).openStream();
 				Scanner scanner = new Scanner(inputStream);
 
 				if (scanner.hasNext()) {
