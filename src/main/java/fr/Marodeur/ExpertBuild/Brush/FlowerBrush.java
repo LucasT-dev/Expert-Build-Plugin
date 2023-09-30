@@ -22,7 +22,7 @@ public class FlowerBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("expflower.use");
+        return p.hasPermission("exp.brush.flower");
     }
 
     @Override
@@ -42,14 +42,14 @@ public class FlowerBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
         Location l = (Location) obj1;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         GlueList<BlockVec4> bv4 = new GlueList<>();
         int radius = bb.getRadius();

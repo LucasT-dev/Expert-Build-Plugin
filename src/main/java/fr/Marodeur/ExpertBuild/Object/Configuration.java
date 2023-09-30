@@ -1,14 +1,11 @@
 package fr.Marodeur.ExpertBuild.Object;
 
 import com.sk89q.worldedit.WorldEdit;
-
 import fr.Marodeur.ExpertBuild.Main;
-
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -32,6 +29,7 @@ public class Configuration extends FileConfiguration {
     private boolean display_bezier_curve;
     private boolean wand_click_in_air;
     private boolean sihft_click_with_wand;
+    private boolean log_shortcut;
     private Material wand_item;
     private int max_file_size;
     private int max_point_saved;
@@ -79,6 +77,7 @@ public class Configuration extends FileConfiguration {
             this.display_bezier_curve = this.yml.getBoolean("build.display_bezier_curve");
             this.wand_click_in_air = this.yml.getBoolean("build.wand_click_in_air");
             this.sihft_click_with_wand = this.yml.getBoolean("build.sihft_click_with_wand");
+            this.log_shortcut = this.yml.getBoolean("build.logShortcut");
             this.wand_item = Material.matchMaterial(WorldEdit.getInstance().getConfiguration().wandItem.replace("minecraft:", ""));
             this.max_file_size = this.yml.getInt("build.max_file_size");
             this.max_point_saved = this.yml.getInt("build.max_point_saved");
@@ -150,6 +149,9 @@ public class Configuration extends FileConfiguration {
     }
     public boolean isSihft_click_with_wand() {
         return sihft_click_with_wand;
+    }
+    public boolean getlog_shortcut() {
+        return log_shortcut;
     }
     public Material getWand_item() {
         return wand_item;
@@ -250,13 +252,28 @@ public class Configuration extends FileConfiguration {
 
         if (this.version.equals("1.18.1.7")) {
             //Update config file from 1.18.1.7 to 1.18.1.8
+            //No modification of the configuration file
 
-            //for next update
+            yml.set("build.version", "1.18.1.8");
+            this.version = "1.18.1.8";
+
+            yml.save(file);
 
         }
 
         if (this.version.equals("1.18.1.8")) {
             //Update config file from 1.18.1.8 to 1.18.1.9
+            //No modification of the configuration file
+
+            yml.set("build.version", "1.18.1.9");
+            this.version = "1.18.1.9";
+
+            yml.save(file);
+
+        }
+
+        if (this.version.equals("1.18.1.9")) {
+            //Update config file from 1.18.1.9 to 1.18.1.10
 
             //for next update
 

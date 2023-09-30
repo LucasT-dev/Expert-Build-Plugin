@@ -42,8 +42,8 @@ public class CommandConvertSlab implements CommandExecutor {
             return false;
         }
 
-        if (!p.isOp() || !p.hasPermission("expperlin.use")) {
-            p.sendMessage(message.getDontPerm());
+        if (!p.hasPermission("exp.command.convertslab")) {
+            p.sendMessage(message.getNoPermissionNode("exp.command.convertslab"));
             return false;
         }
 

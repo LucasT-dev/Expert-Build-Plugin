@@ -1,7 +1,7 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest Version : 1.18.1.7
+* Latest Version : 1.18.1.9
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
@@ -46,6 +46,8 @@ Minecraft build plugin, Expert-Build Documentation
 
 * [**CONFIGURATION**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Configuration)
 
+* [**PERMISSION**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Permission)
+
 ------------------
 
 # Installation
@@ -73,56 +75,56 @@ Java version : 16 minimum
 
 Execute //pos1
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/2` or `left click using wand` :
 
 Execute //pos2
 
-*permission : exptool.use*
+*permission : exp.command.tool* and *permission : worldedit.selection.pos*
 
 ------------------
 `shift click` :
 
 Execute //sel
 
-*permission : expsel.use*
+*permission : exp.command.sel* and *permission : worldedit.selection.pos*
 
 ------------------
 `/terra` aliases `t` :
 
 Give terraforming tools
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/vox` :
 
 Give voxel tools
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/plume` :
 
 Give GoPaint tool
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/silex` :
 
 Give GoBrush tool
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/pos` :
 
 get position location
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/getcommand` :
@@ -130,7 +132,7 @@ get position location
 displays the command of a Block
 command by looking at it from a distance
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 <img src="https://imgur.com/eraXDb9.png" title="Image_1" alt="deco">
 
@@ -140,56 +142,59 @@ command by looking at it from a distance
 
 shortcut for execute //copy
 
-*permission : exptool.use*
+*permission : exp.command.tool* *permission : worldedit.clipboard.copy*
 
 ------------------
 `/cube` :
 
 set cuboid selection mode
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/poly` :
 
 set polygone selection mode
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/convex` aliases `/conv`:
 
 set convex selection mode
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/repeater` or `/rt` :
 
 preset a tick to the repeater when you set it
 
-*permission : exptool.use*
+*permission : exp.command.tool*
 
 ------------------
 `/schemtrans` :
 
 transfer schematic on other sftp server
 
-*permission : expschemtrans.use*
+*permission : exp.command.schemtrans*
 
 ------------------
 `/timelapse` :
 
 launch automatic timelapse
 
-*permission : exptimelapse.use*
+WARNING, this command is not compatible with fawe (//undo, //redo),
+and does not respect plot restrictions (example: plotsquared)️
+
+*permission : exp.command.timelapse*
 
 ------------------
 `/perlin` :
 
 generate perlin, predefined for the hair
 
-*permission : expperlin.use*
+*permission : exp.command.perlin*
 
 ------------------
 `/autocb` :
@@ -197,21 +202,24 @@ generate perlin, predefined for the hair
 pastes all commands separated by a semicolon into a command block. Then execute the command by looking at the command block
 this will allow when the cb to automatically include the command
 
-*permission : expautocb.use*
+*permission : exp.command.autocb*
 
 ------------------
 `/autoflip` :
 
 Use your selection as a plane of symmetry
 
-*permission : expautoflip.use*
+WARNING, this command is not compatible with fawe (//undo, //redo),
+and does not respect plot restrictions (example: plotsquared)️
+
+*permission : exp.command.autoflip*
 
 ------------------
 `/expbuild` aliases `/exp` :
 
 general command for reload config, need help, and more
 
-*permission : expbuild.use*
+*permission : exp.command.build*
 
 
 ## Brush
@@ -219,7 +227,7 @@ general command for reload config, need help, and more
 ------------------
 `/flower` aliases `fw`:
 
-argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball` (`bb`) `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend` (`eb`)
+argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball`, `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend`
 
 Defaut tool : CLAY_BALL, SPECTRAL_ARROW and HONEYCOMB
 
@@ -227,77 +235,78 @@ General brush command,
 
 - material : set pattern
 
+  *permission : exp.command.flower*
+
 - radius : set radius
 
-
-*permission : expflower.use*
+  *permission : exp.command.flower*
 
 
 - melt, fill, fill, smooth, floatclean, erodeblend : voxel brush,
-  *permission : experode.use*
+  *permission : exp.brush.erode and exp.brush.erodeblend*
 
 
 - clipboards : save several selections and place them randomly,
-  *permission : expclipboards.use*
+  *permission : exp.brush.clipboard*
 
 
 - cube : cube brush
 
-  *permission : expcube.use*
+  *permission : exp.brush.cube*
 
 
 - 2dCube : place a cube with an angle corresponding to the angle that the player has
 
-  *permission : exp2dcube.use.use*
+  *permission : exp.brush.2dcube*
 
 <img src="https://imgur.com/EqbP1cz.png" title="Image_1" alt="deco">
 
 - sphere : sphere brush
-  *permission : expsphere.use*
+  *permission : exp.brush.sphere*
 
 
 - line : line brush
 
-  *permission : expline.use*
+  *permission : exp.brush.line*
 
 
 - overlay : overlay brush
 
-  *permission : expoverlay.use*
+  *permission : exp.brush.overlay*
 
 
 - drain : drain brush
 
-  *permission : expdrain.use*
+  *permission : exp.brush.drain*
 
 - drain : drain brush
 
-  *permission : experaser.use*
+  *permission : exp.brush.eraser*
 
 
 - biome : biome brush
 
-  *permission : expbiome.use*
+  *permission : exp.brush.biome*
 
 
 - spike : generates a spike from your position to the brush point
 
-  *permission : expspike.use*
+  *permission : exp.brush.spike*
 
 <img src="https://imgur.com/zAzYBG5.png" title="Image_1" alt="deco">
 
 - blendball : blend terrain
 
-  *permission : expblendball.use*
+  *permission : exp.brush.blendball*
 
 
 - updatechunk : update chunk
 
-  *permission : expupdatechunk.use*
+  *permission : exp.brush.updatechunk*
 
 - none : disable brush
 
-  *permission : expnone.use*
+  *permission : exp.brush.none*
 
 ------------------
 
@@ -386,7 +395,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.6
+  version: 1.18.1.9
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)
@@ -457,6 +466,11 @@ build:
   #Use boolean value (true / false)
   sihft_click_with_wand: false
 
+  #Log shortcut action
+  #Default : true
+  #Use boolean value (true / false)
+  logShortcut: true
+
   #Max point number save for Brush line
   #Default : 20
   #use integer value
@@ -489,3 +503,26 @@ build:
 
   lang: en
 ````
+
+------------------
+
+# Permission
+
+For the player to use the plugin tools, it is necessary to give him permission: exp.register
+This will allow him to create a “BrushBuilder” profile for him.
+
+Depending on the commands you wish to authorize it to execute, the permission is of type: exp.command.<Command Name>
+([**see permission command**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Installation))
+
+Same for brushes, the player cannot apply his brush if permission is not assigned to him,
+([**see permission brush**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush))
+
+For the use of gui, the operation is identical: exp.gui.<gui name>
+
+You have 4 associated permissions:
+- exp.gui.main (for opening the main menu)
+- exp.gui.leather (for opening gui leather)
+- exp.gui.orga (for opening the organic generation gui)
+- exp.gui.flower (for opening flower brush mistletoe)
+
+For any information or difficulty raised, do not hesitate to contact me x)

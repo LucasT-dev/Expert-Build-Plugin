@@ -1,7 +1,6 @@
 package fr.Marodeur.ExpertBuild;
 
 import com.sk89q.worldedit.WorldEdit;
-
 import fr.Marodeur.ExpertBuild.API.Metrics.Metrics;
 import fr.Marodeur.ExpertBuild.Brush.*;
 import fr.Marodeur.ExpertBuild.Commands.CommandAutoCb;
@@ -19,15 +18,12 @@ import fr.Marodeur.ExpertBuild.Listeners.GeneralListener;
 import fr.Marodeur.ExpertBuild.Listeners.RotationEntity;
 import fr.Marodeur.ExpertBuild.Object.*;
 import fr.Marodeur.ExpertBuild.Utils.BrushOperationManager;
-
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -52,7 +48,9 @@ public class Main extends JavaPlugin {
 	private static Configuration configuration;
 	private static MessageBuilder messageBuilder;
 
+	public static List<UUID> Autogm = new ArrayList<>();
 	public static List<UUID> getCommand = new ArrayList<>();
+	public static List<UUID> Slab = new ArrayList<>();
 
 	private static final HashMap<UUID, GOHA_Builder> GOHA = new HashMap<>();
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
@@ -171,9 +169,10 @@ public class Main extends JavaPlugin {
 	public void registerPlayerBuilder() {
 
 		Bukkit.getOnlinePlayers().forEach(player -> {
-			if (player.isOp() || player.hasPermission("expertbuild.use")) {
-				fr.Marodeur.ExpertBuild.Object.BrushBuilder.registerPlayer(player);
+			if (player.hasPermission("exp.register")) {
+				fr.Marodeur.ExpertBuild.Object.BrushBuilder.registerPlayer(player, false);
 				GOHA_Builder.registerPlayer(player);
+				Slab.add(player.getUniqueId());
 
 				getLogger().info(messageBuilder.getPlayerRegistered(player.getName()));
 			}
@@ -209,11 +208,14 @@ public class Main extends JavaPlugin {
 
     public MessageBuilder getMessageConfig() { return messageBuilder; }
 
-	public static fr.Marodeur.ExpertBuild.Object.BrushBuilder getBrushBuilder(@NotNull Player p) {
+	public static BrushBuilder getBrushBuilder(@NotNull Player p) {
 		return BrushBuilder.get(p.getUniqueId());
 	}
 
 	/**
+	 *
+	 * Register player in BrushBuilder, using player uuid,
+	 *
 	 * @param brushBuilder register player
 	 * @return brushBuilder
 	 */
@@ -252,6 +254,11 @@ public class Main extends JavaPlugin {
 		return instance;
 	}
 
+	/**
+	 * get plugin version
+	 *
+	 * @return String
+	 */
 	public static @NotNull String getVersion() {
 		return Main.getInstance().getDescription().getVersion();
 	}
@@ -327,7 +334,7 @@ public class Main extends JavaPlugin {
 
 			try {
 
-				InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + id + "/~")).openStream();
+				InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + id + "\\~")).openStream();
 				Scanner scanner = new Scanner(inputStream);
 
 				if (scanner.hasNext()) {

@@ -26,7 +26,7 @@ public class DegradeBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("expdegrade.use");
+        return p.hasPermission("exp.brush.degrade");
     }
 
     @Override
@@ -47,14 +47,14 @@ public class DegradeBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
         Location l = (Location) obj1;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = bb.getRadius();
         List<BlockVec4> bv4 = new ArrayList<>();

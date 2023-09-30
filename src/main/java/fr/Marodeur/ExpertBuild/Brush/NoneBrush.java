@@ -1,7 +1,7 @@
 package fr.Marodeur.ExpertBuild.Brush;
 
-import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
+import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
@@ -14,7 +14,7 @@ public class NoneBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("expnone.use");
+        return p.hasPermission("exp.brush.none");
     }
 
     @Override
@@ -30,21 +30,21 @@ public class NoneBrush implements BrushOperation {
     @Override
     public void ExecuteBrushOnHoney(Player p, Object obj1) {
         if (hasPermission(p)) {
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBrushDisable());
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBrushDisable());
         }
     }
 
     @Override
     public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
         if (hasPermission(p)) {
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBrushDisable());
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBrushDisable());
         }
     }
 
     @Override
     public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
         if (hasPermission(p)) {
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBrushDisable());
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBrushDisable());
         }
     }
 }

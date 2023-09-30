@@ -695,7 +695,7 @@ public class GOHA_Builder {
 		public OrganicGeneration(Player p, Location startLoc) {
 
 			this.p = p;
-			this.bb = BrushBuilder.getBrushBuilderPlayer(p);
+			this.bb = BrushBuilder.getBrushBuilderPlayer(p, true);
 			this.goha_builder = getGOHABuilder(p);
 			this.height = goha_builder.getHeight();
 			this.seven = height/7;
@@ -707,7 +707,7 @@ public class GOHA_Builder {
 		public OrganicGeneration(Player p) {
 
 			this.p = p;
-			this.bb = BrushBuilder.getBrushBuilderPlayer(p);
+			this.bb = BrushBuilder.getBrushBuilderPlayer(p, true);
 			this.goha_builder = getGOHABuilder(p);
 			this.height = goha_builder.getHeight();
 			this.seven = height/7;

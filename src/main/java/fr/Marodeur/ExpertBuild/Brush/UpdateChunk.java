@@ -12,7 +12,7 @@ public class UpdateChunk implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() || p.hasPermission("expupdatechunk.use");
+        return p.hasPermission("exp.brush.updatechunk");
     }
 
     @Override
@@ -32,8 +32,8 @@ public class UpdateChunk implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 

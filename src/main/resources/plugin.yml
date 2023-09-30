@@ -4,7 +4,7 @@ main: fr.Marodeur.ExpertBuild.Main
 version: '${version}'
 api-version: 1.18
 description: Builder plugin
-website: https://github.com/LucasT-dev
+website: https://github.com/Marodeurun
 depend: [ WorldEdit ]
 libraries:
   - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.5.7
@@ -14,115 +14,186 @@ commands:
   expbuild:
     aliases: exp
     description: general command
-    permission: expbuild.use
+    permission: exp.command.build
 
   pos:
     description: get player position
-    permission: exppos.use
+    permission: exp.command.pos
 
   vox:
     description: give Voxel tool
-    permission: expvox.use
+    permission: exp.command.vox
 
   plume:
     description: give GoPaint tool
-    permission: expplume.use
+    permission: exp.command.plume
 
   silex:
     description: give GoBrush tool
-    permission: expsilex.use
+    permission: exp.command.silex
 
   terra:
     aliases: t
     descrption: give all tool
-    permission: expterra.use
+    permission: exp.command.terra
 
   1:
     description: First position WE
-    permission: exptool.use
+    permission: exp.command.tool
 
   2:
     description: Second position WE
-    permission: exptool.use
+    permission: exp.command.tool
 
   c:
     aliases: copy
     description: copy WE
-    permission: exptool.use
+    permission: exp.command.tool
 
   p:
     description: paste WE
-    permission: expp.use
+    permission: exp.command.p
 
   pa:
     description: paste -a WE
-    permission: exppa.use
+    permission: exp.command.pa
 
   poly:
     description: sel poly WE
-    permission: exptool.use
+    permission: exp.command.tool
 
   cube:
     description: sel cuboid WE
-    permission: exptool.use
+    permission: exp.command.tool
 
   convex:
     aliases: conv
     description: sel convex WE
-    permission: exptool.use
+    permission: exp.command.tool
 
   f:
     aliases: flip
     description: rotate
-    permission: expf.use
+    permission: exp.command.f
 
   s:
     description: set
-    permission: exps.use
+    permission: exp.command.s
 
   sel:
     description: sel
-    permission: expsel.use
+    permission: exp.command.sel
+
+  autogm:
+    description: Auto gamemode
+    permission: exp.command.autogm
 
   flower:
     aliases: fw
     decription: brush
-    permission: expflower.use
+    permission: exp.command.flower
+
+  slab:
+    aliases: bs
+    description: casse la dalle
+    permission: exp.command.slab
 
   timelapse:
     description: launch automatic timelapse
-    permission: exptimelapse.use
+    permission: exp.command.timelapse
 
   schemtrans:
     description: transfert schem on other serveur
-    permission: expschemtrans.use
+    permission: exp.command.schemtrans
 
   easyplanting:
     aliases: ep
     description: set random clipboard
-    permission: expeasyplanting.use
+    permission: exp.command.easyplanting
+
+  maze:
+    description: Generate maze
+    permission: exp.command.maze
 
   repeater:
     aliases: rt
     description: preset a tick to the repeater when you set it
-    permission: exptool.use
+    permission: exp.command.tool
 
   perlin:
     description: generate perlin
-    permission: expperlin.use
+    permission: exp.command.perlin
 
   autocb:
     description: automatic set cb with pre save command
-    permission: expautocb.use
+    permission: exp.command.autocb
 
   getcommand:
     description: displays the command of a Block command by looking at it from a distance
-    permission: expgetcommand.use
+    permission: exp.command.getcommand
 
   autoflip:
     description: Use your selection as a plane of symmetry
-    permission: expautoflip.use
+    permission: exp.command.autoflip
 
   convertslab:
     description: Convert double slab to block
-    permission: expconvertslab.use
+    permission: exp.command.convertslab
+
+  dungeons:
+    description: procedural dungeons
+    permission: exp.command.dungeons
+
+permissions:
+
+  exp.register:
+    default: op
+
+  exp.brush.biome:
+    default: op
+  exp.brush.blendball:
+    default: op
+  exp.brush.clipboard:
+    default: op
+  exp.brush.cube:
+    default: op
+  exp.brush.degrade:
+    default: op
+  exp.brush.drain:
+    default: op
+  exp.brush.eraser:
+    default: op
+  exp.brush.erodeblend:
+    default: op
+  exp.brush.erode:
+    default: op
+  exp.brush.flower:
+    default: op
+  exp.brush.line:
+    default: op
+  exp.brush.none:
+    default: op
+  exp.brush.overlay:
+    default: op
+  exp.brush.2dcube:
+    default: op
+  exp.brush.sphere:
+    default: op
+  exp.brush.spike:
+    default: op
+  exp.brush.updatechunk:
+    default: op
+
+  exp.gui.main:
+    default: op
+  exp.gui.leather:
+    default: op
+  exp.gui.orga:
+    default: op
+  exp.gui.flower:
+    default: op
+
+  exp.selection.clearselection:
+    default: op
+  exp.selection.airpos:
+    default: op

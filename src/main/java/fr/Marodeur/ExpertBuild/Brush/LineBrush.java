@@ -7,8 +7,8 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
-import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
+import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
@@ -29,7 +29,7 @@ public class LineBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("expline.use");
+        return p.hasPermission("exp.brush.line");
     }
 
     @Override
@@ -53,8 +53,8 @@ public class LineBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
@@ -96,13 +96,13 @@ public class LineBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
         BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         GlueList<BlockVec4> bv4 = new GlueList<>();
 

@@ -58,7 +58,7 @@ public class BlendBallBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("expblendball.use");
+        return p.hasPermission("exp.brush.blendball");
     }
 
     @Override
@@ -78,15 +78,15 @@ public class BlendBallBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
         bv4.clear();
         Location l = (Location) obj1;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
@@ -112,15 +112,15 @@ public class BlendBallBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
         bv4.clear();
         Location l = (Location) obj1;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 

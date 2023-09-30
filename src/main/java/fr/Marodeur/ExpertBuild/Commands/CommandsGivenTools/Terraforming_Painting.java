@@ -47,12 +47,17 @@ public class Terraforming_Painting implements CommandExecutor {
 			return false;
 		}
 
-		if (!p.isOp() || !p.hasPermission("exptool.use")) {
-			p.sendMessage(Main.prefix + message.getDontPerm());
+		if (!p.hasPermission("exp.command.tool")) {
+			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.tool"));
 			return false;
 		}
 
-		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+		if (bb == null) {
+			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+			return false;
+		}
 
 		ItemStack itArrow = new ItemBuilder(Material.ARROW, 1).build();
 		ItemStack itGunPowder = new ItemBuilder(Material.GUNPOWDER, 1).build();
@@ -110,6 +115,8 @@ public class Terraforming_Painting implements CommandExecutor {
 			}
 			case "1" -> {
 
+				if (!p.hasPermission("worldedit.selection.pos")) return false;
+
 				new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
 						p.getLocation().getX(),
 						p.getLocation().getY(),
@@ -134,6 +141,8 @@ public class Terraforming_Painting implements CommandExecutor {
 
 			case "2" -> {
 
+				if (!p.hasPermission("worldedit.selection.pos")) return false;
+
 				new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
 						p.getLocation().getX(),
 						p.getLocation().getY(),
@@ -156,11 +165,17 @@ public class Terraforming_Painting implements CommandExecutor {
 				}
 			}
 
-			case "c" -> new UtilsFAWE(p).CopySelection();
+			case "c" -> {
+				if (p.hasPermission("worldedit.clipboard.copy")) new UtilsFAWE(p).CopySelection();
+			}
 
-			case "p" -> new UtilsFAWE(p).pasteClipboard();
+			case "p" -> {
+				if (p.hasPermission("worldedit.clipboard.paste")) new UtilsFAWE(p).pasteClipboard();
+			}
 
-			case "pa" -> new UtilsFAWE(p).pasteClipboardIgnoreAir();
+			case "pa" -> {
+				if (p.hasPermission("worldedit.clipboard.paste")) new UtilsFAWE(p).pasteClipboardIgnoreAir();
+			}
 
 			case "cube" -> {
 				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CUBOID);
@@ -185,6 +200,8 @@ public class Terraforming_Painting implements CommandExecutor {
 
 			case "f" -> {
 
+				if (!p.hasPermission("worldedit.selection.flip")) return false;
+
 				if (args.length == 0) {
 					p.sendMessage(Main.prefix + "flip");
 					Bukkit.dispatchCommand(p, "/flip");
@@ -197,6 +214,8 @@ public class Terraforming_Painting implements CommandExecutor {
 				}
 			}
 			case "s" -> {
+
+				if (!p.hasPermission("worldedit.clipboard.paste")) return false;
 
 				if (args.length == 0) {
 					p.sendMessage(Main.help + "/s");
@@ -223,7 +242,13 @@ public class Terraforming_Painting implements CommandExecutor {
 
 			case "repeater" -> {
 
-				BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+				BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+
+				if (brushBuilder == null) {
+					p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.tool"));
+					return false;
+				}
+
 				if (brushBuilder.getEnable().equals(false)) {
 
 					if (args.length == 1) {

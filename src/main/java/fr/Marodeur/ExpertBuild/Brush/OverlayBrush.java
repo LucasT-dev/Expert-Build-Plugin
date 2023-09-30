@@ -1,6 +1,5 @@
 package fr.Marodeur.ExpertBuild.Brush;
 
-
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
@@ -17,7 +16,7 @@ public class OverlayBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("expoverlay.use");
+        return p.hasPermission("exp.brush.overlay");
     }
 
     @Override
@@ -37,12 +36,12 @@ public class OverlayBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         int brushSize = brushBuilder.getRadius();
         Location l = (Location) obj1;
         List<BlockVec4> bv4 = new ArrayList<>();
@@ -75,12 +74,12 @@ public class OverlayBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p).getBrushType().equals(getTypeOfBrush())) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
+                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
             return;
         }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         int brushSize = brushBuilder.getRadius();
         Location l = (Location) obj1;
         List<BlockVec4> bv4 = new ArrayList<>();

@@ -20,9 +20,9 @@ expbuild:
 
     brush:
       brush_enable: Brush 'brush' activé
-      brush_enable_with_radius: Brush 'brush' activé, rayon = 'radius'
-      brush_enable_with_material: Brush 'brush' activé, pattern = 'pattern'
-      brush_enable_with_radius_pattern: Brush 'brush' activé, rayon = 'radius', pattern = 'pattern'
+      brush_enable_with_radius: "Brush 'brush' activé, rayon : 'radius'"
+      brush_enable_with_material: "Brush 'brush' activé, pattern : 'pattern'"
+      brush_enable_with_radius_pattern: "Brush 'brush' activé, rayon : 'radius', pattern = 'pattern'"
       brush_disable: Brush désactivé
       brush_registered: Brush 'brush' enregistré
       material_set: Material défini
@@ -36,6 +36,7 @@ expbuild:
     permission:
       dont_perm: Vous n'avez pas la permission
       console_not_execute_cmd: La console ne peux pas exécuter cette commande
+      no_permission_node: "Il vous manque le noeud d'autorisation : 'node'"
 
     selection:
       set_pos_1: Pos 1 défini à ('pos')

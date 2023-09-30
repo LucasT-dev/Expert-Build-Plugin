@@ -18,11 +18,12 @@ expbuild:
       new_update_available: There is a new update available. You are 'v' versions late, you are running on version 'v1' , version 'v2' is available !
       unable_check_update: Unable to check for updates 'error'
 
+
     brush:
       brush_enable: Brush 'brush' enable
-      brush_enable_with_radius: Brush 'brush' enable, radius = 'radius'
-      brush_enable_with_material: Brush 'brush' enable, pattern = 'pattern'
-      brush_enable_with_radius_pattern: Brush 'brush' enable, radius = 'radius', pattern = 'pattern'
+      brush_enable_with_radius: "Brush 'brush' enable, radius : 'radius'"
+      brush_enable_with_material: "Brush 'brush' enable, pattern : 'pattern'"
+      brush_enable_with_radius_pattern: "Brush 'brush' enable; Radius : 'radius'; Pattern : 'pattern'"
       brush_disable: Brush disable
       brush_registered: Brush 'brush' registered
       material_set: Material set
@@ -36,6 +37,8 @@ expbuild:
     permission:
       dont_perm: You don't have the permission
       console_not_execute_cmd: Console cannot use this command
+      no_permission_node: "You are lacking the permission node : 'node'"
+
 
     selection:
       set_pos_1: Pos 1 set to ('pos')
@@ -52,7 +55,7 @@ expbuild:
     error:
       error_region: Region error n° 'num' ! 'error'
       error_selection: §4Error ! IncompleteRegionException; Use 'selection' selectionand complete selection
-      error_brushbuilder: §4Error ! 'player' has not been registered as a builder, for this he must be an operator or have the expertbuild.use permission
+      error_brushbuilder: §4Error ! 'player' has not been registered as a builder, for this he must be an operator or have the exp.register permission
       error_jsch_exception: Error JSch-Exception, please see console
       error_sftp_exception: Error Sftp-Exception, please see console
       file_configuration_error: Configuration files in ExpertBuild folder is wrong or corrupt; Repair the file or delete all the files, so that the plugin recreates them

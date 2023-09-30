@@ -5,7 +5,6 @@ import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,7 +13,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
 
 public class BrushListener implements Listener {
@@ -28,7 +26,11 @@ public class BrushListener implements Listener {
         Location loc;
         Configuration conf = Main.getInstance().getConfig();
         MessageBuilder msg = Main.getInstance().getMessageConfig();
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+        if (brushBuilder == null) {
+            return;
+        }
 
         if (it == null || brushBuilder.getBrushType().getBclass() == null) return;
 
@@ -42,10 +44,8 @@ public class BrushListener implements Listener {
                     brushBuilder.sendMessage(msg.getBrushDisable());
                     return;
                 }
-
                 brushBuilder.executeHoneyBrush(brushBuilder, loc);
             }
-
             if (it.getType() == conf.getTerraforming_tool_1()) {
 
                 brushBuilder.executeArrowBrush(brushBuilder, loc, p.getLocation());
@@ -63,6 +63,9 @@ public class BrushListener implements Listener {
                 p.sendMessage(Main.prefix + "You are not registered, execute: /fw register");
                 return;
             }
+
+            if (!p.hasPermission("exp.gui.main")) return;
+
             new MainGUI().openMainInventory(p);
         }
     }

@@ -48,12 +48,12 @@ public class CommandAutoFlip implements TabCompleter, CommandExecutor {
             s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
             return false;
         }
-        if (!p.isOp() | !p.hasPermission("expautoflip.use")) {
-            p.sendMessage(Main.prefix + message.getDontPerm());
+        if (!p.hasPermission("exp.command.autoflip")) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.autoflip"));
             return false;
         }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
 
         if (cmd.getName().equalsIgnoreCase("autoflip")) {
 

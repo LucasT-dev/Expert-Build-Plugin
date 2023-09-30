@@ -43,8 +43,8 @@ public class CommandAutoCb implements CommandExecutor {
             return false;
         }
 
-        if (!p.isOp() | !p.hasPermission("expautocb.use")) {
-            p.sendMessage(Main.prefix + message.getDontPerm());
+        if (!p.hasPermission("exp.command.autocb")) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.autocb"));
             return false;
         }
 

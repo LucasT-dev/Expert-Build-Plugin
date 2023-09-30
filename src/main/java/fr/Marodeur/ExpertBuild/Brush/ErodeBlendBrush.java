@@ -39,7 +39,7 @@ public class ErodeBlendBrush implements BrushOperation {
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
-        return p.isOp() | p.hasPermission("experode.use");
+        return p.hasPermission("exp.brush.erodeblend");
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ErodeBlendBrush implements BrushOperation {
             return;
         }
 
-        if(!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p))) {
+        if(!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true))) {
             return;
         }
 
@@ -68,7 +68,7 @@ public class ErodeBlendBrush implements BrushOperation {
         Location l = (Location) obj1;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
         int radius = bb.getRadius();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
@@ -121,7 +121,7 @@ public class ErodeBlendBrush implements BrushOperation {
             return;
         }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p))) {
+        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true))) {
             return;
         }
 
@@ -129,7 +129,7 @@ public class ErodeBlendBrush implements BrushOperation {
         Location l = (Location) obj1;
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
         int radius = bb.getRadius();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {

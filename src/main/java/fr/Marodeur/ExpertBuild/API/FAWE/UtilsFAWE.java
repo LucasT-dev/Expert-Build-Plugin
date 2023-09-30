@@ -26,12 +26,10 @@ import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -42,7 +40,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -75,7 +72,7 @@ public class UtilsFAWE {
         this.regionSelector = this.session.getRegionSelector(world);
 
         if (Main.containsBrushBuilder(p)) {
-            this.b = BrushBuilder.getBrushBuilderPlayer(p);
+            this.b = BrushBuilder.getBrushBuilderPlayer(p, true);
         }
 
     }
@@ -153,7 +150,7 @@ public class UtilsFAWE {
                 try {
                     editsession.setFastMode(false);
 
-                    editsession.setBlocks(r, BrushBuilder.getBrushBuilderPlayer(p).getPattern());
+                    editsession.setBlocks(r, BrushBuilder.getBrushBuilderPlayer(p, true).getPattern());
 
                 } finally {
                     localSession.remember(editsession);
@@ -175,7 +172,7 @@ public class UtilsFAWE {
                 try {
                     editsession.setFastMode(false);
 
-                    editsession.setBlocks((Region) cuboidRegion, BrushBuilder.getBrushBuilderPlayer(p).getPattern());
+                    editsession.setBlocks((Region) cuboidRegion, BrushBuilder.getBrushBuilderPlayer(p, true).getPattern());
 
                 } finally {
                     localSession.remember(editsession);
@@ -217,9 +214,9 @@ public class UtilsFAWE {
         if (sendMessageBlock & r > 1000) {
             float t = r / 1000;
             float d = (blocks.size() / t);
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
         } else if (sendMessageBlock) {
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
         }
     }
 
@@ -239,7 +236,7 @@ public class UtilsFAWE {
                 try {
 
                     editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
-                            BrushBuilder.getBrushBuilderPlayer(p).getPattern());
+                            BrushBuilder.getBrushBuilderPlayer(p, true).getPattern());
 
                 } catch (Exception exc) {
                     exc.printStackTrace();
@@ -257,9 +254,9 @@ public class UtilsFAWE {
         if (sendMessageBlock & r > 1000) {
             float t = r / 1000;
             float d = (blocks.size() / t);
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
         } else if (sendMessageBlock) {
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
         }
     }
 
@@ -297,9 +294,9 @@ public class UtilsFAWE {
         if (sendMessageBlock & r > 1000) {
             float t = r / 1000;
             float d = (blocks.size() / t);
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
         } else if (sendMessageBlock) {
-            BrushBuilder.getBrushBuilderPlayer(p).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
         }
     }
 

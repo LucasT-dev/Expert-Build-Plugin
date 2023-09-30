@@ -56,12 +56,17 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		if (!p.isOp() || !p.hasPermission("expschemtrans.use")) {
-			p.sendMessage(Main.prefix + message.getDontPerm());
+		if (!p.hasPermission("exp.command.schemtrans")) {
+			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.schemtrans"));
 			return false;
 		}
 
-		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+		if (brushBuilder == null) {
+			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+			return false;
+		}
 
 		if (cmd.getName().equalsIgnoreCase("schemtrans")) {
 
@@ -156,7 +161,12 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 	}
 	private void getConfig(@NotNull Player p, @NotNull YamlConfiguration c, String file, String server) {
 
-		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+		if (brushBuilder == null) {
+			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+			return;
+		}
 
 		brushBuilder.sendMessage(message.getTransfert());
 

@@ -1,6 +1,7 @@
 package fr.Marodeur.ExpertBuild.GUI;
 
 import fr.Marodeur.ExpertBuild.Main;
+import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.ItemBuilder;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
@@ -25,13 +26,22 @@ public class MainGUI {
                     @Override
                     public void init(Player player, InventoryContents contents) {
 
+                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+                        if (brushBuilder == null) {
+                            p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+                            return;
+                        }
+
                         contents.set(7, IntelligentItem.of(new ItemBuilder(msg.getOrganicGuiTitle(), Material.BONE, 1)
                                         .addLore(msg.getOrganicItem())
                                         .build(),
                                 event -> {
 
-                            if (p.hasPermission("exporga.use")) {
+                            if (p.hasPermission("exp.gui.orga")) {
                                 new OrganicGUI().openOrganicGUI(p);
+                            } else {
+                                brushBuilder.sendMessage(msg.getNoPermissionNode("exp.gui.orga"));
                             }
                         }));
 
@@ -51,12 +61,24 @@ public class MainGUI {
                         contents.set(25, IntelligentItem.of(new ItemBuilder(msg.getFlowerGuiTitle(), Material.SUNFLOWER, 1)
                                         .addLore(msg.getFlowerItem())
                                         .build(),
-                                event -> new FlowerGUI().openFlowerInventory(p)));
+                                event -> {
+                                    if (p.hasPermission("exp.gui.flower")) {
+                                        new FlowerGUI().openFlowerInventory(p);
+                                    } else {
+                                        brushBuilder.sendMessage(msg.getNoPermissionNode("exp.gui.flower"));
+                                    }
+                                }));
 
                         contents.set(1, IntelligentItem.of(new ItemBuilder(msg.getLeatherGuiTitle(), Material.LEATHER_CHESTPLATE, 1)
                                         .addLore(msg.getLeatherItem())
                                         .build(),
-                                event -> new LeatherGUI().openLeatherGUI(p)));
+                                event -> {
+                                    if (p.hasPermission("exp.gui.leather")) {
+                                        new LeatherGUI().openLeatherGUI(p);
+                                    } else {
+                                        brushBuilder.sendMessage(msg.getNoPermissionNode("exp.gui.leather"));
+                                    }
+                                }));
                     }
                 })
                 .build(Main.getInstance())

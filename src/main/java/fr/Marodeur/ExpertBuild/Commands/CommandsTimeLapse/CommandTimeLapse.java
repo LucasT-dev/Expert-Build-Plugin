@@ -58,12 +58,17 @@ public class CommandTimeLapse extends Thread implements CommandExecutor {
             return false;
         }
 
-        if (!p.isOp() || !p.hasPermission("exptimelapse.use")) {
-            p.sendMessage(Main.prefix + message.getDontPerm());
+        if (!p.hasPermission("exp.command.timelapse")) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.timelapse"));
             return false;
         }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+        if (brushBuilder == null) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+            return false;
+        }
 
         if (cmd.getName().equalsIgnoreCase("timelapse")) {
 
@@ -77,6 +82,7 @@ public class CommandTimeLapse extends Thread implements CommandExecutor {
             if (args.length < 1)
             {
                 brushBuilder.sendMessage(message.getUse("/timelapse <delay> <iteration>"));
+                return false;
             }
 
             if (args[0].equalsIgnoreCase("stop")) {

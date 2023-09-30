@@ -85,12 +85,12 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        if (!p.isOp() || !p.hasPermission("expperlin.use")) {
-            p.sendMessage(Main.prefix + message.getDontPerm());
+        if (!p.hasPermission("exp.command.perlin")) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.perlin"));
             return false;
         }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
 
         if (cmd.getName().equalsIgnoreCase("perlin")) {
 

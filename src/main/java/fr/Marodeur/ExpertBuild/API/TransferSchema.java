@@ -54,7 +54,7 @@ public class TransferSchema {
 						  String PassWord, String serverName) {
 
 		final Logger log = Logger.getLogger("Expert-Build");
-		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
 
 		Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 

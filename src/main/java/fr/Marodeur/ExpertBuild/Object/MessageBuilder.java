@@ -57,6 +57,7 @@ public class MessageBuilder {
 
     private String dontPerm;
     private String consoleNotExecuteCmd;
+    private String noPermissionNode;
 
 
     private String setPos1;
@@ -209,6 +210,7 @@ public class MessageBuilder {
 
             this.dontPerm = this.yml.getString("expbuild.message.permission.dont_perm");
             this.consoleNotExecuteCmd = this.yml.getString("expbuild.message.permission.console_not_execute_cmd");
+            this.noPermissionNode = this.yml.getString("expbuild.message.permission.no_permission_node");
 
 
             this.setPos1 = this.yml.getString("expbuild.message.selection.set_pos_1");
@@ -418,6 +420,7 @@ public class MessageBuilder {
         return pointNotSave;
     }
 
+
     public String getDontPerm() {
         return dontPerm;
     }
@@ -425,6 +428,11 @@ public class MessageBuilder {
     public String getConsoleNotExecuteCmd() {
         return consoleNotExecuteCmd;
     }
+
+    public String getNoPermissionNode(String node) {
+        return noPermissionNode.replace("'node'", node);
+    }
+
 
     public String getSetPos1(String pos) {
         return setPos1.replace("'pos'", pos);

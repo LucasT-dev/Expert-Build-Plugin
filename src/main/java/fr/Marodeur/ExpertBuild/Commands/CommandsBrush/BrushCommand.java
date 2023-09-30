@@ -91,6 +91,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
         brushList.add("register");
         brushList.add("material");
+        brushList.add("radius");
 
         //brushList.remove("erode");
 
@@ -104,7 +105,11 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
         BrushBuilder builder = null;
 
         if (s instanceof Player p) {
-            builder = BrushBuilder.getBrushBuilderPlayer(p);
+            builder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+            if (builder == null) {
+                p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+            }
         }
 
         if (args.length <= 1) {
@@ -216,12 +221,17 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             return false;
         }
 
-        if (!p.isOp()) {
-            p.sendMessage(Main.prefix + message.getDontPerm());
+        if (!p.hasPermission("exp.command.flower")) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.flower"));
             return false;
         }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+        if (brushBuilder == null) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+            return false;
+        }
 
         if (args.length < 1) {
             brushBuilder.sendMessage(message.getBrushEnable("/fw <brush> [optional : material/biome] [optional : radius]"));
@@ -296,6 +306,11 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                     .setRadius(getRayon(p, args, 1))
                     .setEnable(true)
                     .sendMessage(message.getBrushEnable("Eraser"));
+
+            /*case "Rot3DClipboard" -> brushBuilder.setBrushType(BrushEnum.ROT3DCLIPBOARD)
+                    .setEnable(true)
+                    .sendMessage(message.getBrushEnable("Rot3dClipboard"));*/
+
 
             /*case "find" -> {
 
@@ -475,7 +490,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
         } catch (NumberFormatException | ArrayIndexOutOfBoundsException err) {
 
-            return BrushBuilder.getBrushBuilderPlayer(p).getRadius();
+            return BrushBuilder.getBrushBuilderPlayer(p, false).getRadius();
         }
     }
 
@@ -538,14 +553,17 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
     private static void clipboardCommand(Player p, String @NotNull [] args) {
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+
+        if (brushBuilder == null) {
+            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+        }
 
         if (args[1].equalsIgnoreCase("clear")) {
 
             ArrayList<List<BlockVec4>> a = new ArrayList<>();
 
-            brushBuilder
-                    .setClipboards(a);
+            brushBuilder.setClipboards(a);
 
             p.sendMessage(Main.prefix + "all selection brush cleared");
             return;
@@ -604,8 +622,14 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
     private static void registerCommand(Player p, String @NotNull [] args) {
 
+        if (!p.hasPermission("exp.register")) {
+            return;
+        } else {
+            p.sendMessage(message.getNoPermissionNode("exp.register"));
+        }
+
         if (args.length <= 1) {
-            BrushBuilder.registerPlayer(p);
+            BrushBuilder.registerPlayer(p, false);
         }
 
         if (args.length == 2) {
@@ -613,8 +637,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             Bukkit.getOnlinePlayers().stream()
                     .filter(player -> player.getName().equals(args[1]))
                     .forEach(player ->
-                        p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player).toString()));
-
+                        p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
         }
     }
 }

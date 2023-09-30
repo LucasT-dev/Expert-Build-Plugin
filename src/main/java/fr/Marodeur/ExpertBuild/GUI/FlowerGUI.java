@@ -40,7 +40,7 @@ public class FlowerGUI {
         RyseInventory.builder()
                 .title(Main.prefix + msg.getFlowerGuiTitle())
                 .rows(6)
-                .listener(new EventCreator<>(InventoryCloseEvent.class, event -> buildBrush(BrushBuilder.getBrushBuilderPlayer(p))))
+                .listener(new EventCreator<>(InventoryCloseEvent.class, event -> buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false))))
 
                 .listener(new EventCreator<>(InventoryClickEvent.class, event -> {
 
@@ -58,7 +58,12 @@ public class FlowerGUI {
                     @Override
                     public void init(Player player, InventoryContents contents) {
 
-                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+                        if (brushBuilder == null) {
+                            p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+                            return;
+                        }
 
                         contents.set(0, 8, IntelligentItem.of(new ItemBuilder(Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)
@@ -158,7 +163,12 @@ public class FlowerGUI {
                     @Override
                     public void update(Player player, InventoryContents contents) {
 
-                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+                        if (brushBuilder == null) {
+                            p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+                            return;
+                        }
 
                         //SET MATERIAL RADIUS
                         for (int i = 9; i < 18; i++) {

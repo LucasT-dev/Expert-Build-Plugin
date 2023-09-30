@@ -466,11 +466,11 @@ public class BrushBuilder {
      * @param p Player
      *
      */
-    public static BrushBuilder registerPlayer(@NotNull Player p) {
+    public static BrushBuilder registerPlayer(@NotNull Player p, Boolean sendError) {
 
         if (Main.containsBrushBuilder(p)) {
             p.sendMessage(Main.prefix + message.getPlayerAlreadyRegistered());
-            return getBrushBuilderPlayer(p);
+            return getBrushBuilderPlayer(p, sendError);
         }
 
         BaseBlock ib = Objects.requireNonNull(BlockTypes.BARRIER).getDefaultState().toBaseBlock();
@@ -493,15 +493,23 @@ public class BrushBuilder {
      * @param p Player
      *
      */
-    public static @Nullable BrushBuilder getBrushBuilderPlayer(@NotNull Player p) {
+    public static @Nullable BrushBuilder getBrushBuilderPlayer(@NotNull Player p, Boolean sendError) {
 
         if (Main.containsBrushBuilder(p)) {
             return Main.getBrushBuilder(p);
 
         } else {
-            log.severe(message.getErrorBrushbuilder(p.getName()));
+
+            if (sendError) {
+                log.severe(message.getErrorBrushbuilder(p.getName()));
+                log.severe(message.getNoPermissionNode("exp.register"));
+            }
             return null;
         }
+    }
+
+    public boolean isEmpty(BrushBuilder bb) {
+        return (bb == null);
     }
 
 

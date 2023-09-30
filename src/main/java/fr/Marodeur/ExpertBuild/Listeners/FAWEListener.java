@@ -6,14 +6,12 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.Region;
-
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import fr.Marodeur.ExpertBuild.Utils.LineVisualize;
-
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -23,7 +21,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -42,15 +39,22 @@ public class FAWEListener implements Listener {
 		ItemStack it = event.getItem();
 		BukkitPlayer actor = BukkitAdapter.adapt(p);
 		Configuration conf = Main.getInstance().getConfig();
-		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
+		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
 		Logger log = Logger.getLogger("Expert-Build");
 		Material mat = conf.getWand_item();
 
 		if (it == null) return;
 
-		if (it.getType() == mat && actor.hasPermission("worldedit.selection.pos")) {
+		if (bb == null) {
+			p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+			return;
+		}
 
-			if (!conf.isWand_click_in_air()) { return; }
+		if (!conf.isWand_click_in_air()) {
+			return;
+		}
+
+		if (it.getType() == mat && p.hasPermission("exp.selection.airpos")) {
 
 			if (action == Action.LEFT_CLICK_AIR && !p.isSneaking()) {
 
@@ -73,7 +77,8 @@ public class FAWEListener implements Listener {
 									+ (int) p.getLocation().getZ()));
 				}
 
-				log.info(msg.getPlayerLogCommand(p.getName(), "//pos1"));
+
+				if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos1"));
 
 			}
 
@@ -98,7 +103,7 @@ public class FAWEListener implements Listener {
 									+ (int) p.getLocation().getZ()));
 				}
 
-				log.info(msg.getPlayerLogCommand(p.getName(), "//pos2"));
+				if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos2"));
 
 				try {
 
@@ -112,7 +117,7 @@ public class FAWEListener implements Listener {
 								BlockVector3.get(BlockVector3.size() - 1),
 								BlockVector3.get(BlockVector3.size() - 2));
 
-						if (BlockVector3.size() >=3 && BlockVector3.size() % 2 == 0 && conf.isDisplay_bezier_curve()) {
+						if (BlockVector3.size() >= 3 && BlockVector3.size() % 2 == 0 && conf.isDisplay_bezier_curve()) {
 
 							LineVisualize.bezierCurveDisplay(p, actor, BlockVector3.get(BlockVector3.size() - 1),
 									BlockVector3.get(BlockVector3.size() - 2),
@@ -145,6 +150,9 @@ public class FAWEListener implements Listener {
 					}
 				}
 			}
+		}
+		if (it.getType() == mat && p.hasPermission("exp.selection.clearselection")) {
+
 			if (action == Action.RIGHT_CLICK_BLOCK) {
 				try {
 
@@ -155,14 +163,20 @@ public class FAWEListener implements Listener {
 				}
 			}
 		}
+		if (p.hasPermission("exp.selection.clearselection")) {
 
-		if (action == Action.RIGHT_CLICK_AIR && p.isSneaking() && it.getType() == mat) {
-			if (!conf.isSihft_click_with_wand() || bb.getSelMode().equals(false)) { return; }
+			if (action == Action.RIGHT_CLICK_AIR && p.isSneaking() && it.getType() == mat) {
 
-			new UtilsFAWE(p).clearSelection();
+				if (!conf.isSihft_click_with_wand() || bb.getSelMode().equals(false)) {
+					return;
+				}
 
-			bb.sendMessage(msg.getSelectionClear());
-			log.info(msg.getPlayerLogCommand(p.getName(), "//sel"));
+				new UtilsFAWE(p).clearSelection();
+
+				bb.sendMessage(msg.getSelectionClear());
+
+				if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//sel"));
+			}
 		}
 	}
 
