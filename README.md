@@ -260,9 +260,12 @@ General brush command,
   
   *permission : exp.brush.clipboard*
 
+
 <img src="https://imgur.com/olGd83K.png" title="Image_1" alt="deco">
 
+
 <img src="https://imgur.com/1NEZOjY.gif" width="auto" />
+
 
 - cube : cube brush
 
