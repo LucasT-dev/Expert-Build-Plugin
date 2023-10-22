@@ -256,17 +256,32 @@ public class Configuration extends FileConfiguration {
             //Update config file from 1.18.1.7 to 1.18.1.8
             //No modification of the configuration file
 
+            yml.set("build.version", "1.18.1.8");
+            this.version = "1.18.1.8";
+
+            yml.save(file);
+
         }
 
         if (this.version.equals("1.18.1.8")) {
             //Update config file from 1.18.1.8 to 1.18.1.9
             //No modification of the configuration file
 
+            yml.set("build.version", "1.18.1.9");
+            this.version = "1.18.1.9";
+
+            yml.save(file);
+
         }
 
         if (this.version.equals("1.18.1.9")) {
             //Update config file from 1.18.1.9 to 1.18.1.10
             //No modification of the configuration file
+
+            yml.set("build.version", "1.18.1.10");
+            this.version = "1.18.1.10";
+
+            yml.save(file);
 
         }
 

@@ -50,9 +50,7 @@ public class Main extends JavaPlugin {
 	private static Configuration configuration;
 	private static MessageBuilder messageBuilder;
 
-	public static List<UUID> Autogm = new ArrayList<>();
 	public static List<UUID> getCommand = new ArrayList<>();
-	public static List<UUID> Slab = new ArrayList<>();
 
 	private static final HashMap<UUID, GOHA_Builder> GOHA = new HashMap<>();
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
@@ -180,7 +178,6 @@ public class Main extends JavaPlugin {
 			if (player.hasPermission("exp.register")) {
 				fr.Marodeur.ExpertBuild.Object.BrushBuilder.registerPlayer(player, false);
 				GOHA_Builder.registerPlayer(player);
-				Slab.add(player.getUniqueId());
 
 				getLogger().info(messageBuilder.getPlayerRegistered(player.getName()));
 			}
