@@ -88,7 +88,8 @@ Execute //pos2
 
 *permission : exp.command.tool* and *permission : worldedit.selection.pos*
 
-![Alt Text](https://imgur.com/RV9tyb8.gif)
+<img src="https://imgur.com/RV9tyb8.gif" width="auto" />
+
 ------------------
 `shift click` :
 
@@ -261,9 +262,7 @@ General brush command,
 
 <img src="https://imgur.com/olGd83K.png" title="Image_1" alt="deco">
 
-![Alt Text](https://imgur.com/1NEZOjY.gif)
-
-
+<img src="https://imgur.com/1NEZOjY.gif" width="auto" />
 
 - cube : cube brush
 
