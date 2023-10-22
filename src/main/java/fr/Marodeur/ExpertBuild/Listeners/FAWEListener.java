@@ -6,12 +6,14 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.Region;
+
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
 import fr.Marodeur.ExpertBuild.Utils.LineVisualize;
+
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,6 +23,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -45,10 +48,7 @@ public class FAWEListener implements Listener {
 
 		if (it == null) return;
 
-		if (bb == null) {
-			p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
-			return;
-		}
+		if (!p.hasPermission("exp.register")) return;
 
 		if (!conf.isWand_click_in_air()) {
 			return;

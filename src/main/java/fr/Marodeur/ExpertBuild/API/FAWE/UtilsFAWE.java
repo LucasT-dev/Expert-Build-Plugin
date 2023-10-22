@@ -523,7 +523,7 @@ public class UtilsFAWE {
     }
 
     @Deprecated
-    public Clipboard CopySelection() {
+    public Clipboard CopySelection(boolean sendMessage) {
 
         Region region = this.bukkitPlayer.getSelection();
         LocalSession session = this.bukkitPlayer.getSession();
@@ -540,6 +540,7 @@ public class UtilsFAWE {
 
         copy.setCopyingBiomes(false);
         copy.setCopyingEntities(false);
+
         if (editSession.getMask() != null) {
             copy.setSourceMask(editSession.getMask());
         }
@@ -550,7 +551,8 @@ public class UtilsFAWE {
         Operations.completeLegacy(copy);
         session.setClipboard(new ClipboardHolder(clipboard));
 
-        p.sendMessage(Main.prefix + region.getArea() + " block(s) were copied.");
+        if (sendMessage) p.sendMessage(Main.prefix + message.getCopyBlock(String.valueOf(region.getArea())));
+
         return clipboard;
     }
 }

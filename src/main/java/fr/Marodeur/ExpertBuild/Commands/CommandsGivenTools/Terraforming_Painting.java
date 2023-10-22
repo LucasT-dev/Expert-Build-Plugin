@@ -166,7 +166,7 @@ public class Terraforming_Painting implements CommandExecutor {
 			}
 
 			case "c" -> {
-				if (p.hasPermission("worldedit.clipboard.copy")) new UtilsFAWE(p).CopySelection();
+				if (p.hasPermission("worldedit.clipboard.copy")) new UtilsFAWE(p).CopySelection(true);
 			}
 
 			case "p" -> {

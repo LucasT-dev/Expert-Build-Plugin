@@ -506,6 +506,16 @@ public class BlockVec4 {
         return  Math.sqrt(NumberConversions.square(x - bv4.getX()) + NumberConversions.square(y - bv4.getY()) + NumberConversions.square(z - bv4.getZ()));
     }
 
+    public BlockVec4 rotateAroundY(int Xcenter, int Zcenter, int Xpoint, int Zpoint, double degreeAngle, BaseBlock baseBlock, int y) {
+
+        double angle = Math.toRadians(degreeAngle);
+
+        double newX = Xcenter + (Xpoint - Xcenter) * Math.cos(angle) - (Zpoint - Zcenter) * Math.sin(angle);
+        double newZ = Zcenter + (Xpoint - Xcenter) * Math.sin(angle) + (Zpoint - Zcenter) * Math.cos(angle);
+
+        return new BlockVec4((int) newX, y, (int) newZ, baseBlock);
+    }
+
     @Override
     public String toString() {
         return "BlockVec4{" +

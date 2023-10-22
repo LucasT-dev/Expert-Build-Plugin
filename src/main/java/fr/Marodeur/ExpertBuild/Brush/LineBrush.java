@@ -9,10 +9,7 @@ import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
-import fr.Marodeur.ExpertBuild.Object.BlockVec4;
-import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
-import fr.Marodeur.ExpertBuild.Object.BrushOperation;
-import fr.Marodeur.ExpertBuild.Object.Configuration;
+import fr.Marodeur.ExpertBuild.Object.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -26,6 +23,7 @@ public class LineBrush implements BrushOperation {
 
     private final HashMap<UUID,ArrayList<BlockVec4>> point = new HashMap<>();
     Configuration conf = Main.getInstance().getConfig();
+    MessageBuilder msg = Main.getInstance().getMessageConfig();
 
     @Override
     public boolean hasPermission(@NotNull Player p) {
@@ -59,6 +57,7 @@ public class LineBrush implements BrushOperation {
         }
 
         Location l = (Location) obj1;
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
 
         if (!point.containsKey(p.getUniqueId())) {
 
@@ -66,7 +65,8 @@ public class LineBrush implements BrushOperation {
             pointList.add(new BlockVec4(l));
 
             point.put(p.getUniqueId(), pointList);
-            p.sendMessage(Main.prefix + "Point add at (" + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + ")");
+            brushBuilder.sendMessage(msg.getPointAdd(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
+            //p.sendMessage(Main.prefix + "Point add at (" + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + ")");
             return;
         }
         if (point.containsKey(p.getUniqueId())) {
@@ -77,14 +77,16 @@ public class LineBrush implements BrushOperation {
             //en config
             if (pointList.size() >= conf.getMax_point_saved()) {
                 point.replace(p.getUniqueId(), pointList);
-                p.sendMessage(Main.prefix + "limite size, point not save");
+                brushBuilder.sendMessage(msg.getPointNotSave());
+                //p.sendMessage(Main.prefix + "limite size, point not save");
 
                 return;
             }
 
             pointList.add(new BlockVec4(l));
             point.replace(p.getUniqueId(), pointList);
-            p.sendMessage(Main.prefix + "Point add at (" + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + ")");
+            brushBuilder.sendMessage(msg.getPointAdd(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
+            //p.sendMessage(Main.prefix + "Point add at (" + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + ")");
         }
     }
 
@@ -143,7 +145,7 @@ public class LineBrush implements BrushOperation {
                                             new Location(p.getWorld(), bv421.getX(), bv421.getY(), bv421.getZ()),
                                             1,
                                             brushBuilder.getMaterial()
-                                            ));
+                                    ));
                         }
                     }
                 } catch (Exception e) {

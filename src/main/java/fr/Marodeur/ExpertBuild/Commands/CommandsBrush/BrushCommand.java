@@ -1,6 +1,7 @@
 package fr.Marodeur.ExpertBuild.Commands.CommandsBrush;
 
 import com.fastasyncworldedit.core.command.SuggestInputParseException;
+
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.command.util.SuggestionHelper;
 import com.sk89q.worldedit.extension.factory.PatternFactory;
@@ -10,6 +11,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.world.biome.BiomeType;
 import com.sk89q.worldedit.world.block.BlockType;
+
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
@@ -17,6 +19,7 @@ import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -26,13 +29,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,10 +49,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             .asList("lift", "melt", "fill", "smooth", "floatclean");
 
     private final List<String> multiClipboardEnable = Arrays
-            .asList("add", "clear", "enable");
-
-    private final List<String> multiClipboardDisable = Arrays
-            .asList("add", "clear", "disable");
+            .asList("add", "removeAll", "remove", "autoRotation");
 
     private final List<String> Ints = List.of("<radius>");
 
@@ -107,9 +105,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
         if (s instanceof Player p) {
             builder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
-            if (builder == null) {
-                p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
-            }
+            if (builder == null) return null;
         }
 
         if (args.length <= 1) {
@@ -172,19 +168,28 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             return l2;
         }
 
-        //fw clipboard <add/clear/enable/disable>
-        if (args.length == 2 && args[0].equalsIgnoreCase("clipboard")) {
-            if (builder.getEnable().equals(false)) {
-                List<String> l = new ArrayList<>();
-                StringUtil.copyPartialMatches(args[1], this.multiClipboardEnable, l);
-                return l;
-            }
-        }
+        //fw clipboard <add/clear/remove/autoRotation>
         if (args.length == 2 && args[0].equalsIgnoreCase("clipboard")) {
             List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.multiClipboardDisable, l);
+            StringUtil.copyPartialMatches(args[1], this.multiClipboardEnable, l);
             return l;
         }
+
+        //fw clipboard remove <args>
+        if (args.length == 3 && args[1].equalsIgnoreCase("remove")) {
+
+            List<String> clipboardsList = builder.getClipboardsParameter().getClipboardsName().stream().toList();
+
+            if (clipboardsList.size() == 0) {
+                clipboardsList = new ArrayList<>();
+                clipboardsList.add("no clipboard");
+            }
+
+            List<String> l = new ArrayList<>();
+            StringUtil.copyPartialMatches(args[2], clipboardsList, l);
+            return l;
+        }
+
 
         //Custom erode brush
         if (args[0].equalsIgnoreCase("custom")) {
@@ -557,23 +562,71 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
         if (brushBuilder == null) {
             p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+            return;
         }
 
-        if (args[1].equalsIgnoreCase("clear")) {
-
-            ArrayList<List<BlockVec4>> a = new ArrayList<>();
-
-            brushBuilder.setClipboards(a);
-
-            p.sendMessage(Main.prefix + "all selection brush cleared");
+        if (args.length == 1) {
+            brushBuilder.sendMessage(message.getUse("/fw clipboard <autoRotation/add/remove/removeAll>"));
             return;
+        }
+
+        if (args[1].equalsIgnoreCase("autoRotation")) {
+
+            if (brushBuilder.getClipboardsParameter().isRandomRotation()) {
+                brushBuilder.sendMessage(message.getDisable("Auto-rotation"))
+                        .getClipboardsParameter().setRandomRotation(false);
+            } else {
+                brushBuilder.sendMessage(message.getEnable("Auto-rotation"))
+                        .getClipboardsParameter().setRandomRotation(true);
+            }
+        }
+
+        if (args[1].equalsIgnoreCase("removeAll")) {
+
+            brushBuilder.setBrushType(BrushEnum.NONE)
+                    .setEnable(false)
+                    .sendMessage(message.getAllClipboardDelete())
+                    .getClipboardsParameter().clearAll();
+            return;
+        }
+        if (args[1].equalsIgnoreCase("remove")) {
+
+            if (args.length == 2) {
+                brushBuilder.sendMessage(message.getUse("/fw clipboard remove <clipboard-name>"));
+                return;
+            }
+
+            if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
+                brushBuilder.sendMessage(message.getClipboardRemove(args[2]))
+                        .getClipboardsParameter().removeClipboards(args[2]);
+            } else {
+                brushBuilder.sendMessage(message.getClipboardDoesNotExist(args[2]));
+            }
+            return;
+
         }
 
         if (args[1].equalsIgnoreCase("add")) {
 
             if (new UtilsFAWE(p).isValidSelection(RegionSelectorType.CUBOID)) {
 
-                Clipboard clip = new UtilsFAWE(p).CopySelection();
+                String clipboardName;
+
+                if (args.length >= 3) {
+
+                    if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
+                        brushBuilder.sendMessage(message.getClipboardAlreadyExist(args[2]));
+                        return;
+                    } else {
+                        clipboardName = args[2];
+                    }
+
+                } else {
+                    clipboardName = "clipboards_" + brushBuilder.getClipboardsParameter().getClipboardsBlock().size();
+                }
+
+
+                Clipboard clip = new UtilsFAWE(p).CopySelection(false);
                 List<BlockVec4> list = new ArrayList<>();
 
                 clip.iterator().forEachRemaining(blockVector3 -> {
@@ -595,27 +648,12 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
                             clip.getFullBlock(blockX, blockY, blockZ)));
                 });
 
-                brushBuilder.addClipboards(list);
-            }
-        }
-
-        if (args[1].equalsIgnoreCase("enable") || args[1].equalsIgnoreCase("disable")) {
-
-            if (brushBuilder.getClipboards().size() == 0) {
-                p.sendMessage(Main.prefix + "any selection save");
-                return;
-            }
-
-            if (brushBuilder.getEnable().equals(true)) {
-
-                brushBuilder.setEnable(false)
-                        .setBrushType(BrushEnum.NONE)
-                        .sendMessage(message.getBrushDisable());
-
+                brushBuilder.setBrushType(BrushEnum.CLIPBOARD)
+                        .setEnable(true)
+                        .sendMessage(message.getClipboardAddAndEnable(clipboardName))
+                        .getClipboardsParameter().addClipboards(list, clipboardName);
             } else {
-                brushBuilder.setEnable(true)
-                        .setBrushType(BrushEnum.CLIPBOARD)
-                        .sendMessage(message.getBrushEnable("Clipboard"));
+                brushBuilder.sendMessage(message.getErrorSelection("cuboid"));
             }
         }
     }
@@ -623,9 +661,8 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
     private static void registerCommand(Player p, String @NotNull [] args) {
 
         if (!p.hasPermission("exp.register")) {
-            return;
-        } else {
             p.sendMessage(message.getNoPermissionNode("exp.register"));
+            return;
         }
 
         if (args.length <= 1) {
@@ -637,7 +674,7 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
             Bukkit.getOnlinePlayers().stream()
                     .filter(player -> player.getName().equals(args[1]))
                     .forEach(player ->
-                        p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
+                            p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
         }
     }
 }

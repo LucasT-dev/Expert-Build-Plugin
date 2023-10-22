@@ -1,25 +1,27 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest Version : 1.18.1.9
+* Latest Version : 1.18.1.10
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.5-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.10-purple)
 
 ------------------
 <p align="center">
 <img src="https://imgur.com/h5NrDR2.png" title="Image_1" alt="deco">
 </p>
 
-
 ------------------
 # News
 
--> * [NewBrush, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+-> * [Update the clipboard brush, with new functionality, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+
+-> * [New Mask, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Mask)
+
 
 -> * [New inventory, open with left click using honeycomb ! click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Inventory)
 
@@ -43,6 +45,8 @@ Minecraft build plugin, Expert-Build Documentation
 * [**BRUSH**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
 * [**INVENTORY**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Inventory)
+
+* [**MASK**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Mask)
 
 * [**CONFIGURATION**](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Configuration)
 
@@ -84,6 +88,7 @@ Execute //pos2
 
 *permission : exp.command.tool* and *permission : worldedit.selection.pos*
 
+![Alt Text](https://imgur.com/RV9tyb8.gif)
 ------------------
 `shift click` :
 
@@ -227,7 +232,7 @@ general command for reload config, need help, and more
 ------------------
 `/flower` aliases `fw`:
 
-argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball`, `cliboards`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend`
+argument : `melt`, `lift`, `fill`, `smooth`, `floatclean`, `blendball`, `clipboard`, `cube`, `sphere`, `2dCube`, `drain`, `line`, `none`, `overlay`, `spike`, `biome`, `erodeblend`
 
 Defaut tool : CLAY_BALL, SPECTRAL_ARROW and HONEYCOMB
 
@@ -246,8 +251,18 @@ General brush command,
   *permission : exp.brush.erode and exp.brush.erodeblend*
 
 
-- clipboards : save several selections and place them randomly,
+- clipboards : 
+  - < add > : Add a clipboard to the brush
+  - < remove > : Remove a clipboard from the brush
+  - < removeAll > : Remove all clipboards from the brush
+  - < autoRotation > : Paste the clipboard with a random rotation of 0, 90, 180 or 270
+  
   *permission : exp.brush.clipboard*
+
+<img src="https://imgur.com/olGd83K.png" title="Image_1" alt="deco">
+
+![Alt Text](https://imgur.com/1NEZOjY.gif)
+
 
 
 - cube : cube brush
@@ -382,6 +397,17 @@ And press a second time on the honeycomb to deactivate the brush
 <img src="https://imgur.com/i350PM5.png" title="Image_1" alt="deco">
 
 
+# Mask
+
+A new Mask has appeared,
+```#onground[][]```
+It was designed to easily place vegetation.
+
+Example : ```//gmask onground[grass_block][air]```
+
+<img src="https://imgur.com/6NRQElK.png" title="Image_1" alt="deco">
+
+
 # Configuration
 
 execute /expbuild reload ; to reload the config file.
@@ -395,7 +421,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.9
+  version: 1.18.1.10
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)

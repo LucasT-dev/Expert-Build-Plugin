@@ -1,6 +1,8 @@
 package fr.Marodeur.ExpertBuild;
 
 import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+import fr.Marodeur.ExpertBuild.API.FAWE.mask.OngroundMask;
 import fr.Marodeur.ExpertBuild.API.Metrics.Metrics;
 import fr.Marodeur.ExpertBuild.Brush.*;
 import fr.Marodeur.ExpertBuild.Commands.CommandAutoCb;
@@ -62,6 +64,8 @@ public class Main extends JavaPlugin {
 
 	private final InventoryManager inventoryManager = new InventoryManager(this);
 
+	public static WorldEditPlugin WorldEditPlugin;
+
 
 	@Override
 	public void onEnable() {
@@ -88,6 +92,8 @@ public class Main extends JavaPlugin {
 		getLogger().info("FAWE server version : " + WorldEdit.getVersion());
 		getLogger().info("This plugin is not affiliated with Mojang Studios");
 
+		WorldEditPlugin = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
+
 		//bstat
 		bstatsManager(new Metrics(this, 16755));
 
@@ -109,6 +115,8 @@ public class Main extends JavaPlugin {
 		registerPlayerBuilder();
 
 		registerCommand();
+
+		loadCustomMask();
 
 		updateChecker(version -> {
 			if (!this.getDescription().getVersion().equals(version)) {
@@ -201,6 +209,16 @@ public class Main extends JavaPlugin {
 		messageBuilder = new MessageBuilder().loadConfiguration();
 
 		getLogger().info("Message load");
+	}
+
+	public WorldEditPlugin getWorldEditPlugin() {
+		return WorldEditPlugin;
+	}
+
+	private void loadCustomMask() {
+
+		WorldEditPlugin.getWorldEdit().getMaskFactory().register(new OngroundMask(WorldEditPlugin.getWorldEdit()));
+
 	}
 
 	//BrushBuilder

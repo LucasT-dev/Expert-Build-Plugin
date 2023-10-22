@@ -1,5 +1,6 @@
 package fr.Marodeur.ExpertBuild.Brush;
 
+import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.API.GlueList;
@@ -8,6 +9,7 @@ import fr.Marodeur.ExpertBuild.Main;
 import fr.Marodeur.ExpertBuild.Object.BlockVec4;
 import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.BrushOperation;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Contract;

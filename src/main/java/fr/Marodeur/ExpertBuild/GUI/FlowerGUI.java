@@ -1,11 +1,13 @@
 package fr.Marodeur.ExpertBuild.GUI;
 
 import com.fastasyncworldedit.core.registry.state.PropertyKey;
+
 import com.sk89q.worldedit.NotABlockException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.registry.state.Property;
 import com.sk89q.worldedit.util.Direction;
 import com.sk89q.worldedit.world.block.BaseBlock;
+
 import fr.Marodeur.ExpertBuild.API.FAWE.UtilsFAWE;
 import fr.Marodeur.ExpertBuild.Enum.BrushEnum;
 import fr.Marodeur.ExpertBuild.Main;
@@ -13,11 +15,13 @@ import fr.Marodeur.ExpertBuild.Object.BrushBuilder;
 import fr.Marodeur.ExpertBuild.Object.Configuration;
 import fr.Marodeur.ExpertBuild.Object.ItemBuilder;
 import fr.Marodeur.ExpertBuild.Object.MessageBuilder;
+
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,9 +29,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
+import java.util.*;
 
 public class FlowerGUI {
 
@@ -120,7 +125,7 @@ public class FlowerGUI {
                                         .addLore(msg.getTotal((brushBuilder.getFlowerMaterialTaux().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
                                         .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
-                        //SET MATERIAL RADIUS
+                        //SET MATERIAL PROPORTION
                         for (int i = 9; i < 18; i++) {
                             int finalI = i;
                             contents.set(i, IntelligentItem.of(
@@ -170,7 +175,7 @@ public class FlowerGUI {
                             return;
                         }
 
-                        //SET MATERIAL RADIUS
+                        //SET MATERIAL PROPORTION
                         for (int i = 9; i < 18; i++) {
                             int finalI = i;
                             contents.updateOrSet(i, IntelligentItem.of(
@@ -237,14 +242,13 @@ public class FlowerGUI {
                                                             new BaseBlock(BukkitAdapter.asBlockState(
                                                                     new ItemBuilder(Material.BARRIER)
                                                                             .build())), event.getSlot() - 45)
-                                                    .addFlowerMaterialTaux(1, event.getSlot() - 45);
+                                                    .addFlowerMaterialTaux(0, event.getSlot() - 45);
 
                                             //Remove property material
                                             for (int j = 0; j < 4; j++) {
                                                 int slot = (event.getSlot() - (j * 9));
                                                 contents.updateOrSet(slot, new ItemBuilder(Material.AIR).build());
                                             }
-
                                         } else {
 
                                             //Remove last property material
@@ -258,6 +262,10 @@ public class FlowerGUI {
                                                 baseBlock = new BaseBlock(BukkitAdapter.asBlockState(event.getCursor()));
                                             } catch (NotABlockException e) {
                                                 return;
+                                            }
+
+                                            if (brushBuilder.getFlowerMaterialTaux().get(finalI - 45).equals(0)) {
+                                                brushBuilder.getFlowerMaterialTaux().set(finalI - 45, 1);
                                             }
 
                                             brushBuilder.addFlowerMaterial(baseBlock, finalI - 45);

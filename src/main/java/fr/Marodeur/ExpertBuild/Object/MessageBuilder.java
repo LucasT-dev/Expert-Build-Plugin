@@ -73,6 +73,8 @@ public class MessageBuilder {
 
     private String playerLogCommand;
 
+    private String copyBlock;
+
 
     private String errorRegion;
     private String errorSelection;
@@ -105,6 +107,14 @@ public class MessageBuilder {
     private String dontRestart;
     private String succesTransfert;
     private String transfertLog;
+
+    private String enable;
+    private String disable;
+    private String allClipboardDelete;
+    private String clipboardDoesNotExist;
+    private String clipboardAlreadyExist;
+    private String clipboardAddAndEnable;
+    private String clipboardRemove;
 
 
     private String back;
@@ -170,8 +180,6 @@ public class MessageBuilder {
 
     public MessageBuilder loadConfiguration() {
 
-        String lang = config.getLang();
-
         try {
 
             this.pluginEnable = this.yml.getString("expbuild.message.main.plugin_enable");
@@ -226,6 +234,8 @@ public class MessageBuilder {
 
             this.playerLogCommand = this.yml.getString("expbuild.message.selection.player_log_command");
 
+            this.copyBlock = this.yml.getString("expbuild.message.selection.copy_block");
+
             this.errorRegion = this.yml.getString("expbuild.message.error.error_region");
             this.errorSelection = this.yml.getString("expbuild.message.error.error_selection");
             this.errorBrushbuilder = this.yml.getString("expbuild.message.error.error_brushbuilder");
@@ -258,6 +268,15 @@ public class MessageBuilder {
             this.dontRestart = this.yml.getString("expbuild.message.commands.dont_restart");
             this.succesTransfert = this.yml.getString("expbuild.message.commands.succes_transfert");
             this.transfertLog = this.yml.getString("expbuild.message.commands.transfert_log");
+
+            this.enable = this.yml.getString("expbuild.message.commands.enable");
+            this.disable = this.yml.getString("expbuild.message.commands.disable");
+            this.allClipboardDelete = this.yml.getString("expbuild.message.commands.all_clipboards_delete");
+            this.clipboardDoesNotExist = this.yml.getString("expbuild.message.commands.clipboard_does_not_exist");
+            this.clipboardAlreadyExist = this.yml.getString("expbuild.message.commands.clipboard_already_exist");
+            this.clipboardAddAndEnable = this.yml.getString("expbuild.message.commands.clipboard_add_and_enable");
+            this.clipboardRemove = this.yml.getString("expbuild.message.commands.clipboard_remove");
+
 
             this.back = this.yml.getString("expbuild.message.gui.back");
             this.exit = this.yml.getString("expbuild.message.gui.exit");
@@ -474,6 +493,10 @@ public class MessageBuilder {
         return playerLogCommand.replace("'player'", player).replace("'cmd'", cmd);
     }
 
+    public String getCopyBlock(String num) {
+        return this.copyBlock.replace("'num'", num);
+    }
+
     public String getErrorRegion(String num, String error) {
         return errorRegion.replace("'num'", num).replace("'error'", error);
     }
@@ -577,6 +600,35 @@ public class MessageBuilder {
     public String getTransfertLog(String file, String player, String server) {
         return transfertLog.replace("'file'", file).replace("'player'", player).replace("'server'", server);
     }
+
+    public String getEnable(String element) {
+        return this.enable.replace("'element'", element);
+    }
+
+    public String getDisable(String element) {
+        return this.disable.replace("'element'", element);
+    }
+
+    public String getAllClipboardDelete() {
+        return this.allClipboardDelete;
+    }
+
+    public String getClipboardDoesNotExist(String clipboard) {
+        return this.clipboardDoesNotExist.replace("'clipboard'", clipboard);
+    }
+
+    public String getClipboardAlreadyExist(String clipboard) {
+        return this.clipboardAlreadyExist.replace("'clipboard'", clipboard);
+    }
+
+    public String getClipboardAddAndEnable(String clipboard) {
+        return this.clipboardAddAndEnable.replace("'clipboard'", clipboard);
+    }
+
+    public String getClipboardRemove(String clipboard) {
+        return this.clipboardRemove.replace("'clipboard'", clipboard);
+    }
+
 
     public String getBack() {
         return back;

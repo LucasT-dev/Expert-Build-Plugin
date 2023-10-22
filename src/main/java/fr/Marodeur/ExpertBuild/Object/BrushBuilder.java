@@ -45,6 +45,7 @@ public class BrushBuilder {
     private Pattern pattern;
 
     private TerraParameter terraParameter;
+    private ClipboardParameter clipboardParameter;
 
     /**
      * Create objet BrushBuilder
@@ -53,7 +54,7 @@ public class BrushBuilder {
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region, ArrayList<List<BlockVec4>> clipboards,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
-                        TerraParameter terraParameter) {
+                        TerraParameter terraParameter, ClipboardParameter clipboardParameter) {
 
         this.uuid = uuid;
         this.brushEnum = brushEnum;
@@ -73,6 +74,7 @@ public class BrushBuilder {
         this.pattern = pattern;
 
         this.terraParameter = terraParameter;
+        this.clipboardParameter = clipboardParameter;
 
     }
 
@@ -163,6 +165,13 @@ public class BrushBuilder {
     public int getFillRecursion() {
         return this.terraParameter.getFillRecursion();
     }
+
+    public ClipboardParameter getClipboardsParameter() {
+        return this.clipboardParameter;
+    }
+
+
+
 
     public BrushBuilder setBrushType(BrushEnum brushEnum) {
         this.brushEnum = brushEnum;
@@ -476,14 +485,15 @@ public class BrushBuilder {
         BaseBlock ib = Objects.requireNonNull(BlockTypes.BARRIER).getDefaultState().toBaseBlock();
         List<BaseBlock> it = new ArrayList<>(Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib));
 
-        List<Integer> flowerMaterialTaux = Arrays.asList(1, 1, 1, 1, 1, 1, 1, 1, 1);
+        List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
         return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(), BrushEnum.NONE, false, true,
                 conf.getDefault_material_brush(), it, flowerMaterialTaux, conf.getDefault_biome_brush(),
                 conf.getDefault_air_brush(), conf.getDefaultBrushRayon(), 4, null, new ArrayList<>(),
                 null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
-                new TerraParameter(0, 0, 0, 0)));
+                new TerraParameter(0, 0, 0, 0),
+                new ClipboardParameter(new ArrayList<>(), new ArrayList<>(), false)));
     }
 
     /**
@@ -567,6 +577,69 @@ public class BrushBuilder {
                     ", fillFaces=" + fillFaces +
                     ", fillRecursion=" + fillRecursion +
                     '}';
+        }
+    }
+
+    public static class ClipboardParameter {
+
+        private ArrayList<List<BlockVec4>> clipboardsBlock;
+        private ArrayList<String> clipboardsName;
+        private boolean isRandomRotation;
+
+        public ClipboardParameter(ArrayList<List<BlockVec4>> clipboardsBlock, ArrayList<String> clipboardsName, boolean isRandomRotation) {
+            this.clipboardsBlock = clipboardsBlock;
+            this.clipboardsName = clipboardsName;
+            this.isRandomRotation = isRandomRotation;
+        }
+
+        public ClipboardParameter setClipboardsBlock(ArrayList<List<BlockVec4>> clipboardsBlock) {
+            this.clipboardsBlock = clipboardsBlock;
+            return this;
+        }
+
+        public ClipboardParameter setClipboardsName(ArrayList<String> clipboardsName) {
+            this.clipboardsName = clipboardsName;
+            return this;
+        }
+
+        public ClipboardParameter addClipboards(List<BlockVec4> clipboardsBlock, String clipboardsName) {
+            this.clipboardsBlock.add(clipboardsBlock);
+            this.clipboardsName.add(clipboardsName);
+            return this;
+        }
+
+        public ClipboardParameter removeClipboards(String clipboardsName) {
+
+            int index = this.clipboardsName.indexOf(clipboardsName);
+            this.clipboardsName.remove(index);
+            this.clipboardsBlock.remove(index);
+
+            return this;
+        }
+
+        public boolean isRandomRotation() {
+            return isRandomRotation;
+        }
+
+        public void setRandomRotation(boolean randomRotation) {
+            isRandomRotation = randomRotation;
+        }
+
+        public ArrayList<List<BlockVec4>> getClipboardsBlock() {
+            return this.clipboardsBlock;
+        }
+
+        public ArrayList<String> getClipboardsName() {
+            return this.clipboardsName;
+        }
+
+        public boolean getClipboardsNameExist(String clipboardsName) {
+            return this.clipboardsName.contains(clipboardsName);
+        }
+
+        public void clearAll() {
+            this.clipboardsName.clear();
+            this.clipboardsBlock.clear();
         }
     }
 }

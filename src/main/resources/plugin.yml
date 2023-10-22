@@ -4,7 +4,7 @@ main: fr.Marodeur.ExpertBuild.Main
 version: '${version}'
 api-version: 1.18
 description: Builder plugin
-website: https://github.com/Marodeurun
+website: https://github.com/LucasT-dev
 depend: [ WorldEdit ]
 libraries:
   - io.github.rysefoxx.inventory:RyseInventory-Plugin:1.5.7
@@ -105,11 +105,6 @@ commands:
   schemtrans:
     description: transfert schem on other serveur
     permission: exp.command.schemtrans
-
-  easyplanting:
-    aliases: ep
-    description: set random clipboard
-    permission: exp.command.easyplanting
 
   maze:
     description: Generate maze
