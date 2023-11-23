@@ -1,6 +1,6 @@
 name: ExpertBuild
 author: Marodeur
-main: fr.Marodeur.ExpertBuild.Main
+main: fr.marodeur.expertbuild.Main
 version: '${version}'
 api-version: 1.18
 description: Builder plugin

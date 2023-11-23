@@ -2,4 +2,4 @@
 
 ## Reporting a Vulnerability
 
-You can report a vulnerability on github or discord Marodeur#2922
+You can report a vulnerability on github or discord marodeur#2922

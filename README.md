@@ -1,10 +1,12 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest Version : 1.18.1.10
-* Author : Marodeur
+* Latest plugin version : 1.18.1.11
+* Author : marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
+* [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/ExpertBuild/tree/master#Supported_Versions)
+
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
@@ -27,7 +29,7 @@ Minecraft build plugin, Expert-Build Documentation
 
 ------------------
 
-# Supported Versions
+# Supported_Versions
 
 | Mc Version | Supported          |
 |------------|--------------------|
@@ -423,7 +425,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.10
+  version: 1.18.1.11
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)
