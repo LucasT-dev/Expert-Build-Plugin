@@ -1,13 +1,5 @@
 package fr.marodeur.expertbuild.commands.CommandsBrush;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.enums.BrushEnum;
-import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.object.Configuration;
-
 import com.fastasyncworldedit.core.command.SuggestInputParseException;
 
 import com.sk89q.worldedit.WorldEdit;
@@ -19,6 +11,11 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.world.biome.BiomeType;
 import com.sk89q.worldedit.world.block.BlockType;
+
+import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.object.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;

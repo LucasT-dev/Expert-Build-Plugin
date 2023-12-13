@@ -8,6 +8,7 @@ import fr.marodeur.expertbuild.object.ItemBuilder;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.enums.TimeSetting;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 
 import org.bukkit.Bukkit;
@@ -29,6 +30,7 @@ public class OrganicGUI {
         RyseInventory.builder()
                 .title(Main.prefix + msg.getOrganicGuiTitle())
                 .rows(6)
+                .period(1, TimeSetting.SECONDS)
                 .provider(new InventoryProvider() {
 
                     final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
@@ -88,7 +90,6 @@ public class OrganicGUI {
                                     if (goha_builder.getCommutateur() == 2) {
                                         goha_builder.setCommutateur(1);
                                     }
-                                    goha_builder.buildGoha(goha_builder);
                                 }));
                         //Y rotation
                         contents.set(25, IntelligentItem.of(
@@ -106,7 +107,6 @@ public class OrganicGUI {
                                     else if (goha_builder.getCommutateur() == 2) {
                                         goha_builder.setCommutateur(0);
                                     }
-                                    goha_builder.buildGoha(goha_builder);
                                 }));
 
                         contents.set(26, IntelligentItem.of(new ItemBuilder(msg.getMemberConf(), Material.BARRIER, 1)
@@ -122,7 +122,6 @@ public class OrganicGUI {
                             else if (goha_builder.getCommutateur() == 2) {
                                 goha_builder.setCommutateur(0);
                             }
-                            goha_builder.buildGoha(goha_builder);
                         }));
 
 
@@ -167,14 +166,14 @@ public class OrganicGUI {
                                             .build(), event ->
 
                                             goha_builder.setPregen(false)
-                                                    .setStartLoc(null)
-                                                    .buildGoha(goha_builder)));
+                                                    .setStartLoc(null)));
 
                         } else {
                             contents.set(43, IntelligentItem.of(
                                     new ItemBuilder(msg.getPregeneration(), Material.ARMOR_STAND, 1)
                                             .addLore(msg.getClickPregen())
                                             .build(), event -> {
+
                                     }));
                         }
 
@@ -197,6 +196,10 @@ public class OrganicGUI {
                                                 .generateAllBlock()
                                                 .buildBlock();
                                     }
+
+                                    goha_builder.setPregen(false)
+                                            .setStartLoc(null);
+
                                 }));
 
                         //tete
@@ -412,8 +415,7 @@ public class OrganicGUI {
 
                                             goha_builder.setPregen(false)
                                                     .setMomentallyParticleStop(false)
-                                                    .setStartLoc(null)
-                                                    .buildGoha(goha_builder)));
+                                                    .setStartLoc(null)));
 
                         //Pregeneration
                         } else {
@@ -426,8 +428,7 @@ public class OrganicGUI {
                                         goha_builder.setPregen(true)
                                                 .setMomentallyParticleStop(true)
                                                 .setUpdate(true)
-                                                .setStartLoc(p.getLocation())
-                                                .buildGoha(goha_builder);
+                                                .setStartLoc(p.getLocation());
 
                                         new GOHA_Builder.OrganicGeneration(p)
                                                 .getAllPoint()
@@ -452,7 +453,6 @@ public class OrganicGUI {
                                     else if (goha_builder.getCommutateur() == 2) {
                                         goha_builder.setCommutateur(1);
                                     }
-                                    goha_builder.buildGoha(goha_builder);
 
                                 }));
                         //Y rotation
@@ -472,7 +472,7 @@ public class OrganicGUI {
                                     else if (goha_builder.getCommutateur() == 2) {
                                         goha_builder.setCommutateur(0);
                                     }
-                                    goha_builder.buildGoha(goha_builder);
+
                                 }));
 
                         contents.set(26, IntelligentItem.of(new ItemBuilder(msg.getMemberConf(), Material.BARRIER, 1)
@@ -488,7 +488,7 @@ public class OrganicGUI {
                             else if (goha_builder.getCommutateur() == 2) {
                                 goha_builder.setCommutateur(0);
                             }
-                            goha_builder.buildGoha(goha_builder);
+
                         }));
 
 

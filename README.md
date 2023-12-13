@@ -1,7 +1,7 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.11
+* Latest plugin version : 1.18.1.12
 * Author : marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
@@ -425,7 +425,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.11
+  version: 1.18.1.12
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)

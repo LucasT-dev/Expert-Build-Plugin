@@ -263,6 +263,10 @@ public class Main extends JavaPlugin {
 		BrushBuilder.remove(p.getUniqueId());
 	}
 
+	public static int getBrushBuilderSize() {
+		return BrushBuilder.size();
+	}
+
 	//goha Builder
 	public static GOHA_Builder getGohaBuilder(@NotNull Player p) {
 		return GOHA.get(p.getUniqueId());

@@ -7,6 +7,7 @@ import fr.marodeur.expertbuild.object.ItemBuilder;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.enums.TimeSetting;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 
 import org.bukkit.Material;
@@ -26,6 +27,7 @@ public class LeatherGUI {
         RyseInventory.builder()
                 .title(Main.prefix + msg.getLeatherGuiTitle())
                 .rows(6)
+                .period(1, TimeSetting.SECONDS)
                 .provider(new InventoryProvider() {
 
                     @Override

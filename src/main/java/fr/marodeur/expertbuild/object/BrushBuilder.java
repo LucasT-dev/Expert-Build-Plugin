@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class BrushBuilder {
@@ -30,10 +31,11 @@ public class BrushBuilder {
     private final UUID uuid;
     private BrushEnum brushEnum;
     private Boolean isEnable;
-    private Boolean SelMode;
+    private Boolean selMode;
+    private Boolean flyMode;
     private Material material;
     private List<BaseBlock> flowerMaterial;
-    private List<Integer> flowerMaterialTaux;
+    private List<Integer> flowerMaterialRate;
     private Biome biome;
     private int airBrush;
     private Integer radius;
@@ -49,7 +51,7 @@ public class BrushBuilder {
     /**
      * Create objet BrushBuilder
      */
-    public BrushBuilder(UUID uuid, BrushEnum brushEnum, Boolean isEnable, Boolean SelMode, Material material,
+    public BrushBuilder(UUID uuid, BrushEnum brushEnum, Boolean isEnable, Boolean selMode, Boolean flyMode, Material material,
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
@@ -58,10 +60,11 @@ public class BrushBuilder {
         this.uuid = uuid;
         this.brushEnum = brushEnum;
         this.isEnable = isEnable;
-        this.SelMode = SelMode;
+        this.selMode = selMode;
+        this.flyMode = flyMode;
         this.material = material;
         this.flowerMaterial = flowerMaterial;
-        this.flowerMaterialTaux = flowerMaterialTaux;
+        this.flowerMaterialRate = flowerMaterialTaux;
         this.biome = biome;
         this.airBrush = airBrush;
         this.radius = rayon;
@@ -75,6 +78,8 @@ public class BrushBuilder {
         this.clipboardParameter = clipboardParameter;
 
     }
+
+    // GETTER
 
     public UUID getUUID() {
         return uuid;
@@ -93,7 +98,11 @@ public class BrushBuilder {
     }
 
     public Boolean getSelMode() {
-        return SelMode;
+        return selMode;
+    }
+
+    public Boolean getFlyMode() {
+        return flyMode;
     }
 
     public Material getMaterial() {
@@ -104,8 +113,8 @@ public class BrushBuilder {
         return flowerMaterial;
     }
 
-    public List<Integer> getFlowerMaterialTaux() {
-        return flowerMaterialTaux;
+    public List<Integer> getFlowerMaterialRate() {
+        return flowerMaterialRate;
     }
 
     public Biome getBiome() {
@@ -165,7 +174,7 @@ public class BrushBuilder {
     }
 
 
-
+    // SETTER
 
     public BrushBuilder setBrushType(BrushEnum brushEnum) {
         this.brushEnum = brushEnum;
@@ -178,7 +187,12 @@ public class BrushBuilder {
     }
 
     public BrushBuilder setSelMode(Boolean selMode) {
-        this.SelMode = selMode;
+        this.selMode = selMode;
+        return this;
+    }
+
+    public BrushBuilder setFlyMode(Boolean flyMode) {
+        this.flyMode = flyMode;
         return this;
     }
 
@@ -197,21 +211,21 @@ public class BrushBuilder {
         return this;
     }
 
-    public BrushBuilder setFlowerMaterialTaux(List<Integer> flowerMaterialTaux) {
-        this.flowerMaterialTaux = flowerMaterialTaux;
+    public BrushBuilder setFlowerMaterialRate(List<Integer> flowerMaterialRate) {
+        this.flowerMaterialRate = flowerMaterialRate;
         return this;
     }
 
-    public BrushBuilder addFlowerMaterialTaux(Integer flowerMaterialTaux, int index) {
-        this.flowerMaterialTaux.set(index, flowerMaterialTaux);
+    public BrushBuilder addFlowerMaterialRate(Integer flowerMaterialRate, int index) {
+        this.flowerMaterialRate.set(index, flowerMaterialRate);
         return this;
     }
 
-    public BrushBuilder addFlowerMaterialTaux(int index, boolean isShiftClick, boolean isRightClick) {
+    public BrushBuilder addFlowerMaterialRate(int index, boolean isShiftClick, boolean isRightClick) {
 
         int maxRadius = 100;
         int minRadius = 1;
-        int n =  this.flowerMaterialTaux.get(index);
+        int n =  this.flowerMaterialRate.get(index);
         int num;
 
         if (isShiftClick) {
@@ -229,11 +243,11 @@ public class BrushBuilder {
         }
 
         if (n + num > maxRadius) {
-            this.flowerMaterialTaux.set(index, maxRadius);
+            this.flowerMaterialRate.set(index, maxRadius);
         } else if (n + num < minRadius) {
-            this.flowerMaterialTaux.set(index, minRadius);
+            this.flowerMaterialRate.set(index, minRadius);
         } else {
-            this.flowerMaterialTaux.set(index, n + num);
+            this.flowerMaterialRate.set(index, n + num);
         }
         return this;
     }
@@ -364,28 +378,30 @@ public class BrushBuilder {
         return this;
     }
 
-
     @Override
     public String toString() {
         return "BrushBuilder{" +
-                "p=" + uuid +
+                "uuid=" + uuid +
                 ", brushEnum=" + brushEnum +
                 ", isEnable=" + isEnable +
-                ", SelMode=" + SelMode +
+                ", selMode=" + selMode +
+                ", flyMode=" + flyMode +
                 ", material=" + material +
                 ", flowerMaterial=" + flowerMaterial +
-                ", flowerMaterialTaux=" + flowerMaterialTaux +
+                ", flowerMaterialRate=" + flowerMaterialRate +
                 ", biome=" + biome +
                 ", airBrush=" + airBrush +
-                ", rayon=" + radius +
+                ", radius=" + radius +
                 ", tickRT=" + tickRT +
                 ", region=" + region +
                 ", blockFace=" + blockFace +
                 ", bv4=" + bv4 +
-                ", pattern=" + pattern.toString() +
-                ", terraParameter=" + terraParameter +
+                ", pattern=" + pattern +
+                ", terraParameter=" + terraParameter.toString() +
+                ", clipboardParameter=" + clipboardParameter.toString() +
                 '}';
     }
+
 
     //OPERATION
 
@@ -393,8 +409,8 @@ public class BrushBuilder {
      *
      * Find Brush enable of player and execute function on honeycomb
      *
-     * @param brushBuilder BrushBuilder
-     * @param obj Object
+     * @param brushBuilder
+     * @param obj
      */
     public void executeHoneyBrush(BrushBuilder brushBuilder, Object obj) {
 
@@ -473,7 +489,7 @@ public class BrushBuilder {
         List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
-        return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(), BrushEnum.NONE, false, true,
+        return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(), BrushEnum.NONE, false, true, true,
                 conf.getDefault_material_brush(), it, flowerMaterialTaux, conf.getDefault_biome_brush(),
                 conf.getDefault_air_brush(), conf.getDefaultBrushRayon(), 4, null,
                 null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
@@ -501,7 +517,7 @@ public class BrushBuilder {
      * Get objet BrushBuild associated at the player
      *
      * @param p Player
-     *
+     * @param sendError Boolean
      */
     public static @Nullable BrushBuilder getBrushBuilderPlayer(@NotNull Player p, Boolean sendError) {
 
@@ -640,6 +656,20 @@ public class BrushBuilder {
         public void clearAll() {
             this.clipboardsName.clear();
             this.clipboardsBlock.clear();
+        }
+
+        @Override
+        public String toString() {
+
+            AtomicReference<String> name = new AtomicReference<>("");
+
+            clipboardsName.forEach(s -> name.set(name + "{" + s + "},"));
+
+            return "ClipboardParameter{" +
+                    "clipboardsBlock.size=" + clipboardsBlock.size() +
+                    ", clipboardsName=" + name +
+                    ", isRandomRotation=" + isRandomRotation +
+                    '}';
         }
     }
 }

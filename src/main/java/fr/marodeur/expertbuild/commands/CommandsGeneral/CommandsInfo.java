@@ -25,7 +25,7 @@ import java.util.List;
 public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
-	private final List<String> list = Arrays.asList("info", "version", "help", "reload", "sel_mode");
+	private final List<String> list = Arrays.asList("info", "version", "help", "reload", "sel_mode", "fly_mode");
 
 	@Override
 	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, String @NotNull [] args) {
@@ -64,14 +64,16 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				URL_Youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open GitHub report bug").create()));
 				URL_Youtube.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-						"https://github.com/Marodeurun/Expert-Build-Doc/blob/main/SECURITY.md"));
+						"https://github.com/LucasT-dev/Expert-Build-Plugin/issues"));
 				sender.spigot().sendMessage(URL_Youtube);
 				return false;
 			}
+
 			if (args[0].equalsIgnoreCase("version")) {
 				sender.sendMessage(Main.prefix + " Version : " + Main.getInstance().getDescription().getVersion());
 				return false;
 			}
+
 			if (args[0].equalsIgnoreCase("help")) {
 
 				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
@@ -79,7 +81,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				github_doc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open documentation URL").create()));
 				github_doc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-						"https://github.com/Marodeurun/Expert-Build-Doc"));
+						"https://github.com/LucasT-dev/Expert-Build-Plugin/blob/master/README.md"));
 				sender.spigot().sendMessage(github_doc);
 				return false;
 			}
@@ -102,11 +104,33 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 					if (bb.getSelMode().equals(false)) {
 						bb.setSelMode(true)
-								.sendMessage("Shift click executing /sel disable");
+								.sendMessage("Shift click executing /sel, enable");
 						return false;
+
 					} else {
 						bb.setSelMode(false)
-								.sendMessage("Shift click executing /sel enable");
+								.sendMessage("Shift click executing /sel, disable");
+						return false;
+					}
+
+				} else {
+					sender.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
+					return false;
+				}
+			}
+
+			if (args[0].equalsIgnoreCase("fly_mode")) {
+				if (sender instanceof Player p) {
+
+					BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
+
+					if (bb.getFlyMode().equals(false)) {
+						bb.setFlyMode(true)
+								.sendMessage("Click air selection enable");
+						return false;
+					} else {
+						bb.setFlyMode(false)
+								.sendMessage("Click air selection disable");
 						return false;
 					}
 

@@ -1,23 +1,25 @@
 package fr.marodeur.expertbuild.gui;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.enums.BrushEnum;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.Configuration;
-import fr.marodeur.expertbuild.object.MessageBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.object.ItemBuilder;
-
 import com.fastasyncworldedit.core.registry.state.PropertyKey;
+
 import com.sk89q.worldedit.NotABlockException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.registry.state.Property;
 import com.sk89q.worldedit.util.Direction;
 import com.sk89q.worldedit.world.block.BaseBlock;
 
+import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.object.BrushBuilder;
+import fr.marodeur.expertbuild.object.Configuration;
+import fr.marodeur.expertbuild.object.ItemBuilder;
+import fr.marodeur.expertbuild.object.MessageBuilder;
+
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
+import io.github.rysefoxx.inventory.plugin.enums.TimeSetting;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 
@@ -44,7 +46,9 @@ public class FlowerGUI {
         RyseInventory.builder()
                 .title(Main.prefix + msg.getFlowerGuiTitle())
                 .rows(6)
-                .listener(new EventCreator<>(InventoryCloseEvent.class, event -> buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false))))
+                .period(1, TimeSetting.SECONDS)
+                .listener(new EventCreator<>(InventoryCloseEvent.class, event ->
+                        buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false))))
 
                 .listener(new EventCreator<>(InventoryClickEvent.class, event -> {
 
@@ -121,7 +125,7 @@ public class FlowerGUI {
                         contents.set(5, IntelligentItem.of(
                                 new ItemBuilder(msg.getAirText(), Material.POTION, 1)
                                         .addLore(msg.getAirValue(String.valueOf(brushBuilder.getAirBrush())))
-                                        .addLore(msg.getTotal((brushBuilder.getFlowerMaterialTaux().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
+                                        .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
                                         .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
                         //SET MATERIAL PROPORTION
@@ -129,10 +133,10 @@ public class FlowerGUI {
                             int finalI = i;
                             contents.set(i, IntelligentItem.of(
                                     new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getRightArrow(brushBuilder.getFlowerMaterialTaux().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)))
-                                            .addLore(msg.getTotal((brushBuilder.getFlowerMaterialTaux().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
+                                            .addLore(msg.getRightArrow(brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)))
+                                            .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
                                             .addLore(msg.getClickForChange())
-                                            .build(), event -> brushBuilder.addFlowerMaterialTaux(finalI - 9, event.isShiftClick(), event.isRightClick())));
+                                            .build(), event -> brushBuilder.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick())));
                         }
 
                         //SET MATERIAL
@@ -179,11 +183,11 @@ public class FlowerGUI {
                             int finalI = i;
                             contents.updateOrSet(i, IntelligentItem.of(
                                     new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getRightArrow(brushBuilder.getFlowerMaterialTaux().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)))
-                                            .addLore(msg.getTotal((brushBuilder.getFlowerMaterialTaux().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
+                                            .addLore(msg.getRightArrow(brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)))
+                                            .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
                                             .addLore(msg.getClickForChange())
                                             .build(), event -> {
-                                        brushBuilder.addFlowerMaterialTaux(finalI - 9, event.isShiftClick(), event.isRightClick());
+                                        brushBuilder.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick());
                                     }));
                         }
 
@@ -222,7 +226,7 @@ public class FlowerGUI {
                         contents.updateOrSet(5, IntelligentItem.of(
                                 new ItemBuilder(msg.getAirText(), Material.POTION, 1)
                                         .addLore(msg.getAirValue(String.valueOf(brushBuilder.getAirBrush())))
-                                        .addLore(msg.getTotal((brushBuilder.getFlowerMaterialTaux().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
+                                        .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
                                         .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
 
@@ -241,7 +245,7 @@ public class FlowerGUI {
                                                             new BaseBlock(BukkitAdapter.asBlockState(
                                                                     new ItemBuilder(Material.BARRIER)
                                                                             .build())), event.getSlot() - 45)
-                                                    .addFlowerMaterialTaux(0, event.getSlot() - 45);
+                                                    .addFlowerMaterialRate(0, event.getSlot() - 45);
 
                                             //Remove property material
                                             for (int j = 0; j < 4; j++) {
@@ -263,8 +267,8 @@ public class FlowerGUI {
                                                 return;
                                             }
 
-                                            if (brushBuilder.getFlowerMaterialTaux().get(finalI - 45).equals(0)) {
-                                                brushBuilder.getFlowerMaterialTaux().set(finalI - 45, 1);
+                                            if (brushBuilder.getFlowerMaterialRate().get(finalI - 45).equals(0)) {
+                                                brushBuilder.getFlowerMaterialRate().set(finalI - 45, 1);
                                             }
 
                                             brushBuilder.addFlowerMaterial(baseBlock, finalI - 45);
@@ -715,7 +719,7 @@ public class FlowerGUI {
 
                 if (!brushBuilder.getFlowerMaterial().get(i).toBlockState().toString().equalsIgnoreCase("minecraft:barrier")) {
 
-                    stringBuilder.append(brushBuilder.getFlowerMaterialTaux().get(i))
+                    stringBuilder.append(brushBuilder.getFlowerMaterialRate().get(i))
                             .append("%")
                             .append(brushBuilder.getFlowerMaterial().get(i))
                             .append(',');

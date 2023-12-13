@@ -126,7 +126,7 @@ public class LineVisualize {
 					length += space;
 				}
 			}
-		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 10);
+		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 20);
 	}
 
 	public static void genSphereParticle(Player p, int rayon, @NotNull Location center) {
@@ -162,6 +162,6 @@ public class LineVisualize {
 					}
 				}
 			}
-		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 10);
+		}.runTaskTimerAsynchronously(Main.getInstance(), 0, 20);
 	}
 }

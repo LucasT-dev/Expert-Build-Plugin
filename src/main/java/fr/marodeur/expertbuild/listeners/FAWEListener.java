@@ -2,6 +2,7 @@ package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
+import fr.marodeur.expertbuild.object.GOHA_Builder;
 import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.utils.LineVisualize;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
@@ -20,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.ItemStack;
@@ -58,52 +60,58 @@ public class FAWEListener implements Listener {
 
 			if (action == Action.LEFT_CLICK_AIR && !p.isSneaking()) {
 
-				new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
-						p.getLocation().getX(),
-						p.getLocation().getY(),
-						p.getLocation().getZ()));
+				if (bb.getFlyMode()) {
 
-				if (new UtilsFAWE(p).isCompleteSelection()) {
+					new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
+							p.getLocation().getX(),
+							p.getLocation().getY(),
+							p.getLocation().getZ()));
 
-					bb.sendMessage(msg.getSetPos1WithArea(
-							(int) p.getLocation().getX() + ", "
-									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
-				} else {
+					if (new UtilsFAWE(p).isCompleteSelection()) {
 
-					bb.sendMessage(msg.getSetPos1(
-							(int) p.getLocation().getX() + ", "
-									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ()));
+						bb.sendMessage(msg.getSetPos1WithArea(
+								(int) p.getLocation().getX() + ", "
+										+ (int) p.getLocation().getY() + ", "
+										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+					} else {
+
+						bb.sendMessage(msg.getSetPos1(
+								(int) p.getLocation().getX() + ", "
+										+ (int) p.getLocation().getY() + ", "
+										+ (int) p.getLocation().getZ()));
+					}
+
+
+					if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos1"));
+
 				}
-
-
-				if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos1"));
-
 			}
 
 			if (action == Action.RIGHT_CLICK_AIR && !p.isSneaking()) {
 
-				new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
-						p.getLocation().getX(),
-						p.getLocation().getY(),
-						p.getLocation().getZ()));
+				if (bb.getFlyMode()) {
 
-				if (new UtilsFAWE(p).isCompleteSelection()) {
+					new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
+							p.getLocation().getX(),
+							p.getLocation().getY(),
+							p.getLocation().getZ()));
 
-					bb.sendMessage(msg.getSetPos2WithArea(
-							(int) p.getLocation().getX() + ", "
-									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
-				} else {
+					if (new UtilsFAWE(p).isCompleteSelection()) {
 
-					bb.sendMessage(msg.getSetPos2(
-							(int) p.getLocation().getX() + ", "
-									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ()));
+						bb.sendMessage(msg.getSetPos2WithArea(
+								(int) p.getLocation().getX() + ", "
+										+ (int) p.getLocation().getY() + ", "
+										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+					} else {
+
+						bb.sendMessage(msg.getSetPos2(
+								(int) p.getLocation().getX() + ", "
+										+ (int) p.getLocation().getY() + ", "
+										+ (int) p.getLocation().getZ()));
+					}
+
+					if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos2"));
 				}
-
-				if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos2"));
 
 				try {
 
@@ -194,6 +202,24 @@ public class FAWEListener implements Listener {
 			Player p = ((Player) sender).getPlayer();
 
 			e.setCompletions(new UtilsFAWE(p).getFileList());
+		}
+	}
+
+	@EventHandler
+	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+
+		String cmd = event.getMessage();
+		Player p = event.getPlayer();
+
+		if (cmd.equals("//sel")) {
+
+			//Clear all particle
+			final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+
+			goha_builder.setPregen(false)
+					.setMomentallyParticleStop(false)
+					.setStartLoc(null);
+
 		}
 	}
 }

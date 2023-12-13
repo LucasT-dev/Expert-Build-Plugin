@@ -94,6 +94,15 @@ public class GeneralListener implements Listener {
 	@EventHandler
 	private void onQuit(@NotNull PlayerQuitEvent e) {
 
+		Player p = e.getPlayer();
+
+		//Clear all particle
+		final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+
+		goha_builder.setPregen(false)
+				.setMomentallyParticleStop(false)
+				.setStartLoc(null);
+
 	}
 
 	@EventHandler

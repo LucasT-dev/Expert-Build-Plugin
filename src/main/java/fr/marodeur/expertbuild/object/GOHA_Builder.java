@@ -643,10 +643,6 @@ public class GOHA_Builder {
 		return Main.getGohaBuilder(p);
 	}
 
-	public void buildGoha(GOHA_Builder goha_builder) {
-		Main.updateGohaBuilder(goha_builder);
-	}
-
 
 	public static class OrganicGeneration {
 
