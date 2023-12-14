@@ -8,6 +8,7 @@ Minecraft build plugin, Expert-Build Documentation
 * [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
 
 
+
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
 ![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.10-purple)
