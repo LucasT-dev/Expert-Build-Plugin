@@ -5,7 +5,7 @@ Minecraft build plugin, Expert-Build Documentation
 * Author : marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
-* [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/ExpertBuild/tree/master#Supported_Versions)
+* [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
 
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
