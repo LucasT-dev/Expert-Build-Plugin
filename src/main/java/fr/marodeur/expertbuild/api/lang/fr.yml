@@ -1,5 +1,5 @@
 #EXPERT-BUILD
-#Frensh lang file
+#frensh lang file
 
 expbuild:
   message:
@@ -49,11 +49,13 @@ expbuild:
       block_modified: "'num' blocs ont été modifiés"
       block_modified_with_time: "'num' blocs ont été modifiés ('num2' blocks/s)"
       player_log_command: "'player' a executé 'cmd'"
+      copy_block: "'num' block(s) copié"
 
     error:
       error_region: Erreur région n° 'num' ! 'error'
       error_selection: §4Error ! IncompleteRegionException; Utilisez 'selection' selection et completez votre selection
-      error_brushbuilder: §4Error ! 'player' n'eest pas enregistré en tant que Builder, il doit être opérateur ou avoir la permission expertbuild.use
+      error_incomplete_selection: "§cSelection invalide :§7 \nSélection incomplète, veuillez définir une sélection complète."
+      error_brushbuilder: §4Error ! 'player' n'est pas enregistré en tant que Builder, il doit être opérateur ou avoir la permission expertbuild.use
       error_jsch_exception: Error JSch-Exception, voir console
       error_sftp_exception: Error Sftp-Exception, voir console
       file_configuration_error: Le fichier de configuration dans le dossier ExpertBuild est erroné ou corrompu; Réparez le fichier ou supprimez tous les fichier pour que le plugin les re-créer
@@ -65,12 +67,15 @@ expbuild:
       invalid_material_set: Pattern invalide, pattern défini 'pattern'
       invalid_biome: Biome invalide
       invalid_biome_set: Biome invalide, biome défini 'biome'
+      invalid_instance: "§cInstance invalide: §8<§6 'sender' §8> \n §7 Cette instance d'executeur n'est pas autorisé a executer cette commande."
+      invalid_argument: "§cArgument invalide : §8<§6 'arg' §8>\n §7 La valeur doit etre de type 'type'."
+      invalid_argument_integer: "§cArgument invalide: §8<§6 'arg' §8> \n §7 La valeur acceptable doit etre supérieur a 'min' et inférieur a 'max'."
 
     tools:
-      give_tool: L' 'tool' donné
+      give_tool: L'outil 'tool' donné
 
     commands:
-      use: Utilisez 'cmd'
+      use: "§cArgument invalide :\n §7 Utilisez 'cmd'."
       pregeneration: pré-générer
       generate: Générer
       file_not_exist: Le fichier 'file' n'existe pas
@@ -89,7 +94,6 @@ expbuild:
       clipboard_already_exist: Le clipboard 'clipboard' existe déjà
       clipboard_add_and_enable: Le clipboard 'clipboard' ajouté et le brush est activé
       clipboard_remove: Le clipboard 'clipboard' a été supprimé
-
 
     gui:
       back: Retour

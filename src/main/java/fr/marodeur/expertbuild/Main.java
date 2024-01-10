@@ -1,5 +1,6 @@
 package fr.marodeur.expertbuild;
 
+import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.utils.BrushOperationManager;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
@@ -123,8 +124,10 @@ public class Main extends JavaPlugin {
 
 		registerCommand();
 
+		// LOAD MASK
 		loadCustomMask();
 
+		// UPDATE CHECKER
 		Main.getInstance().getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getCheckingUpdate());
 
 		updateChecker(version -> {
@@ -175,6 +178,8 @@ public class Main extends JavaPlugin {
 		getCommand("autocb").setExecutor(new CommandAutoCb());
 		getCommand("autoflip").setExecutor(new CommandAutoFlip());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
+		getCommand("painting").setExecutor(new CommandPainting());
+
 
 		getLogger().info(messageBuilder.getCommandsLoad());
 
@@ -233,7 +238,7 @@ public class Main extends JavaPlugin {
 
 	}
 
-	//BrushBuilder
+	// BrushBuilder
 	public @NotNull Configuration getConfig() { return configuration; }
 
     public MessageBuilder getMessageConfig() { return messageBuilder; }
@@ -295,6 +300,10 @@ public class Main extends JavaPlugin {
 	 */
 	public static @NotNull String getVersion() {
 		return Main.getInstance().getDescription().getVersion();
+	}
+
+	public static @NotNull String getBukkitVersion() {
+		return Bukkit.getBukkitVersion();
 	}
 
 	public Map<Class<? extends BrushOperation>, BrushOperation> getRegisteredBrush() {

@@ -2,44 +2,44 @@ package fr.marodeur.expertbuild.enums;
 
 import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.brush.*;
+import org.bukkit.entity.Player;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public enum BrushEnum {
 
-    LIFT("lift", ErodeBrush.class), //OK
-    FILL("fill", ErodeBrush.class), //OK
-    CUSTOM("custom", ErodeBrush.class), //OK
-    SMOOTH("smooth", ErodeBrush.class),
-    MELT("smooth", ErodeBrush.class), //OK
-    FLOATCLEAN("smooth", ErodeBrush.class),
-    BLENDBALL("blendball", BlendBallBrush.class), //OK
-    ERODEBLEND("erodeBlend", ErodeBlendBrush.class), //OK
-    ERASER("eraser", EraserBrush.class),
+    ERODE("e", ErodeBrush.class, "exp.brush.erode"), //OK
+    BLENDBALL("bb", BlendBallBrush.class, "exp.brush.blendball"), //OK
+    ERODEBLEND("eb", ErodeBlendBrush.class, "exp.brush.erodeblend"), //OK
+    ERASER("eraser", EraserBrush.class, "exp.brush.eraser"),
 
-    OVERLAY("overlay", OverlayBrush.class), //OK
-    DRAIN("drain", DrainBrush.class), //OK
-    ROT2DCUBE("rot2Dcube", Rot2DCubeBrush.class), //OK
-    LINE("line", LineBrush.class), //OK
-    SPIKE("spike", SpikeBrush.class), //OK
-    CUBE("cube", CubeBrush.class), //OK
+    OVERLAY("overlay", OverlayBrush.class, "exp.brush.overlay"), //OK
+    DRAIN("drain", DrainBrush.class, "exp.brush.drain"), //OK
+    ROT2DCUBE("rot2Dcube", Rot2DCubeBrush.class, "exp.brush.2dcube"), //OK
+    LINE("line", LineBrush.class, "exp.brush.line"), //OK
+    SPIKE("spike", SpikeBrush.class, "exp.brush.spike"), //OK
+    CUBE("cube", CubeBrush.class, "exp.brush.cube"), //OK
 
-    NONE("none", NoneBrush.class), //OK
-    SPHERE("sphere", SphereBrush.class), //OK
-    DEGRADE("degrade", DegradeBrush.class), //OK
-    CLIPBOARD("clipboard", ClipboardsBrush.class), //OK
-    FLOWER("flower", FlowerBrush.class), //OK
-    BIOME("biome", BiomeBrush.class), //OK
-    UPDATECHUNK("updatechunk", UpdateChunk.class), //OK
-    TICK_REPEATER("tick_reaperter", null),
-    AUTOFLIP("auto_flip", null);
+    NONE("none", NoneBrush.class, "exp.brush.none"), //OK
+    SPHERE("sphere", SphereBrush.class, "exp.brush.sphere"), //OK
+    DEGRADE("degrade", DegradeBrush.class, "exp.brush.degrade"), //OK
+    CLIPBOARD("clipboard", ClipboardsBrush.class, "exp.brush.clipboard"), //OK
+    FLOWER("flower", FlowerBrush.class, "exp.brush.flower"), //OK
+    BIOME("biome", BiomeBrush.class, "exp.brush.biome"), //OK
+    UPDATECHUNK("updatechunk", UpdateChunk.class, "exp.brush.updatechunk"), //OK
+    TICK_REPEATER("tick_reaperter", null, "NOT_none"),
+    AUTOFLIP("auto_flip", null, "NOT_none");
 
 
     public final String brush;
-
     public final Class<? extends BrushOperation> bclass;
+    public final String permission;
 
-    BrushEnum(String brush, Class<? extends BrushOperation> bclass) {
+    BrushEnum(String brush, Class<? extends BrushOperation> bclass, String permission) {
         this.brush = brush;
         this.bclass = bclass;
+        this.permission = permission;
     }
 
     public String getBrush() {
@@ -52,5 +52,13 @@ public enum BrushEnum {
 
     public final String getPrefix() {
         return brush;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public static Stream<BrushEnum> getStreamArrayFilterPermission(Player p) {
+        return Arrays.stream(BrushEnum.values()).filter(brushEnum -> p.hasPermission(brushEnum.getPermission()));
     }
 }

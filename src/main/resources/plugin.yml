@@ -139,6 +139,10 @@ commands:
     description: procedural dungeons
     permission: exp.command.dungeons
 
+  painting:
+    description: advanced painting tool
+    permission: exp.command.painting
+
 permissions:
 
   exp.register:
@@ -159,6 +163,8 @@ permissions:
   exp.brush.eraser:
     default: op
   exp.brush.erodeblend:
+    default: op
+  exp.brush.custom:
     default: op
   exp.brush.erode:
     default: op

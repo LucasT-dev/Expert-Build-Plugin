@@ -1,579 +1,648 @@
 package fr.marodeur.expertbuild.commands.CommandsBrush;
 
-import com.fastasyncworldedit.core.command.SuggestInputParseException;
-
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.command.util.SuggestionHelper;
-import com.sk89q.worldedit.extension.factory.PatternFactory;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.selector.RegionSelectorType;
-import com.sk89q.worldedit.world.biome.BiomeType;
-import com.sk89q.worldedit.world.block.BlockType;
-
+import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.enums.BrushEnum;
-import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
-
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
-
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class BrushCommand implements CommandExecutor, TabCompleter {
+public class BrushCommand extends AbstractCommand {
 
+    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.getInstance().getConfig();
-    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
-    private final List<String> customBrush = Arrays
-            .asList("<erosion faces> <erosion recursion> <fill faces> <fill recursion>");
-
-    private final List<String> erodeBlendArgs = Arrays
-            .asList("lift", "melt", "fill", "smooth", "floatclean");
-
-    private final List<String> multiClipboardEnable = Arrays
-            .asList("add", "removeAll", "remove", "autoRotation");
-
-    private final List<String> Ints = List.of("<radius>");
-
-    public List<String> getBiomeList(final String @NotNull [] args, final boolean space, int indexArg) {
-        return SuggestionHelper.getNamespacedRegistrySuggestions(BiomeType.REGISTRY, args[indexArg])
-                .map(value -> value.toLowerCase(Locale.ENGLISH).replace("minecraft:", ""))
-                .filter(value -> value.startsWith(args[indexArg].toLowerCase(Locale.ENGLISH)))
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getMaterialList(final String @NotNull [] args, final boolean space, int indexArg) {
-        return SuggestionHelper.getNamespacedRegistrySuggestions(BlockType.REGISTRY, args[indexArg])
-                .map(value -> value.toLowerCase(Locale.ENGLISH).replace("minecraft:", ""))
-                //.filter(value -> value.startsWith(args[indexArg].toLowerCase(Locale.ENGLISH)))
-                .collect(Collectors.toList());
-    }
-
-    public List<String> getPatternFactoryList(final String @NotNull [] args) {
-        return new PatternFactory(WorldEdit.getInstance()).getSuggestions(args[1]);
-    }
-
-    private static @NotNull List<String> getBrushList() {
-
-        List<String> brushList = Stream.of(BrushEnum.values())
-                .filter(brushEnum -> brushEnum.getBclass() != null)
-                .map(BrushEnum::getBrush)
-                .collect(Collectors.toList());
-
-        brushList.add("melt");
-        brushList.add("fill");
-        brushList.add("smooth");
-        brushList.add("floatclean");
-        brushList.add("custom");
-        brushList.add("eb");
-
-        brushList.add("bb");
-
-        brushList.add("register");
-        brushList.add("material");
-        brushList.add("radius");
-
-        //brushList.remove("erode");
-
-        return brushList;
-    }
-
-    @Nullable
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
-
-        BrushBuilder builder = null;
-
-        if (s instanceof Player p) {
-            builder = BrushBuilder.getBrushBuilderPlayer(p, false);
-
-            if (builder == null) return null;
-        }
-
-        if (args.length <= 1) {
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[0], getBrushList(), l);
-            return l;
-        }
-
-        //cmd /fw biome <biome> <int>
-        if (args.length == 2 && args[0].equalsIgnoreCase("biome")) {
-            List<String> l2 = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.getBiomeList(args, true, 1), l2);
-            return l2;
-        }
-        if (args.length == 3 && getBiomeList(args, true, 1).contains(args[1])) {
-            List<String> l3 = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[2], this.Ints, l3);
-            return l3;
-        }
-
-        //cmd type /fw <brush> <integer>
-        if (args.length == 2 &&
-                (args[0].equalsIgnoreCase("update_chunk") |
-                        args[0].equalsIgnoreCase("drain") |
-                        args[0].equalsIgnoreCase("blendball") |
-                        args[0].equalsIgnoreCase("bb") |
-                        args[0].equalsIgnoreCase("erode") |
-                        args[0].equalsIgnoreCase("degrade") |
-                        args[0].equalsIgnoreCase("eraser") |
-                        args[0].equalsIgnoreCase("smooth"))) {
-            List<String> l2 = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.Ints, l2);
-            return l2;
-        }
-
-        //cmd type /fw <brush> <Material>
-        if (args.length == 2 &&
-                (args[0].equalsIgnoreCase("material") |
-                        args[0].equalsIgnoreCase("overlay") |
-                        args[0].equalsIgnoreCase("spike") |
-                        args[0].equalsIgnoreCase("cube") |
-                        args[0].equalsIgnoreCase("line") |
-                        args[0].equalsIgnoreCase("sphere") |
-                        args[0].equalsIgnoreCase("rot2Dcube"))) {
-            List<String> l2 = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.getPatternFactoryList(args), l2);
-            return l2;
-        }
-
-        //cmd type /fw <brush> <Material> <INT>
-        if (args.length == 3 &&
-                (args[0].equalsIgnoreCase("material") |
-                        args[0].equalsIgnoreCase("overlay") |
-                        args[0].equalsIgnoreCase("spike") |
-                        args[0].equalsIgnoreCase("cube") |
-                        args[0].equalsIgnoreCase("sphere") |
-                        args[0].equalsIgnoreCase("rot2Dcube"))) {
-            List<String> l2 = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[2], this.Ints, l2);
-            return l2;
-        }
-
-        //fw clipboard <add/clear/remove/autoRotation>
-        if (args.length == 2 && args[0].equalsIgnoreCase("clipboard")) {
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.multiClipboardEnable, l);
-            return l;
-        }
-
-        //fw clipboard remove <args>
-        if (args.length == 3 && args[1].equalsIgnoreCase("remove")) {
-
-            List<String> clipboardsList = builder.getClipboardsParameter().getClipboardsName().stream().toList();
-
-            if (clipboardsList.size() == 0) {
-                clipboardsList = new ArrayList<>();
-                clipboardsList.add("no clipboard");
-            }
-
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[2], clipboardsList, l);
-            return l;
-        }
-
-
-        //Custom erode brush
-        if (args[0].equalsIgnoreCase("custom")) {
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.customBrush, l);
-            return l;
-        }
-        if (args[1].equalsIgnoreCase("custom")) {
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[2], this.customBrush, l);
-            return l;
-        }
-
-        //fw eb
-        if (args.length == 2 && (args[0].equalsIgnoreCase("eb") | args[0].equalsIgnoreCase("erodeBlend"))) {
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[1], this.erodeBlendArgs, l);
-            return l;
-        }
-
-        if (args.length == 3 && (args[0].equalsIgnoreCase("eb") | args[0].equalsIgnoreCase("erodeBlend"))) {
-            List<String> l = new ArrayList<>();
-            StringUtil.copyPartialMatches(args[2], this.Ints, l);
-            return l;
-        }
-        return null;
+    public String getCommand() {
+        return "/flower";
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
+    public String getSyntax() {
+        return "/flower <brush> [pattern - radius]";
+    }
 
-        if (! (s instanceof Player p)) {
-            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
-            return false;
-        }
+    @Override
+    public Integer getMinimumArgsLength() {
+        return 1;
+    }
 
-        if (!p.hasPermission("exp.command.flower")) {
-            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.flower"));
-            return false;
-        }
+    @Override
+    public String getPermission() {
+        return "exp.command.flower";
+    }
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+    @Override
+    public List<ExecutorType> getExecutorType() {
+        return List.of(ExecutorType.PLAYER);
+    }
 
-        if (brushBuilder == null) {
-            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
-            return false;
-        }
+    @Override
+    public void execute(CommandSender executor, Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (args.length < 1) {
-            brushBuilder.sendMessage(message.getBrushEnable("/fw <brush> [optional : material/biome] [optional : radius]"));
-            return false;
-        }
+        BrushBuilder brushBuilder = this.getBrushBuilder((Player) executor);
+        Player p = (Player) executor;
+
+        Pattern pattern;
+        Integer radius = 0;
+        Biome biome;
 
         switch (args[0]) {
 
-            case "drain" -> brushBuilder.setBrushType(BrushEnum.DRAIN)
-                    .setRadius(getRayon(p, args, 1))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Drain"));
+            case "material" -> {
 
-            case "sphere" -> brushBuilder.setBrushType(BrushEnum.SPHERE)
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .setRadius(getRayon(p, args, 2))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Sphere"));
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-            case "overlay" -> brushBuilder.setBrushType(BrushEnum.OVERLAY)
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .setRadius(getRayon(p, args, 2))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Overlay"));
+                brushBuilder.setPattern(pattern).sendMessage(msg.getMaterialSet());
+            }
 
-            case "none" -> brushBuilder.setBrushType(BrushEnum.NONE)
-                    .setEnable(false)
-                    .sendMessage(message.getBrushDisable());
+            case "radius" -> {
 
-            case "update" -> brushBuilder.setBrushType(BrushEnum.UPDATECHUNK)
-                    .setRadius(getRayon(p, args, 1))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("UpdateChunk"));
+                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-            case "rot2Dcube" -> brushBuilder.setBrushType(BrushEnum.ROT2DCUBE)
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .setRadius(getRayon(p, args, 2))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Rot2Dcube"));
+                brushBuilder.setRadius(radius).sendMessage(msg.getRadiusSet());
+            }
 
-            case "line" -> brushBuilder.setBrushType(BrushEnum.LINE)
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Line"));
+            case "biome" -> {
 
-            case "spike" -> brushBuilder.setBrushType(BrushEnum.SPIKE)
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .setRadius(getRayon(p, args, 2))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Spike"));
+                if (this.getValidArgument().isBiome(args[1])) {
+                    biome = this.getValidArgument().getBiome(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidBiome(executor, args[1]);
+                    break;
+                }
 
-            case "biome" -> brushBuilder.setBrushType(BrushEnum.BIOME)
-                    .setBiome(getBiome(brushBuilder, args, 1))
-                    .setRadius(getRayon(p, args, 2))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Biome"));
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-            case "clipboard" -> clipboardCommand(p, args);
+                brushBuilder.setBrushType(BrushEnum.BIOME)
+                        .setEnable(true)
+                        .setBiome(biome)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Biome"));
+            }
 
-            case "cube" -> brushBuilder.setBrushType(BrushEnum.CUBE)
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .setRadius(getRayon(p, args, 2))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Cube"));
+            // TYPE : Brush Pattern Radius
+            case "overlay" -> {
 
-            case "degrade" -> brushBuilder.setBrushType(BrushEnum.DEGRADE)
-                    .setRadius(getRayon(p, args, 1))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Degrade"));
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-            case "eraser" -> brushBuilder.setBrushType(BrushEnum.ERASER)
-                    .setRadius(getRayon(p, args, 1))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Eraser"));
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-            /*case "Rot3DClipboard" -> brushBuilder.setBrushType(BrushEnum.ROT3DCLIPBOARD)
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Rot3dClipboard"));*/
+                brushBuilder.setBrushType(BrushEnum.OVERLAY)
+                        .setEnable(true)
+                        .setPattern(pattern)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Overlay"));
 
+            }
+            case "spike" -> {
 
-            /*case "find" -> {
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-                System.out.println("1 - FIND ");
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-                BukkitPlayer actor = BukkitAdapter.adapt(p);
-                LocalSession session = actor.getSession();
-                EditSession editSession = session.createEditSession(actor);
-                Region r = actor.getSession().getSelection();
+                brushBuilder.setBrushType(BrushEnum.SPIKE)
+                        .setEnable(true)
+                        .setPattern(pattern)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Spike"));
 
-                System.out.println("2 - FIND ");
+            }
+            case "cube" -> {
 
-                Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-                            r.spliterator().forEachRemaining(blockVector3 -> {
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-                                Material mat = Material.matchMaterial(editSession.getBlock(blockVector3).getBlockType().toString());
+                brushBuilder.setBrushType(BrushEnum.CUBE)
+                        .setEnable(true)
+                        .setPattern(pattern)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Cube"));
+            }
 
-                                if (mat.toString().equalsIgnoreCase(args[1])) {
-                                    System.out.println("FIND = " + blockVector3.toString());
-                                }
-                            });
-                        });
-            }*/
+            case "sphere" -> {
 
-            /*NONE(new ErosionPreset(0, 1, 0, 1)),
-    -MELT(new ErosionPreset(2, 1, 5, 1)),
-    -FILL(new ErosionPreset(5, 1, 2, 1)),
-    SMOOTH(new ErosionPreset(3, 1, 3, 1)),
-    -LIFT(new ErosionPreset(6, 0, 1, 1)),
-    FLOATCLEAN(new ErosionPreset(6, 1, 6, 1));
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-    0 > Erosion face
-    1 > Erosion erosionRecursion
-    2 > fill Faces
-    3 > fill Recursion
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-    */
-            case "lift" -> brushBuilder.setBrushType(BrushEnum.LIFT)
-                    .setErosionFaces(6)
-                    .setErosionRecursion(0)
-                    .setFillFaces(1)
-                    .setFillRecursion(1)
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Lift"));
+                brushBuilder.setBrushType(BrushEnum.SPHERE)
+                        .setEnable(true)
+                        .setPattern(pattern)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Sphere"));
+            }
 
-            case "melt" -> brushBuilder.setBrushType(BrushEnum.MELT)
-                    .setErosionFaces(2)
-                    .setErosionRecursion(1)
-                    .setFillFaces(5)
-                    .setFillRecursion(1)
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Melt"));
+            case "rot2Dcube" -> {
 
-            case "fill" -> brushBuilder.setBrushType(BrushEnum.FILL)
-                    .setErosionFaces(5)
-                    .setErosionRecursion(1)
-                    .setFillFaces(2)
-                    .setFillRecursion(1)
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Fill"));
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-            case "smooth" -> brushBuilder.setBrushType(BrushEnum.SMOOTH)
-                    .setErosionFaces(3)
-                    .setErosionRecursion(1)
-                    .setFillFaces(3)
-                    .setFillRecursion(1)
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Smooth"));
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
 
-            case "floatclean" -> brushBuilder.setBrushType(BrushEnum.FLOATCLEAN)
-                    .setErosionFaces(6)
-                    .setErosionRecursion(1)
-                    .setFillFaces(6)
-                    .setFillRecursion(1)
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("FloatClean"));
+                brushBuilder.setBrushType(BrushEnum.OVERLAY)
+                        .setEnable(true)
+                        .setPattern(pattern)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Rot2Dcube"));
+            }
 
-            case "custom" -> brushBuilder.setBrushType(BrushEnum.CUSTOM)
-                    .setErosionFaces(getInteger(p, args[1]))
-                    .setErosionRecursion(getInteger(p, args[2]))
-                    .setFillFaces(getInteger(p, args[3]))
-                    .setFillRecursion(getInteger(p, args[4]))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Custom"));
+            // TYPE : Brush pattern
+            case "line" -> {
 
-            case "eb", "erodeBlend" -> {
+                if (this.getValidArgument().isPattern(p, args[1])) {
+                    pattern = this.getValidArgument().getPattern(p, args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
+                    break;
+                }
 
-                if (args.length == 1) {
-                    brushBuilder.sendMessage(message.getUse(" /fw eb <brush> [optional : radius]"));
+                brushBuilder.setBrushType(BrushEnum.LINE)
+                        .setEnable(true)
+                        .setPattern(pattern)
+                        .sendMessage(msg.getBrushEnable("Line"));
+            }
+
+            // TYPE : Brush integer
+            case "bb" -> {
+
+                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    break;
+                }
+
+                brushBuilder.setBrushType(BrushEnum.BLENDBALL)
+                        .setEnable(true)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("blendBall"));
+
+            }
+
+            case "drain" -> {
+
+                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    break;
+                }
+
+                brushBuilder.setBrushType(BrushEnum.DRAIN)
+                        .setEnable(true)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Drain"));
+
+            }
+
+            case "updatechunk" -> {
+
+                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    break;
+                }
+
+                brushBuilder.setBrushType(BrushEnum.UPDATECHUNK)
+                        .setEnable(true)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("UpdateChunk"));
+
+            }
+
+            case "eraser" -> {
+
+                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    break;
+                }
+
+                brushBuilder.setBrushType(BrushEnum.ERASER)
+                        .setEnable(true)
+                        .setRadius(radius)
+                        .sendMessage(msg.getBrushEnable("Eraser"));
+
+            }
+
+            case "e" -> {
+
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    break;
+                }
+
+                switch (args[1]) {
+
+                    case "lift" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                            .setRadius(radius)
+                            .setErosionFaces(6)
+                            .setErosionRecursion(0)
+                            .setFillFaces(1)
+                            .setFillRecursion(1)
+                            .setEnable(true)
+                            .sendMessage(msg.getBrushEnable("Erode lift"));
+
+                    case "melt" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                            .setRadius(radius)
+                            .setErosionFaces(2)
+                            .setErosionRecursion(1)
+                            .setFillFaces(5)
+                            .setFillRecursion(1)
+                            .setEnable(true)
+                            .sendMessage(msg.getBrushEnable("Erode melt"));
+
+                    case "fill" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                            .setRadius(radius)
+                            .setErosionFaces(5)
+                            .setErosionRecursion(1)
+                            .setFillFaces(2)
+                            .setFillRecursion(1)
+                            .setEnable(true)
+                            .sendMessage(msg.getBrushEnable("Erode fill"));
+
+                    case "smooth" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                            .setRadius(radius)
+                            .setErosionFaces(3)
+                            .setErosionRecursion(1)
+                            .setFillFaces(3)
+                            .setFillRecursion(1)
+                            .setEnable(true)
+                            .sendMessage(msg.getBrushEnable("Erode smooth"));
+
+                    case "floatclean" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                            .setRadius(radius)
+                            .setErosionFaces(6)
+                            .setErosionRecursion(1)
+                            .setFillFaces(6)
+                            .setFillRecursion(1)
+                            .setEnable(true)
+                            .sendMessage(msg.getBrushEnable("Erode floatClean"));
+                }
+            }
+
+            case "eb" -> {
+
+                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
                     break;
                 }
 
                 switch (args[1]) {
 
                     case "lift" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
-                            .setRadius(getRayon(p, args, 2))
+                            .setRadius(radius)
                             .setErosionFaces(6)
                             .setErosionRecursion(0)
                             .setFillFaces(1)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(message.getBrushEnable("Lift"));
+                            .sendMessage(msg.getBrushEnable("ErodeBlend lift"));
 
                     case "melt" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
-                            .setRadius(getRayon(p, args, 2))
+                            .setRadius(radius)
                             .setErosionFaces(2)
                             .setErosionRecursion(1)
                             .setFillFaces(5)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(message.getBrushEnable("Melt"));
+                            .sendMessage(msg.getBrushEnable("ErodeBlend melt"));
 
                     case "fill" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
-                            .setRadius(getRayon(p, args, 2))
+                            .setRadius(radius)
                             .setErosionFaces(5)
                             .setErosionRecursion(1)
                             .setFillFaces(2)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(message.getBrushEnable("Fill"));
+                            .sendMessage(msg.getBrushEnable("ErodeBlend fill"));
 
                     case "smooth" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
-                            .setRadius(getRayon(p, args, 2))
+                            .setRadius(radius)
                             .setErosionFaces(3)
                             .setErosionRecursion(1)
                             .setFillFaces(3)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(message.getBrushEnable("Smooth"));
+                            .sendMessage(msg.getBrushEnable("ErodeBlend smooth"));
 
                     case "floatclean" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
-                            .setRadius(getRayon(p, args, 2))
+                            .setRadius(radius)
                             .setErosionFaces(6)
                             .setErosionRecursion(1)
                             .setFillFaces(6)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(message.getBrushEnable("FloatClean"));
+                            .sendMessage(msg.getBrushEnable("ErodeBlend floatClean"));
+
                 }
             }
 
-            case "blendball", "bb" -> brushBuilder.setBrushType(BrushEnum.BLENDBALL)
-                    .setRadius(getRayon(p, args, 1))
-                    .setEnable(true)
-                    .sendMessage(message.getBrushEnable("Blendball"));
+            case "custom" -> {
 
+                int parameter1;
+                int parameter2;
+                int parameter3;
+                int parameter4;
 
-            case "register" -> registerCommand(p, args);
+                if (this.getValidArgument().isInteger(args[1], 0, 6)) {
+                    parameter1 = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, 6);
+                    break;
+                }
 
-            case "material" -> brushBuilder
-                    .setPattern(getPattern(brushBuilder, args, 1))
-                    .sendMessage(message.getMaterialSet());
+                if (this.getValidArgument().isInteger(args[2], 0, 6)) {
+                    parameter2 = this.getValidArgument().getInteger(args[2]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, 6);
+                    break;
+                }
 
-            case "radius" -> brushBuilder
-                    .setRadius(getRayon(p, args, 1))
-                    .sendMessage(message.getRadiusSet());
+                if (this.getValidArgument().isInteger(args[3], 0, 6)) {
+                    parameter3 = this.getValidArgument().getInteger(args[3]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[3], 0, 6);
+                    break;
+                }
 
-            default -> {
+                if (this.getValidArgument().isInteger(args[4], 0, 6)) {
+                    parameter4 = this.getValidArgument().getInteger(args[4]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[4], 0, 6);
+                    break;
+                }
 
-                try {
-                    int i = Integer.parseInt(args[0]);
-                    brushBuilder.setRadius(i).sendMessage(message.getRadiusSet());
-                } catch (NumberFormatException ignored) {
+                if (this.getValidArgument().isInteger(args[4], 0, conf.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[4]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[4], 0, 6);
+                    break;
+                }
 
-                    brushBuilder.sendMessage(message.getUse(" /flower <brush> [optional : material/biome] [optional : radius]"));
+                brushBuilder.setBrushType(BrushEnum.ERODE)
+                        .setErosionFaces(parameter1)
+                        .setErosionRecursion(parameter2)
+                        .setFillFaces(parameter3)
+                        .setFillRecursion(parameter4)
+                        .setRadius(radius)
+                        .setEnable(true)
+                        .sendMessage(msg.getBrushEnable("Custom"));
+
+            }
+
+            case "none" -> brushBuilder.setBrushType(BrushEnum.NONE)
+                    .setEnable(false)
+                    .sendMessage(msg.getBrushDisable());
+
+            case "register" -> {
+
+                if (args.length <= 1) {
+                    BrushBuilder.registerPlayer(p, false);
+                }
+
+                if (args.length == 2) {
+
+                    Bukkit.getOnlinePlayers().stream()
+                            .filter(player -> player.getName().equals(args[1]))
+                            .forEach(player ->
+                                    p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
                 }
             }
-        }
-        return false;
-    }
 
-    private static int getRayon(Player p, String @NotNull [] s, int index) {
-
-        try {
-            return Integer.parseInt(s[index]);
-
-        } catch (NumberFormatException | ArrayIndexOutOfBoundsException err) {
-
-            return BrushBuilder.getBrushBuilderPlayer(p, false).getRadius();
+            case "clipboard" -> clipboardCommand(p, args, this.getValidArgument());
         }
     }
 
-    private static Biome getBiome(BrushBuilder brushBuilder, String @NotNull [] s, int index) {
 
-        try {
-
-            if (Stream.of(Biome.values())
-                    .map(Biome::toString).toList().toString().contains(s[index])) {
-                return Biome.valueOf(s[index]);
-
-            } else {
-
-                brushBuilder.sendMessage(message.getInvalidBiomeSet(brushBuilder.getBiome().name()));
-                return brushBuilder.getBiome();
-            }
-        } catch (ArrayIndexOutOfBoundsException err) {
-            return brushBuilder.getBiome();
-        }
+    @Override
+    protected OptionalConditionExecution getArgumentLengthList(CommandSender sender) {
+        return new OptionalConditionExecution(sender).AddBrushBuilderProfile();
     }
 
-    private static Material getMaterial(BrushBuilder brushBuilder, String @NotNull [] s, int index) {
+    @Override
+    protected ArgumentLengthList getArgumentLengthList() {
+        return new ArgumentLengthList(Arrays.asList(
 
-        try {
+                new ArgumentLength(2, "material", 0, "/flower material <pattern>", 2),
+                new ArgumentLength(2, "radius", 0, "/flower radius <integer>", 2),
 
-            if (Stream.of(Material.values())
-                    .map(Material::toString).toList().contains(s[index])) {
-                return Material.valueOf(s[index]);
+                //register
 
-            } else {
-                brushBuilder.sendMessage(message.getInvalidMaterialSet(brushBuilder.getMaterial().toString()));
-                return brushBuilder.getMaterial();
-            }
-        } catch (ArrayIndexOutOfBoundsException err) {
-            return brushBuilder.getMaterial();
-        }
+                new ArgumentLength(3, "biome", 0, "/flower biome <biome> <radius>", 2),
+
+                new ArgumentLength(3, "line", 0, "/flower line <pettern>", 2),
+
+                new ArgumentLength(3, "overlay", 0, "/flower overlay <pattern> <radius>", 2),
+                new ArgumentLength(3, "spike", 0, "/flower spike <pattern> <radius>", 2),
+                new ArgumentLength(3, "cube", 0, "/flower cube <pattern> <radius>", 2),
+                new ArgumentLength(3, "rot2Dcube", 0, "/flower rot2Dcube <pattern> <radius>", 2),
+                new ArgumentLength(3, "sphere", 0, "/flower sphere <pattern> <radius>", 2),
+
+                new ArgumentLength(2, "updatechunk", 0, "/flower updatechunk <radius>", 2),
+                new ArgumentLength(2, "drain", 0, "/flower drain  <radius>", 2),
+                new ArgumentLength(2, "eraser", 0, "/flower eraser <radius>", 2),
+                new ArgumentLength(2, "bb", 0, "/flower bb <radius>", 2),
+
+                new ArgumentLength(3, "e", 0, "/flower e <lift-melt-fill-smooth-floatclean> <radius>", 2),
+                new ArgumentLength(3, "eb", 0, "/flower eb <lift-melt-fill-smooth-floatclean> <radius>", 2),
+
+                new ArgumentLength(6, "custom", 0, "/flower bb <erosion face> <erosion recursion> <fill faces> <fill recursion> <radius>", 2),
+
+
+                new ArgumentLength(3, "remove", 1, "/flower clipboard remove <clipboard name>", 2),
+                new ArgumentLength(2, "removeAll", 1, "/flower clipboard removeAll", 1),
+                new ArgumentLength(2, "autorotation", 1, "/flower clipboard autorotation", 1),
+                new ArgumentLength(2, "add", 1, "/flower clipboard add [clipboard name]", 1),
+
+                new ArgumentLength(2, "clipboard", 0, "/flower clipboard <add-remove-removeAll-autorotation>", 2)
+
+        ));
     }
 
-    private static Pattern getPattern(BrushBuilder brushBuilder, String[] s, int index) {
+    @Override
+    public SubCommandSender getSubCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        try {
-            Pattern pattern = new UtilsFAWE(Bukkit.getPlayer(brushBuilder.getUUID())).getPattern(s[index]);
-            return pattern;
+        final List<String> erodeArgs = Arrays
+                .asList("lift", "melt", "fill", "smooth", "floatclean");
 
-        } catch (NullPointerException | SuggestInputParseException | ArrayIndexOutOfBoundsException err) {
-            brushBuilder.sendMessage(message.getInvalidMaterialSet(brushBuilder.getPattern().toString()));
-            return brushBuilder.getPattern();
+        final List<String> clipboardBrush = Arrays
+                .asList("add", "removeAll", "remove", "autoRotation");
+
+        SubCommandSender subCommandSender = new SubCommandSender();
+
+        if (sender instanceof Player p) {
+
+            // Brush
+            Arrays.stream(BrushEnum.values()).toList().forEach(brushEnum -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, brushEnum.getBrush()).toSubCommand(brushEnum.getPermission())));
+
+            // Material
+            subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "material").toSubCommand("None"));
+            // Radius
+            subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "radius").toSubCommand("None"));
+            // Register
+            subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "register").toSubCommand("exp.register"));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPlayerList(args, 1).toSubCommand("None", new ConditionArgumentBefore("register", 0)));
+
+
+            // Biome
+            subCommandSender.addSubCommand(new SubCommandSelector().getBiomeList(args, 1).toSubCommand("exp.brush.biome", new ConditionArgumentBefore("biome", 0)));
+
+            // Brush with pattern <pattern>
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("none", new ConditionArgumentBefore("material", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.overlay", new ConditionArgumentBefore("overlay", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.spike", new ConditionArgumentBefore("spike", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.cube", new ConditionArgumentBefore("cube", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.line", new ConditionArgumentBefore("line", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("rot2Dcube", 0)));
+
+            // Brush with pattern/biome and integer <integer>
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.overlay", new ConditionArgumentBefore("overlay", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.spike", new ConditionArgumentBefore("spike", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.cube", new ConditionArgumentBefore("cube", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("rot2Dcube", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.biome", new ConditionArgumentBefore("biome", 0)));
+
+
+            // Brush with <integer>
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.blendball", new ConditionArgumentBefore("bb", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.drain", new ConditionArgumentBefore("drain", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.updatechunk", new ConditionArgumentBefore("update_chunk", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.eraser", new ConditionArgumentBefore("eraser", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("none", new ConditionArgumentBefore("radius", 0)));
+
+
+            // Erode / ErodeBlend
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, erodeArgs).toSubCommand("exp.brush.erode", new ConditionArgumentBefore("e", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, erodeArgs).toSubCommand("exp.brush.erodeblend", new ConditionArgumentBefore("eb", 0)));
+
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("lift", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("melt", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("smooth", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("fill", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("floatclean", 1)));
+
+
+            // Custom erode brush
+            // Custom
+            subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "custom").toSubCommand("exp.brush.custom"));
+
+            // Erosion face <integer>
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("custom", 0)));
+            // Erosion recursion
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("custom", 0)));
+            // Fill faces
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 3).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("custom", 0)));
+            // Fill recursion
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 4).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("custom", 0)));
+            // Custom erode radius <integer>
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 5).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("custom", 0)));
+
+            // Clipboard
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, clipboardBrush).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("clipboard", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardsParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("remove", 1)));
+
         }
+        return subCommandSender;
     }
 
-    private static int getInteger(Player p, String s) {
-
-        try {
-            return Integer.parseInt(s);
-        } catch (NumberFormatException | NullPointerException err) {
-            p.sendMessage(message.getInvalidNumberIntegerUpper0());
-            return 0;
-        }
-    }
-
-    private static void clipboardCommand(Player p, String @NotNull [] args) {
+    private static void clipboardCommand(Player p, String @NotNull [] args, ValidArgument validArgument) {
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-
-        if (brushBuilder == null) {
-            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
-            return;
-        }
-
-        if (args.length == 1) {
-            brushBuilder.sendMessage(message.getUse("/fw clipboard <autoRotation/add/remove/removeAll>"));
-            return;
-        }
 
         if (args[1].equalsIgnoreCase("autoRotation")) {
 
             if (brushBuilder.getClipboardsParameter().isRandomRotation()) {
-                brushBuilder.sendMessage(message.getDisable("Auto-rotation"))
+                brushBuilder.sendMessage(msg.getDisable("Auto-rotation"))
                         .getClipboardsParameter().setRandomRotation(false);
             } else {
-                brushBuilder.sendMessage(message.getEnable("Auto-rotation"))
+                brushBuilder.sendMessage(msg.getEnable("Auto-rotation"))
                         .getClipboardsParameter().setRandomRotation(true);
             }
         }
@@ -582,22 +651,22 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
             brushBuilder.setBrushType(BrushEnum.NONE)
                     .setEnable(false)
-                    .sendMessage(message.getAllClipboardDelete())
+                    .sendMessage(msg.getAllClipboardDelete())
                     .getClipboardsParameter().clearAll();
             return;
         }
         if (args[1].equalsIgnoreCase("remove")) {
 
             if (args.length == 2) {
-                brushBuilder.sendMessage(message.getUse("/fw clipboard remove <clipboard-name>"));
+                brushBuilder.sendMessage(msg.getUse("/fw clipboard remove <clipboard-name>"));
                 return;
             }
 
             if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
-                brushBuilder.sendMessage(message.getClipboardRemove(args[2]))
+                brushBuilder.sendMessage(msg.getClipboardRemove(args[2]))
                         .getClipboardsParameter().removeClipboards(args[2]);
             } else {
-                brushBuilder.sendMessage(message.getClipboardDoesNotExist(args[2]));
+                brushBuilder.sendMessage(msg.getClipboardDoesNotExist(args[2]));
             }
             return;
 
@@ -605,73 +674,55 @@ public class BrushCommand implements CommandExecutor, TabCompleter {
 
         if (args[1].equalsIgnoreCase("add")) {
 
-            if (new UtilsFAWE(p).isValidSelection(RegionSelectorType.CUBOID)) {
+            if (validArgument.hasSelection(p)) {
+            } else {
+                validArgument.sendMessageInvalidSelection(p);
+                return;
+            }
 
-                String clipboardName;
+            String clipboardName;
 
-                if (args.length >= 3) {
+            if (args.length >= 3) {
 
-                    if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
-                        brushBuilder.sendMessage(message.getClipboardAlreadyExist(args[2]));
-                        return;
-                    } else {
-                        clipboardName = args[2];
-                    }
-
+                if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
+                    brushBuilder.sendMessage(msg.getClipboardAlreadyExist(args[2]));
+                    return;
                 } else {
-                    clipboardName = "clipboards_" + brushBuilder.getClipboardsParameter().getClipboardsBlock().size();
+                    clipboardName = args[2];
                 }
 
-
-                Clipboard clip = new UtilsFAWE(p).CopySelection(false);
-                List<BlockVec4> list = new ArrayList<>();
-
-                clip.iterator().forEachRemaining(blockVector3 -> {
-
-                    BlockVector3 blockVector31 = clip.getOrigin().add(blockVector3);
-
-                    int blockX = blockVector31.getBlockX() - clip.getOrigin().getX();
-                    int blockY = blockVector31.getBlockY() - clip.getOrigin().getY();
-                    int blockZ = blockVector31.getBlockZ() - clip.getOrigin().getZ();
-
-                    int deltaX = blockX - clip.getOrigin().getX();
-                    int deltaY = blockY - clip.getOrigin().getY();
-                    int deltaZ = blockZ - clip.getOrigin().getZ();
-
-                    list.add(new BlockVec4(
-                            deltaX,
-                            deltaY,
-                            deltaZ,
-                            clip.getFullBlock(blockX, blockY, blockZ)));
-                });
-
-                brushBuilder.setBrushType(BrushEnum.CLIPBOARD)
-                        .setEnable(true)
-                        .sendMessage(message.getClipboardAddAndEnable(clipboardName))
-                        .getClipboardsParameter().addClipboards(list, clipboardName);
             } else {
-                brushBuilder.sendMessage(message.getErrorSelection("cuboid"));
+                clipboardName = "clipboards_" + brushBuilder.getClipboardsParameter().getClipboardsBlock().size();
             }
-        }
-    }
 
-    private static void registerCommand(Player p, String @NotNull [] args) {
 
-        if (!p.hasPermission("exp.register")) {
-            p.sendMessage(message.getNoPermissionNode("exp.register"));
-            return;
-        }
+            Clipboard clip = new UtilsFAWE(p).CopySelection(false);
+            List<BlockVec4> list = new ArrayList<>();
 
-        if (args.length <= 1) {
-            BrushBuilder.registerPlayer(p, false);
-        }
+            clip.iterator().forEachRemaining(blockVector3 -> {
 
-        if (args.length == 2) {
+                BlockVector3 blockVector31 = clip.getOrigin().add(blockVector3);
 
-            Bukkit.getOnlinePlayers().stream()
-                    .filter(player -> player.getName().equals(args[1]))
-                    .forEach(player ->
-                            p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
+                int blockX = blockVector31.getBlockX() - clip.getOrigin().getX();
+                int blockY = blockVector31.getBlockY() - clip.getOrigin().getY();
+                int blockZ = blockVector31.getBlockZ() - clip.getOrigin().getZ();
+
+                int deltaX = blockX - clip.getOrigin().getX();
+                int deltaY = blockY - clip.getOrigin().getY();
+                int deltaZ = blockZ - clip.getOrigin().getZ();
+
+                list.add(new BlockVec4(
+                        deltaX,
+                        deltaY,
+                        deltaZ,
+                        clip.getFullBlock(blockX, blockY, blockZ)));
+            });
+
+            brushBuilder.setBrushType(BrushEnum.CLIPBOARD)
+                    .setEnable(true)
+                    .sendMessage(msg.getClipboardAddAndEnable(clipboardName))
+                    .getClipboardsParameter().addClipboards(list, clipboardName);
+
         }
     }
 }

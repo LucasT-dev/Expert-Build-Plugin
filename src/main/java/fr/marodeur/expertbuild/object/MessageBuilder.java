@@ -78,6 +78,7 @@ public class MessageBuilder {
 
     private String errorRegion;
     private String errorSelection;
+    private String errorIncompleteSelection;
     private String errorBrushbuilder;
     private String errorJschException;
     private String errorSftpException;
@@ -90,6 +91,9 @@ public class MessageBuilder {
     private String invalidMaterialSet;
     private String invalidBiome;
     private String invalidBiomeSet;
+    private String invalidInstance;
+    private String invalidArgument;
+    private String invalidArgumentInteger;
 
 
     private String giveTool;
@@ -238,6 +242,7 @@ public class MessageBuilder {
 
             this.errorRegion = this.yml.getString("expbuild.message.error.error_region");
             this.errorSelection = this.yml.getString("expbuild.message.error.error_selection");
+            this.errorIncompleteSelection = this.yml.getString("expbuild.message.error.error_incomplete_selection");
             this.errorBrushbuilder = this.yml.getString("expbuild.message.error.error_brushbuilder");
             this.errorJschException = this.yml.getString("expbuild.message.error.error_jsch_exception");
             this.errorSftpException = this.yml.getString("expbuild.message.error.error_sftp_exception");
@@ -250,6 +255,10 @@ public class MessageBuilder {
             this.invalidMaterialSet = this.yml.getString("expbuild.message.error.invalid_material_set");
             this.invalidBiome = this.yml.getString("expbuild.message.error.invalid_biome");
             this.invalidBiomeSet = this.yml.getString("expbuild.message.error.invalid_biome_set");
+            this.invalidInstance = this.yml.getString("expbuild.message.error.invalid_instance");
+            this.invalidArgument = this.yml.getString("expbuild.message.error.invalid_argument");
+            this.invalidArgumentInteger = this.yml.getString("expbuild.message.error.invalid_argument_integer");
+
 
 
             this.giveTool = this.yml.getString("expbuild.message.tools.give_tool");
@@ -497,12 +506,18 @@ public class MessageBuilder {
         return this.copyBlock.replace("'num'", num);
     }
 
+
+    // Error
     public String getErrorRegion(String num, String error) {
         return errorRegion.replace("'num'", num).replace("'error'", error);
     }
 
     public String getErrorSelection(String selection) {
         return errorSelection.replace("'selection'", selection);
+    }
+
+    public String getErrorIncompleteSelection() {
+        return errorIncompleteSelection;
     }
 
     public String getErrorBrushbuilder(String player) {
@@ -553,6 +568,20 @@ public class MessageBuilder {
         return invalidBiomeSet.replace("'biome'", biome);
     }
 
+    public String getInvalidInstance(String sender) {
+        return this.invalidInstance.replace("'sender'", sender);
+    }
+
+    public String getInvalidArgument(String arg, String type) {
+        return this.invalidArgument.replace("'arg'", arg).replace("'type'", type);
+    }
+
+    public String getInvalidArgumentInteger(String value, String min, String max) {
+        return this.invalidArgumentInteger.replace("'value'", value).replace("'min'", min).replace("'max'", max);
+    }
+
+
+    // TOOLS
     public String getGiveTool(String tool) {
         return giveTool.replace("'tool'", tool);
     }

@@ -60,7 +60,7 @@ public class ErodeBrush implements BrushOperation {
 
     @Override
     public BrushEnum getTypeOfBrush() {
-        return BrushEnum.LIFT;
+        return BrushEnum.ERODE;
     }
 
     @Override
