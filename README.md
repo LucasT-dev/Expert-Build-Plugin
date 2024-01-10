@@ -21,7 +21,7 @@ Minecraft build plugin, Expert-Build Documentation
 ------------------
 # News
 
--> * [New command /painting, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+-> * [New command /painting, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Commands)
 
 -> * [Update the clipboard brush, with new functionality, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
