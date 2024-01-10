@@ -1,8 +1,8 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.12
-* Author : marodeur
+* Latest plugin version : 1.18.1.13
+* Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
 * [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
@@ -20,6 +20,8 @@ Minecraft build plugin, Expert-Build Documentation
 
 ------------------
 # News
+
+-> * [New command /painting, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
 -> * [Update the clipboard brush, with new functionality, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
@@ -77,6 +79,22 @@ Java version : 16 minimum
 
 - **All commands and brush using Fawe editSession, All commands and brush can be //undo, //redo !!!**
 
+------------------
+`/painting` :
+
+This command allows you to create a painting based on the light of the blocks
+
+*permission : exp.command.painting*
+
+Command : /painting <block> <block> [length] [ block ]
+
+Example : ```/painting white_concrete stone```
+
+
+<img src="https://imgur.com/gywYZSS.png" width="auto" />
+
+The first 2 server arguments define the start and finish block of the gradient. The 3rd argument (optional) indicates the number of blocks to place in the gradient (between 0 and 15; by default 15).
+The 4th argument (optional) will force the gradient to pass through the block defined in the middle
 
 `/1` or `right click using wand` :
 
