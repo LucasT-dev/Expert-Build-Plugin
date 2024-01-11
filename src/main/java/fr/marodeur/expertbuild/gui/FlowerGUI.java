@@ -37,7 +37,9 @@ import java.util.*;
 
 public class FlowerGUI {
 
-    public static final String RightArrow = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTlkZGRhM2RkMTkxZDYwNTk5MDA3MDBlZDBjYWY1NGZjNzdjM2Q4MTVhYTI5NDZiYzA5YjY5YWIyZjJmZjk5NiJ9fX0=";
+    //public static final String RightArrow = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTlkZGRhM2RkMTkxZDYwNTk5MDA3MDBlZDBjYWY1NGZjNzdjM2Q4MTVhYTI5NDZiYzA5YjY5YWIyZjJmZjk5NiJ9fX0=";
+
+    private final String RightArrow = "16227036b8afed6935d53143d16488d39cf4fb73a671f2b2955e80fc9dfe458";
     private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.getInstance().getConfig();
 
@@ -47,8 +49,12 @@ public class FlowerGUI {
                 .title(Main.prefix + msg.getFlowerGuiTitle())
                 .rows(6)
                 .period(1, TimeSetting.SECONDS)
-                .listener(new EventCreator<>(InventoryCloseEvent.class, event ->
-                        buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false))))
+                .listener(new EventCreator<>(InventoryCloseEvent.class, event -> {
+
+                    if (event.getView().getTitle().equalsIgnoreCase(Main.prefix + msg.getFlowerGuiTitle())) {
+                        buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false));
+                    }
+                }))
 
                 .listener(new EventCreator<>(InventoryClickEvent.class, event -> {
 
@@ -717,7 +723,7 @@ public class FlowerGUI {
 
             for (int i = 0; i < brushBuilder.getFlowerMaterial().size(); i++) {
 
-                if (!brushBuilder.getFlowerMaterial().get(i).toBlockState().toString().equalsIgnoreCase("minecraft:barrier")) {
+                if (!brushBuilder.getFlowerMaterial().get(i).toBaseBlock().getBlockType().equals(BukkitAdapter.asBlockType(Material.BARRIER))) {
 
                     stringBuilder.append(brushBuilder.getFlowerMaterialRate().get(i))
                             .append("%")

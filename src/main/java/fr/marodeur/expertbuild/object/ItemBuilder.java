@@ -2,6 +2,7 @@ package fr.marodeur.expertbuild.object;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,8 +13,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -158,7 +165,7 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder setLeatherColor(Color color){
+	public ItemBuilder setLeatherColor(Color color) {
 		LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) itemStack.getItemMeta();
 		leatherArmorMeta.setColor(color);
 		itemStack.setItemMeta(leatherArmorMeta);
@@ -181,14 +188,31 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemBuilder setSkullByName(String name){
+	public ItemBuilder setSkullByName(String name) {
 		SkullMeta skullMeta = (SkullMeta) this.itemStack.getItemMeta();
 		skullMeta.setOwner(name);
 		this.itemStack.setItemMeta(skullMeta);
 		return this;
 	}
 
-	public ItemBuilder setSkullTextures(String textures) {
+	private static @NotNull PlayerProfile getProfile(String url) {
+
+		PlayerProfile profile = Bukkit.createPlayerProfile(UUID.nameUUIDFromBytes(("https://textures.minecraft.net/texture/"+url).getBytes())); // Get a new player profile
+		PlayerTextures textures = profile.getTextures();
+		URL urlObject;
+
+		try {
+			urlObject = new URL("https://textures.minecraft.net/texture/"+url); // The URL to the skin, for example: https://textures.minecraft.net/texture/18813764b2abc94ec3c3bc67b9147c21be850cdf996679703157f4555997ea63a
+		} catch (MalformedURLException exception) {
+			throw new RuntimeException("Invalid URL", exception);
+		}
+		textures.setSkin(urlObject); // Set the skin of the player profile to the URL
+		profile.setTextures(textures); // Set the textures back to the profile
+		return profile;
+	}
+
+	// Old method, disable #19
+	public ItemBuilder setSkullTextures1(String textures) throws IllegalArgumentException, NullPointerException {
 
 		this.itemStack = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta headMeta = (SkullMeta) this.itemStack.getItemMeta();
@@ -207,8 +231,25 @@ public class ItemBuilder {
 		return this;
 	}
 
-	public ItemStack build()
-	{
+	// https://blog.jeff-media.com/creating-custom-heads-in-spigot-1-18-1/
+	// https://minecraft-heads.com/custom-heads/search
+
+	public ItemBuilder setSkullTextures(String textures) {
+
+		PlayerProfile pProfile = getProfile(textures);
+
+		this.itemStack = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta skullMeta = (SkullMeta) this.itemStack.getItemMeta();
+
+		((SkullMeta) this.itemStack.getItemMeta()).setOwnerProfile(pProfile);
+
+		skullMeta.setOwnerProfile(pProfile);
+		this.itemStack.setItemMeta(skullMeta);
+
+		return this;
+	}
+
+	public ItemStack build() {
 		return itemStack;
 	}
 }
