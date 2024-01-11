@@ -492,8 +492,6 @@ public class FlowerGUI {
         //Modify Property AXIS
         if (set.getKey().getName().equalsIgnoreCase("AXIS")) {
 
-            System.out.println("baseBlockProperty.getState(PropertyKey.AXIS) = " + baseBlockProperty.getState(PropertyKey.AXIS));
-
             if (baseBlockProperty.getState(PropertyKey.AXIS).toString().equalsIgnoreCase("x")) {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.AXIS, "y");
             } else if (baseBlockProperty.getState(PropertyKey.AXIS).toString().equalsIgnoreCase("y")) {
@@ -509,8 +507,6 @@ public class FlowerGUI {
         //Modify Property LEAVES
         if (set.getKey().getName().equalsIgnoreCase("LEAVES")) {
 
-            System.out.println("baseBlockProperty.getState(PropertyKey.LEAVES) = " + baseBlockProperty.getState(PropertyKey.LEAVES));
-
             if (baseBlockProperty.getState(PropertyKey.LEAVES).toString().equalsIgnoreCase("small")) {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.LEAVES, "large");
             } else if (baseBlockProperty.getState(PropertyKey.LEAVES).toString().equalsIgnoreCase("large")) {
@@ -525,8 +521,6 @@ public class FlowerGUI {
 
         //Modify Property POWERED
         if (set.getKey().getName().equalsIgnoreCase("POWERED")) {
-
-            System.out.println("baseBlockProperty.getState(PropertyKey.POWERED) = " + baseBlockProperty.getState(PropertyKey.POWERED));
 
             if (baseBlockProperty.getState(PropertyKey.POWERED).toString().equalsIgnoreCase("true")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.POWERED, false);
@@ -557,8 +551,6 @@ public class FlowerGUI {
         //Modify Property HANGING
         if (set.getKey().getName().equalsIgnoreCase("HANGING")) {
 
-            System.out.println("baseBlockProperty.getState(PropertyKey.HANGING) = " + baseBlockProperty.getState(PropertyKey.HANGING));
-
             if (baseBlockProperty.getState(PropertyKey.HANGING).toString().equalsIgnoreCase("true")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.HANGING, false);
             } else {
@@ -572,8 +564,6 @@ public class FlowerGUI {
         //Modify Property OCCUPIED
         if (set.getKey().getName().equalsIgnoreCase("OCCUPIED")) {
 
-            System.out.println("baseBlockProperty.getState(PropertyKey.OCCUPIED) = " + baseBlockProperty.getState(PropertyKey.OCCUPIED));
-
             if (baseBlockProperty.getState(PropertyKey.OCCUPIED).toString().equalsIgnoreCase("true")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.OCCUPIED, false);
             } else {
@@ -586,8 +576,6 @@ public class FlowerGUI {
 
         //Modify Property PART
         if (set.getKey().getName().equalsIgnoreCase("PART")) {
-
-            System.out.println("baseBlockProperty.getState(PropertyKey.PART) = " + baseBlockProperty.getState(PropertyKey.PART));
 
             if (baseBlockProperty.getState(PropertyKey.PART).toString().equalsIgnoreCase("foot")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.PART, "head");
@@ -617,8 +605,6 @@ public class FlowerGUI {
 
         //Modify Property SNOWY
         if (set.getKey().getName().equalsIgnoreCase("SNOWY")) {
-
-            System.out.println("baseBlockProperty.getState(PropertyKey.OCCUPIED) = " + baseBlockProperty.getState(PropertyKey.SNOWY));
 
             if (baseBlockProperty.getState(PropertyKey.SNOWY).toString().equalsIgnoreCase("true")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.SNOWY, false);
@@ -665,8 +651,6 @@ public class FlowerGUI {
         //Modify Property OPEN
         if (set.getKey().getName().equalsIgnoreCase("OPEN")) {
 
-            System.out.println("baseBlockProperty.getState(PropertyKey.OCCUPIED) = " + baseBlockProperty.getState(PropertyKey.OPEN));
-
             if (baseBlockProperty.getState(PropertyKey.OPEN).toString().equalsIgnoreCase("true")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.OPEN, false);
             } else {
@@ -680,8 +664,6 @@ public class FlowerGUI {
         //NOT OK
         //Modify Property PART
         if (set.getKey().getName().equalsIgnoreCase("ATTACHMENT")) {
-
-            System.out.println("baseBlockProperty.getState(PropertyKey.ATTACHMENT) = " + baseBlockProperty.getState(PropertyKey.ATTACHMENT));
 
             if (baseBlockProperty.getState(PropertyKey.ATTACHMENT).toString().equalsIgnoreCase("ceiling")) {
                 baseBlockProperty = baseBlock.with(PropertyKey.ATTACHMENT, "double_wall");

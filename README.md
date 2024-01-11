@@ -1,12 +1,11 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.13
+* Latest plugin version : 1.18.1.14
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
 * [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
-
 
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
@@ -95,6 +94,8 @@ Example : ```/painting white_concrete stone```
 
 The first 2 server arguments define the start and finish block of the gradient. The 3rd argument (optional) indicates the number of blocks to place in the gradient (between 0 and 15; by default 15).
 The 4th argument (optional) will force the gradient to pass through the block defined in the middle
+
+------------------
 
 `/1` or `right click using wand` :
 
