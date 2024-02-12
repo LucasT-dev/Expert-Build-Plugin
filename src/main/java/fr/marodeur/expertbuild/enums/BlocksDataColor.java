@@ -320,7 +320,7 @@ public enum BlocksDataColor {
     CHERRY_WOOD("cherry_wood", 55, 33, 44, 1.20),
     BIRCH_WOOD("birch_wood", 219, 217, 213, 1.07),
     ACACIA_WOOD("acacia_wood", 103, 97, 87, 1.07),
-    // Bamboo
+    ANCIENT_DEBRIS("ancient_debris",96, 64, 56, 1.16),
 
 
     STRIPPED_SPRUCE_WOOD("stripped_spruce_wood", 116, 90, 53, 1.07),
@@ -331,16 +331,9 @@ public enum BlocksDataColor {
     STRIPPED_CHERRY_WOOD("stripped_cherry_wood", 216, 146, 150, 1.20),
     STRIPPED_BIRCH_WOOD("stripped_birch_wood", 198, 177, 119, 1.07),
     STRIPPED_ACACIA_WOOD("stripped_acacia_wood", 176, 93, 60, 1.07);
-    // Bamboo
-
-    // Target
-    // Ancient debris
 
     // Honey block
     // Slime block
-
-    // Smooth_red_sandstone
-
 
 
     final String name;
@@ -378,6 +371,6 @@ public enum BlocksDataColor {
     }
 
     public static Stream<BlocksDataColor> getStreamArray() {
-        return Arrays.stream(BlocksDataColor.values()).filter(blocksDataColor -> blocksDataColor.blockVersion <= Double.parseDouble(Main.getBukkitVersion().substring(0, 4)));
+        return Arrays.stream(BlocksDataColor.values()).filter(blocksDataColor -> blocksDataColor.getBlockVersion() <= Double.parseDouble(Main.getBukkitVersion().substring(0, 4)));
     }
 }

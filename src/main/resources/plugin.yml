@@ -152,6 +152,8 @@ permissions:
     default: op
   exp.brush.blendball:
     default: op
+  exp.brush.clipboard3d:
+    default: op
   exp.brush.clipboard:
     default: op
   exp.brush.cube:

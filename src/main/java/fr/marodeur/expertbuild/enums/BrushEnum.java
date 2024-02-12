@@ -29,6 +29,7 @@ public enum BrushEnum {
     BIOME("biome", BiomeBrush.class, "exp.brush.biome"), //OK
     UPDATECHUNK("updatechunk", UpdateChunk.class, "exp.brush.updatechunk"), //OK
     TICK_REPEATER("tick_reaperter", null, "NOT_none"),
+    CLIPBOARD_3D("clipboard3D", Clipboard3D.class, "exp.brush.clipboard3d"),
     AUTOFLIP("auto_flip", null, "NOT_none");
 
 

@@ -401,76 +401,26 @@ public class BlockVec4 {
         return bv4;
     }
 
-    public boolean pointIsInsidePolygon(BlockVec4[] polygon, int n, BlockVec4 p) {
 
-        {
-            int INF = 10000;
-            if (n < 3)
-                return false;
 
-            BlockVec4 extreme = new BlockVec4(INF, 0, p.getZ());
+    public BlockVec4 getRandomLocationInSphere(int radius, @NotNull BlockVec4 center) {
+        Random random = new Random();
+        double theta = 2.0 * Math.PI * random.nextDouble(); // Angle azimutal
+        double phi = Math.acos(2.0 * random.nextDouble() - 1.0); // Angle polaire
+        double r = radius * Math.cbrt(random.nextDouble()); // Rayon, la cbrt() assure une distribution uniforme
 
-            int count = 0, i = 0;
-
-            do {
-                int next = (i + 1) % n;
-                if (doIntersect(polygon[i], polygon[next], p, extreme)) {
-                    if (orientation(polygon[i], p, polygon[next]) == 0)
-                        return onSegment(polygon[i], p, polygon[next]);
-
-                    count++;
-                }
-                i = next;
-            } while (i != 0);
-
-            return (count & 1) == 1 ? true : false;
-        }
+        // Convertir les coordonnées sphériques en coordonnées cartésiennes
+        int x = (int) (center.getX() + r * Math.sin(phi) * Math.cos(theta));
+        int y = (int) (center.getY() + r * Math.sin(phi) * Math.sin(theta));
+        int z = (int) (center.getZ() + r * Math.cos(phi));
+        return new BlockVec4(x, y, z);
     }
 
-    public boolean onSegment(BlockVec4 p, BlockVec4 q, BlockVec4 r)
-    {
-        if (q.getX() <= Math.max(p.getX(), r.getX()) && q.getX() >= Math.min(p.getX(), r.getX())
-                && q.getZ() <= Math.max(p.getZ(), r.getZ()) && q.getZ() >= Math.min(p.getZ(), r.getZ()))
-            return true;
-        return false;
+    public BlockVec4 getRandomLocationInSphere(int radius) {
+        return this.getRandomLocationInSphere(radius, new BlockVec4(x, y, z));
     }
 
-    public int orientation(BlockVec4 p, BlockVec4 q, BlockVec4 r)
-    {
-        int val = (q.getZ() - p.getZ()) * (r.getX() - q.getX()) - (q.getX() - p.getX()) * (r.getZ() - q.getZ());
-
-        if (val == 0)
-            return 0;
-        return (val > 0) ? 1 : 2;
-    }
-
-    public boolean doIntersect(BlockVec4 p1, BlockVec4 q1, BlockVec4 p2, BlockVec4 q2)
-    {
-
-        int o1 = new BlockVec4().orientation(p1, q1, p2);
-        int o2 = new BlockVec4().orientation(p1, q1, q2);
-        int o3 = new BlockVec4().orientation(p2, q2, p1);
-        int o4 = new BlockVec4().orientation(p2, q2, q1);
-
-        if (o1 != o2 && o3 != o4)
-            return true;
-
-        if (o1 == 0 && onSegment(p1, p2, q1))
-            return true;
-
-        if (o2 == 0 && onSegment(p1, q2, q1))
-            return true;
-
-        if (o3 == 0 && onSegment(p2, p1, q2))
-            return true;
-
-        if (o4 == 0 && onSegment(p2, q1, q2))
-            return true;
-
-        return false;
-    }
-
-    public BlockVec4 getRandomLocation(@NotNull BlockVec4 p1, @NotNull BlockVec4 p2) {
+    public BlockVec4 getRandomLocationInCube(@NotNull BlockVec4 p1, @NotNull BlockVec4 p2) {
 
         int xMin = Math.min(p1.getX(), p2.getX());
         int xMax = Math.max(p1.getX(), p2.getX());
@@ -486,24 +436,22 @@ public class BlockVec4 {
         return new BlockVec4(x, y, z);
     }
 
-    public BlockVec4 getRandomLocation(@NotNull BlockVec4 p1) {
-
-        int xMin = Math.min(p1.getX(), this.x);
-        int xMax = Math.max(p1.getX(), this.x);
-        int yMin = Math.min(p1.getY(), this.y);
-        int yMax = Math.max(p1.getY(), this.y);
-        int zMin = Math.min(p1.getZ(), this.z);
-        int zMax = Math.max(p1.getZ(), this.z);
-
-        final Random rand = new Random();
-        final int x = rand.nextInt(Math.abs(xMax - xMin) + 1) + xMin;
-        final int y = rand.nextInt(Math.abs(yMax - yMin) + 1) + yMin;
-        final int z = rand.nextInt(Math.abs(zMax - zMin) + 1) + zMin;
-        return new BlockVec4(x, y, z);
+    public BlockVec4 getRandomLocationInCube(@NotNull BlockVec4 p1) {
+        return this.getRandomLocationInCube(p1, new BlockVec4(this.x, this.y, this.z));
     }
 
     public double distance(@NotNull BlockVec4 bv4) {
         return  Math.sqrt(NumberConversions.square(x - bv4.getX()) + NumberConversions.square(y - bv4.getY()) + NumberConversions.square(z - bv4.getZ()));
+    }
+
+    public BlockVec4 rotateAroundX(int Ycenter, int Zcenter, int Ypoint, int Zpoint, double degreeAngle, BaseBlock baseBlock, int x) {
+
+        double angle = Math.toRadians(degreeAngle);
+
+        double newY = Ycenter + (Ypoint - Ycenter) * Math.cos(angle) - (Zpoint - Zcenter) * Math.sin(angle);
+        double newZ = Zcenter + (Ypoint - Ycenter) * Math.sin(angle) + (Zpoint - Zcenter) * Math.cos(angle);
+
+        return new BlockVec4(x, (int) newY, (int) newZ, baseBlock);
     }
 
     public BlockVec4 rotateAroundY(int Xcenter, int Zcenter, int Xpoint, int Zpoint, double degreeAngle, BaseBlock baseBlock, int y) {
@@ -516,6 +464,16 @@ public class BlockVec4 {
         return new BlockVec4((int) newX, y, (int) newZ, baseBlock);
     }
 
+    public BlockVec4 rotateAroundZ(int Xcenter, int Ycenter, int Xpoint, int Ypoint, double degreeAngle, BaseBlock baseBlock, int z) {
+
+        double angle = Math.toRadians(degreeAngle);
+
+        double newX = Xcenter + (Xpoint - Xcenter) * Math.cos(angle) - (Ypoint - Ycenter) * Math.sin(angle);
+        double newY = Ycenter + (Xpoint - Xcenter) * Math.sin(angle) + (Ypoint - Ycenter) * Math.cos(angle);
+
+        return new BlockVec4((int) newX, (int) newY, z, baseBlock);
+    }
+
     @Override
     public String toString() {
         return "BlockVec4{" +
@@ -524,7 +482,7 @@ public class BlockVec4 {
                 ", z=" + z +
                 ", loc=" + loc +
                 ", mat=" + mat +
-                ", pattern=" + pattern +
+                //", pattern=" + pattern +
                 '}';
     }
 

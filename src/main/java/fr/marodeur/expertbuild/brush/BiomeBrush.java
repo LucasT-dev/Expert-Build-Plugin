@@ -1,6 +1,7 @@
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.enums.BrushEnum;
 import fr.marodeur.expertbuild.object.BrushBuilder;
@@ -11,6 +12,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +51,7 @@ public class BiomeBrush implements BrushOperation {
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
+        GlueList<Chunk> chunks = new GlueList<>();
 
         Location loc1 = l.clone()
                 .add(-radius, -radius, -radius)
@@ -71,15 +74,14 @@ public class BiomeBrush implements BrushOperation {
 
                                 if (l.distance(loc) <= radius) {
                                     loc.getBlock().setBiome(brushBuilder.getBiome());
+                                    if (!chunks.contains(loc.getChunk())) chunks.add(loc.getChunk());
 
-                                    //Execution trop lente
-                                    //editsession.setBiome(x,y, z, BukkitAdapter.adapt(brushBuilder.getBiome()));
                                 }
                             }
                         }
                     }
                 } finally {
-                    new UtilsFAWE(p).refreshChunk(l.getChunk());
+                    chunks.forEach(chunk -> new UtilsFAWE(p).refreshChunk(chunk));
                 }
             }
         });

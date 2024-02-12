@@ -333,11 +333,18 @@ public class Configuration extends FileConfiguration {
         if (this.version.equals("1.18.1.14")) {
             //Update config file from 1.18.1.14 to 1.18.1.15
 
-            //for next update
+            //No modification of the configuration file
+
+            yml.set("build.version", "1.18.1.15");
+            this.version = "1.18.1.15";
+
+            yml.save(file);
         }
 
         if (this.version.equals("1.18.1.15")) {
             //Update config file from 1.18.1.15 to 1.18.1.16
+
+            //for next update
         }
 
         if (this.version.equals("1.18.1.16")) {

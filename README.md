@@ -10,7 +10,7 @@ Minecraft build plugin, Expert-Build Documentation
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.10-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.15-purple)
 
 ------------------
 <p align="center">
@@ -19,6 +19,8 @@ Minecraft build plugin, Expert-Build Documentation
 
 ------------------
 # News
+
+-> * [New Brush Clipboard3D, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
 -> * [New command /painting, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Commands)
 
@@ -61,11 +63,11 @@ Minecraft build plugin, Expert-Build Documentation
 # Installation
 
 ``` 
-Insert plugin in folder plugins,
+1 / Insert plugin in folder plugins,
 
-Use FAWE plugin : 
+2 / Use FAWE plugin,
 
-Java version : 16 minimum
+3 / Use java version : 16 minimum,
 ```
 
 [![FAWE](https://img.shields.io/badge/Download-FAWE-red)](https://ci.athion.net/job/FastAsyncWorldEdit/)
@@ -269,9 +271,21 @@ General brush command,
 
   *permission : exp.command.flower*
 
+- clipboard3D : Paste your clipboard according to the angle of your view on the block you clicked
+
+  *permission : exp.brush.clipboard3d*
+
+
 
 - melt, fill, fill, smooth, floatclean, erodeblend : voxel brush,
   *permission : exp.brush.erode and exp.brush.erodeblend*
+
+
+- clipboard3D : Place a clipboard depending on the direction of the head
+
+  *permission : exp.brush.clipboard3d*
+
+<img src="https://imgur.com/JWKl1zB.gif" title="Image_1" alt="deco">
 
 
 - clipboards : 
@@ -445,7 +459,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.12
+  version: 1.18.1.15
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)

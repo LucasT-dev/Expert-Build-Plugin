@@ -53,6 +53,7 @@ public class Main extends JavaPlugin {
 	public static String lateVersion;
 
 
+
 	private Map<Class<? extends BrushOperation>, BrushOperation> registeredBrush;
 
 	private static Configuration configuration;
@@ -316,23 +317,24 @@ public class Main extends JavaPlugin {
 
 		registeredBrush = new HashMap<>();
 
-		brushManager.addBrush(new SphereBrush());
-		brushManager.addBrush(new ClipboardsBrush());
-		brushManager.addBrush(new OverlayBrush());
 		brushManager.addBrush(new BiomeBrush());
-		brushManager.addBrush(new UpdateChunk());
-		brushManager.addBrush(new NoneBrush());
+		brushManager.addBrush(new BlendBallBrush());
+		brushManager.addBrush(new Clipboard3D());
+		brushManager.addBrush(new ClipboardsBrush());
+		brushManager.addBrush(new CubeBrush());
 		brushManager.addBrush(new DegradeBrush());
 		brushManager.addBrush(new DrainBrush());
-		brushManager.addBrush(new Rot2DCubeBrush());
-		brushManager.addBrush(new LineBrush());
-		brushManager.addBrush(new SpikeBrush());
-		brushManager.addBrush(new CubeBrush());
-		brushManager.addBrush(new ErodeBrush());
-		brushManager.addBrush(new BlendBallBrush());
-		brushManager.addBrush(new FlowerBrush());
-		brushManager.addBrush(new ErodeBlendBrush());
 		brushManager.addBrush(new EraserBrush());
+		brushManager.addBrush(new ErodeBlendBrush());
+		brushManager.addBrush(new ErodeBrush());
+		brushManager.addBrush(new FlowerBrush());
+		brushManager.addBrush(new LineBrush());
+		brushManager.addBrush(new NoneBrush());
+		brushManager.addBrush(new OverlayBrush());
+		brushManager.addBrush(new Rot2DCubeBrush());
+		brushManager.addBrush(new SphereBrush());
+		brushManager.addBrush(new SpikeBrush());
+		brushManager.addBrush(new UpdateChunk());
 
 		getLogger().info(messageBuilder.getBrushLoad());
 

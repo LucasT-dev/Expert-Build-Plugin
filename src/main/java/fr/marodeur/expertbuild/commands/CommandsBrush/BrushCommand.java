@@ -3,7 +3,9 @@ package fr.marodeur.expertbuild.commands.CommandsBrush;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.regions.Region;
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.enums.BrushEnum;
 import fr.marodeur.expertbuild.enums.ExecutorType;
@@ -303,6 +305,43 @@ public class BrushCommand extends AbstractCommand {
                         .setRadius(radius)
                         .sendMessage(msg.getBrushEnable("Eraser"));
 
+            }
+
+            case "clipboard3D" -> {
+
+                if (this.getValidArgument().hasSelection(p)) {
+                    Region selection = this.getValidArgument().getSelection(p);
+                } else {
+                    this.getValidArgument().sendMessageInvalidSelection(executor);
+                    break;
+                }
+
+                Clipboard clip = new UtilsFAWE(p).CopySelection(false);
+                GlueList<BlockVec4> list = new GlueList<>();
+
+                clip.iterator().forEachRemaining(blockVector3 -> {
+
+                    BlockVector3 blockVector31 = clip.getOrigin().add(blockVector3);
+
+                    int blockX = blockVector31.getBlockX() - clip.getOrigin().getX();
+                    int blockY = blockVector31.getBlockY() - clip.getOrigin().getY();
+                    int blockZ = blockVector31.getBlockZ() - clip.getOrigin().getZ();
+
+                    int deltaX = blockX - clip.getOrigin().getX();
+                    int deltaY = blockY - clip.getOrigin().getY();
+                    int deltaZ = blockZ - clip.getOrigin().getZ();
+
+                    list.add(new BlockVec4(
+                            deltaX,
+                            deltaY,
+                            deltaZ,
+                            clip.getFullBlock(blockX, blockY, blockZ)));
+                });
+
+                brushBuilder.setBrushType(BrushEnum.CLIPBOARD_3D)
+                        .setEnable(true)
+                        .sendMessage(msg.getBrushEnable("3DClipboard"))
+                        .getClipboardBrush().setClipboardsBrush(list);
             }
 
             case "e" -> {

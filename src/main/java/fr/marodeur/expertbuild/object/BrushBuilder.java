@@ -5,6 +5,7 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
 
+import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.enums.BrushEnum;
@@ -47,6 +48,7 @@ public class BrushBuilder {
 
     private TerraParameter terraParameter;
     private final ClipboardParameter clipboardParameter;
+    private final ClipboardBrush clipboardBrush;
 
     /**
      * Create objet BrushBuilder
@@ -55,7 +57,7 @@ public class BrushBuilder {
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
-                        TerraParameter terraParameter, ClipboardParameter clipboardParameter) {
+                        TerraParameter terraParameter, ClipboardParameter clipboardParameter, ClipboardBrush clipboardBrush) {
 
         this.uuid = uuid;
         this.brushEnum = brushEnum;
@@ -76,6 +78,7 @@ public class BrushBuilder {
 
         this.terraParameter = terraParameter;
         this.clipboardParameter = clipboardParameter;
+        this.clipboardBrush = clipboardBrush;
 
     }
 
@@ -173,6 +176,10 @@ public class BrushBuilder {
         return this.clipboardParameter;
     }
 
+
+    public ClipboardBrush getClipboardBrush() {
+        return clipboardBrush;
+    }
 
     // SETTER
 
@@ -378,6 +385,10 @@ public class BrushBuilder {
         return this;
     }
 
+    public ClipboardBrush clipboardBrush() {
+        return clipboardBrush;
+    }
+
     @Override
     public String toString() {
         return "BrushBuilder{" +
@@ -396,7 +407,7 @@ public class BrushBuilder {
                 ", region=" + region +
                 ", blockFace=" + blockFace +
                 ", bv4=" + bv4 +
-                ", pattern=" + pattern +
+                ", pattern=" + pattern.toString() +
                 ", terraParameter=" + terraParameter.toString() +
                 ", clipboardParameter=" + clipboardParameter.toString() +
                 '}';
@@ -489,22 +500,34 @@ public class BrushBuilder {
         List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 
-        return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(), BrushEnum.NONE, false, true, true,
-                conf.getDefault_material_brush(), it, flowerMaterialTaux, conf.getDefault_biome_brush(),
-                conf.getDefault_air_brush(), conf.getDefaultBrushRayon(), 4, null,
-                null, new ArrayList<>(), new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
+        return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(),
+                BrushEnum.NONE,
+                false,
+                true,
+                true,
+                conf.getDefault_material_brush(),
+                it, flowerMaterialTaux,
+                conf.getDefault_biome_brush(),
+                conf.getDefault_air_brush(),
+                conf.getDefaultBrushRayon(),
+                4,
+                null,
+                null,
+                new ArrayList<>(),
+                new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
                 new TerraParameter(0, 0, 0, 0),
-                new ClipboardParameter(new ArrayList<>(), new ArrayList<>(), false)));
+                new ClipboardParameter(new ArrayList<>(), new ArrayList<>(), false),
+                new ClipboardBrush(new GlueList<>())));
     }
 
-    /**
-     * Using before player de-connection
-     * When the player login, he retrieves his BrushBuilder profile
-     *
-     * @param p Player
-     * @param brushBuilder BrushBuilder
-     * @return this
-     */
+        /**
+         * Using before player de-connection
+         * When the player login, he retrieves his BrushBuilder profile
+         *
+         * @param p Player
+         * @param brushBuilder BrushBuilder
+         * @return this
+         */
     public static @NotNull BrushBuilder registerPlayer(@NotNull Player p, BrushBuilder brushBuilder) {
 
         Main.removeBrushBuilder(p);
@@ -669,6 +692,36 @@ public class BrushBuilder {
                     "clipboardsBlock.size=" + clipboardsBlock.size() +
                     ", clipboardsName=" + name +
                     ", isRandomRotation=" + isRandomRotation +
+                    '}';
+        }
+    }
+
+    public static class ClipboardBrush {
+
+        private GlueList<BlockVec4> clipboardsBrush;
+
+        public ClipboardBrush(GlueList<BlockVec4> clipboardsBrush) {
+            this.clipboardsBrush = clipboardsBrush;
+        }
+
+        public GlueList<BlockVec4>getClipboardsBrush() {
+            return clipboardsBrush;
+        }
+
+        public void setClipboardsBrush(GlueList<BlockVec4> clipboardsBrush) {
+            this.clipboardsBrush = clipboardsBrush;
+        }
+
+        @Override
+        public String toString() {
+
+            AtomicReference<String> s = new AtomicReference<>("");
+            clipboardsBrush.iterator().forEachRemaining(blockVec4 -> s.set(s + blockVec4.toString() + "\n"));
+
+            return "ClipboardBrush{" +
+                    "clipboardsBrush=" + clipboardsBrush + "\n" +
+                    "size=" + clipboardsBrush.size() + "\n" +
+                    "blockVec4 Iteration=" + s +
                     '}';
         }
     }
