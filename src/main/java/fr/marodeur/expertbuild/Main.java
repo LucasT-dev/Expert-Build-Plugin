@@ -2,14 +2,12 @@ package fr.marodeur.expertbuild;
 
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.utils.BrushOperationManager;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
 import fr.marodeur.expertbuild.api.metrics.Metrics;
 import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.commands.CommandConvertSlab.CommandConvertSlab;
 import fr.marodeur.expertbuild.commands.CommandTransferSchem;
-import fr.marodeur.expertbuild.commands.CommandsAutoFlips.CommandAutoFlip;
 import fr.marodeur.expertbuild.commands.CommandsBrush.BrushCommand;
 import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
 import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
@@ -31,6 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,8 +53,7 @@ public class Main extends JavaPlugin {
 
 
 
-	private Map<Class<? extends BrushOperation>, BrushOperation> registeredBrush;
-
+	private static AbstractBrush.RegisterBrush brush;
 	private static Configuration configuration;
 	private static MessageBuilder messageBuilder;
 
@@ -76,7 +74,7 @@ public class Main extends JavaPlugin {
 	public static WorldEditPlugin WorldEditPlugin;
 
 
-	@Override
+    @Override
 	public void onEnable() {
 
 		instance = this;
@@ -117,7 +115,7 @@ public class Main extends JavaPlugin {
 			getLogger().severe(messageBuilder.getFileConfigurationError());
 		}
 
-		loadBrushOperation();
+		loadBrush();
 
 		registerListeners();
 
@@ -177,7 +175,6 @@ public class Main extends JavaPlugin {
 		getCommand("timelapse").setExecutor(new CommandTimeLapse());
 		getCommand("perlin").setExecutor(new CommandPerlin());
 		getCommand("autocb").setExecutor(new CommandAutoCb());
-		getCommand("autoflip").setExecutor(new CommandAutoFlip());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
 		getCommand("painting").setExecutor(new CommandPainting());
 
@@ -307,34 +304,34 @@ public class Main extends JavaPlugin {
 		return Bukkit.getBukkitVersion();
 	}
 
-	public Map<Class<? extends BrushOperation>, BrushOperation> getRegisteredBrush() {
-		return registeredBrush;
+
+	public static AbstractBrush.RegisterBrush getBrush() {
+		return brush;
 	}
 
-	private void loadBrushOperation() {
+	private void loadBrush() {
 
-		BrushOperationManager brushManager = new BrushOperationManager();
+		brush = new AbstractBrush.RegisterBrush();
 
-		registeredBrush = new HashMap<>();
+		brush.createBrush(new BiomeBrush());
+		brush.createBrush(new BlendBallBrush());
+		brush.createBrush(new Clipboard3DBrush());
+		brush.createBrush(new ClipboardsBrush());
+		brush.createBrush(new CubeBrush());
+		brush.createBrush(new DegradeBrush());
+		brush.createBrush(new DrainBrush());
+		brush.createBrush(new EraserBrush());
+		brush.createBrush(new ErodeBlendBrush());
+		brush.createBrush(new ErodeBrush());
+		brush.createBrush(new FlowerBrush());
+		brush.createBrush(new LineBrush());
+		brush.createBrush(new NoneBrush());
+		brush.createBrush(new OverlayBrush());
+		brush.createBrush(new Rot2DCubeBrush());
+		brush.createBrush(new SphereBrush());
+		brush.createBrush(new SpikeBrush());
+		brush.createBrush(new UpdateChunkBrush());
 
-		brushManager.addBrush(new BiomeBrush());
-		brushManager.addBrush(new BlendBallBrush());
-		brushManager.addBrush(new Clipboard3D());
-		brushManager.addBrush(new ClipboardsBrush());
-		brushManager.addBrush(new CubeBrush());
-		brushManager.addBrush(new DegradeBrush());
-		brushManager.addBrush(new DrainBrush());
-		brushManager.addBrush(new EraserBrush());
-		brushManager.addBrush(new ErodeBlendBrush());
-		brushManager.addBrush(new ErodeBrush());
-		brushManager.addBrush(new FlowerBrush());
-		brushManager.addBrush(new LineBrush());
-		brushManager.addBrush(new NoneBrush());
-		brushManager.addBrush(new OverlayBrush());
-		brushManager.addBrush(new Rot2DCubeBrush());
-		brushManager.addBrush(new SphereBrush());
-		brushManager.addBrush(new SpikeBrush());
-		brushManager.addBrush(new UpdateChunk());
 
 		getLogger().info(messageBuilder.getBrushLoad());
 

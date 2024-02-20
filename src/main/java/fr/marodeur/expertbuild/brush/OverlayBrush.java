@@ -1,50 +1,51 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OverlayBrush implements BrushOperation {
+public class OverlayBrush extends AbstractBrush {
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.overlay");
+    public String getBrushName() {
+        return "overlay";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.OVERLAY;
+    public String getAliases() {
+        return null;
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.overlay";
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
+    }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
+    @Override
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         int brushSize = brushBuilder.getRadius();
-        Location l = (Location) obj1;
+        Location l = (Location) loc;
         List<BlockVec4> bv4 = new ArrayList<>();
 
         for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
@@ -57,7 +58,7 @@ public class OverlayBrush implements BrushOperation {
 
                         Location floc = new Location(l.getWorld(), x, y, z);
 
-                        if (!new UtilsFAWE(p).ignoredBlock(floc.getBlock())) {
+                        if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
                             bv4.add(new BlockVec4(floc, brushBuilder.getPattern()));
                             break;
                         }
@@ -65,24 +66,14 @@ public class OverlayBrush implements BrushOperation {
                 }
             }
         }
-        new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
+        new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         int brushSize = brushBuilder.getRadius();
-        Location l = (Location) obj1;
+        Location l = (Location) loc;
         List<BlockVec4> bv4 = new ArrayList<>();
 
         for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
@@ -95,7 +86,7 @@ public class OverlayBrush implements BrushOperation {
 
                         Location floc = new Location(l.getWorld(), x, y, z);
 
-                        if (!new UtilsFAWE(p).ignoredBlock(floc.getBlock())) {
+                        if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
                             floc.setY(y+1);
                             bv4.add(new BlockVec4(floc, brushBuilder.getPattern()));
                             break;
@@ -104,6 +95,6 @@ public class OverlayBrush implements BrushOperation {
                 }
             }
         }
-        new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
+        new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
     }
 }

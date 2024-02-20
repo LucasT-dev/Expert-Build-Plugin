@@ -9,8 +9,8 @@ import com.sk89q.worldedit.util.Direction;
 import com.sk89q.worldedit.world.block.BaseBlock;
 
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.enums.BrushEnum;
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.brush.FlowerBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Configuration;
 import fr.marodeur.expertbuild.object.ItemBuilder;
@@ -699,7 +699,7 @@ public class FlowerGUI {
     private static void buildBrush(@NotNull BrushBuilder brushBuilder) {
 
         if (brushBuilder.getEnable()) {
-            brushBuilder.setBrushType(BrushEnum.FLOWER);
+            brushBuilder.setBrush(new FlowerBrush());
 
             StringBuilder stringBuilder = new StringBuilder();
 

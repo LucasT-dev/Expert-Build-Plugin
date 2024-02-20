@@ -1,7 +1,7 @@
 package fr.marodeur.expertbuild.commands.CommandsGivenTools;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.brush.NoneBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
@@ -259,9 +259,9 @@ public class Terraforming_Painting implements CommandExecutor {
 							p.sendMessage(Main.prefix + " Use delay < 5");
 						}
 
-						brushBuilder.setTickRT(Integer.parseInt(args[0]))
-								.setBrushType(BrushEnum.TICK_REPEATER)
-								.setEnable(true);
+						//brushBuilder.setTickRT(Integer.parseInt(args[0]))
+						//		.setBrushType(BrushEnum.TICK_REPEATER)
+						//		.setEnable(true);
 
 						ItemStack itemBuilder = new ItemBuilder("Intelligence repeater", Material.REPEATER, 1)
 								.addLore("Delay : " + brushBuilder.getTickRT())
@@ -273,7 +273,7 @@ public class Terraforming_Painting implements CommandExecutor {
 
 					}
 				} else {
-					brushBuilder.setBrushType(BrushEnum.NONE)
+					brushBuilder.setBrush(new NoneBrush())
 							.setEnable(false)
 							.sendMessage(message.getBrushDisable());
 				}

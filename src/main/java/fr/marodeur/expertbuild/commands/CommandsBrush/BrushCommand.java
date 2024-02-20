@@ -4,22 +4,26 @@ import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
+
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class BrushCommand extends AbstractCommand {
 
@@ -103,7 +107,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.BIOME)
+                brushBuilder.setBrush(new BiomeBrush())
                         .setEnable(true)
                         .setBiome(biome)
                         .setRadius(radius)
@@ -127,7 +131,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.OVERLAY)
+                brushBuilder.setBrush(new OverlayBrush())
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
@@ -150,7 +154,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.SPIKE)
+                brushBuilder.setBrush(new SpikeBrush())
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
@@ -173,7 +177,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.CUBE)
+                brushBuilder.setBrush(new CubeBrush())
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
@@ -196,7 +200,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.SPHERE)
+                brushBuilder.setBrush(new SphereBrush())
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
@@ -219,7 +223,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.OVERLAY)
+                brushBuilder.setBrush(new Rot2DCubeBrush())
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
@@ -236,14 +240,14 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.LINE)
+                brushBuilder.setBrush(new LineBrush())
                         .setEnable(true)
                         .setPattern(pattern)
                         .sendMessage(msg.getBrushEnable("Line"));
             }
 
             // TYPE : Brush integer
-            case "bb" -> {
+            case "blendball" -> {
 
                 if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
@@ -252,7 +256,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.BLENDBALL)
+                brushBuilder.setBrush(new BlendBallBrush())
                         .setEnable(true)
                         .setRadius(radius)
                         .sendMessage(msg.getBrushEnable("blendBall"));
@@ -268,7 +272,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.DRAIN)
+                brushBuilder.setBrush(new DrainBrush())
                         .setEnable(true)
                         .setRadius(radius)
                         .sendMessage(msg.getBrushEnable("Drain"));
@@ -284,7 +288,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.UPDATECHUNK)
+                brushBuilder.setBrush(new UpdateChunkBrush())
                         .setEnable(true)
                         .setRadius(radius)
                         .sendMessage(msg.getBrushEnable("UpdateChunk"));
@@ -300,7 +304,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.ERASER)
+                brushBuilder.setBrush(new EraserBrush())
                         .setEnable(true)
                         .setRadius(radius)
                         .sendMessage(msg.getBrushEnable("Eraser"));
@@ -338,7 +342,7 @@ public class BrushCommand extends AbstractCommand {
                             clip.getFullBlock(blockX, blockY, blockZ)));
                 });
 
-                brushBuilder.setBrushType(BrushEnum.CLIPBOARD_3D)
+                brushBuilder.setBrush(new Clipboard3DBrush())
                         .setEnable(true)
                         .sendMessage(msg.getBrushEnable("3DClipboard"))
                         .getClipboardBrush().setClipboardsBrush(list);
@@ -355,7 +359,7 @@ public class BrushCommand extends AbstractCommand {
 
                 switch (args[1]) {
 
-                    case "lift" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                    case "lift" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
                             .setErosionFaces(6)
                             .setErosionRecursion(0)
@@ -364,7 +368,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("Erode lift"));
 
-                    case "melt" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                    case "melt" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
                             .setErosionFaces(2)
                             .setErosionRecursion(1)
@@ -373,7 +377,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("Erode melt"));
 
-                    case "fill" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                    case "fill" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
                             .setErosionFaces(5)
                             .setErosionRecursion(1)
@@ -382,7 +386,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("Erode fill"));
 
-                    case "smooth" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                    case "smooth" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
                             .setErosionFaces(3)
                             .setErosionRecursion(1)
@@ -391,7 +395,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("Erode smooth"));
 
-                    case "floatclean" -> brushBuilder.setBrushType(BrushEnum.ERODE)
+                    case "floatclean" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
                             .setErosionFaces(6)
                             .setErosionRecursion(1)
@@ -413,7 +417,7 @@ public class BrushCommand extends AbstractCommand {
 
                 switch (args[1]) {
 
-                    case "lift" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
+                    case "lift" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
                             .setErosionFaces(6)
                             .setErosionRecursion(0)
@@ -422,7 +426,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("ErodeBlend lift"));
 
-                    case "melt" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
+                    case "melt" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
                             .setErosionFaces(2)
                             .setErosionRecursion(1)
@@ -431,7 +435,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("ErodeBlend melt"));
 
-                    case "fill" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
+                    case "fill" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
                             .setErosionFaces(5)
                             .setErosionRecursion(1)
@@ -440,7 +444,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("ErodeBlend fill"));
 
-                    case "smooth" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
+                    case "smooth" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
                             .setErosionFaces(3)
                             .setErosionRecursion(1)
@@ -449,7 +453,7 @@ public class BrushCommand extends AbstractCommand {
                             .setEnable(true)
                             .sendMessage(msg.getBrushEnable("ErodeBlend smooth"));
 
-                    case "floatclean" -> brushBuilder.setBrushType(BrushEnum.ERODEBLEND)
+                    case "floatclean" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
                             .setErosionFaces(6)
                             .setErosionRecursion(1)
@@ -503,7 +507,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setBrushType(BrushEnum.ERODE)
+                brushBuilder.setBrush(new ErodeBrush())
                         .setErosionFaces(parameter1)
                         .setErosionRecursion(parameter2)
                         .setFillFaces(parameter3)
@@ -514,7 +518,7 @@ public class BrushCommand extends AbstractCommand {
 
             }
 
-            case "none" -> brushBuilder.setBrushType(BrushEnum.NONE)
+            case "none" -> brushBuilder.setBrush(new NoneBrush())
                     .setEnable(false)
                     .sendMessage(msg.getBrushDisable());
 
@@ -597,7 +601,15 @@ public class BrushCommand extends AbstractCommand {
         if (sender instanceof Player p) {
 
             // Brush
-            Arrays.stream(BrushEnum.values()).toList().forEach(brushEnum -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, brushEnum.getBrush()).toSubCommand(brushEnum.getPermission())));
+            // name
+            Main.getBrush().getBrushes().iterator().forEachRemaining(registerBrush -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, registerBrush.getBrushName()).toSubCommand(registerBrush.getPermission())));
+
+            // aliases
+            Main.getBrush().getBrushes().stream()
+                    .filter(abstractBrush -> abstractBrush.getAliases().isEmpty())
+                    .forEach(registerBrush -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, registerBrush.getAliases()).toSubCommand(registerBrush.getPermission())));
+
+            //Arrays.stream(BrushEnum.values()).toList().forEach(brushEnum -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, brushEnum.getBrush()).toSubCommand(brushEnum.getPermission())));
 
             // Material
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "material").toSubCommand("None"));
@@ -688,7 +700,7 @@ public class BrushCommand extends AbstractCommand {
 
         if (args[1].equalsIgnoreCase("removeAll")) {
 
-            brushBuilder.setBrushType(BrushEnum.NONE)
+            brushBuilder.setBrush(new NoneBrush())
                     .setEnable(false)
                     .sendMessage(msg.getAllClipboardDelete())
                     .getClipboardsParameter().clearAll();
@@ -757,7 +769,7 @@ public class BrushCommand extends AbstractCommand {
                         clip.getFullBlock(blockX, blockY, blockZ)));
             });
 
-            brushBuilder.setBrushType(BrushEnum.CLIPBOARD)
+            brushBuilder.setBrush(new ClipboardsBrush())
                     .setEnable(true)
                     .sendMessage(msg.getClipboardAddAndEnable(clipboardName))
                     .getClipboardsParameter().addClipboards(list, clipboardName);

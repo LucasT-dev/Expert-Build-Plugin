@@ -1,51 +1,50 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.object.MessageBuilder;
 
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
-public class NoneBrush implements BrushOperation {
+public class NoneBrush extends AbstractBrush {
 
     private MessageBuilder message = Main.getInstance().getMessageConfig();
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.none");
+    public String getBrushName() {
+        return "none";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.NONE;
+    public String getAliases() {
+        return null;
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.none";
     }
 
     @Override
-    public void ExecuteBrushOnHoney(Player p, Object obj1) {
-        if (hasPermission(p)) {
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBrushDisable());
-        }
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        brushBuilder.sendMessage(message.getBrushDisable());
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
-        if (hasPermission(p)) {
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBrushDisable());
-        }
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        brushBuilder.sendMessage(message.getBrushDisable());
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
-        if (hasPermission(p)) {
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBrushDisable());
-        }
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        brushBuilder.sendMessage(message.getBrushDisable());
     }
 }

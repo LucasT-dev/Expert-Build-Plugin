@@ -1,11 +1,19 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.EditSession;
@@ -17,50 +25,45 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-public class EraserBrush implements BrushOperation {
+public class EraserBrush extends AbstractBrush {
 
     private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
     private static final Set<Material> EXCLUSIVE_MATERIALS = EnumSet.of(
             Material.AIR, Material.WATER, Material.STONE, Material.GRASS_BLOCK, Material.DIRT, Material.SAND, Material.DEEPSLATE, Material.SANDSTONE);
 
+
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.eraser");
+    public String getBrushName() {
+        return "eraser";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.ERASER;
+    public String getAliases() {
+        return null;
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.eraser";
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
+    }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
+    @Override
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        Location middlePoint = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+        Location middlePoint = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
@@ -73,7 +76,7 @@ public class EraserBrush implements BrushOperation {
                     apply(middlePoint, radius, true);
 
                 } finally {
-                    new UtilsFAWE(p).setBlockAnyPattern(p, (List<BlockVec4>) bv4.clone(), false);
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), (List<BlockVec4>) bv4.clone(), false);
                 }
             }
             bv4.clear();
@@ -81,20 +84,10 @@ public class EraserBrush implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location middlePoint = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+        Location middlePoint = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
@@ -107,12 +100,11 @@ public class EraserBrush implements BrushOperation {
                     apply(middlePoint, radius, false);
 
                 } finally {
-                    new UtilsFAWE(p).setBlockAnyPattern(p, (List<BlockVec4>) bv4.clone(), false);
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), (List<BlockVec4>) bv4.clone(), false);
                 }
             }
             bv4.clear();
         });
-
     }
 
     private static void apply(@NotNull Location middlePoint, int radius, boolean deleteFluid) {

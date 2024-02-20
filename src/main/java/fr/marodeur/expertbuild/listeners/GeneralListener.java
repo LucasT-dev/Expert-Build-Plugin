@@ -2,14 +2,11 @@ package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
-import fr.marodeur.expertbuild.enums.BrushEnum;
-import fr.marodeur.expertbuild.enums.FaceDirection;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Configuration;
 import fr.marodeur.expertbuild.object.GOHA_Builder;
 import fr.marodeur.expertbuild.object.MessageBuilder;
 
-import com.sk89q.worldedit.math.BlockVector3;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -18,16 +15,11 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.CommandBlock;
-import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Repeater;
-import org.bukkit.block.data.type.Slab;
-import org.bukkit.block.data.type.Stairs;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -197,249 +189,6 @@ public class GeneralListener implements Listener {
 			CommandBlock commandBlock = (CommandBlock) b.getState();
 
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7" + commandBlock.getCommand()));
-		}
-	}
-	@EventHandler
-	private void onPlaceBlock(@NotNull BlockPlaceEvent e) {
-
-		Player p = e.getPlayer();
-		Block block = e.getBlock();
-		BlockData blockData = block.getState().getBlockData();
-		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
-		Location loc = block.getLocation();
-
-		if (brushBuilder == null) {
-			return;
-		}
-
-		if (brushBuilder.getBrushType().equals(BrushEnum.AUTOFLIP) && brushBuilder.getEnable().equals(true)) {
-
-			BlockVector3 bv3 = brushBuilder.getBlockVec4List().get(0).toBlockVector3();
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.UP)) {
-
-
-				if (loc.getY() > bv3.getY()) {
-
-					int y = (int) (block.getLocation().getY() - bv3.getY());
-
-					if (setBlock(new Location(p.getWorld(), block.getX(), bv3.getY()-y, block.getZ()), block, brushBuilder).equals(true)) {
-						new Location(p.getWorld(), block.getX(), bv3.getY()-y, block.getZ()).getBlock().setBlockData(blockData);
-						//l.getBlock().setBlockData(blockData);
-					}
-					return;
-				}
-
-				if (loc.getY() < bv3.getY()) {
-
-					int y = bv3.getY() - (int) (block.getLocation().getY());
-
-					if (setBlock(new Location(p.getWorld(), block.getX(), bv3.getY()+y, block.getZ()), block, brushBuilder).equals(true)) {
-
-						new Location(p.getWorld(), block.getX(), bv3.getY()+y, block.getZ()).getBlock().setBlockData(blockData);
-
-					}
-					return;
-				}
-			}
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.WEST)) {
-
-				if (loc.getX() > bv3.getX()) {
-
-					int x = (int) (block.getLocation().getX() - bv3.getX());
-
-					if (setBlock(new Location(p.getWorld(), bv3.getX() - x, block.getY(), block.getZ()), block, brushBuilder).equals(true)) {
-						new Location(p.getWorld(), bv3.getX() - x, block.getY(), block.getZ()).getBlock().setBlockData(blockData);
-					}
-					return;
-				}
-
-				if (loc.getX() < bv3.getX()) {
-
-					int x = bv3.getX() - (int) (block.getLocation().getX());
-
-					if (setBlock(new Location(p.getWorld(), bv3.getX() + x, block.getY(), block.getZ()), block, brushBuilder).equals(true)) {
-
-						new Location(p.getWorld(), bv3.getX() + x, block.getY(), block.getZ()).getBlock().setBlockData(blockData);
-					}
-					return;
-				}
-			}
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.NORTH)) {
-
-				if (loc.getZ() > bv3.getZ()) {
-
-					int z = (int) (block.getLocation().getZ() - brushBuilder.getRegion().getMaximumPoint().getZ());
-
-					if (setBlock(new Location(p.getWorld(), block.getX(), block.getY(), bv3.getZ() - z), block, brushBuilder).equals(true)) {
-
-						new Location(p.getWorld(), block.getX(), block.getY(), bv3.getZ() - z).getBlock().setBlockData(blockData);
-					}
-					return;
-				}
-
-				if (loc.getZ() < bv3.getZ()) {
-
-					int z = bv3.getZ() - (int) (block.getLocation().getZ());
-
-					if (setBlock(new Location(p.getWorld(), block.getX(), block.getY(), bv3.getZ() + z), block, brushBuilder).equals(true)) {
-
-						new Location(p.getWorld(), block.getX(), block.getY(), bv3.getZ() + z).getBlock().setBlockData(blockData);
-					}
-				}
-			}
-		}
-	}
-
-	private static @NotNull Boolean setBlock(Location l, @NotNull Block block, BrushBuilder brushBuilder) {
-
-		if (block.getType().name().contains("SLAB")) {
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.UP)) {
-
-				Slab slab = (Slab) block.getBlockData();
-
-				if (slab.getType().equals(Slab.Type.TOP)) {
-					slab.setType(Slab.Type.BOTTOM);
-					l.getBlock().setBlockData(slab);
-					return false;
-				}
-				if (slab.getType().equals(Slab.Type.BOTTOM)) {
-					slab.setType(Slab.Type.TOP);
-					l.getBlock().setBlockData(slab);
-					return false;
-				}
-			}
-		}
-		if (block.getType().name().contains("STAIR")) {
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.UP)) {
-				Stairs stairs = (Stairs) block.getBlockData();
-
-				if (stairs.getHalf().equals(Bisected.Half.TOP)) {
-					stairs.setHalf(Bisected.Half.BOTTOM);
-					l.getBlock().setBlockData(stairs);
-					return false;
-				}
-
-				if (stairs.getHalf().equals(Bisected.Half.BOTTOM)) {
-					stairs.setHalf(Bisected.Half.TOP);
-					l.getBlock().setBlockData(stairs);
-					return false;
-				}
-			}
-			if (brushBuilder.getBlockFace().equals(BlockFace.WEST)) {
-				Stairs stairs = (Stairs) block.getBlockData();
-
-				if (!stairs.getShape().equals(Stairs.Shape.STRAIGHT)) {
-					stairs.setShape(FaceDirection.getOppositeFaceAngle(stairs.getShape()));
-				}
-
-				if (stairs.getFacing().equals(BlockFace.WEST) || stairs.getFacing().equals(BlockFace.EAST)) {
-
-					stairs.setFacing(FaceDirection.getOppositeFaceDirection(stairs.getFacing()));
-					l.getBlock().setBlockData(stairs);
-					return false;
-				} else {
-					l.getBlock().setBlockData(stairs);
-					return false;
-				}
-			}
-			if (brushBuilder.getBlockFace().equals(BlockFace.NORTH)) {
-				Stairs stairs = (Stairs) block.getBlockData();
-
-				if (!stairs.getShape().equals(Stairs.Shape.STRAIGHT)) {
-					stairs.setShape(FaceDirection.getOppositeFaceAngle(stairs.getShape()));
-				}
-
-				if (stairs.getFacing().equals(BlockFace.NORTH) || stairs.getFacing().equals(BlockFace.SOUTH)) {
-
-					stairs.setFacing(FaceDirection.getOppositeFaceDirection(stairs.getFacing()));
-					l.getBlock().setBlockData(stairs);
-					return false;
-				} else {
-					l.getBlock().setBlockData(stairs);
-					return false;
-				}
-			}
-		} else {
-			return true;
-		}
-		return true;
-	}
-
-	@EventHandler
-	public void onBreakBlock(@NotNull BlockBreakEvent e) {
-
-		Player p = e.getPlayer();
-		Block block = e.getBlock();
-		BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
-		Location loc = block.getLocation();
-
-		if (brushBuilder == null) {
-			return;
-		}
-
-		if (brushBuilder.getBrushType().equals(BrushEnum.AUTOFLIP) && brushBuilder.getEnable().equals(true)) {
-
-			BlockVector3 bv3 = brushBuilder.getBlockVec4List().get(0).toBlockVector3();
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.UP)) {
-
-				if (loc.getY() > bv3.getY()) {
-
-					int y = (int) (block.getLocation().getY() - bv3.getY());
-					new Location(p.getWorld(), block.getX(), bv3.getY() - y, block.getZ()).getBlock().setType(Material.AIR);
-					return;
-				}
-
-				if (loc.getY() < bv3.getY()) {
-
-					int y = bv3.getY() - (int) (block.getLocation().getY());
-					new Location(p.getWorld(), block.getX(), bv3.getY() + y, block.getZ()).getBlock().setType(Material.AIR);
-					return;
-				}
-			}
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.WEST)) {
-
-				if (loc.getX() > bv3.getX()) {
-
-					int x = (int) (block.getLocation().getX() - bv3.getX());
-
-					new Location(p.getWorld(), bv3.getX() - x, block.getY(), block.getZ()).getBlock().setType(Material.AIR);
-
-					return;
-				}
-
-				if (loc.getX() < bv3.getX()) {
-
-					int x = bv3.getX() - (int) (block.getLocation().getX());
-
-					new Location(p.getWorld(), bv3.getX() + x, block.getY(), block.getZ()).getBlock().setType(Material.AIR);
-					return;
-				}
-			}
-
-			if (brushBuilder.getBlockFace().equals(BlockFace.NORTH)) {
-
-				if (loc.getZ() > bv3.getZ()) {
-
-					int z = (int) (block.getLocation().getZ() - bv3.getZ());
-
-					new Location(p.getWorld(), block.getX(), block.getY(), bv3.getZ() - z).getBlock().setType(Material.AIR);
-					return;
-				}
-
-				if (loc.getZ() < bv3.getZ()) {
-
-					int z = bv3.getZ() - (int) (block.getLocation().getZ());
-
-					new Location(p.getWorld(), block.getX(), block.getY(), bv3.getZ() + z).getBlock().setType(Material.AIR);
-				}
-			}
 		}
 	}
 }

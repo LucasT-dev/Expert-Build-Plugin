@@ -1,12 +1,20 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
@@ -17,60 +25,58 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class FlowerBrush implements BrushOperation {
+public class FlowerBrush extends AbstractBrush {
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.flower");
+    public String getBrushName() {
+        return "flower";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.FLOWER;
+    public String getAliases() {
+        return null;
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.flower";
     }
 
     @Override
-    public void ExecuteBrushOnHoney(Player p, Object obj1) {
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location l = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
+        Location l = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         GlueList<BlockVec4> bv4 = new GlueList<>();
-        int radius = bb.getRadius();
+        int radius = brushBuilder.getRadius();
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
             try (EditSession editsession = localSession.createEditSession(actor)) {
-                
+
                 try {
                     editsession.setFastMode(false);
 
                     bv4.addAll(new BlockVec4().getPointInSphere(l, radius, Material.STONE));
 
-                    new UtilsFAWE().setBlockListSimple(p, bv4, false);
+                    new UtilsFAWE().setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    @Override
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
+    }
+
+    @Override
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }

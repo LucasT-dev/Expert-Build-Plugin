@@ -1,66 +1,61 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
+import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class DrainBrush implements BrushOperation {
+public class DrainBrush extends AbstractBrush {
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.drain");
+    public String getBrushName() {
+        return "drain";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.DRAIN;
+    public String getAliases() {
+        return null;
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.drain";
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
-        ExecuteBrushOnArrow(p, obj1, loc);
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
     }
 
-    public DrainBrush() {
-    }
-
-    @Deprecated
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location l = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
+        Location l = (Location) loc;
+        Location pl = (Location) ploc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = bb.getRadius();
+        int radius = brushBuilder.getRadius();
         GlueList<BlockVec4> bv4 = new GlueList<>();
 
         Location loc1 = l.clone()
@@ -80,24 +75,29 @@ public class DrainBrush implements BrushOperation {
                         for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
                             for (int z = loc1.getBlockZ(); z <= loc2.getBlockZ(); z++) {
 
-                                Location bloc = new Location(p.getWorld(), x, y, z);
+                                Location bloc = new Location(pl.getWorld(), x, y, z);
 
                                 if (l.distance(bloc) <= radius) {
 
                                     if (bloc.getBlock().isLiquid()) {
-                                        bv4.add(new BlockVec4(bloc, Material.AIR, p));
+                                        bv4.add(new BlockVec4(bloc, Material.AIR, brushBuilder.getPlayer()));
                                     }
                                 }
                             }
                         }
                     }
 
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    @Override
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        spectralToolBrush(brushBuilder, loc, ploc);
     }
 }
