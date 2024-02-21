@@ -45,11 +45,6 @@ public class EraserBrush extends AbstractBrush {
     }
 
     @Override
-    public String getAliases() {
-        return null;
-    }
-
-    @Override
     public String getPermission() {
         return "exp.brush.eraser";
     }

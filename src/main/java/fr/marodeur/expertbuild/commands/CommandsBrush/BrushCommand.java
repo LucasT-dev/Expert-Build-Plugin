@@ -23,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 public class BrushCommand extends AbstractCommand {
 
@@ -184,7 +183,7 @@ public class BrushCommand extends AbstractCommand {
                         .sendMessage(msg.getBrushEnable("Cube"));
             }
 
-            case "sphere" -> {
+            case "sphere", "s" -> {
 
                 if (this.getValidArgument().isPattern(p, args[1])) {
                     pattern = this.getValidArgument().getPattern(p, args[1]);
@@ -247,7 +246,7 @@ public class BrushCommand extends AbstractCommand {
             }
 
             // TYPE : Brush integer
-            case "blendball" -> {
+            case "blendball", "bb" -> {
 
                 if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
@@ -348,7 +347,7 @@ public class BrushCommand extends AbstractCommand {
                         .getClipboardBrush().setClipboardsBrush(list);
             }
 
-            case "e" -> {
+            case "erode", "e" -> {
 
                 if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
@@ -406,7 +405,7 @@ public class BrushCommand extends AbstractCommand {
                 }
             }
 
-            case "eb" -> {
+            case "eb", "erodeblend" -> {
 
                 if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
@@ -606,7 +605,7 @@ public class BrushCommand extends AbstractCommand {
 
             // aliases
             Main.getBrush().getBrushes().stream()
-                    .filter(abstractBrush -> abstractBrush.getAliases().isEmpty())
+                    .filter(abstractBrush -> !abstractBrush.getAliases().equals("unused"))
                     .forEach(registerBrush -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, registerBrush.getAliases()).toSubCommand(registerBrush.getPermission())));
 
             //Arrays.stream(BrushEnum.values()).toList().forEach(brushEnum -> subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, brushEnum.getBrush()).toSubCommand(brushEnum.getPermission())));
@@ -630,6 +629,7 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.cube", new ConditionArgumentBefore("cube", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.line", new ConditionArgumentBefore("line", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("s", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("rot2Dcube", 0)));
 
             // Brush with pattern/biome and integer <integer>
@@ -638,11 +638,14 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.cube", new ConditionArgumentBefore("cube", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("rot2Dcube", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("s", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.biome", new ConditionArgumentBefore("biome", 0)));
 
 
             // Brush with <integer>
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.blendball", new ConditionArgumentBefore("bb", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.blendball", new ConditionArgumentBefore("blendball", 0)));
+
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.drain", new ConditionArgumentBefore("drain", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.updatechunk", new ConditionArgumentBefore("update_chunk", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.eraser", new ConditionArgumentBefore("eraser", 0)));
@@ -651,7 +654,11 @@ public class BrushCommand extends AbstractCommand {
 
             // Erode / ErodeBlend
             subCommandSender.addSubCommand(new SubCommandSelector().getList(1, erodeArgs).toSubCommand("exp.brush.erode", new ConditionArgumentBefore("e", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, erodeArgs).toSubCommand("exp.brush.erode", new ConditionArgumentBefore("erode", 0)));
+
             subCommandSender.addSubCommand(new SubCommandSelector().getList(1, erodeArgs).toSubCommand("exp.brush.erodeblend", new ConditionArgumentBefore("eb", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, erodeArgs).toSubCommand("exp.brush.erodeblend", new ConditionArgumentBefore("erodeblend", 0)));
+
 
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("lift", 1)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("melt", 1)));

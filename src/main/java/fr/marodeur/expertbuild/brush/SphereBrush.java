@@ -38,7 +38,7 @@ public class SphereBrush extends AbstractBrush {
 
     @Override
     public String getAliases() {
-        return null;
+        return "s";
     }
 
     @Override

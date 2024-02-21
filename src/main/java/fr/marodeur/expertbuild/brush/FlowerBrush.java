@@ -35,7 +35,7 @@ public class FlowerBrush extends AbstractBrush {
 
     @Override
     public String getAliases() {
-        return null;
+        return "fw";
     }
 
     @Override

@@ -25,11 +25,6 @@ public class Clipboard3DBrush extends AbstractBrush {
     }
 
     @Override
-    public String getAliases() {
-        return null;
-    }
-
-    @Override
     public String getPermission() {
         return "exp.brush.clipboard3d";
     }

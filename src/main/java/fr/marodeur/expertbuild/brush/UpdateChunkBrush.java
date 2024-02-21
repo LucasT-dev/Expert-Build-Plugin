@@ -9,37 +9,36 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-public class NoneBrush extends AbstractBrush {
+import org.bukkit.Location;
 
-    private MessageBuilder message = Main.getInstance().getMessageConfig();
+public class UpdateChunkBrush extends AbstractBrush {
 
     @Override
     public String getBrushName() {
-        return "none";
+        return "updateChunk";
     }
 
     @Override
     public String getPermission() {
-        return "exp.brush.none";
+        return "exp.brush.updatechunk";
     }
 
     @Override
     public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        brushBuilder.sendMessage(message.getBrushDisable());
+        new UtilsFAWE(brushBuilder.getPlayer()).refreshChunk(((Location) loc).getChunk());
     }
 
     @Override
     public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        brushBuilder.sendMessage(message.getBrushDisable());
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
     public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        brushBuilder.sendMessage(message.getBrushDisable());
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }
