@@ -71,15 +71,6 @@ commands:
     description: sel convex WE
     permission: exp.command.tool
 
-  f:
-    aliases: flip
-    description: rotate
-    permission: exp.command.f
-
-  s:
-    description: set
-    permission: exp.command.s
-
   sel:
     description: sel
     permission: exp.command.sel

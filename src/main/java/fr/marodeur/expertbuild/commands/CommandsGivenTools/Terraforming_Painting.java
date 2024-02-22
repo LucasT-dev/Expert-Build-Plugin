@@ -200,37 +200,6 @@ public class Terraforming_Painting implements CommandExecutor {
 				bb.sendMessage(message.getSelectionClear());
 			}
 
-			case "f" -> {
-
-				if (!p.hasPermission("worldedit.selection.flip")) return false;
-
-				if (args.length == 0) {
-					p.sendMessage(Main.prefix + "flip");
-					Bukkit.dispatchCommand(p, "/flip");
-				}
-				if (args[0].equalsIgnoreCase("up") || args[0].equalsIgnoreCase("down") || args[0].equalsIgnoreCase("south")
-						|| args[0].equalsIgnoreCase("north") || args[0].equalsIgnoreCase("east")
-						|| args[0].equalsIgnoreCase("west")) {
-					p.sendMessage("§8[§7§oEXP-Build§8] §l>§l§7 flip §8" + args[0]);
-					Bukkit.dispatchCommand(p, "/flip " + args[0]);
-				}
-			}
-			case "s" -> {
-
-				if (!p.hasPermission("worldedit.clipboard.paste")) return false;
-
-				if (args.length == 0) {
-					p.sendMessage(Main.help + "/s");
-					p.sendMessage("§7  Usages : /s");
-					p.sendMessage("§7  Arguments : <Block>");
-					return false;
-				}
-				if (args[0] != null) {
-					p.sendMessage(Main.prefix + "set §8" + args[0]);
-					Bukkit.dispatchCommand(p, "/set " + args[0]);
-				}
-			}
-
 			case "getcommand" -> {
 
 				if (Main.getCommand.contains(p.getUniqueId())) {
