@@ -1,7 +1,5 @@
 package fr.marodeur.expertbuild.object;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -19,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -212,7 +209,7 @@ public class ItemBuilder {
 	}
 
 	// Old method, disable #19
-	public ItemBuilder setSkullTextures1(String textures) throws IllegalArgumentException, NullPointerException {
+	/*public ItemBuilder setSkullTextures1(String textures) throws IllegalArgumentException, NullPointerException {
 
 		this.itemStack = new ItemStack(Material.PLAYER_HEAD);
 		SkullMeta headMeta = (SkullMeta) this.itemStack.getItemMeta();
@@ -229,7 +226,7 @@ public class ItemBuilder {
 			this.itemStack.setItemMeta(headMeta);
 		} catch (NoSuchFieldException|IllegalAccessException ignored) {}
 		return this;
-	}
+	}*/
 
 	// https://blog.jeff-media.com/creating-custom-heads-in-spigot-1-18-1/
 	// https://minecraft-heads.com/custom-heads/search
