@@ -34,7 +34,7 @@ public class BrushListener implements Listener {
             return;
         }
 
-        if (it == null || brushBuilder.getBrushType().getBclass() == null) return;
+        if (it == null) return;
 
         loc = p.getTargetBlock(null, conf.getMax_brush_distance()).getLocation().clone();
 
@@ -46,16 +46,16 @@ public class BrushListener implements Listener {
                     brushBuilder.sendMessage(msg.getBrushDisable());
                     return;
                 }
-                brushBuilder.executeHoneyBrush(brushBuilder, loc);
+                brushBuilder.executeBrush(brushBuilder, Material.HONEYCOMB, loc, p.getLocation());
             }
             if (it.getType() == conf.getTerraforming_tool_1()) {
 
-                brushBuilder.executeArrowBrush(brushBuilder, loc, p.getLocation());
+                brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_1(), loc, p.getLocation());
             }
 
             if (it.getType() == conf.getTerraforming_tool_2()) {
 
-                brushBuilder.executeGunPowderBrush(brushBuilder, loc, p.getLocation());
+                brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_1(), loc, p.getLocation());
             }
         }
 

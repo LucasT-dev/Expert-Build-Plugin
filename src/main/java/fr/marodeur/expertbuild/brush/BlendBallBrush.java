@@ -1,17 +1,27 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
+import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class BlendBallBrush implements BrushOperation {
+public class BlendBallBrush extends AbstractBrush {
 
     public static int seed;
     //[Range (2, 8)]
@@ -56,89 +66,6 @@ public class BlendBallBrush implements BrushOperation {
 
     private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
-    @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.blendball");
-    }
-
-    @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.BLENDBALL;
-    }
-
-    @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
-    }
-
-    @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
-
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        bv4.clear();
-        Location l = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = brushBuilder.getRadius();
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
-
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
-
-                    blend(l, false, radius);
-
-                } finally {
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
-
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        bv4.clear();
-        Location l = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = brushBuilder.getRadius();
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
-
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
-
-                    blend(l, true, radius);
-
-                } finally {
-                    new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
-                }
-            }
-        });
-
-    }
 
     public void blend(Location l, boolean excludeAir, int radius) {
 
@@ -350,6 +277,74 @@ public class BlendBallBrush implements BrushOperation {
                 water *= (1 - evaporateSpeed);
             }
         }
+    }
+
+    @Override
+    public String getBrushName() {
+        return "blendball";
+    }
+
+    @Override
+    public String getAliases() {
+        return "bb";
+    }
+
+    @Override
+    public String getPermission() {
+        return "exp.brush.blendball";
+    }
+
+    @Override
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
+    }
+
+    @Override
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
+        bv4.clear();
+        Location l = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
+        int radius = brushBuilder.getRadius();
+
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+
+            try (EditSession editsession = localSession.createEditSession(actor)) {
+                try {
+                    editsession.setFastMode(false);
+
+                    blend(l, false, radius);
+
+                } finally {
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
+        bv4.clear();
+        Location l = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
+        int radius = brushBuilder.getRadius();
+
+        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+
+            try (EditSession editsession = localSession.createEditSession(actor)) {
+                try {
+                    editsession.setFastMode(false);
+
+                    blend(l, true, radius);
+
+                } finally {
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
+                }
+            }
+        });
     }
 
     public static class HeightAndGradient {

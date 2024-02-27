@@ -8,7 +8,7 @@ import com.sk89q.worldedit.world.block.BlockTypes;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.brush.NoneBrush;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -30,7 +30,7 @@ public class BrushBuilder {
     private static final Configuration conf = Main.getInstance().getConfig();
 
     private final UUID uuid;
-    private BrushEnum brushEnum;
+    private AbstractBrush abstractBrush;
     private Boolean isEnable;
     private Boolean selMode;
     private Boolean flyMode;
@@ -53,14 +53,14 @@ public class BrushBuilder {
     /**
      * Create objet BrushBuilder
      */
-    public BrushBuilder(UUID uuid, BrushEnum brushEnum, Boolean isEnable, Boolean selMode, Boolean flyMode, Material material,
+    public BrushBuilder(UUID uuid, AbstractBrush abstractBrush, Boolean isEnable, Boolean selMode, Boolean flyMode, Material material,
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
                         TerraParameter terraParameter, ClipboardParameter clipboardParameter, ClipboardBrush clipboardBrush) {
 
         this.uuid = uuid;
-        this.brushEnum = brushEnum;
+        this.abstractBrush = abstractBrush;
         this.isEnable = isEnable;
         this.selMode = selMode;
         this.flyMode = flyMode;
@@ -92,8 +92,8 @@ public class BrushBuilder {
         return Bukkit.getWorld(this.uuid);
     }
 
-    public BrushEnum getBrushType() {
-        return brushEnum;
+    public AbstractBrush getBrushType() {
+        return abstractBrush;
     }
 
     public Boolean getEnable() {
@@ -181,10 +181,17 @@ public class BrushBuilder {
         return clipboardBrush;
     }
 
+    public boolean hasPermission(String permission) {
+        return getPlayer().hasPermission(permission);
+    }
+
+    public Player getPlayer() {
+        return Bukkit.getPlayer(this.uuid);
+    }
     // SETTER
 
-    public BrushBuilder setBrushType(BrushEnum brushEnum) {
-        this.brushEnum = brushEnum;
+    public BrushBuilder setBrush(AbstractBrush abstractBrush) {
+        this.abstractBrush = abstractBrush;
         return this;
     }
 
@@ -393,7 +400,7 @@ public class BrushBuilder {
     public String toString() {
         return "BrushBuilder{" +
                 "uuid=" + uuid +
-                ", brushEnum=" + brushEnum +
+                ", abstractBrush=" + abstractBrush +
                 ", isEnable=" + isEnable +
                 ", selMode=" + selMode +
                 ", flyMode=" + flyMode +
@@ -416,50 +423,11 @@ public class BrushBuilder {
 
     //OPERATION
 
-    /**
-     *
-     * Find Brush enable of player and execute function on honeycomb
-     *
-     * @param brushBuilder
-     * @param obj
-     */
-    public void executeHoneyBrush(BrushBuilder brushBuilder, Object obj) {
+    public void executeBrush(BrushBuilder brushBuilder, Material tool, Object loc, Object ploc) {
 
-        Main.getInstance().getRegisteredBrush()
-                .values().stream()
-                .filter(brushOperation -> brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnHoney(Bukkit.getPlayer(this.uuid), obj));
-    }
-
-    /**
-     *
-     * Find Brush enable of player and execute function on first item builder
-     *
-     * @param brushBuilder BrushBuilder
-     * @param obj Object
-     */
-    public void executeArrowBrush(BrushBuilder brushBuilder, Object obj, Object loc) {
-
-        Main.getInstance().getRegisteredBrush()
-                .values().stream()
-                .filter(brushOperation -> brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnArrow(Bukkit.getPlayer(this.uuid), obj, loc));
-    }
-
-    /**
-     *
-     * Find Brush enable of player and execute function on second item builder
-     *
-     * @param brushBuilder BrushBuilder
-     * @param obj Object
-     * @param loc Object
-     */
-    public void executeGunPowderBrush(BrushBuilder brushBuilder, Object obj, Object loc) {
-
-        Main.getInstance().getRegisteredBrush()
-                .values().stream()
-                .filter(brushOperation ->  brushBuilder.getBrushType().getBclass().getName().equalsIgnoreCase(brushOperation.getClass().getName().replace("class ", "")))
-                .forEach(brushOperation -> brushOperation.ExecuteBrushOnGunpowder(Bukkit.getPlayer(this.uuid), obj, loc));
+        Main.getBrush().getBrushes().stream()
+                .filter(registerBrush -> registerBrush.getBrushName().equalsIgnoreCase(brushBuilder.getBrushType().getBrushName()))
+                .forEach(registerBrush -> registerBrush.execute(brushBuilder, tool, loc, ploc));
     }
 
     //MESSAGE:
@@ -501,7 +469,7 @@ public class BrushBuilder {
 
 
         return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(),
-                BrushEnum.NONE,
+                new NoneBrush(),
                 false,
                 true,
                 true,

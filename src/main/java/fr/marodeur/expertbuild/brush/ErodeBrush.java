@@ -1,10 +1,18 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.EditSession;
@@ -16,14 +24,13 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class ErodeBrush implements BrushOperation {
+public class ErodeBrush extends AbstractBrush {
 
     private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
@@ -53,46 +60,42 @@ public class ErodeBrush implements BrushOperation {
 
     */
 
+
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.erode");
+    public String getBrushName() {
+        return "erode";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.ERODE;
+    public String getAliases() {
+        return "e";
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.erode";
     }
 
-    @Deprecated
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
+    }
 
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true))) {
-            return;
-        }
+    @Override
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         bv4.clear();
-        Location l = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
+        Location l = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
-        int radius = bb.getRadius();
+        int radius = brushBuilder.getRadius();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
 
             try {
                 editsession.setFastMode(false);
 
-                erorionParameter = new int[]{bb.getErosionFaces(), bb.getErosionRecursion(), bb.getFillFaces(), bb.getFillRecursion()};
+                erorionParameter = new int[]{brushBuilder.getErosionFaces(), brushBuilder.getErosionRecursion(), brushBuilder.getFillFaces(), brushBuilder.getFillRecursion()};
 
                 final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
@@ -115,7 +118,7 @@ public class ErodeBrush implements BrushOperation {
                     fillIteration(iterationBlockManager);
                 }
 
-                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
+                new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
 
                 spherePoint.clear();
 
@@ -125,30 +128,20 @@ public class ErodeBrush implements BrushOperation {
         }
     }
 
-    @Deprecated
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
-
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true))) {
-            return;
-        }
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         bv4.clear();
-        Location l = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
+        Location l = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
-        int radius = bb.getRadius();
+        int radius = brushBuilder.getRadius();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
             try {
                 editsession.setFastMode(false);
 
-                erorionParameter = new int[]{bb.getFillFaces(), bb.getFillRecursion(), bb.getErosionFaces(), bb.getErosionRecursion()};
+                erorionParameter = new int[]{brushBuilder.getFillFaces(), brushBuilder.getFillRecursion(), brushBuilder.getErosionFaces(), brushBuilder.getErosionRecursion()};
 
                 final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
@@ -171,7 +164,7 @@ public class ErodeBrush implements BrushOperation {
                     fillIteration(blockChangeTracker);
                 }
 
-                new UtilsFAWE(p).setBlockAnyPattern(p, bv4, false);
+                new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
 
                 spherePoint.clear();
 
