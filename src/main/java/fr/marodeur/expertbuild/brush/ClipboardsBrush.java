@@ -1,59 +1,51 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
-import com.sk89q.worldedit.world.block.BaseBlock;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class ClipboardsBrush implements BrushOperation {
+public class ClipboardsBrush extends AbstractBrush {
 
     private static final List<Integer> rotation = Arrays.asList(0, 90, 180, 270);
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.clipboard");
+    public String getBrushName() {
+        return "clipboard";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() { return BrushEnum.CLIPBOARD; }
-
-    @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.clipboard";
     }
 
     @Override
-    public void ExecuteBrushOnHoney(Player p, Object obj1) {
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location l = (Location) obj1;
+        Location l = (Location) loc;
         Random r = new Random();
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         GlueList<BlockVec4> bv4 = new GlueList<>();
 
         if (brushBuilder.getClipboardsParameter().getClipboardsBlock().size() == 0) {
-            p.sendMessage(Main.prefix + "Any selection register");
+
+            brushBuilder.sendMessage(Main.prefix + "Any selection register");
             return;
         }
 
@@ -74,6 +66,16 @@ public class ClipboardsBrush implements BrushOperation {
                                 finalRandomRotation, bv3.getBaseblock(),
                                 l.getBlockY() + bv3.getY() + 1)));
 
-        new UtilsFAWE(p).setBlockList(p, bv4, false);
+        new UtilsFAWE(brushBuilder.getPlayer()).setBlockList(brushBuilder.getPlayer(), bv4, false);
+    }
+
+    @Override
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
+    }
+
+    @Override
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
     }
 }

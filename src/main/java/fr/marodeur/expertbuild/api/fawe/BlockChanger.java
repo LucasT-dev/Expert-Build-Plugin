@@ -458,7 +458,6 @@ public class BlockChanger {
      * Added for debugging purposes.
      * </p>
      */
-    public static void test() {}
 
     private static void addNMSBlockData(Material material) {
         ItemStack itemStack = new ItemStack(material);

@@ -1,7 +1,7 @@
 package fr.marodeur.expertbuild.commands.CommandsGivenTools;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.brush.NoneBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
@@ -224,27 +224,32 @@ public class Terraforming_Painting implements CommandExecutor {
 
 					if (args.length == 1) {
 
-						if (Integer.parseInt(args[0]) > 4) {
-							p.sendMessage(Main.prefix + " Use delay < 5");
+						try {
+
+							int tickRT = Integer.parseInt(args[0]);
+
+							if (tickRT > 4 || tickRT < 1) {
+								p.sendMessage(Main.prefix + " Use delay > 0 and < 5");
+								return false;
+							}
+						} catch (NumberFormatException ignored) {
+							p.sendMessage(Main.prefix + "Invlid number, use /repeater <delay (1-4)>");
+							return false;
 						}
 
-						brushBuilder.setTickRT(Integer.parseInt(args[0]))
-								.setBrushType(BrushEnum.TICK_REPEATER)
-								.setEnable(true);
 
 						ItemStack itemBuilder = new ItemBuilder("Intelligence repeater", Material.REPEATER, 1)
-								.addLore("Delay : " + brushBuilder.getTickRT())
+								.addLore("Delay : " + Integer.parseInt(args[0]))
 								.addEnchant(Enchantment.LUCK, 1)
 								.build();
 
 						p.getInventory().setItem(1, itemBuilder);
 						p.sendMessage(Main.prefix + "Repeater give and enable ");
 
+					} else {
+						p.sendMessage(Main.prefix + "Invlid number, use /repeater <delay (1-4)>");
+						return false;
 					}
-				} else {
-					brushBuilder.setBrushType(BrushEnum.NONE)
-							.setEnable(false)
-							.sendMessage(message.getBrushDisable());
 				}
 			}
 		}

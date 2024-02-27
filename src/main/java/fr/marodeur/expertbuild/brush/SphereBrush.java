@@ -1,11 +1,19 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.EditSession;
@@ -17,46 +25,33 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-
-public class SphereBrush implements BrushOperation {
+public class SphereBrush extends AbstractBrush {
 
     private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.sphere");
+    public String getBrushName() {
+        return "sphere";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.SPHERE;
+    public String getAliases() {
+        return "s";
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
+    public String getPermission() {
+        return "exp.brush.sphere";
     }
 
-    @SuppressWarnings({"deprecation"})
     @Override
-    public void ExecuteBrushOnHoney(Player p, Object obj1) {
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location middlePoint = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+        bv4.clear();
+        Location middlePoint = (Location) loc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
@@ -69,81 +64,23 @@ public class SphereBrush implements BrushOperation {
                     apply(middlePoint, radius, brushBuilder.getPattern());
 
                 } finally {
-                    new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
                 }
             }
         });
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
-
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location middlePoint = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = brushBuilder.getRadius();
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
-
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
-
-                    apply(middlePoint, radius, brushBuilder.getPattern());
-
-                } finally {
-                    new UtilsFAWE(p).setBlockListSimple(p, (List<BlockVec4>) bv4.clone(), false);
-                }
-            }
-            bv4.clear();
-        });
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
-
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location middlePoint = (Location) obj1;
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        int radius = brushBuilder.getRadius();
-
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
-
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
-
-                    apply(middlePoint, radius, brushBuilder.getPattern());
-
-                } finally {
-                    new UtilsFAWE(p).setBlockListSimple(p, (List<BlockVec4>) bv4.clone(), false);
-                }
-            }
-            bv4.clear();
-        });
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
-    private static void apply(@NotNull Location middlePoint, int radius, Pattern pattern) {
+    private void apply(@NotNull Location middlePoint, int radius, Pattern pattern) {
 
         Location loc1 = middlePoint.clone()
                 .add(-radius, -radius, -radius)

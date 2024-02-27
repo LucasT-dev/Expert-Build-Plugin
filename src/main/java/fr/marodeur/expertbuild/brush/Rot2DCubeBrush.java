@@ -1,11 +1,19 @@
+
+/*
+ * Copyright (c) 2024. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.enums.BrushEnum;
+import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.BrushOperation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.EditSession;
@@ -18,43 +26,25 @@ import com.sk89q.worldedit.regions.Polygonal2DRegion;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-public class Rot2DCubeBrush implements BrushOperation {
+public class Rot2DCubeBrush extends AbstractBrush {
 
     @Override
-    public boolean hasPermission(@NotNull Player p) {
-        return p.hasPermission("exp.brush.2dcube");
+    public String getBrushName() {
+        return "2dcube";
     }
 
     @Override
-    public BrushEnum getTypeOfBrush() {
-        return BrushEnum.ROT2DCUBE;
+    public String getPermission() {
+        return "exp.brush.2dcube";
     }
 
     @Override
-    public boolean hasEnabelingBrush(@NotNull BrushBuilder brushBuilder) {
-        return BrushOperation.super.hasEnabelingBrush(brushBuilder);
-    }
+    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-    @Deprecated
-    @Override
-    public void ExecuteBrushOnHoney(Player p, Object obj1) {
-
-        if (!hasPermission(p)) {
-            return;
-        }
-
-        if (!hasEnabelingBrush(BrushBuilder.getBrushBuilderPlayer(p, true)) ||
-                !BrushBuilder.getBrushBuilderPlayer(p, true).getBrushType().equals(getTypeOfBrush())) {
-            return;
-        }
-
-        Location l = (Location) obj1;
-        Location pl = p.getLocation();
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+        Location l = (Location) loc;
+        Location pl = (Location) ploc;
+        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
         GlueList<BlockVec4> bv4 = new GlueList<>();
@@ -65,7 +55,7 @@ public class Rot2DCubeBrush implements BrushOperation {
                 try {
                     editsession.setFastMode(false);
 
-                    int radiusCube = (int) Math.sqrt(radius*radius + radius*radius);
+                    int radiusCube = (int) Math.sqrt(radius * radius + radius * radius);
 
                     Location ldir = new BlockVec4(l).getPointAngle(0, pl.getYaw(), radiusCube, l.getWorld());
 
@@ -91,12 +81,12 @@ public class Rot2DCubeBrush implements BrushOperation {
 
                     polygonal2DRegion.forEach(blockVector3 -> {
 
-                        for (int i = l.getBlockY(); i < l.getBlockY()+(2*radiusCube); i++) {
+                        for (int i = l.getBlockY(); i < l.getBlockY() + (2 * radiusCube); i++) {
                             bv4.add(new BlockVec4(blockVector3.getBlockX(), i, blockVector3.getBlockZ(), brushBuilder.getPattern()));
                         }
                     });
 
-                    new UtilsFAWE(p).setBlockListSimple(p, bv4, false);
+                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -106,12 +96,12 @@ public class Rot2DCubeBrush implements BrushOperation {
     }
 
     @Override
-    public void ExecuteBrushOnArrow(Player p, Object obj1, Object loc) {
-        ExecuteBrushOnHoney(p, obj1);
+    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
-    public void ExecuteBrushOnGunpowder(Player p, Object obj1, Object loc) {
-        ExecuteBrushOnHoney(p, obj1);
+    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }
