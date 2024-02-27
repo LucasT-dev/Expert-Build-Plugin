@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.CommandBlock;
 import org.bukkit.block.data.type.Repeater;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -118,37 +119,30 @@ public class GeneralListener implements Listener {
 		if (a != Action.RIGHT_CLICK_BLOCK)
 			return;
 
-		if (p.getInventory().getItemInMainHand().getType().equals(Material.REPEATER)) {
+		ItemStack handItemStack = p.getInventory().getItemInMainHand();
+
+		if (handItemStack.getType().equals(Material.REPEATER) && handItemStack.getItemMeta().hasEnchant(Enchantment.LUCK)) {
 
 			if (block.getType().equals(Material.REPEATER)) {
 				return;
 			}
 
-			BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+			Location loc = new Location(p.getWorld(), block.getX(), block.getY() + 1, block.getZ());
 
-			if (brushBuilder == null) {
-				return;
-			}
+			if (loc.getBlock().getType().equals(Material.AIR)) {
 
-			if (brushBuilder.getEnable().equals(true) && brushBuilder.getEnable().equals(true)) {
+				loc.getBlock().setType(Material.REPEATER);
 
-				Location loc = new Location(p.getWorld(), block.getX(), block.getY() +1, block.getZ());
+				Repeater rp1 = (Repeater) loc.getBlock().getBlockData();
+				BlockFace blockFace = p.getFacing().getOppositeFace();
 
-				if (loc.getBlock().getType().equals(Material.AIR)) {
+				rp1.setDelay(Integer.parseInt(handItemStack.getItemMeta().getLore().get(0).substring(handItemStack.getItemMeta().getLore().get(0).length()-1)));
+				rp1.setFacing(blockFace);
 
-					loc.getBlock().setType(Material.REPEATER);
+				loc.getBlock().setBlockData(rp1);
+				loc.getBlock().getState().update();
 
-					Repeater rp1 = (Repeater) loc.getBlock().getBlockData();
-					BlockFace blockFace = p.getFacing().getOppositeFace();
-
-					rp1.setDelay(brushBuilder.getTickRT());
-					rp1.setFacing(blockFace);
-
-					loc.getBlock().setBlockData(rp1);
-					loc.getBlock().getState().update();
-
-					e.setCancelled(true);
-				}
+				e.setCancelled(true);
 			}
 		}
 	}

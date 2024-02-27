@@ -200,37 +200,6 @@ public class Terraforming_Painting implements CommandExecutor {
 				bb.sendMessage(message.getSelectionClear());
 			}
 
-			case "f" -> {
-
-				if (!p.hasPermission("worldedit.selection.flip")) return false;
-
-				if (args.length == 0) {
-					p.sendMessage(Main.prefix + "flip");
-					Bukkit.dispatchCommand(p, "/flip");
-				}
-				if (args[0].equalsIgnoreCase("up") || args[0].equalsIgnoreCase("down") || args[0].equalsIgnoreCase("south")
-						|| args[0].equalsIgnoreCase("north") || args[0].equalsIgnoreCase("east")
-						|| args[0].equalsIgnoreCase("west")) {
-					p.sendMessage("§8[§7§oEXP-Build§8] §l>§l§7 flip §8" + args[0]);
-					Bukkit.dispatchCommand(p, "/flip " + args[0]);
-				}
-			}
-			case "s" -> {
-
-				if (!p.hasPermission("worldedit.clipboard.paste")) return false;
-
-				if (args.length == 0) {
-					p.sendMessage(Main.help + "/s");
-					p.sendMessage("§7  Usages : /s");
-					p.sendMessage("§7  Arguments : <Block>");
-					return false;
-				}
-				if (args[0] != null) {
-					p.sendMessage(Main.prefix + "set §8" + args[0]);
-					Bukkit.dispatchCommand(p, "/set " + args[0]);
-				}
-			}
-
 			case "getcommand" -> {
 
 				if (Main.getCommand.contains(p.getUniqueId())) {
@@ -255,27 +224,32 @@ public class Terraforming_Painting implements CommandExecutor {
 
 					if (args.length == 1) {
 
-						if (Integer.parseInt(args[0]) > 4) {
-							p.sendMessage(Main.prefix + " Use delay < 5");
+						try {
+
+							int tickRT = Integer.parseInt(args[0]);
+
+							if (tickRT > 4 || tickRT < 1) {
+								p.sendMessage(Main.prefix + " Use delay > 0 and < 5");
+								return false;
+							}
+						} catch (NumberFormatException ignored) {
+							p.sendMessage(Main.prefix + "Invlid number, use /repeater <delay (1-4)>");
+							return false;
 						}
 
-						//brushBuilder.setTickRT(Integer.parseInt(args[0]))
-						//		.setBrushType(BrushEnum.TICK_REPEATER)
-						//		.setEnable(true);
 
 						ItemStack itemBuilder = new ItemBuilder("Intelligence repeater", Material.REPEATER, 1)
-								.addLore("Delay : " + brushBuilder.getTickRT())
+								.addLore("Delay : " + Integer.parseInt(args[0]))
 								.addEnchant(Enchantment.LUCK, 1)
 								.build();
 
 						p.getInventory().setItem(1, itemBuilder);
 						p.sendMessage(Main.prefix + "Repeater give and enable ");
 
+					} else {
+						p.sendMessage(Main.prefix + "Invlid number, use /repeater <delay (1-4)>");
+						return false;
 					}
-				} else {
-					brushBuilder.setBrush(new NoneBrush())
-							.setEnable(false)
-							.sendMessage(message.getBrushDisable());
 				}
 			}
 		}
