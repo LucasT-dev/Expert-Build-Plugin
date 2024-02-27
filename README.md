@@ -459,7 +459,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.15
+  version: 1.18.1.16
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)
