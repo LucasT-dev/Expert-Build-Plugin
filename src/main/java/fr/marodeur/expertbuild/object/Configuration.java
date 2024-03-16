@@ -97,7 +97,7 @@ public class Configuration {
 
             this.wand_click_in_air = yml.getBoolean("build.wand_click_in_air");
             this.sihft_click_with_wand = yml.getBoolean("build.sihft_click_with_wand");
-            this.log_shortcut = yml.getBoolean("build.log_shortcut");
+            this.log_shortcut = yml.getBoolean("build.logShortcut");
             this.wand_item = Material.matchMaterial(WorldEdit.getInstance().getConfiguration().wandItem.replace("minecraft:", ""));
             this.max_file_size = yml.getInt("build.max_file_size");
             this.max_point_saved = yml.getInt("build.max_point_saved");
