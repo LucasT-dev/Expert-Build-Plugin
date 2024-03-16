@@ -2,9 +2,9 @@ package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.gui.MainGUI;
 import fr.marodeur.expertbuild.object.Configuration;
+import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,7 +26,7 @@ public class BrushListener implements Listener {
         Action action = e.getAction();
         ItemStack it = e.getItem();
         Location loc;
-        Configuration conf = Main.getInstance().getConfig();
+        Configuration conf = Main.configuration();
         MessageBuilder msg = Main.getInstance().getMessageConfig();
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 

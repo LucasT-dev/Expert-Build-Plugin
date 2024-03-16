@@ -2,8 +2,8 @@ package fr.marodeur.expertbuild.gui;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.GOHA_Builder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.object.ItemBuilder;
+import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;

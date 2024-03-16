@@ -1,9 +1,7 @@
 package fr.marodeur.expertbuild.commands.CommandsGivenTools;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.brush.NoneBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.ItemBuilder;
 
@@ -12,7 +10,7 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 
-import org.bukkit.Bukkit;
+import fr.marodeur.expertbuild.object.MessageBuilder;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

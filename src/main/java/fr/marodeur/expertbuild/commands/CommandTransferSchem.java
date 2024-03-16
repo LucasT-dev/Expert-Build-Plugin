@@ -2,10 +2,10 @@ package fr.marodeur.expertbuild.commands;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.api.TransferSchema;
 import fr.marodeur.expertbuild.object.Configuration;
+import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +24,7 @@ import java.util.List;
 public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 
 	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
-	private final Configuration conf = Main.getInstance().getConfig();
+	private final Configuration conf = Main.configuration();
 
 	private final List<String> serv =
 			Arrays.asList(conf.getServerName1()+"", conf.getServerName2()+"",

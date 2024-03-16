@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public abstract class AbstractBrush {
 
     private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
-    private static final Configuration conf = Main.getInstance().getConfig();
+    private static final Configuration conf = Main.configuration();
 
     public abstract String getBrushName();
 

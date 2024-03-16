@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.commands.CommandsPerlin;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.api.exception.IncompleteSelectionException;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
@@ -11,6 +10,7 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 
+import fr.marodeur.expertbuild.object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -115,7 +115,7 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
                     new UtilsFAWE(p).setBlockListSimple(p, bv4, true);
 
                 } catch (NumberFormatException e) {
-                    p.sendMessage(message.getInvalidNumberIntegerUpper0());
+                    p.sendMessage(message.getInvalidNumberIntegerUpper0().toString());
                 }
 
                 p.sendMessage(message.getBlockModified(String.valueOf(bv4.size())));

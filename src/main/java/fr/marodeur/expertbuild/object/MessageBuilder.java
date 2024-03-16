@@ -1,12 +1,12 @@
 package fr.marodeur.expertbuild.object;
 
 import fr.marodeur.expertbuild.Main;
-
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Paths;
 import java.util.Enumeration;
@@ -17,23 +17,23 @@ import java.util.logging.Logger;
 public class MessageBuilder {
 
     private final FileConfiguration yml;
-    private final Configuration config = Main.getInstance().getConfig();
+    private final Configuration config = Main.configuration();
     private final Logger log = Logger.getLogger("Expert-Build");
 
     private File langfile;
 
-    private String pluginEnable;
-    private String pluginDisable;
+    private StringBuilder pluginEnable;
+    private StringBuilder pluginDisable;
 
-    private String listenersLoad;
-    private String commandsLoad;
-    private String configLoad;
-    private String guiLoad;
-    private String brushLoad;
+    private StringBuilder listenersLoad;
+    private StringBuilder commandsLoad;
+    private StringBuilder configLoad;
+    private StringBuilder guiLoad;
+    private StringBuilder brushLoad;
     private String schematicTransfertFile;
 
-    private String checkingUpdate;
-    private String notNewUpdate;
+    private StringBuilder checkingUpdate;
+    private StringBuilder notNewUpdate;
     private String newUpdateAvailable;
     private String unableCheckUpdate;
 
@@ -42,21 +42,21 @@ public class MessageBuilder {
     private String brushEnableWithRadius;
     private String brushEnableWithMaterial;
     private String brushEnableWithRadiusPattern;
-    private String brushDisable;
+    private StringBuilder brushDisable;
     private String brushRegistered;
-    private String materialSet;
-    private String radiusSet;
+    private StringBuilder materialSet;
+    private StringBuilder radiusSet;
 
     private String playerRegistered;
-    private String builderProfileRegistered;
-    private String playerAlreadyRegistered;
+    private StringBuilder builderProfileRegistered;
+    private StringBuilder playerAlreadyRegistered;
 
     private String pointAdd;
-    private String pointNotSave;
+    private StringBuilder pointNotSave;
 
 
-    private String dontPerm;
-    private String consoleNotExecuteCmd;
+    private StringBuilder dontPerm;
+    private StringBuilder consoleNotExecuteCmd;
     private String noPermissionNode;
 
 
@@ -65,7 +65,7 @@ public class MessageBuilder {
     private String setPos2;
     private String setPos2WithArea;
     private String addVertexPos;
-    private String selectionClear;
+    private StringBuilder selectionClear;
     private String setSelection;
 
     private String blockModified;
@@ -78,18 +78,18 @@ public class MessageBuilder {
 
     private String errorRegion;
     private String errorSelection;
-    private String errorIncompleteSelection;
+    private StringBuilder errorIncompleteSelection;
     private String errorBrushbuilder;
-    private String errorJschException;
-    private String errorSftpException;
-    private String fileConfigurationError;
-    private String incompleteSelection;
-    private String invalidNumber;
-    private String invalidNumberInteger;
-    private String invalidNumberIntegerUpper0;
-    private String invalidMaterial;
+    private StringBuilder errorJschException;
+    private StringBuilder errorSftpException;
+    private StringBuilder fileConfigurationError;
+    private StringBuilder incompleteSelection;
+    private StringBuilder invalidNumber;
+    private StringBuilder invalidNumberInteger;
+    private StringBuilder invalidNumberIntegerUpper0;
+    private StringBuilder invalidMaterial;
     private String invalidMaterialSet;
-    private String invalidBiome;
+    private StringBuilder invalidBiome;
     private String invalidBiomeSet;
     private String invalidInstance;
     private String invalidArgument;
@@ -100,79 +100,79 @@ public class MessageBuilder {
 
 
     private String use;
-    private String pregeneration;
-    private String generate;
+    private StringBuilder pregeneration;
+    private StringBuilder generate;
 
     private String fileNotExist;
-    private String fileTooLarge;
-    private String serverOff;
-    private String unknownServer;
-    private String transfert;
-    private String dontRestart;
+    private StringBuilder fileTooLarge;
+    private StringBuilder serverOff;
+    private StringBuilder unknownServer;
+    private StringBuilder transfert;
+    private StringBuilder dontRestart;
     private String succesTransfert;
     private String transfertLog;
 
     private String enable;
     private String disable;
-    private String allClipboardDelete;
+    private StringBuilder allClipboardDelete;
     private String clipboardDoesNotExist;
     private String clipboardAlreadyExist;
     private String clipboardAddAndEnable;
     private String clipboardRemove;
 
 
-    private String back;
-    private String exit;
-    private String main_gui_title;
-    private String main_item_1;
-    private String main_item_2;
-    private String main_item_3;
+    private StringBuilder back;
+    private StringBuilder exit;
+    private StringBuilder main_gui_title;
+    private StringBuilder main_item_1;
+    private StringBuilder main_item_2;
+    private StringBuilder main_item_3;
 
-    private String leather_gui_title;
-    private String leather_item;
-    private String leather_helmet;
-    private String leather_chestplate;
-    private String leather_leggings;
-    private String leather_boots;
-    private String red_color;
-    private String green_color;
-    private String blue_color;
+    private StringBuilder leather_gui_title;
+    private StringBuilder leather_item;
+    private StringBuilder leather_helmet;
+    private StringBuilder leather_chestplate;
+    private StringBuilder leather_leggings;
+    private StringBuilder leather_boots;
+    private StringBuilder red_color;
+    private StringBuilder green_color;
+    private StringBuilder blue_color;
     private String red;
     private String green;
     private String blue;
 
-    private String organic_gui_title;
-    private String organic_item;
-    private String pitch_angle_conf;
-    private String yaw_angle_conf;
+    private StringBuilder organic_gui_title;
+    private StringBuilder organic_item;
+    private StringBuilder pitch_angle_conf;
+    private StringBuilder yaw_angle_conf;
     private String click_change_angle;
-    private String click_enable_disable;
-    private String clickPregen;
-    private String clickGenerate;
-    private String clickClearParticle;
+    private StringBuilder click_enable_disable;
+    private StringBuilder clickPregen;
+    private StringBuilder clickGenerate;
+    private StringBuilder clickClearParticle;
 
-    private String member_conf;
-    private String height;
+    private StringBuilder member_conf;
+    private StringBuilder height;
     private String organic_height;
-    private String interact_member;
+    private StringBuilder interact_member;
     private String switch_member;
     private String pitch_level;
     private String yaw_level;
 
-    private String flowerGuiTitle;
-    private String flowerItem;
-    private String brushEnable2;
-    private String brushDisable2;
-    private String radiusText;
+    private StringBuilder flowerGuiTitle;
+    private StringBuilder flowerItem;
+    private StringBuilder brushEnable2;
+    private StringBuilder brushDisable2;
+    private StringBuilder radiusText;
     private String radiusValue;
-    private String airText;
+    private StringBuilder airText;
     private String airValue;
     private String total;
     private String rightArrow;
-    private String clickForChange;
+    private StringBuilder clickForChange;
     private String propertyKey;
     private String valuePropertykey;
-    private String clickForChangeProperty;
+    private StringBuilder clickForChangeProperty;
 
 
     public MessageBuilder() throws URISyntaxException {
@@ -186,18 +186,18 @@ public class MessageBuilder {
 
         try {
 
-            this.pluginEnable = this.yml.getString("expbuild.message.main.plugin_enable");
-            this.pluginDisable = this.yml.getString("expbuild.message.main.plugin_disable");
+            this.pluginEnable = new StringBuilder(this.yml.getString("expbuild.message.main.plugin_enable"));
+            this.pluginDisable = new StringBuilder(this.yml.getString("expbuild.message.main.plugin_disable"));
 
-            this.listenersLoad = this.yml.getString("expbuild.message.main.listeners_load");
-            this.commandsLoad = this.yml.getString("expbuild.message.main.commands_load");
-            this.configLoad = this.yml.getString("expbuild.message.main.config_load");
-            this.guiLoad = this.yml.getString("expbuild.message.main.gui_load");
-            this.brushLoad = this.yml.getString("expbuild.message.main.brush_load");
+            this.listenersLoad = new StringBuilder(this.yml.getString("expbuild.message.main.listeners_load"));
+            this.commandsLoad = new StringBuilder(this.yml.getString("expbuild.message.main.commands_load"));
+            this.configLoad = new StringBuilder(this.yml.getString("expbuild.message.main.config_load"));
+            this.guiLoad = new StringBuilder(this.yml.getString("expbuild.message.main.gui_load"));
+            this.brushLoad = new StringBuilder(this.yml.getString("expbuild.message.main.brush_load"));
             this.schematicTransfertFile = this.yml.getString("expbuild.message.main.schematic_transfert_file");
 
-            this.checkingUpdate = this.yml.getString("expbuild.message.main.checking_update");
-            this.notNewUpdate = this.yml.getString("expbuild.message.main.not_new_update");
+            this.checkingUpdate = new StringBuilder(this.yml.getString("expbuild.message.main.checking_update"));
+            this.notNewUpdate = new StringBuilder(this.yml.getString("expbuild.message.main.not_new_update"));
             this.newUpdateAvailable = this.yml.getString("expbuild.message.main.new_update_available");
             this.unableCheckUpdate = this.yml.getString("expbuild.message.main.unable_check_update");
 
@@ -206,22 +206,22 @@ public class MessageBuilder {
             this.brushEnableWithRadius = this.yml.getString("expbuild.message.brush.brush_enable_with_radius");
             this.brushEnableWithMaterial = this.yml.getString("expbuild.message.brush.brush_enable_with_material");
             this.brushEnableWithRadiusPattern = this.yml.getString("expbuild.message.brush.brush_enable_with_radius_pattern");
-            this.brushDisable = this.yml.getString("expbuild.message.brush.brush_disable");
+            this.brushDisable = new StringBuilder(this.yml.getString("expbuild.message.brush.brush_disable"));
             this.brushRegistered = this.yml.getString("expbuild.message.brush.brush_registered");
-            this.materialSet = this.yml.getString("expbuild.message.brush.material_set");
-            this.radiusSet = this.yml.getString("expbuild.message.brush.radius_set");
+            this.materialSet = new StringBuilder(this.yml.getString("expbuild.message.brush.material_set"));
+            this.radiusSet = new StringBuilder(this.yml.getString("expbuild.message.brush.radius_set"));
 
 
             this.playerRegistered = this.yml.getString("expbuild.message.brush.player_registered");
-            this.builderProfileRegistered = this.yml.getString("expbuild.message.brush.builder_profile_registered");
-            this.playerAlreadyRegistered = this.yml.getString("expbuild.message.brush.player_already_registered");
+            this.builderProfileRegistered = new StringBuilder(this.yml.getString("expbuild.message.brush.builder_profile_registered"));
+            this.playerAlreadyRegistered = new StringBuilder(this.yml.getString("expbuild.message.brush.player_already_registered"));
 
             this.pointAdd = this.yml.getString("expbuild.message.brush.point_add");
-            this.pointNotSave = this.yml.getString("expbuild.message.brush.point_not_save");
+            this.pointNotSave = new StringBuilder(this.yml.getString("expbuild.message.brush.point_not_save"));
 
 
-            this.dontPerm = this.yml.getString("expbuild.message.permission.dont_perm");
-            this.consoleNotExecuteCmd = this.yml.getString("expbuild.message.permission.console_not_execute_cmd");
+            this.dontPerm = new StringBuilder(this.yml.getString("expbuild.message.permission.dont_perm"));
+            this.consoleNotExecuteCmd = new StringBuilder(this.yml.getString("expbuild.message.permission.console_not_execute_cmd"));
             this.noPermissionNode = this.yml.getString("expbuild.message.permission.no_permission_node");
 
 
@@ -230,7 +230,7 @@ public class MessageBuilder {
             this.setPos2 = this.yml.getString("expbuild.message.selection.set_pos_2");
             this.setPos2WithArea = this.yml.getString("expbuild.message.selection.set_pos_2_with_area");
             this.addVertexPos = this.yml.getString("expbuild.message.selection.add_vertex_pos");
-            this.selectionClear = this.yml.getString("expbuild.message.selection.selection_clear");
+            this.selectionClear = new StringBuilder(this.yml.getString("expbuild.message.selection.selection_clear"));
             this.setSelection = this.yml.getString("expbuild.message.selection.set_selection");
 
             this.blockModified = this.yml.getString("expbuild.message.selection.block_modified");
@@ -242,18 +242,18 @@ public class MessageBuilder {
 
             this.errorRegion = this.yml.getString("expbuild.message.error.error_region");
             this.errorSelection = this.yml.getString("expbuild.message.error.error_selection");
-            this.errorIncompleteSelection = this.yml.getString("expbuild.message.error.error_incomplete_selection");
+            this.errorIncompleteSelection = new StringBuilder(this.yml.getString("expbuild.message.error.error_incomplete_selection"));
             this.errorBrushbuilder = this.yml.getString("expbuild.message.error.error_brushbuilder");
-            this.errorJschException = this.yml.getString("expbuild.message.error.error_jsch_exception");
-            this.errorSftpException = this.yml.getString("expbuild.message.error.error_sftp_exception");
-            this.fileConfigurationError = this.yml.getString("expbuild.message.error.file_configuration_error");
-            this.incompleteSelection = this.yml.getString("expbuild.message.error.incomplete_selection");
-            this.invalidNumber = this.yml.getString("expbuild.message.error.invalid_number");
-            this.invalidNumberInteger = this.yml.getString("expbuild.message.error.invalid_number_integer");
-            this.invalidNumberIntegerUpper0 = this.yml.getString("expbuild.message.error.invalid_number_integer_upper_0");
-            this.invalidMaterial = this.yml.getString("expbuild.message.error.invalid_material");
+            this.errorJschException = new StringBuilder(this.yml.getString("expbuild.message.error.error_jsch_exception"));
+            this.errorSftpException = new StringBuilder(this.yml.getString("expbuild.message.error.error_sftp_exception"));
+            this.fileConfigurationError = new StringBuilder(this.yml.getString("expbuild.message.error.file_configuration_error"));
+            this.incompleteSelection = new StringBuilder(this.yml.getString("expbuild.message.error.incomplete_selection"));
+            this.invalidNumber = new StringBuilder(this.yml.getString("expbuild.message.error.invalid_number"));
+            this.invalidNumberInteger = new StringBuilder(this.yml.getString("expbuild.message.error.invalid_number_integer"));
+            this.invalidNumberIntegerUpper0 = new StringBuilder(this.yml.getString("expbuild.message.error.invalid_number_integer_upper_0"));
+            this.invalidMaterial = new StringBuilder(this.yml.getString("expbuild.message.error.invalid_material"));
             this.invalidMaterialSet = this.yml.getString("expbuild.message.error.invalid_material_set");
-            this.invalidBiome = this.yml.getString("expbuild.message.error.invalid_biome");
+            this.invalidBiome = new StringBuilder(this.yml.getString("expbuild.message.error.invalid_biome"));
             this.invalidBiomeSet = this.yml.getString("expbuild.message.error.invalid_biome_set");
             this.invalidInstance = this.yml.getString("expbuild.message.error.invalid_instance");
             this.invalidArgument = this.yml.getString("expbuild.message.error.invalid_argument");
@@ -265,79 +265,79 @@ public class MessageBuilder {
 
 
             this.use = this.yml.getString("expbuild.message.commands.use");
-            this.pregeneration = this.yml.getString("expbuild.message.commands.pregeneration");
-            this.generate = this.yml.getString("expbuild.message.commands.generate");
+            this.pregeneration = new StringBuilder(this.yml.getString("expbuild.message.commands.pregeneration"));
+            this.generate = new StringBuilder(this.yml.getString("expbuild.message.commands.generate"));
 
 
             this.fileNotExist = this.yml.getString("expbuild.message.commands.file_not_exist");
-            this.fileTooLarge = this.yml.getString("expbuild.message.commands.file_too_large");
-            this.serverOff = this.yml.getString("expbuild.message.commands.server_off");
-            this.unknownServer = this.yml.getString("expbuild.message.commands.unknown_server");
-            this.transfert = this.yml.getString("expbuild.message.commands.transfert");
-            this.dontRestart = this.yml.getString("expbuild.message.commands.dont_restart");
+            this.fileTooLarge = new StringBuilder(this.yml.getString("expbuild.message.commands.file_too_large"));
+            this.serverOff = new StringBuilder(this.yml.getString("expbuild.message.commands.server_off"));
+            this.unknownServer = new StringBuilder(this.yml.getString("expbuild.message.commands.unknown_server"));
+            this.transfert = new StringBuilder(this.yml.getString("expbuild.message.commands.transfert"));
+            this.dontRestart = new StringBuilder(this.yml.getString("expbuild.message.commands.dont_restart"));
             this.succesTransfert = this.yml.getString("expbuild.message.commands.succes_transfert");
             this.transfertLog = this.yml.getString("expbuild.message.commands.transfert_log");
 
             this.enable = this.yml.getString("expbuild.message.commands.enable");
             this.disable = this.yml.getString("expbuild.message.commands.disable");
-            this.allClipboardDelete = this.yml.getString("expbuild.message.commands.all_clipboards_delete");
+            this.allClipboardDelete = new StringBuilder(this.yml.getString("expbuild.message.commands.all_clipboards_delete"));
             this.clipboardDoesNotExist = this.yml.getString("expbuild.message.commands.clipboard_does_not_exist");
             this.clipboardAlreadyExist = this.yml.getString("expbuild.message.commands.clipboard_already_exist");
             this.clipboardAddAndEnable = this.yml.getString("expbuild.message.commands.clipboard_add_and_enable");
             this.clipboardRemove = this.yml.getString("expbuild.message.commands.clipboard_remove");
 
 
-            this.back = this.yml.getString("expbuild.message.gui.back");
-            this.exit = this.yml.getString("expbuild.message.gui.exit");
-            this.main_gui_title = this.yml.getString("expbuild.message.gui.main_gui_title");
-            this.main_item_1 = this.yml.getString("expbuild.message.gui.main_item_1");
-            this.main_item_2 = this.yml.getString("expbuild.message.gui.main_item_2");
-            this.main_item_3 = this.yml.getString("expbuild.message.gui.main_item_3");
+            this.back = new StringBuilder(this.yml.getString("expbuild.message.gui.back"));
+            this.exit = new StringBuilder(this.yml.getString("expbuild.message.gui.exit"));
+            this.main_gui_title = new StringBuilder(this.yml.getString("expbuild.message.gui.main_gui_title"));
+            this.main_item_1 = new StringBuilder(this.yml.getString("expbuild.message.gui.main_item_1"));
+            this.main_item_2 = new StringBuilder(this.yml.getString("expbuild.message.gui.main_item_2"));
+            this.main_item_3 = new StringBuilder(this.yml.getString("expbuild.message.gui.main_item_3"));
 
-            this.leather_gui_title = this.yml.getString("expbuild.message.gui.leather_gui_title");
-            this.leather_item = this.yml.getString("expbuild.message.gui.leather_item");
-            this.leather_helmet = this.yml.getString("expbuild.message.gui.leather_helmet");
-            this.leather_chestplate = this.yml.getString("expbuild.message.gui.leather_chestplate");
-            this.leather_leggings = this.yml.getString("expbuild.message.gui.leather_leggings");
-            this.leather_boots = this.yml.getString("expbuild.message.gui.leather_boots");
-            this.red_color = this.yml.getString("expbuild.message.gui.red_color");
-            this.green_color = this.yml.getString("expbuild.message.gui.green_color");
-            this.blue_color = this.yml.getString("expbuild.message.gui.blue_color");
+            this.leather_gui_title = new StringBuilder(this.yml.getString("expbuild.message.gui.leather_gui_title"));
+            this.leather_item = new StringBuilder(this.yml.getString("expbuild.message.gui.leather_item"));
+            this.leather_helmet = new StringBuilder(this.yml.getString("expbuild.message.gui.leather_helmet"));
+            this.leather_chestplate = new StringBuilder(this.yml.getString("expbuild.message.gui.leather_chestplate"));
+            this.leather_leggings = new StringBuilder(this.yml.getString("expbuild.message.gui.leather_leggings"));
+            this.leather_boots = new StringBuilder(this.yml.getString("expbuild.message.gui.leather_boots"));
+            this.red_color = new StringBuilder(this.yml.getString("expbuild.message.gui.red_color"));
+            this.green_color = new StringBuilder(this.yml.getString("expbuild.message.gui.green_color"));
+            this.blue_color = new StringBuilder(this.yml.getString("expbuild.message.gui.blue_color"));
             this.red = this.yml.getString("expbuild.message.gui.red");
             this.green = this.yml.getString("expbuild.message.gui.green");
             this.blue = this.yml.getString("expbuild.message.gui.blue");
 
-            this.organic_gui_title = this.yml.getString("expbuild.message.gui.organic_gui_title");
-            this.organic_item = this.yml.getString("expbuild.message.gui.organic_item");
-            this.pitch_angle_conf = this.yml.getString("expbuild.message.gui.pitch_angle_conf");
-            this.yaw_angle_conf = this.yml.getString("expbuild.message.gui.yaw_angle_conf");
+            this.organic_gui_title = new StringBuilder(this.yml.getString("expbuild.message.gui.organic_gui_title"));
+            this.organic_item = new StringBuilder(this.yml.getString("expbuild.message.gui.organic_item"));
+            this.pitch_angle_conf = new StringBuilder(this.yml.getString("expbuild.message.gui.pitch_angle_conf"));
+            this.yaw_angle_conf = new StringBuilder(this.yml.getString("expbuild.message.gui.yaw_angle_conf"));
             this.click_change_angle = this.yml.getString("expbuild.message.gui.click_change_angle");
-            this.click_enable_disable = this.yml.getString("expbuild.message.gui.click_enable_disable");
-            this.clickPregen = this.yml.getString("expbuild.message.gui.click_pregen");
-            this.clickGenerate = this.yml.getString("expbuild.message.gui.click_generate");
-            this.clickClearParticle = this.yml.getString("expbuild.message.gui.click_clear_particle");
-            this.member_conf = this.yml.getString("expbuild.message.gui.member_conf");
-            this.height = this.yml.getString("expbuild.message.gui.height");
+            this.click_enable_disable = new StringBuilder(this.yml.getString("expbuild.message.gui.click_enable_disable"));
+            this.clickPregen = new StringBuilder(this.yml.getString("expbuild.message.gui.click_pregen"));
+            this.clickGenerate = new StringBuilder(this.yml.getString("expbuild.message.gui.click_generate"));
+            this.clickClearParticle = new StringBuilder(this.yml.getString("expbuild.message.gui.click_clear_particle"));
+            this.member_conf = new StringBuilder(this.yml.getString("expbuild.message.gui.member_conf"));
+            this.height = new StringBuilder(this.yml.getString("expbuild.message.gui.height"));
             this.organic_height = this.yml.getString("expbuild.message.gui.organic_height");
-            this.interact_member = this.yml.getString("expbuild.message.gui.interact_member");
+            this.interact_member = new StringBuilder(this.yml.getString("expbuild.message.gui.interact_member"));
             this.switch_member = this.yml.getString("expbuild.message.gui.switch_member");
             this.pitch_level = this.yml.getString("expbuild.message.gui.pitch_level");
             this.yaw_level = this.yml.getString("expbuild.message.gui.yaw_level");
 
-            this.flowerGuiTitle = this.yml.getString("expbuild.message.gui.flower_gui_title");
-            this.flowerItem = this.yml.getString("expbuild.message.gui.flower_item");
-            this.brushEnable2 = this.yml.getString("expbuild.message.gui.brush_enable");
-            this.brushDisable2 = this.yml.getString("expbuild.message.gui.brush_disable");
-            this.radiusText = this.yml.getString("expbuild.message.gui.radius_text");
+            this.flowerGuiTitle = new StringBuilder(this.yml.getString("expbuild.message.gui.flower_gui_title"));
+            this.flowerItem = new StringBuilder(this.yml.getString("expbuild.message.gui.flower_item"));
+            this.brushEnable2 = new StringBuilder(this.yml.getString("expbuild.message.gui.brush_enable"));
+            this.brushDisable2 = new StringBuilder(this.yml.getString("expbuild.message.gui.brush_disable"));
+            this.radiusText = new StringBuilder(this.yml.getString("expbuild.message.gui.radius_text"));
             this.radiusValue = this.yml.getString("expbuild.message.gui.radius_value");
-            this.airText = this.yml.getString("expbuild.message.gui.air_text");
+            this.airText = new StringBuilder(this.yml.getString("expbuild.message.gui.air_text"));
             this.airValue = this.yml.getString("expbuild.message.gui.air_value");
             this.total = this.yml.getString("expbuild.message.gui.total");
             this.rightArrow = this.yml.getString("expbuild.message.gui.right_arrow");
-            this.clickForChange = this.yml.getString("expbuild.message.gui.click_for_change");
+            this.clickForChange = new StringBuilder(this.yml.getString("expbuild.message.gui.click_for_change"));
             this.propertyKey = this.yml.getString("expbuild.message.gui.property_key");
             this.valuePropertykey = this.yml.getString("expbuild.message.gui.value_propertykey");
-            this.clickForChangeProperty = this.yml.getString("expbuild.message.gui.click_for_change_property");
+            this.clickForChangeProperty = new StringBuilder(this.yml.getString("expbuild.message.gui.click_for_change_property"));
 
         } catch (NullPointerException | IllegalStateException e) {
 
@@ -348,31 +348,31 @@ public class MessageBuilder {
         return this;
     }
 
-    public String getPluginEnable() {
+    public StringBuilder getPluginEnable() {
         return pluginEnable;
     }
 
-    public String getPluginDisable() {
+    public StringBuilder getPluginDisable() {
         return pluginDisable;
     }
 
-    public String getListenersLoad() {
+    public StringBuilder getListenersLoad() {
         return listenersLoad;
     }
 
-    public String getCommandsLoad() {
+    public StringBuilder getCommandsLoad() {
         return commandsLoad;
     }
 
-    public String getConfigLoad() {
+    public StringBuilder getConfigLoad() {
         return configLoad;
     }
 
-    public String getGuiLoad() {
+    public StringBuilder getGuiLoad() {
         return guiLoad;
     }
 
-    public String getBrushLoad() {
+    public StringBuilder getBrushLoad() {
         return brushLoad;
     }
 
@@ -380,11 +380,11 @@ public class MessageBuilder {
         return schematicTransfertFile.replace("'num'", num);
     }
 
-    public String getCheckingUpdate() {
+    public StringBuilder getCheckingUpdate() {
         return checkingUpdate;
     }
 
-    public String getNotNewUpdate() {
+    public StringBuilder getNotNewUpdate() {
         return notNewUpdate;
     }
 
@@ -412,15 +412,15 @@ public class MessageBuilder {
         return brushEnableWithRadiusPattern.replace("'brush'", brush).replace("'radius'", radius).replace("'pattern'", pattern);
     }
 
-    public String getMaterialSet() {
+    public StringBuilder getMaterialSet() {
         return materialSet;
     }
 
-    public String getRadiusSet() {
+    public StringBuilder getRadiusSet() {
         return radiusSet;
     }
 
-    public String getBrushDisable() {
+    public StringBuilder getBrushDisable() {
         return brushDisable;
     }
 
@@ -432,11 +432,11 @@ public class MessageBuilder {
         return playerRegistered.replace("'player'", player);
     }
 
-    public String getBuilderProfileRegistered() {
+    public StringBuilder getBuilderProfileRegistered() {
         return builderProfileRegistered;
     }
 
-    public String getPlayerAlreadyRegistered() {
+    public StringBuilder getPlayerAlreadyRegistered() {
         return playerAlreadyRegistered;
     }
 
@@ -444,16 +444,16 @@ public class MessageBuilder {
         return pointAdd.replace("'point'", point);
     }
 
-    public String getPointNotSave() {
+    public StringBuilder getPointNotSave() {
         return pointNotSave;
     }
 
 
-    public String getDontPerm() {
+    public StringBuilder getDontPerm() {
         return dontPerm;
     }
 
-    public String getConsoleNotExecuteCmd() {
+    public StringBuilder getConsoleNotExecuteCmd() {
         return consoleNotExecuteCmd;
     }
 
@@ -482,7 +482,7 @@ public class MessageBuilder {
         return addVertexPos.replace("'pos'", pos);
     }
 
-    public String getSelectionClear() {
+    public StringBuilder getSelectionClear() {
         return selectionClear;
     }
 
@@ -516,7 +516,7 @@ public class MessageBuilder {
         return errorSelection.replace("'selection'", selection);
     }
 
-    public String getErrorIncompleteSelection() {
+    public StringBuilder getErrorIncompleteSelection() {
         return errorIncompleteSelection;
     }
 
@@ -524,35 +524,35 @@ public class MessageBuilder {
         return errorBrushbuilder.replace("'player'", player);
     }
 
-    public String getErrorJschException() {
+    public StringBuilder getErrorJschException() {
         return errorJschException;
     }
 
-    public String getErrorSftpException() {
+    public StringBuilder getErrorSftpException() {
         return errorSftpException;
     }
 
-    public String getFileConfigurationError() {
+    public StringBuilder getFileConfigurationError() {
         return fileConfigurationError;
     }
 
-    public String getIncompleteSelection() {
+    public StringBuilder getIncompleteSelection() {
         return incompleteSelection;
     }
 
-    public String getInvalidNumber() {
+    public StringBuilder getInvalidNumber() {
         return invalidNumber;
     }
 
-    public String getInvalidNumberInteger() {
+    public StringBuilder getInvalidNumberInteger() {
         return invalidNumberInteger;
     }
 
-    public String getInvalidNumberIntegerUpper0() {
+    public StringBuilder getInvalidNumberIntegerUpper0() {
         return invalidNumberIntegerUpper0;
     }
 
-    public String getInvalidMaterial() {
+    public StringBuilder getInvalidMaterial() {
         return invalidMaterial;
     }
 
@@ -560,7 +560,7 @@ public class MessageBuilder {
         return invalidMaterialSet.replace("'pattern'", pattern);
     }
 
-    public String getInvalidBiome() {
+    public StringBuilder getInvalidBiome() {
         return invalidBiome;
     }
 
@@ -590,11 +590,11 @@ public class MessageBuilder {
         return use.replace("'cmd'", cmd);
     }
 
-    public String getPregeneration() {
+    public StringBuilder getPregeneration() {
         return pregeneration;
     }
 
-    public String getGenerate() {
+    public StringBuilder getGenerate() {
         return generate;
     }
 
@@ -602,23 +602,23 @@ public class MessageBuilder {
         return fileNotExist.replace("'file'", file);
     }
 
-    public String getFileTooLarge() {
+    public StringBuilder getFileTooLarge() {
         return fileTooLarge;
     }
 
-    public String getServerOff() {
+    public StringBuilder getServerOff() {
         return serverOff;
     }
 
-    public String getUnknownServer() {
+    public StringBuilder getUnknownServer() {
         return unknownServer;
     }
 
-    public String getTransfert() {
+    public StringBuilder getTransfert() {
         return transfert;
     }
 
-    public String getDontRestart() {
+    public StringBuilder getDontRestart() {
         return dontRestart;
     }
 
@@ -638,7 +638,7 @@ public class MessageBuilder {
         return this.disable.replace("'element'", element);
     }
 
-    public String getAllClipboardDelete() {
+    public StringBuilder getAllClipboardDelete() {
         return this.allClipboardDelete;
     }
 
@@ -659,63 +659,63 @@ public class MessageBuilder {
     }
 
 
-    public String getBack() {
+    public StringBuilder getBack() {
         return back;
     }
 
-    public String getExit() {
+    public StringBuilder getExit() {
         return exit;
     }
 
-    public String getMainGuiTitle() {
+    public StringBuilder getMainGuiTitle() {
         return main_gui_title;
     }
 
-    public String getMainItem1() {
+    public StringBuilder getMainItem1() {
         return main_item_1;
     }
 
-    public String getMainItem2() {
+    public StringBuilder getMainItem2() {
         return main_item_2;
     }
 
-    public String getMainItem3() {
+    public StringBuilder getMainItem3() {
         return main_item_3;
     }
 
-    public String getLeatherGuiTitle() {
+    public StringBuilder getLeatherGuiTitle() {
         return leather_gui_title;
     }
 
-    public String getLeatherItem() {
+    public StringBuilder getLeatherItem() {
         return leather_item;
     }
 
-    public String getLeatherHelmet() {
+    public StringBuilder getLeatherHelmet() {
         return leather_helmet;
     }
 
-    public String getLeatherChestplate() {
+    public StringBuilder getLeatherChestplate() {
         return leather_chestplate;
     }
 
-    public String getLeatherLeggings() {
+    public StringBuilder getLeatherLeggings() {
         return leather_leggings;
     }
 
-    public String getLeatherBoots() {
+    public StringBuilder getLeatherBoots() {
         return leather_boots;
     }
 
-    public String getRedColor() {
+    public StringBuilder getRedColor() {
         return red_color;
     }
 
-    public String getGreenColor() {
+    public StringBuilder getGreenColor() {
         return green_color;
     }
 
-    public String getBlueColor() {
+    public StringBuilder getBlueColor() {
         return blue_color;
     }
 
@@ -731,19 +731,19 @@ public class MessageBuilder {
         return blue.replace("'level'", level);
     }
 
-    public String getOrganicGuiTitle() {
+    public StringBuilder getOrganicGuiTitle() {
         return organic_gui_title;
     }
 
-    public String getOrganicItem() {
+    public StringBuilder getOrganicItem() {
         return organic_item;
     }
 
-    public String getPitchAngleConf() {
+    public StringBuilder getPitchAngleConf() {
         return pitch_angle_conf;
     }
 
-    public String getYawAngleConf() {
+    public StringBuilder getYawAngleConf() {
         return yaw_angle_conf;
     }
 
@@ -751,27 +751,27 @@ public class MessageBuilder {
         return click_change_angle.replace("'type'", type);
     }
 
-    public String getClickEnableDisable() {
+    public StringBuilder getClickEnableDisable() {
         return click_enable_disable;
     }
 
-    public String getClickPregen() {
+    public StringBuilder getClickPregen() {
         return this.clickPregen;
     }
 
-    public String getClickGenerate() {
+    public StringBuilder getClickGenerate() {
         return this.clickGenerate;
     }
 
-    public String getClickClearParticle() {
+    public StringBuilder getClickClearParticle() {
         return this.clickClearParticle;
     }
 
-    public String getMemberConf() {
+    public StringBuilder getMemberConf() {
         return member_conf;
     }
 
-    public String getHeight() {
+    public StringBuilder getHeight() {
         return height;
     }
 
@@ -779,7 +779,7 @@ public class MessageBuilder {
         return organic_height.replace("'value'", value);
     }
 
-    public String getInteractMember() {
+    public StringBuilder getInteractMember() {
         return interact_member;
     }
 
@@ -796,23 +796,23 @@ public class MessageBuilder {
     }
 
 
-    public String getFlowerGuiTitle() {
+    public StringBuilder getFlowerGuiTitle() {
         return flowerGuiTitle;
     }
 
-    public String getFlowerItem() {
+    public StringBuilder getFlowerItem() {
         return flowerItem;
     }
 
-    public String getBrushEnable2() {
+    public StringBuilder getBrushEnable2() {
         return brushEnable2;
     }
 
-    public String getBrushDisable2() {
+    public StringBuilder getBrushDisable2() {
         return brushDisable2;
     }
 
-    public String getRadiusText() {
+    public StringBuilder getRadiusText() {
         return radiusText;
     }
 
@@ -820,7 +820,7 @@ public class MessageBuilder {
         return radiusValue.replace("'value'", value);
     }
 
-    public String getAirText() {
+    public StringBuilder getAirText() {
         return airText;
     }
 
@@ -836,7 +836,7 @@ public class MessageBuilder {
         return rightArrow.replace("'value'", value);
     }
 
-    public String getClickForChange() {
+    public StringBuilder getClickForChange() {
         return clickForChange;
     }
 
@@ -848,7 +848,7 @@ public class MessageBuilder {
         return valuePropertykey.replace("'value'", value);
     }
 
-    public String getClickForChangeProperty() {
+    public StringBuilder getClickForChangeProperty() {
         return clickForChangeProperty;
     }
 

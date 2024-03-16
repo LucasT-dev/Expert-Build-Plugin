@@ -2,8 +2,8 @@ package fr.marodeur.expertbuild.gui;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.object.ItemBuilder;
+import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
@@ -20,7 +20,7 @@ public class MainGUI {
     public void openMainInventory(Player p) {
 
         RyseInventory.builder()
-                .title(msg.getMainGuiTitle())
+                .title(msg.getMainGuiTitle().toString())
                 .rows(3)
                 .disableUpdateTask()
                 .provider(new InventoryProvider() {

@@ -2,12 +2,13 @@ package fr.marodeur.expertbuild.utils;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.GOHA_Builder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
+import fr.marodeur.expertbuild.object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -49,7 +50,7 @@ public class LineVisualize {
 						length += space;
 					}
 				} catch (IncompleteRegionException e) {
-					logger.info(message.getIncompleteSelection());
+					logger.info(message.getIncompleteSelection().toString());
 					cancel();
 				}
 			}
@@ -71,7 +72,7 @@ public class LineVisualize {
 					Region region = actor.getSession().getSelection();
 
 				} catch (IncompleteRegionException e) {
-					logger.info(message.getIncompleteSelection());
+					logger.info(message.getIncompleteSelection().toString());
 					cancel();
 				}
 

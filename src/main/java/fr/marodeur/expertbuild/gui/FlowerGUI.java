@@ -11,10 +11,7 @@ import com.sk89q.worldedit.world.block.BaseBlock;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.FlowerBrush;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.Configuration;
-import fr.marodeur.expertbuild.object.ItemBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.*;
 
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
@@ -41,7 +38,7 @@ public class FlowerGUI {
 
     private final String RightArrow = "16227036b8afed6935d53143d16488d39cf4fb73a671f2b2955e80fc9dfe458";
     private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
-    private static final Configuration conf = Main.getInstance().getConfig();
+    private static final Configuration conf = Main.configuration();
 
     public void openFlowerInventory(Player p) {
 
@@ -91,7 +88,7 @@ public class FlowerGUI {
 
                         //FLOWER
                         contents.set(1, IntelligentItem.of(
-                                new ItemBuilder(msg.getFlowerGuiTitle(), Material.HONEYCOMB, 1)
+                                new ItemBuilder(msg.getFlowerGuiTitle().toString(), Material.HONEYCOMB, 1)
                                         .addLoreLineTest(msg.getBrushEnable2(), msg.getBrushDisable2(), brushBuilder.getEnable())
                                         .build(), event -> brushBuilder.setEnable(!brushBuilder.getEnable())));
 
@@ -104,7 +101,7 @@ public class FlowerGUI {
 
                                         brushBuilder.setEnable(false);
                                         contents.updateMaterial(0, Material.RED_STAINED_GLASS_PANE);
-                                        contents.updateLore(0, 0, msg.getBrushDisable2());
+                                        contents.updateLore(0, 0, msg.getBrushDisable2().toString());
                                     }));
 
                             //SET BRUSH TRUE
@@ -116,7 +113,7 @@ public class FlowerGUI {
 
                                         brushBuilder.setEnable(true);
                                         contents.updateMaterial(0, Material.LIME_STAINED_GLASS_PANE);
-                                        contents.updateLore(0, 0, msg.getBrushEnable2());
+                                        contents.updateLore(0, 0, msg.getBrushEnable2().toString());
                                     }));
                         }
 

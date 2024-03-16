@@ -6,7 +6,6 @@ import fr.marodeur.expertbuild.api.exception.IncompleteSelectionException;
 import fr.marodeur.expertbuild.api.fawe.BlockChanger;
 import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.EditSession;
@@ -18,6 +17,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 
+import fr.marodeur.expertbuild.object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;

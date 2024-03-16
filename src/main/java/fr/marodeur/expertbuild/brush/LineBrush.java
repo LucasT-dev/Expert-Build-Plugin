@@ -30,7 +30,7 @@ import java.util.UUID;
 public class LineBrush extends AbstractBrush {
 
     private final HashMap<UUID,ArrayList<BlockVec4>> point = new HashMap<>();
-    Configuration conf = Main.getInstance().getConfig();
+    Configuration conf = Main.configuration();
     MessageBuilder msg = Main.getInstance().getMessageConfig();
 
 

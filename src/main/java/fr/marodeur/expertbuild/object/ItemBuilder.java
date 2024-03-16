@@ -50,6 +50,13 @@ public class ItemBuilder {
 		itemStack.setItemMeta(itemMeta);
 	}
 
+	public ItemBuilder(StringBuilder name, Material material, int amount){
+		itemStack = new ItemStack(material,amount);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(name.toString());
+		itemStack.setItemMeta(itemMeta);
+	}
+
 	public ItemBuilder(Material material, int amount, short data)
 	{
 		itemStack = new ItemStack(material, amount, data);
@@ -90,6 +97,17 @@ public class ItemBuilder {
 		return this;
 	}
 
+	public ItemBuilder addLore(StringBuilder line)
+	{
+		ItemMeta im = itemStack.getItemMeta();
+		List<String> lore = new ArrayList<>();
+		if (im.hasLore()) lore = new ArrayList<>(im.getLore());
+		lore.add(line.toString());
+		im.setLore(lore);
+		itemStack.setItemMeta(im);
+		return this;
+	}
+
 	public ItemBuilder addLoreLineTest(String lineIfTrue, String lineIfFalse, Boolean b)
 	{
 		ItemMeta im = itemStack.getItemMeta();
@@ -97,6 +115,18 @@ public class ItemBuilder {
 		if (im.hasLore()) lore = new ArrayList<>(im.getLore());
 		if (b) lore.add(lineIfTrue);
 		if (!b) lore.add(lineIfFalse);
+		im.setLore(lore);
+		itemStack.setItemMeta(im);
+		return this;
+	}
+
+	public ItemBuilder addLoreLineTest(StringBuilder lineIfTrue, StringBuilder lineIfFalse, Boolean b)
+	{
+		ItemMeta im = itemStack.getItemMeta();
+		List<String> lore = new ArrayList<>();
+		if (im.hasLore()) lore = new ArrayList<>(im.getLore());
+		if (b) lore.add(lineIfTrue.toString());
+		if (!b) lore.add(lineIfFalse.toString());
 		im.setLore(lore);
 		itemStack.setItemMeta(im);
 		return this;

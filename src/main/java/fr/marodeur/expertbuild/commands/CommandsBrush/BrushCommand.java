@@ -27,7 +27,7 @@ import java.util.List;
 public class BrushCommand extends AbstractCommand {
 
     private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
-    private static final Configuration conf = Main.getInstance().getConfig();
+    private static final Configuration conf = Main.configuration();
 
     @Override
     public String getCommand() {
