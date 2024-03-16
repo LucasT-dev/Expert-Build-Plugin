@@ -1,12 +1,9 @@
 package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.GOHA_Builder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
-import fr.marodeur.expertbuild.utils.LineVisualize;
+import fr.marodeur.expertbuild.object.*;
+import fr.marodeur.expertbuild.object.LISON.AdvancedParticleVisualisation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.object.Configuration;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -43,9 +40,9 @@ public class FAWEListener implements Listener {
 		Action action = event.getAction();
 		ItemStack it = event.getItem();
 		BukkitPlayer actor = BukkitAdapter.adapt(p);
-		Configuration conf = Main.getInstance().getConfig();
 		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
 		Logger log = Logger.getLogger("Expert-Build");
+		Configuration conf = Main.configuration();
 		Material mat = conf.getWand_item();
 
 		if (it == null) return;
@@ -112,6 +109,10 @@ public class FAWEListener implements Listener {
 
 					if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos2"));
 				}
+			}
+
+			if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
+
 
 				try {
 
@@ -121,41 +122,45 @@ public class FAWEListener implements Listener {
 
 						List<BlockVector3> BlockVector3 = new ArrayList<>(((ConvexPolyhedralRegion) region).getVertices());
 
-						LineVisualize.generate_line(p,
-								BlockVector3.get(BlockVector3.size() - 1),
-								BlockVector3.get(BlockVector3.size() - 2));
+						if (BlockVector3.size() == 3 && conf.getDisplay_convex_line()) {
 
-						if (BlockVector3.size() >= 3 && BlockVector3.size() % 2 == 0 && conf.isDisplay_bezier_curve()) {
+							for (int i = 1; i < BlockVector3.size(); i++) {
 
-							LineVisualize.bezierCurveDisplay(p, actor, BlockVector3.get(BlockVector3.size() - 1),
-									BlockVector3.get(BlockVector3.size() - 2),
-									BlockVector3.get(BlockVector3.size() - 3));
+								new AdvancedParticleVisualisation(p)
+										.lineParticle(
+												BlockVector3.get(i),
+												BlockVector3.get(i-1),
+												conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+												new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true) });
+
+							}
+
+						} else if (BlockVector3.size() > 3 && conf.getDisplay_convex_line()) {
+
+							new AdvancedParticleVisualisation(p)
+									.lineParticle(
+											BlockVector3.get(BlockVector3.size() - 1),
+											BlockVector3.get(BlockVector3.size() - 2),
+											conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+											new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true) });
+
+						}
+
+						if (conf.isDisplay_bezier_curve()) {
+
+							bb.setParticleID();
+
+							new AdvancedParticleVisualisation(p)
+									.bezierLineParticle(
+											BlockVector3,
+											conf.getParticle_bezier_curve_type(), conf.getCoefficient_particle_number(),
+											new AdvancedParticleVisualisation.RescheduledParticle[]
+													{new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true),
+															new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearUpdateId(true)});
 						}
 					}
-
 				} catch (IncompleteRegionException e) {
-
-					log.info(msg.getErrorRegion("1", e.toString()));
-
-					List<BlockVector3> bv3 = new ArrayList<>(new ConvexPolyhedralRegion(actor.getWorld()).getVertices());
-
-					try {
-						new UtilsFAWE(p).getPrimaryPos();
-					} catch (IncompleteRegionException e1) {
-
-						log.info(msg.getErrorRegion("2", e.toString()));
-						return;
-					}
-
-					if (bv3.size() == 0) {
-
-						LineVisualize.generate_line(p, BlockVector3.at(
-								p.getLocation().getX(),
-								p.getLocation().getY(),
-								p.getLocation().getZ()), new UtilsFAWE(p).getPrimaryPos());
-
-						return;
-					}
+						log.info(msg.getErrorRegion("1", e.toString()));
 				}
 			}
 		}

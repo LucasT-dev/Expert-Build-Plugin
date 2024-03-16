@@ -1,23 +1,25 @@
 package fr.marodeur.expertbuild.object;
 
 import fr.marodeur.expertbuild.Main;
+
 import com.sk89q.worldedit.WorldEdit;
 
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.logging.Logger;
 
-public class Configuration extends FileConfiguration {
+public class Configuration {
 
-    private final FileConfiguration yml;
+    File file = new File("plugins/ExpertBuild/config.yml");
+    FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
+
     private final Logger log = Logger.getLogger("Expert-Build");
 
     private String version;
@@ -28,7 +30,17 @@ public class Configuration extends FileConfiguration {
     private String default_pattern_brush;
     private Biome default_biome_brush;
     private int max_brush_distance;
+
     private boolean display_bezier_curve;
+    private Particle particle_bezier_curve_type;
+    private int coefficient_particle_number;
+
+    private boolean display_convex_line;
+    private Particle particle_convex_type_line;
+    private int spacing_between_particles;
+
+    private int period_particle;
+
     private boolean wand_click_in_air;
     private boolean sihft_click_with_wand;
     private boolean log_shortcut;
@@ -55,59 +67,65 @@ public class Configuration extends FileConfiguration {
 
 
     public Configuration() throws IOException {
+    }
 
-
-        File file = new File("plugins/ExpertBuild/config.yml");
-        this.yml = YamlConfiguration.loadConfiguration(file);
+    public Configuration loadConfiguration() throws IOException {
 
         if (getFileIsUpToDate()) updateFileConfig(file);
 
-    }
-
-    public Configuration loadConfiguration() {
-
         try {
 
-            this.version = this.yml.getString("build.version");
-            this.max_rayon_brush = this.yml.getInt("build.max_brush_rayon");
-            this.default_brush_rayon = this.yml.getInt("build.default_brush_rayon");
-            this.default_air_brush = this.yml.getInt("build.default_air_brush");
-            this.default_material_brush = Material.valueOf(Objects.requireNonNull(this.yml.getString("build.default_material_brush")));
-            this.default_pattern_brush = this.yml.getString("build.default_pattern_brush");
-            this.default_biome_brush = Biome.valueOf(Objects.requireNonNull(this.yml.getString("build.default_biome_brush")));
-            this.max_brush_distance = this.yml.getInt("build.max_brush_distance");
-            this.display_bezier_curve = this.yml.getBoolean("build.display_bezier_curve");
-            this.wand_click_in_air = this.yml.getBoolean("build.wand_click_in_air");
-            this.sihft_click_with_wand = this.yml.getBoolean("build.sihft_click_with_wand");
-            this.log_shortcut = this.yml.getBoolean("build.log_shortcut");
+            this.version = yml.getString("build.version");
+            this.max_rayon_brush = yml.getInt("build.max_brush_rayon");
+            this.default_brush_rayon = yml.getInt("build.default_brush_rayon");
+            this.default_air_brush = yml.getInt("build.default_air_brush");
+            this.default_material_brush = Material.valueOf(Objects.requireNonNull(yml.getString("build.default_material_brush")));
+            this.default_pattern_brush = yml.getString("build.default_pattern_brush");
+            this.default_biome_brush = Biome.valueOf(Objects.requireNonNull(yml.getString("build.default_biome_brush")));
+            this.max_brush_distance = yml.getInt("build.max_brush_distance");
+
+            // Particle
+            this.display_bezier_curve = yml.getBoolean("build.display_bezier_curve");
+            this.particle_bezier_curve_type = Particle.valueOf(yml.getString("build.particle_bezier_curve_type").toUpperCase());
+            this.coefficient_particle_number = yml.getInt("build.coefficient_particle_number");
+
+            this.display_convex_line = yml.getBoolean("build.display_convex_line");
+            this.particle_convex_type_line = Particle.valueOf(yml.getString("build.particle_convex_type_line").toUpperCase());
+            this.spacing_between_particles = yml.getInt("build.spacing_between_particles");
+
+            this.period_particle = yml.getInt("build.period_particle");
+
+            this.wand_click_in_air = yml.getBoolean("build.wand_click_in_air");
+            this.sihft_click_with_wand = yml.getBoolean("build.sihft_click_with_wand");
+            this.log_shortcut = yml.getBoolean("build.log_shortcut");
             this.wand_item = Material.matchMaterial(WorldEdit.getInstance().getConfiguration().wandItem.replace("minecraft:", ""));
-            this.max_file_size = this.yml.getInt("build.max_file_size");
-            this.max_point_saved = this.yml.getInt("build.max_point_saved");
-            this.terraforming_tool_1 = Material.matchMaterial(Objects.requireNonNull(this.yml.getString("build.terraforming_tool_1")));
-            this.terraforming_tool_2 = Material.matchMaterial(Objects.requireNonNull(this.yml.getString("build.terraforming_tool_2")));
+            this.max_file_size = yml.getInt("build.max_file_size");
+            this.max_point_saved = yml.getInt("build.max_point_saved");
+            this.terraforming_tool_1 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_1")));
+            this.terraforming_tool_2 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_2")));
 
-            this.arm_correction_factor = this.yml.getDouble("build.GOHA.arm_correction_factor");
-            this.default_material = this.yml.getString("build.GOHA.default_material");
-            this.default_orga_height = this.yml.getInt("build.GOHA.default_orga_height");
+            this.arm_correction_factor = yml.getDouble("build.GOHA.arm_correction_factor");
+            this.default_material = yml.getString("build.GOHA.default_material");
+            this.default_orga_height = yml.getInt("build.GOHA.default_orga_height");
 
-            this.lang = this.yml.getString("build.lang");
+            this.lang = yml.getString("build.lang");
 
             /*
              *
              * get state and name of server
              *
              */
-            this.state_server_1 = this.yml.getBoolean("build.server_1.statserver");
-            this.server_name_1 = this.yml.getString("build.server_1.name");
+            this.state_server_1 = yml.getBoolean("build.server_1.statserver");
+            this.server_name_1 = yml.getString("build.server_1.name");
 
-            this.state_server_2 = this.yml.getBoolean("build.server_2.statserver");
-            this.server_name_2 = this.yml.getString("build.server_2.name");
+            this.state_server_2 = yml.getBoolean("build.server_2.statserver");
+            this.server_name_2 = yml.getString("build.server_2.name");
 
-            this.state_server_3 = this.yml.getBoolean("build.server_3.statserver");
-            this.server_name_3 = this.yml.getString("build.server_3.name");
+            this.state_server_3 = yml.getBoolean("build.server_3.statserver");
+            this.server_name_3 = yml.getString("build.server_3.name");
 
-            this.state_server_4 = this.yml.getBoolean("build.server_4.statserver");
-            this.server_name_4 = this.yml.getString("build.server_4.name");
+            this.state_server_4 = yml.getBoolean("build.server_4.statserver");
+            this.server_name_4 = yml.getString("build.server_4.name");
 
         } catch (NullPointerException | IllegalStateException e) {
 
@@ -115,7 +133,6 @@ public class Configuration extends FileConfiguration {
                     "repair the file or delete all the files, so that the plugin recreates them");
 
         }
-
         return this;
     }
 
@@ -143,9 +160,33 @@ public class Configuration extends FileConfiguration {
     public int getMax_brush_distance() {
         return max_brush_distance;
     }
+
+    // Bezier particle
     public boolean isDisplay_bezier_curve() {
         return display_bezier_curve;
     }
+    public Particle getParticle_bezier_curve_type() {
+        return particle_bezier_curve_type;
+    }
+    public int getCoefficient_particle_number() {
+        return coefficient_particle_number;
+    }
+
+    // Line particle
+    public boolean getDisplay_convex_line() {
+        return display_convex_line;
+    }
+    public Particle getParticle_convex_type_line() {
+        return particle_convex_type_line;
+    }
+    public int getSpacing_between_particles() {
+        return spacing_between_particles;
+    }
+
+    public int getPeriod_particle() {
+        return period_particle;
+    }
+
     public boolean isWand_click_in_air() {
         return wand_click_in_air;
     }
@@ -211,15 +252,44 @@ public class Configuration extends FileConfiguration {
     }
 
 
-    @NotNull
     @Override
-    public String saveToString() {
-        return "";
-    }
-
-    @Override
-    public void loadFromString(@NotNull String contents) {
-
+    public String toString() {
+        return "Configuration{" +
+                "version='" + version + '\'' +
+                ", max_rayon_brush=" + max_rayon_brush +
+                ", default_brush_rayon=" + default_brush_rayon +
+                ", default_air_brush=" + default_air_brush +
+                ", default_material_brush=" + default_material_brush +
+                ", default_pattern_brush='" + default_pattern_brush + '\'' +
+                ", default_biome_brush=" + default_biome_brush +
+                ", max_brush_distance=" + max_brush_distance +
+                ", display_bezier_curve=" + display_bezier_curve +
+                ", particle_bezier_curve_type=" + particle_bezier_curve_type +
+                ", coefficient_particle_number=" + coefficient_particle_number +
+                ", display_convex_line=" + display_convex_line +
+                ", particle_convex_type_line=" + particle_convex_type_line +
+                ", spacing_between_particles=" + spacing_between_particles +
+                ", wand_click_in_air=" + wand_click_in_air +
+                ", sihft_click_with_wand=" + sihft_click_with_wand +
+                ", log_shortcut=" + log_shortcut +
+                ", wand_item=" + wand_item +
+                ", max_file_size=" + max_file_size +
+                ", max_point_saved=" + max_point_saved +
+                ", terraforming_tool_1=" + terraforming_tool_1 +
+                ", terraforming_tool_2=" + terraforming_tool_2 +
+                ", arm_correction_factor=" + arm_correction_factor +
+                ", default_material='" + default_material + '\'' +
+                ", default_orga_height=" + default_orga_height +
+                ", lang='" + lang + '\'' +
+                ", state_server_1=" + state_server_1 +
+                ", server_name_1='" + server_name_1 + '\'' +
+                ", state_server_2=" + state_server_2 +
+                ", server_name_2='" + server_name_2 + '\'' +
+                ", state_server_3=" + state_server_3 +
+                ", server_name_3='" + server_name_3 + '\'' +
+                ", state_server_4=" + state_server_4 +
+                ", server_name_4='" + server_name_4 + '\'' +
+                '}';
     }
 
     private boolean getFileIsUpToDate() {
@@ -355,11 +425,29 @@ public class Configuration extends FileConfiguration {
         if (this.version.equals("1.18.1.16")) {
             //Update config file from 1.18.1.16 to 1.18.1.17
 
+            // Bezier particle
+            yml.set("build.particle_bezier_curve_type", Particle.FLAME.name());
+            yml.set("build.coefficient_particle_number", 3);
+
+            // Line particle
+            yml.set("build.display_convex_line", true);
+            yml.set("build.particle_convex_type_line", Particle.FLAME.name());
+            yml.set("build.spacing_between_particles", 1);
+
+            yml.set("build.period_particle", 10);
+
+            yml.set("build.version", "1.18.1.17");
+            this.version = "1.18.1.17";
+
+            yml.save(file);
+
             //for next update
         }
 
         if (this.version.equals("1.18.1.17")) {
             //Update config file from 1.18.1.17 to 1.18.1.18
+
+            //for next update
         }
 
         log.info("File config update");

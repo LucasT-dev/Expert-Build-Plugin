@@ -14,7 +14,7 @@ public class GOHA_Builder {
 
 	private final Player player;
 	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
-	private static final Configuration conf = Main.getInstance().getConfig();
+	private static final Configuration conf = Main.configuration();
 
 	private int Height;
 	private String MaterialOrga;
@@ -619,7 +619,7 @@ public class GOHA_Builder {
 
 	public static void registerPlayer(@NotNull Player p) {
 
-		Configuration conf = Main.getInstance().getConfig();
+		Configuration conf = Main.configuration();
 
 		Main.registerGohaBuilder(new GOHA_Builder(
 				p,
@@ -656,7 +656,7 @@ public class GOHA_Builder {
 
 		private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
-		double factor = Main.getInstance().getConfig().getArm_correction_factor();
+		double factor = Main.configuration().getArm_correction_factor();
 
 		private final Player p;
 		private final GOHA_Builder goha_builder;
@@ -797,6 +797,21 @@ public class GOHA_Builder {
 
 				LineVisualize.genLineParticle(p, l, Jcerveau);
 				LineVisualize.genSphereParticle(p, (int) (seven / 1.5), Jcerveau);
+
+				/*new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(l.getX(), l.getY(), l.getZ()),
+								BlockVector3.at(Jcerveau.getX(), Jcerveau.getY(), Jcerveau.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
+				new AdvancedParticleVisualisation(p)
+						.sphereParticle(
+								Jcerveau,
+								(int) (seven / 1.5),
+								Particle.CLOUD,
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+				*/
 			}
 
 			return this;

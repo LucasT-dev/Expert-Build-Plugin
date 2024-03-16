@@ -27,7 +27,7 @@ public class BrushBuilder {
 
     private static final Logger log = Logger.getLogger("Expert-Build");
     private static final MessageBuilder message = Main.getInstance().getMessageConfig();
-    private static final Configuration conf = Main.getInstance().getConfig();
+    private static final Configuration conf = Main.configuration();
 
     private final UUID uuid;
     private AbstractBrush abstractBrush;
@@ -46,6 +46,8 @@ public class BrushBuilder {
     private List<BlockVec4> bv4; //using autoflip
     private Pattern pattern;
 
+    private UUID particleID;
+
     private TerraParameter terraParameter;
     private final ClipboardParameter clipboardParameter;
     private final ClipboardBrush clipboardBrush;
@@ -56,7 +58,7 @@ public class BrushBuilder {
     public BrushBuilder(UUID uuid, AbstractBrush abstractBrush, Boolean isEnable, Boolean selMode, Boolean flyMode, Material material,
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region,
-                        BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern,
+                        BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern, UUID particleID,
                         TerraParameter terraParameter, ClipboardParameter clipboardParameter, ClipboardBrush clipboardBrush) {
 
         this.uuid = uuid;
@@ -75,6 +77,7 @@ public class BrushBuilder {
         this.blockFace = blockFace;
         this.bv4 = bv4;
         this.pattern = pattern;
+        this.particleID = particleID;
 
         this.terraParameter = terraParameter;
         this.clipboardParameter = clipboardParameter;
@@ -150,6 +153,10 @@ public class BrushBuilder {
 
     public Pattern getPattern() {
         return pattern;
+    }
+
+    public UUID getParticleID() {
+        return particleID;
     }
 
     public TerraParameter getTerraParameter() {
@@ -368,6 +375,10 @@ public class BrushBuilder {
         return this;
     }
 
+    public void setParticleID() {
+        this.particleID = UUID.randomUUID();
+    }
+
     public void setTerraParameter(TerraParameter terraParameter) {
         this.terraParameter = terraParameter;
     }
@@ -448,6 +459,14 @@ public class BrushBuilder {
 
     }
 
+    public BrushBuilder sendMessage(StringBuilder msg) {
+
+        Bukkit.getPlayer(this.uuid).sendMessage(getMainPrefix() + msg);
+
+        return this;
+
+    }
+
     /**
      * Register BrushBuilder of player in HashMap
      *
@@ -483,6 +502,7 @@ public class BrushBuilder {
                 null,
                 new ArrayList<>(),
                 new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
+                UUID.randomUUID(),
                 new TerraParameter(0, 0, 0, 0),
                 new ClipboardParameter(new ArrayList<>(), new ArrayList<>(), false),
                 new ClipboardBrush(new GlueList<>())));

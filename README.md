@@ -455,11 +455,13 @@ default file config :
 ````yaml
 # EXP-Build
 
+# EXP-Build
+
 build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.16
+  version: 1.18.1.17
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)
@@ -515,10 +517,44 @@ build:
   #Default : 100
   max_brush_distance: 100
 
+
   #Display bezier line on convex selection
   #Default : true
   #Use boolean value (true / false)
   display_bezier_curve: true
+
+  #Type of particle to display
+  #Default : FLAME
+  #Use particle value (FLAME / SOUL / CLOUD ...)
+  particle_bezier_curve_type: FLAME
+
+  #Coefficient divide by the distance of the convex selection
+  #Default : 3
+  # Use integer value > 0
+  coefficient_particle_number: 3
+
+
+  #Display line on convex selection
+  #Default : true
+  #Use boolean value (true / false)
+  display_convex_line: true
+
+  #Type of particle to display
+  #Default : FLAME
+  #Use particle value (FLAME / SOUL / CLOUD ...)
+  particle_convex_type_line: FLAME
+
+  #Particle spacing
+  #Default : 1
+  # Use integer value > 0
+  spacing_between_particles: 1
+
+
+  #Repetition period of the asynchronous particle spawn loop 
+  #Default : 10
+  #Use integer value > 0
+  period_particle: 10
+
 
   #Player can wand click in air
   #Default : true

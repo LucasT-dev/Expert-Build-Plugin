@@ -2,10 +2,7 @@ package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.Configuration;
-import fr.marodeur.expertbuild.object.GOHA_Builder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.*;
 
 
 import net.md_5.bungee.api.ChatMessageType;
@@ -30,7 +27,7 @@ import java.util.Objects;
 
 public class GeneralListener implements Listener {
 
-	private final Configuration conf = Main.getInstance().getConfig();
+	private final Configuration conf = Main.configuration();
 	private final MessageBuilder message = Main.getInstance().getMessageConfig();
 
 	@EventHandler

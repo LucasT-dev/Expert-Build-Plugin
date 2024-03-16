@@ -19,6 +19,9 @@ import fr.marodeur.expertbuild.listeners.GeneralListener;
 import fr.marodeur.expertbuild.listeners.RotationEntity;
 import fr.marodeur.expertbuild.object.*;
 
+import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
+import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
+import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 
 import com.sk89q.worldedit.WorldEdit;
@@ -56,6 +59,9 @@ public class Main extends JavaPlugin {
 	private static AbstractBrush.RegisterBrush brush;
 	private static Configuration configuration;
 	private static MessageBuilder messageBuilder;
+
+	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
+
 
 	public static List<UUID> getCommand = new ArrayList<>();
 
@@ -112,7 +118,7 @@ public class Main extends JavaPlugin {
 		try {
 			serverFileBuilder();
 		} catch (IOException e) {
-			getLogger().severe(messageBuilder.getFileConfigurationError());
+			getLogger().severe(messageBuilder.getFileConfigurationError().toString());
 		}
 
 		loadBrush();
@@ -122,6 +128,9 @@ public class Main extends JavaPlugin {
 		registerPlayerBuilder();
 
 		registerCommand();
+
+		// LISON
+		new LightweightInteractiveSystemforOptimizedParticleNavigation().loadSchedule();
 
 		// LOAD MASK
 		loadCustomMask();
@@ -134,6 +143,7 @@ public class Main extends JavaPlugin {
 				getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getNewUpdateAvailable(lateVersion, this.getDescription().getVersion(), latestVersion));
 			}
 		},id);
+
 	}
 
 	private void registerListeners() {
@@ -145,7 +155,8 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new RotationEntity(), this);
 		pm.registerEvents(new BrushListener(), this);
 
-		getLogger().info(messageBuilder.getListenersLoad());
+
+		getLogger().info(messageBuilder.getListenersLoad().toString());
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -177,7 +188,7 @@ public class Main extends JavaPlugin {
 		getCommand("painting").setExecutor(new CommandPainting());
 
 
-		getLogger().info(messageBuilder.getCommandsLoad());
+		getLogger().info(messageBuilder.getCommandsLoad().toString());
 
 	}
 
@@ -218,6 +229,7 @@ public class Main extends JavaPlugin {
 		messageBuilder = new MessageBuilder().loadConfiguration();
 
 		getLogger().info("Message load");
+
 	}
 
 	/**
@@ -235,7 +247,9 @@ public class Main extends JavaPlugin {
 	}
 
 	// BrushBuilder
-	public @NotNull Configuration getConfig() { return configuration; }
+	public static Configuration configuration() {
+		return configuration;
+	}
 
     public MessageBuilder getMessageConfig() { return messageBuilder; }
 
@@ -289,6 +303,10 @@ public class Main extends JavaPlugin {
 		return instance;
 	}
 
+	public static void addScheduledWorkloadRunnable(ScheduledWorkload scheduledWorkload) {
+		scheduledWorkloadRunnable.addWorkload(scheduledWorkload);
+	}
+
 	/**
 	 * get plugin version
 	 *
@@ -331,7 +349,7 @@ public class Main extends JavaPlugin {
 		brush.createBrush(new UpdateChunkBrush());
 
 
-		getLogger().info(messageBuilder.getBrushLoad());
+		getLogger().info(messageBuilder.getBrushLoad().toString());
 
 	}
 
