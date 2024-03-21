@@ -1,332 +1,314 @@
 package fr.marodeur.expertbuild.commands.CommandsTimeLapse;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.api.exception.IncompleteSelectionException;
-import fr.marodeur.expertbuild.api.fawe.BlockChanger;
-import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.selector.RegionSelectorType;
+import com.sk89q.worldedit.regions.Region;
 
+import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.fawe.BlockChanger;
+import fr.marodeur.expertbuild.enums.ExecutorType;
+import fr.marodeur.expertbuild.object.AbstractCommand;
+import fr.marodeur.expertbuild.object.BrushBuilder;
+import fr.marodeur.expertbuild.object.Configuration;
 import fr.marodeur.expertbuild.object.MessageBuilder;
-import org.bukkit.Location;
+
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public class CommandTimeLapse extends Thread implements CommandExecutor {
+public class CommandTimelapse extends AbstractCommand {
 
-    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
-    public static List<String> BrokenBlock = new ArrayList<>();
+    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
+    private static final Configuration conf = Main.configuration();
 
-    private static int Xmin;
-    private static int Xmax;
+    private final Vector[] CHECK_FACES = {
+            new Vector(0, 0, 1),
+            new Vector(0, 0, -1),
+            new Vector(0, 1, 0),
+            new Vector(0, -1, 0),
+            new Vector(1, 0, 0),
+            new Vector(-1, 0, 0)};
 
-    private static int Ymin;
+    private final Vector[] CHECK_HORIZONTAL_FACES = {
+            new Vector(0, 0, 1),
+            new Vector(0, 0, -1),
+            new Vector(1, 0, 0),
+            new Vector(-1, 0, 0)};
 
-    private static int Zmin;
-    private static int Zmax;
-
-    private static int x;
-    private static int y;
-    private static int z;
-
-    boolean stopGen = false;
-
-    private static Location l;
 
     @Override
-    public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
-
-        if (!(s instanceof Player p)) {
-            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
-            return false;
-        }
-
-        if (!p.hasPermission("exp.command.timelapse")) {
-            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.timelapse"));
-            return false;
-        }
-
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
-
-        if (brushBuilder == null) {
-            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
-            return false;
-        }
-
-        if (cmd.getName().equalsIgnoreCase("timelapse")) {
-
-            try {
-                if (!new UtilsFAWE(p).isValidSelection(RegionSelectorType.CUBOID)) throw
-                        new IncompleteSelectionException(p, RegionSelectorType.CUBOID);
-            } catch (IncompleteSelectionException e) {
-                return false;
-            }
-
-            if (args.length < 1)
-            {
-                brushBuilder.sendMessage(message.getUse("/timelapse <delay> <iteration>"));
-                return false;
-            }
-
-            if (args[0].equalsIgnoreCase("stop")) {
-                stopGen = true;
-            }
-
-            if (args.length >= 2)
-            {
-                try {
-                    ExecuteTimeLapse(p, Long.parseLong(args[0]), Integer.parseInt(args[1]));
-                } catch (NumberFormatException e) {
-                    brushBuilder.sendMessage(message.getUse("/timelapse <delay> <iteration>"));
-                }
-            }
-        }
-        return false;
+    public String getCommand() {
+        return "/timelapse";
     }
 
-    private static void ExecuteTimeLapse(final Player p, long delay, int iter) {
+    @Override
+    public String getSyntax() {
+        return "/timelapse <start-stop>";
+    }
 
-        BukkitPlayer actor = BukkitAdapter.adapt(p);
+    @Override
+    public Integer getMinimumArgsLength() {
+        return 1;
+    }
 
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        EditSession editsession = localSession.createEditSession(actor);
+    @Override
+    public String getPermission() {
+        return "exp.command.timelapse";
+    }
+
+    @Override
+    public List<ExecutorType> getExecutorType() {
+        return Collections.singletonList(ExecutorType.PLAYER);
+    }
+
+    @Override
+    public void execute(CommandSender executor, Command command, @NotNull String label, @NotNull String[] args) {
+
+        Player p = (Player) executor;
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
 
-        p.sendMessage(Main.prefix + "Timelapse started...");
+        if (args[0].equalsIgnoreCase("start")) {
 
-        Xmin = actor.getSelection().getMinimumPoint().getX();
-        Xmax = actor.getSelection().getMaximumPoint().getX();
+            BukkitPlayer actor = BukkitAdapter.adapt(p);
 
-        Ymin = actor.getSelection().getMinimumPoint().getY();
-        int ymax = actor.getSelection().getMaximumPoint().getY();
+            LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
+            EditSession editsession = localSession.createEditSession(actor);
 
-        Zmin = actor.getSelection().getMinimumPoint().getZ();
-        Zmax = actor.getSelection().getMaximumPoint().getZ();
+            int Ymin = actor.getSelection().getMinimumPoint().getY();
+            int Ymax = actor.getSelection().getMaximumPoint().getY();
 
-        long volume = actor.getSelection().getVolume();
+            long volumeBlock = 0;
 
-        long startTime = System.currentTimeMillis();
+            long startTime = System.currentTimeMillis();
 
-        x = Xmax;
-        y = ymax;
-        z = Zmax;
+            final int[] loopNumber = new int[1];
+            if (args.length == 2 ) {
 
-        /*
-         *
-         * replace :
-         *  for (int i = 0; i < s.length; i++) {
-         *             BrokenBlock.add(s[i]);
-         *         }
-         *
-         * Par :
-         * BrokenBlock.addAll(Arrays.asList(s));
-         */
-
-        l = new Location(p.getWorld(), Xmax, ymax, Zmax);
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-
-                Location loc = new Location(p.getWorld(), x, y, z);
-
-                //layer contains block
-                if (x>= Xmax && z >= Zmax) {
-
-                    while (!containsBlock(y, editsession) && y >= Ymin) {
-                        y--;
-                    }
+                if (this.getValidArgument().isInteger(args[1], 1, conf.getTimelapse_max_block_per_tick())) {
+                    loopNumber[0] = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 1, conf.getTimelapse_max_block_per_tick());
+                    return;
                 }
+            } else {
+                loopNumber[0] = 1;
+            }
 
-                //layer contains get proportion block / air
-                if (x >= Xmax && z >= Zmax) {
+            if (new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().hasTimelapseRunning()) {
+                brushBuilder.sendMessage(msg.getTimelapseAlreadyRunning());
+                return;
+            }
 
-                    int blockProportion = containsBlockQ(y, editsession);
+            Region r = actor.getSelection();
+            HashMap<Integer, Deque<BlockVector3>> hashMap = new HashMap<>();
 
-                    if (blockProportion <= 10) {
+            new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setHasTimelapseRunning(true).setSelection(r.getMinimumPoint(), r.getMaximumPoint());
 
-                        CuboidRegion cuboidRegion = new CuboidRegion(BlockVector3.at(Xmax, y, Zmax), BlockVector3.at(Xmin, y, Zmin));
+            //Loading block
 
-                        cuboidRegion.stream()
-                                .filter(bv4 -> !editsession.getFullBlock(BlockVector3.at(bv4.getX(), bv4.getY(), bv4.getZ())).getBlockType().getMaterial().isAir())
-                                .forEach(bv4-> BlockChanger.setBlock(l.getWorld(), bv4.getX(), y, bv4.getZ(), Material.AIR, false));
+            if (Ymax == Ymin) {
 
-                        x = Xmin;
-                        z = Zmin;
+                int finalY = Ymax;
+                Deque<BlockVector3> layer = new ArrayDeque<>();
 
+                r.forEach(blockVector3 -> {
+
+                    if (blockVector3.getBlockY() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
+                        layer.add(BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ()));
+                    }
+                });
+
+                hashMap.put(Ymax, layer);
+                volumeBlock += layer.size();
+
+            } else {
+
+                for (int y = Ymax; y >= Ymin; y--) {
+
+                    int finalY = y;
+                    Deque<BlockVector3> layer = new ArrayDeque<>();
+
+                    r.forEach(blockVector3 -> {
+
+                        if (blockVector3.getBlockY() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
+                            BlockVector3 b = BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ());
+                            layer.add(b);
+                        }
+                    });
+
+                    hashMap.put(y, layer);
+                    volumeBlock += layer.size();
+                }
+            }
+
+            // Loop execution
+
+            long finalVolumeBlock = volumeBlock;
+            new BukkitRunnable() {
+
+                @Override
+                public void run() {
+
+                    // Stop timelapse
+                    if (new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().stopTimelapse()) {
+                        cancel();
+                        new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setStopTimelapse(false).setHasTimelapseRunning(false);
+                        return;
                     }
 
-                    if (blockProportion <= 80 ) {
+                    int y = Collections.max(hashMap.keySet());
 
-                        GlueList<BlockVec4> bv4 = new GlueList<>();
+                    if (hashMap.get(y).isEmpty()) {
+                        hashMap.remove(y);
 
-                        CuboidRegion cuboidRegion = new CuboidRegion(BlockVector3.at(Xmax, y, Zmax), BlockVector3.at(Xmin, y, Zmin));
+                        if (hashMap.isEmpty()) {
 
-                        cuboidRegion.stream()
-                                .filter(blockVector3 -> !editsession.getFullBlock(BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ())).getBlockType().getMaterial().isAir())
-                                .forEach(blockVector3-> {
-                                    bv4.add(new BlockVec4(blockVector3.getX(), y, blockVector3.getZ()));
-                                    //BlockChanger.setBlock(l.getWorld(), blockVector3.getX(), y, blockVector3.getZ(), Material.AIR, false);
-                                });
+                            float timeEnd = 0;
 
-                        final int[] ite = {0};
+                            int sec = (int) ((System.currentTimeMillis() - startTime) / 1000);
 
-                        new BukkitRunnable() {
-
-                            @Override
-                            public void run() {
-
-                                BlockVec4 blv3 = bv4.get(ite[0]);
-                                BlockChanger.setBlock(l.getWorld(), blv3.getX(), blv3.getY(), blv3.getZ(), Material.AIR, false);
-
-                                //bv4.remove(ite[0]);
-
-                                ite[0]++;
-
-                                if (ite[0] >= bv4.size() ) cancel();
-
-                                if (bv4.size() == 0) cancel();
-
+                            if (sec < 60) {
+                                timeEnd = sec;
+                                brushBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.second().toString() ));
                             }
 
-                        }.runTaskTimer(Main.getInstance(), 20, 0);
+                            if (sec >= 60 && sec < 3600) {
+                                timeEnd = sec / 60;
+                                brushBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.minute().toString() ));
+                            }
 
+                            if (sec >= 3600) {
+                                timeEnd = sec / 60 / 60;
+                                brushBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.hour().toString() ));
+                            }
 
-                        x = Xmin;
-                        z = Zmin;
+                            p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 10, 10);
+                            new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setHasTimelapseRunning(false);
+
+                            cancel();
+                            return;
+                        }
+                        y = Collections.max(hashMap.keySet());
                     }
-                }
 
-                if (loc.getBlock().getType().equals(Material.AIR)) {
+                    int forValue = loopNumber[0];
 
-                    while ((x > Xmin) && loc.getBlock().getType().equals(Material.AIR)) {
-                        x--;
-                        loc.setX(x);
+                    if (hashMap.get(y).size() < loopNumber[0]) {
+                        forValue = hashMap.get(y).size();
                     }
 
+                    for (int i = 0; i < forValue; i++) {
 
-                    l = new Location(p.getWorld(), x-1, y, z);
-                    BlockChanger.setBlock(l, Material.AIR, false);
+                        if (!hashMap.get(y).isEmpty()) {
 
-                    l.setX(x);
-                }
-
-                    //int zs = l.getBlockZ();
-                if (x != Xmin) {
-                    for (int i = 0; i < iter; i++) {
-
-                        if (loc.getZ() -i > Zmin) {
-
-                            Location l2 = loc.clone().add(0, 0, -i);
-
-                            BlockChanger.setBlock(l2, Material.AIR, false);
-                            //BlockChanger.setBlock(l3, Material.AIR, false);
+                            BlockVector3 bv3 = hashMap.get(y).poll();
+                            BlockChanger.setBlock(p.getWorld(), bv3.getX(), bv3.getY(), bv3.getZ(), Material.AIR, false);
                         }
                     }
                 }
+            }.runTaskTimer(Main.getInstance(), 0, 0);
 
-                if (!l.getBlock().getType().equals(Material.AIR)) {
 
-                    BlockChanger.setBlock(l, Material.AIR, false);
+            // Estimate timing
 
+            float time = 0;
+            String unit = "s";
+
+            // Limite a 5 heure a mettre en config
+            if ((int) ((volumeBlock / loopNumber[0]) / 20) > 18000) {
+
+                for (int i = 0; i < 50; i++) {
+
+                    if ((int) ((volumeBlock / loopNumber[0] + i) / 20) < 18000) {
+
+                        loopNumber[0] = loopNumber[0] + i;
+
+                    }
                 }
+            }
+            int sec = (int) ((volumeBlock / loopNumber[0]) / 20);
 
-                if (x <= Xmin && y <= Ymin && z <= Zmin) {
 
-                    long endTime = System.currentTimeMillis();
-                    p.sendMessage(Main.prefix + "Timelapse finish in " + (endTime-startTime) + "ms, " + volume + " block distroyed");
-                    p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 10, 10);
-
-                    BrokenBlock.clear();
-
-                    cancel();
-                    return;
-                }
-
-                if (x == Xmin && z == Zmin) {
-                    y--;
-                    x = Xmax + 1;
-                    z = Zmax;
-                }
-
-                if (x == Xmin) {
-                    z--;
-                    x = Xmax + 1;
-                }
-
-                x--;
-
-                l = new Location(p.getWorld(), x, y, z);
+            if (sec < 60) {
+                time = sec;
+                brushBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.second().toString()));
 
             }
 
-        }.runTaskTimer(Main.getInstance(), 0, delay);
+            if (sec >= 60 && sec < 3600) {
+                time = sec / 60;
+                brushBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.minute().toString()));
+
+            }
+
+            if (sec >= 3600) {
+                time = sec / 60 / 60;
+                brushBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.hour().toString()));
+            }
+            return;
+        }
+
+        if (args[0].equalsIgnoreCase("stop")) {
+
+            if (new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().hasTimelapseRunning()) {
+
+                new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setStopTimelapse(true);
+
+                brushBuilder.sendMessage(msg.getTimelapseStopped());
+
+            } else {
+                brushBuilder.sendMessage(msg.getTimelapseNoInProgress());
+            }
+        } else {
+
+            brushBuilder.sendMessage(msg.getUse(getSyntax()));
+
+        }
     }
 
-    public static boolean containsBlock(int y, EditSession editsession) {
-
-        CuboidRegion cuboidRegion = new CuboidRegion(BlockVector3.at(Xmax, y, Zmax), BlockVector3.at(Xmin, y, Zmin));
-
-        final boolean[] b = {false};
-        final int[] n = {0};
-
-        cuboidRegion.stream()
-                .filter(bv3 -> !editsession.getFullBlock(BlockVector3.at(bv3.getX(), bv3.getY(), bv3.getZ())).getBlockType().getMaterial().isAir())
-                .forEach(blockVector3 -> {
-                    b[0] = true;
-                    n[0]++;
-                });
-
-
-        //System.out.println("n = " + n[0]);
-
-        return b[0];
+    @Override
+    protected OptionalConditionExecution getArgumentLengthList(CommandSender sender) {
+        return new OptionalConditionExecution(sender).AddConditionSelection();
     }
 
-    public static int containsBlockQ(int y, EditSession editsession) {
+    @Override
+    protected ArgumentLengthList getArgumentLengthList() {
 
-        CuboidRegion cuboidRegion = new CuboidRegion(BlockVector3.at(Xmax, y, Zmax), BlockVector3.at(Xmin, y, Zmin));
+        return new ArgumentLengthList(Arrays.asList(
 
-        int size = cuboidRegion.getArea();
+                new ArgumentLength(1, "start", 0, "/timelapse start [integer, block remove per tick]", 2),
+                new ArgumentLength(1, "stop", 0, "/timelapse stop", 2)
+        ));
+    }
 
-        GlueList<BlockVector3> bv = new GlueList<>(cuboidRegion.getArea()+1);
+    @Override
+    protected SubCommandSender getSubCommand(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        cuboidRegion.stream()
-                .filter(bv3 -> !editsession.getFullBlock(BlockVector3.at(bv3.getX(), bv3.getY(), bv3.getZ())).getBlockType().getMaterial().isAir())
-                .forEach(bv::add);
+        SubCommandSender subCommandSender = new SubCommandSender();
 
-        //n[0] = block
-        //size = numbre de block total
+        // START
+        subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "start")
+                .toSubCommand("None"));
+        // STOP
+        subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "stop")
+                .toSubCommand("None"));
 
-        //total
-        //100% = size
-        //x = n[0]
+        // START int
+        subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1)
+                .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
-        //n[0]*100/size
-
-        //System.out.println("(n[0]*100)/size = " + (bv.size()*100)/size + "% de block");
-
-        return (bv.size()*100)/size;
-
+        return subCommandSender;
     }
 }
