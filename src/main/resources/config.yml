@@ -21,112 +21,112 @@ build:
     statserver: false
     name: server_4
 
-  #Max file size to transfer (ko)
-  #Default : 500
-  #-1 for by-pass
+  # Max file size to transfer (ko)
+  # Default : 500 | -1 for by-pass
+  # Use integer value > 1
   max_file_size: 500
 
-  #Maximum size brush
-  #Default : 50
-  #Use integer value
+  # Maximum size brush
+  # Default : 50
+  # Use integer value
   max_brush_rayon: 50
 
-  #default brush radius
-  #Default : 10
-  #Use integer value
+  # default brush radius
+  # Default : 10
+  # Use integer value
   default_brush_rayon: 10
 
-  #Default material brush
-  #Default : STONE
-  #Use block name
+  # Default material brush
+  # Default : STONE
+  # Use block name
   default_material_brush: STONE
 
-  #Default pattern brush
-  #Default : 1
-  #Id of block
+  # Default pattern brush
+  # Default : 1
+  # Id of block
   default_pattern_brush: 1
 
-  #Default biomes brush
-  #Default : PLAINS
-  #Use Biome name
+  # Default biomes brush
+  # Default : PLAINS
+  # Use Biome name
   default_biome_brush: PLAINS
 
-  #Percentage of air in the flower brush
-  #Default : 10
-  #Use integer value
+  # Percentage of air in the flower brush
+  # Default : 10
+  # Use integer value
   default_air_brush: 10
 
-  #Max distance to apply brush
-  #Default : 100
+  # Max distance to apply brush
+  # Default : 100
   max_brush_distance: 100
 
 
-  #Display bezier line on convex selection
-  #Default : true
-  #Use boolean value (true / false)
+  # Display bezier line on convex selection
+  # Default : true
+  # Use boolean value (true / false)
   display_bezier_curve: true
 
-  #Type of particle to display
-  #Default : FLAME
-  #Use particle value (FLAME / SOUL / CLOUD ...)
+  # Type of particle to display
+  # Default : FLAME
+  # Use particle value (FLAME / SOUL / CLOUD ...)
   particle_bezier_curve_type: FLAME
 
-  #Coefficient divide by the distance of the convex selection
-  #Default : 3
+  # Coefficient divide by the distance of the convex selection
+  # Default : 3
   # Use integer value > 0
   coefficient_particle_number: 3
 
 
-  #Display line on convex selection
-  #Default : true
-  #Use boolean value (true / false)
+  # Display line on convex selection
+  # Default : true
+  # Use boolean value (true / false)
   display_convex_line: true
 
-  #Type of particle to display
-  #Default : FLAME
-  #Use particle value (FLAME / SOUL / CLOUD ...)
+  # Type of particle to display
+  # Default : FLAME
+  # Use particle value (FLAME / SOUL / CLOUD ...)
   particle_convex_type_line: FLAME
 
-  #Particle spacing
-  #Default : 1
-  #Use integer value > 0
+  # Particle spacing
+  # Default : 1
+  # Use integer value > 0
   spacing_between_particles: 1
 
 
-  #Repetition period of the asynchronous particle spawn loop
-  #Default : 10
-  #Use integer value > 0
+  # Repetition period of the asynchronous particle spawn loop
+  # Default : 10
+  # Use integer value > 0
   period_particle: 10
 
 
-  #Player can wand click in air
-  #Default : true
-  #Use boolean value (true / false)
+  # Player can wand click in air
+  # Default : true
+  # Use boolean value (true / false)
   wand_click_in_air: true
 
-  #Player can clear selection using shift click with wand
-  #Default : false
-  #Use boolean value (true / false)
+  # Player can clear selection using shift click with wand
+  # Default : false
+  # Use boolean value (true / false)
   sihft_click_with_wand: false
 
-  #Log shortcut action
-  #Default : true
-  #Use boolean value (true / false)
+  # Log shortcut action
+  # Default : true
+  # Use boolean value (true / false)
   logShortcut: true
 
-  #Max point number save for Brush line
-  #Default : 20
-  #use integer value
+  # Max point number save for Brush line
+  # Default : 20
+  # Use integer value
   max_point_saved: 20
 
-  #Terraforming Tool 1
-  #Default : ARROW
-  #Use item name
+  # Terraforming Tool 1
+  # Default : ARROW
+  # Use item name
   terraforming_tool_1: SPECTRAL_ARROW
 
-  #Terraforming Tool 2
-  #Default : GUNPOWDER
-  #Use item name
+  # Terraforming Tool 2
+  # Default : GUNPOWDER
+  # Use item name
   terraforming_tool_2: CLAY_BALL
 
   # Maximum possible number of blocks removed per tick with the /timelapse command
@@ -145,8 +145,7 @@ build:
     #Default organic height
     default_orga_height: 50
 
-  #lang
-  #Default : en (english)
-  #possibilité (fr / en )
-
+  # Lang
+  # Default : en (english)
+  # Possibility : (fr / en )
   lang: en
