@@ -57,7 +57,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				TextComponent URL_Discord = new TextComponent("§1Discord §7link : click here");
 				URL_Discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open Discord URL").create()));
-				URL_Discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/rJeJu8AcmB"));
+				URL_Discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/Y5XfQtT6"));
 				sender.spigot().sendMessage(URL_Discord);
 
 				TextComponent URL_Youtube = new TextComponent("§8GitHub §7link : click here");
@@ -70,7 +70,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			}
 
 			if (args[0].equalsIgnoreCase("version")) {
-				sender.sendMessage(Main.prefix + " Version : " + Main.getInstance().getDescription().getVersion());
+				sender.sendMessage(Main.prefix + "Version : " + Main.getInstance().getDescription().getVersion());
 				return false;
 			}
 
