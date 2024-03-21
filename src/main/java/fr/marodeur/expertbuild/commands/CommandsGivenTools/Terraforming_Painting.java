@@ -59,6 +59,8 @@ public class Terraforming_Painting implements CommandExecutor {
 			return false;
 		}
 
+		int slot = p.getInventory().getHeldItemSlot();
+
 		ItemStack itArrow = new ItemBuilder(Material.ARROW, 1).build();
 		ItemStack itGunPowder = new ItemBuilder(Material.GUNPOWDER, 1).build();
 		ItemStack itFeather = new ItemBuilder(Material.FEATHER, 1).build();
@@ -77,7 +79,7 @@ public class Terraforming_Painting implements CommandExecutor {
 				int Y =  p.getLocation().getBlockY();
 				int Z =  p.getLocation().getBlockZ();
 				p.sendMessage(Main.prefix + "your position :");
-				p.sendMessage("§8World = §7§o " + World);
+				p.sendMessage("§8World = §7§o " + World.toString());
 				p.sendMessage("§8X =§7§o " + X);
 				p.sendMessage("§8Y =§7§o " + Y);
 				p.sendMessage("§8Z =§7§o " + Z);
@@ -85,21 +87,21 @@ public class Terraforming_Painting implements CommandExecutor {
 
 			case "vox" -> {
 
-				p.getInventory().setItem(0, itArrow);
-				p.getInventory().setItem(1, itGunPowder);
+				p.getInventory().setItem(slot, itArrow);
+				p.getInventory().setItem(slot + 1, itGunPowder);
 
 				bb.sendMessage(message.getGiveTool("Voxel/FAVS"));
 
 			}
 			case "plume" -> {
 
-				p.getInventory().setItem(0, itFeather);
+				p.getInventory().setItem(slot, itFeather);
 
 				bb.sendMessage(message.getGiveTool("GoPaint"));
 			}
 			case "silex" -> {
 
-				p.getInventory().setItem(0, itFlint);
+				p.getInventory().setItem(slot, itFlint);
 
 				bb.sendMessage(message.getGiveTool("GoBrush"));
 			}
@@ -235,13 +237,12 @@ public class Terraforming_Painting implements CommandExecutor {
 							return false;
 						}
 
-
 						ItemStack itemBuilder = new ItemBuilder("Intelligence repeater", Material.REPEATER, 1)
 								.addLore("Delay : " + Integer.parseInt(args[0]))
 								.addEnchant(Enchantment.LUCK, 1)
 								.build();
 
-						p.getInventory().setItem(1, itemBuilder);
+						p.getInventory().setItem(slot, itemBuilder);
 						p.sendMessage(Main.prefix + "Repeater give and enable ");
 
 					} else {
