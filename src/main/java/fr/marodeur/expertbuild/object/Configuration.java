@@ -50,6 +50,9 @@ public class Configuration {
     private Material terraforming_tool_1;
     private Material terraforming_tool_2;
 
+
+    private int timelapse_max_block_per_tick;
+
     private Double arm_correction_factor;
     private String default_material;
     private int default_orga_height;
@@ -103,6 +106,8 @@ public class Configuration {
             this.max_point_saved = yml.getInt("build.max_point_saved");
             this.terraforming_tool_1 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_1")));
             this.terraforming_tool_2 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_2")));
+
+            this.timelapse_max_block_per_tick = yml.getInt("build.timelapse_max_block_per_tick");
 
             this.arm_correction_factor = yml.getDouble("build.GOHA.arm_correction_factor");
             this.default_material = yml.getString("build.GOHA.default_material");
@@ -212,6 +217,10 @@ public class Configuration {
         return terraforming_tool_2;
     }
 
+    public int getTimelapse_max_block_per_tick() {
+        return timelapse_max_block_per_tick;
+    }
+
     public Double getArm_correction_factor() {
         return this.arm_correction_factor;
     }
@@ -277,6 +286,7 @@ public class Configuration {
                 ", max_point_saved=" + max_point_saved +
                 ", terraforming_tool_1=" + terraforming_tool_1 +
                 ", terraforming_tool_2=" + terraforming_tool_2 +
+                ", timelapse_max_block_per_tick=" + timelapse_max_block_per_tick +
                 ", arm_correction_factor=" + arm_correction_factor +
                 ", default_material='" + default_material + '\'' +
                 ", default_orga_height=" + default_orga_height +
@@ -435,6 +445,8 @@ public class Configuration {
             yml.set("build.spacing_between_particles", 1);
 
             yml.set("build.period_particle", 10);
+
+            yml.set("build.timelapse_max_block_per_tick", 40);
 
             yml.set("build.version", "1.18.1.17");
             this.version = "1.18.1.17";

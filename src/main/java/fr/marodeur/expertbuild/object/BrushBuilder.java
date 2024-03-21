@@ -10,6 +10,7 @@ import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
 
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,6 +29,7 @@ public class BrushBuilder {
     private static final Logger log = Logger.getLogger("Expert-Build");
     private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.configuration();
+
 
     private final UUID uuid;
     private AbstractBrush abstractBrush;
@@ -49,8 +51,8 @@ public class BrushBuilder {
     private UUID particleID;
 
     private TerraParameter terraParameter;
-    private final ClipboardParameter clipboardParameter;
-    private final ClipboardBrush clipboardBrush;
+    private ClipboardParameter clipboardParameter;
+    private ClipboardBrush clipboardBrush;
 
     /**
      * Create objet BrushBuilder
@@ -84,6 +86,19 @@ public class BrushBuilder {
         this.clipboardBrush = clipboardBrush;
 
     }
+
+    // Object with UUID acces :
+
+    // TIMELAPSE
+    public BrushBuilder(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public TimelapseBuilder getTimeLapseProfile() {
+        return Main.getDataProfile().getTimelapseProfile(this.uuid);
+    }
+
+
 
     // GETTER
 
@@ -485,6 +500,9 @@ public class BrushBuilder {
         List<BaseBlock> it = new ArrayList<>(Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib));
 
         List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+
+        Main.getDataProfile().registerPlayer(p.getUniqueId());
 
 
         return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(),

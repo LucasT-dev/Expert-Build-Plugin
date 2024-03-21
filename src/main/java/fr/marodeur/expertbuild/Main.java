@@ -1,5 +1,6 @@
 package fr.marodeur.expertbuild;
 
+import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
@@ -12,7 +13,6 @@ import fr.marodeur.expertbuild.commands.CommandsBrush.BrushCommand;
 import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
 import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
 import fr.marodeur.expertbuild.commands.CommandsPerlin.CommandPerlin;
-import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimeLapse;
 import fr.marodeur.expertbuild.listeners.BrushListener;
 import fr.marodeur.expertbuild.listeners.FAWEListener;
 import fr.marodeur.expertbuild.listeners.GeneralListener;
@@ -55,10 +55,10 @@ public class Main extends JavaPlugin {
 	public static String lateVersion;
 
 
-
 	private static AbstractBrush.RegisterBrush brush;
 	private static Configuration configuration;
 	private static MessageBuilder messageBuilder;
+	private static DataProfile dataProfile;
 
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
 
@@ -125,6 +125,9 @@ public class Main extends JavaPlugin {
 
 		registerListeners();
 
+		// LOAD DATA PROFILE
+		dataProfile = new DataProfile();
+
 		registerPlayerBuilder();
 
 		registerCommand();
@@ -181,7 +184,7 @@ public class Main extends JavaPlugin {
 		getCommand("flower").setExecutor(new BrushCommand());
 		getCommand("expbuild").setExecutor(new CommandsInfo());
 		getCommand("schemtrans").setExecutor(new CommandTransferSchem());
-		getCommand("timelapse").setExecutor(new CommandTimeLapse());
+		getCommand("timelapse").setExecutor(new CommandTimelapse());
 		getCommand("perlin").setExecutor(new CommandPerlin());
 		getCommand("autocb").setExecutor(new CommandAutoCb());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
@@ -257,6 +260,10 @@ public class Main extends JavaPlugin {
 		return BrushBuilder.get(p.getUniqueId());
 	}
 
+	public static HashMap<UUID, BrushBuilder> getHashMapBrushBuilder() {
+		return BrushBuilder;
+	}
+
 	/**
 	 *
 	 * Register player in BrushBuilder, using player uuid,
@@ -280,6 +287,10 @@ public class Main extends JavaPlugin {
 
 	public static int getBrushBuilderSize() {
 		return BrushBuilder.size();
+	}
+
+	public static DataProfile getDataProfile() {
+		return dataProfile;
 	}
 
 	//goha Builder

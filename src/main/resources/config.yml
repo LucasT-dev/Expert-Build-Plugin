@@ -129,6 +129,11 @@ build:
   #Use item name
   terraforming_tool_2: CLAY_BALL
 
+  # Maximum possible number of blocks removed per tick with the /timelapse command
+  # Default : 40
+  # Use integer value > 1
+  timelapse_max_block_per_tick: 40
+
 
   GOHA:
     #Arm length correction factor

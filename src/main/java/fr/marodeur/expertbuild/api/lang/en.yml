@@ -18,6 +18,11 @@ expbuild:
       new_update_available: There is a new update available. You are 'v' versions late, you are running on version 'v1' , version 'v2' is available !
       unable_check_update: Unable to check for updates 'error'
 
+      day: day
+      hour: hour
+      minute: minute
+      second: second
+
 
     brush:
       brush_enable: Brush 'brush' enable
@@ -97,6 +102,11 @@ expbuild:
       clipboard_add_and_enable: clipboard 'clipboard' add and brush enable
       clipboard_remove: The clipboard 'clipboard' has been deleted
 
+      timelapse_already_running: You already have a timelapse running
+      timelapse_finish_recap: Timelapse finish in 'time' 'unit'; 'quantity' blocks destroyed
+      timelapse_estimate_time: "Estimate: 'quantity' blocks broken in 'time' 'unit'"
+      timelapse_stopped: Timelapse stopped successfully
+      timelapse_no_in_progress: You don't have a timelapse in progress
 
     gui:
       back: Back

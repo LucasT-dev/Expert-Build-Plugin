@@ -18,6 +18,11 @@ expbuild:
       new_update_available: Une nouvelle mise a jour est disponible. Vous avez 'v' version(s) de retard, vous utilisez la version 'v1' , version 'v2' disponible !
       unable_check_update: Inpossible de check les versions disponible 'error'
 
+      day: jour
+      hour: heure
+      minute: minute
+      second: seconde
+
     brush:
       brush_enable: Brush 'brush' activé
       brush_enable_with_radius: "Brush 'brush' activé, rayon : 'radius'"
@@ -94,6 +99,13 @@ expbuild:
       clipboard_already_exist: Le clipboard 'clipboard' existe déjà
       clipboard_add_and_enable: Le clipboard 'clipboard' ajouté et le brush est activé
       clipboard_remove: Le clipboard 'clipboard' a été supprimé
+
+      timelapse_already_running: Vous avez déjà un timelapse en cours d'exécution
+      timelapse_finish_recap: Timelapse fini en 'time' 'unit'; 'quantity' blocks detruits
+      timelapse_estimate_time: "Estimation : 'quantity' blocks detruit en 'time' 'unit'"
+      timelapse_stopped: Timelapse stoppé avec succes
+      timelapse_no_in_progress: Vous n'avez pas de timelapse en cours
+
 
     gui:
       back: Retour

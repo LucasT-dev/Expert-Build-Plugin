@@ -37,6 +37,11 @@ public class MessageBuilder {
     private String newUpdateAvailable;
     private String unableCheckUpdate;
 
+    private StringBuilder day;
+    private StringBuilder hour;
+    private StringBuilder minute;
+    private StringBuilder second;
+
 
     private String brushEnable;
     private String brushEnableWithRadius;
@@ -121,6 +126,13 @@ public class MessageBuilder {
     private String clipboardRemove;
 
 
+    private String timelapse_already_running;
+    private String timelapse_finish_recap;
+    private String timelapse_estimate_time;
+    private String timelapse_stopped;
+    private String timelapse_no_in_progress;
+
+
     private StringBuilder back;
     private StringBuilder exit;
     private StringBuilder main_gui_title;
@@ -200,6 +212,11 @@ public class MessageBuilder {
             this.notNewUpdate = new StringBuilder(this.yml.getString("expbuild.message.main.not_new_update"));
             this.newUpdateAvailable = this.yml.getString("expbuild.message.main.new_update_available");
             this.unableCheckUpdate = this.yml.getString("expbuild.message.main.unable_check_update");
+
+            this.day = new StringBuilder(this.yml.getString("expbuild.message.main.day"));
+            this.hour = new StringBuilder(this.yml.getString("expbuild.message.main.hour"));
+            this.minute = new StringBuilder(this.yml.getString("expbuild.message.main.minute"));
+            this.second = new StringBuilder(this.yml.getString("expbuild.message.main.second"));
 
 
             this.brushEnable = this.yml.getString("expbuild.message.brush.brush_enable");
@@ -285,6 +302,13 @@ public class MessageBuilder {
             this.clipboardAlreadyExist = this.yml.getString("expbuild.message.commands.clipboard_already_exist");
             this.clipboardAddAndEnable = this.yml.getString("expbuild.message.commands.clipboard_add_and_enable");
             this.clipboardRemove = this.yml.getString("expbuild.message.commands.clipboard_remove");
+
+            this.timelapse_already_running = this.yml.getString("expbuild.message.commands.timelapse_finish_recap");
+            this.timelapse_finish_recap = this.yml.getString("expbuild.message.commands.timelapse_already_running");
+            this.timelapse_estimate_time = this.yml.getString("expbuild.message.commands.timelapse_estimate_time");
+            this.timelapse_stopped = this.yml.getString("expbuild.message.commands.timelapse_stopped");
+            this.timelapse_no_in_progress = this.yml.getString("expbuild.message.commands.timelapse_no_in_progress");
+
 
 
             this.back = new StringBuilder(this.yml.getString("expbuild.message.gui.back"));
@@ -395,6 +419,24 @@ public class MessageBuilder {
     public String getUnableCheckUpdate(String error) {
         return unableCheckUpdate.replace("'error'", error);
     }
+
+    public StringBuilder day() {
+        return day;
+    }
+
+    public StringBuilder hour() {
+        return hour;
+    }
+
+    public StringBuilder minute() {
+        return minute;
+    }
+
+    public StringBuilder second() {
+        return second;
+    }
+
+    // BRUSH
 
     public String getBrushEnable(String brush) {
         return brushEnable.replace("'brush'", brush);
@@ -586,6 +628,8 @@ public class MessageBuilder {
         return giveTool.replace("'tool'", tool);
     }
 
+
+    // COMMANDS
     public String getUse(String cmd) {
         return use.replace("'cmd'", cmd);
     }
@@ -658,6 +702,28 @@ public class MessageBuilder {
         return this.clipboardRemove.replace("'clipboard'", clipboard);
     }
 
+    public String getTimelapseAlreadyRunning() {
+        return this.timelapse_already_running;
+    }
+
+    public String getTimelapseFinishRecap(String quantity, String time, String unit) {
+        return this.timelapse_finish_recap.replace("'quantity'", quantity).replace("'time'", time).replace("'unit'", unit);
+    }
+
+    public String getTimelapseEstimateTime(String quantity, String time, String unit) {
+        return this.timelapse_estimate_time.replace("'quantity'", quantity).replace("'time'", time).replace("'unit'", unit);
+    }
+
+    public String getTimelapseStopped() {
+        return this.timelapse_stopped;
+    }
+
+    public String getTimelapseNoInProgress() {
+        return this.timelapse_no_in_progress;
+    }
+
+
+    // GUI
 
     public StringBuilder getBack() {
         return back;

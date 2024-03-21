@@ -232,7 +232,7 @@ public class BlockVec4 {
 
     public Block getBlock() {
         if (loc == null) {
-            logger.warning("BlockVec4 : loc is null");
+            logger.warning("BlockVec4 : #getBlock() loc is null");
             return null;
         }
         return getBlock(this.loc.getWorld(), this.x, this.y, this.z);
@@ -527,6 +527,14 @@ public class BlockVec4 {
         this.x += x;
         this.y += y;
         this.z += z;
+
+        return this;
+    }
+
+    public BlockVec4 add(Vector vector) {
+        this.x += vector.getBlockX();
+        this.y += vector.getBlockY();
+        this.z += vector.getBlockZ();
 
         return this;
     }

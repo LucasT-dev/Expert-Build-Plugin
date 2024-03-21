@@ -1,10 +1,12 @@
 package fr.marodeur.expertbuild.listeners;
 
+import com.sk89q.worldedit.math.BlockVector3;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.object.*;
 
 
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -18,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -181,5 +184,28 @@ public class GeneralListener implements Listener {
 
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7" + commandBlock.getCommand()));
 		}
+	}
+
+	/**
+	 *
+	 * Allows water not to regenerate during a timelapse
+	 *
+	 * @param e event BlockFromToEvent
+	 */
+	@EventHandler
+	public void onBlockFromTo(BlockFromToEvent e) {
+
+		Main.getHashMapBrushBuilder().forEach((uuid, brushBuilder) -> {
+
+			TimelapseBuilder timelapseBuilder = Main.getDataProfile().getTimelapseProfile(uuid);
+			Location l = e.getBlock().getLocation();
+
+			if (timelapseBuilder.hasTimelapseRunning()) {
+
+				if (BlockVector3.at(l.getBlockX(), l.getBlockY(), l.getBlockZ()).containedWithin(timelapseBuilder.selection()[0], timelapseBuilder.selection()[1])) {
+					e.setCancelled(true);
+				}
+			}
+		});
 	}
 }
