@@ -75,10 +75,6 @@ commands:
     description: sel
     permission: exp.command.sel
 
-  autogm:
-    description: Auto gamemode
-    permission: exp.command.autogm
-
   flower:
     aliases: fw
     decription: brush
@@ -117,10 +113,6 @@ commands:
   getcommand:
     description: displays the command of a Block command by looking at it from a distance
     permission: exp.command.getcommand
-
-  autoflip:
-    description: Use your selection as a plane of symmetry
-    permission: exp.command.autoflip
 
   convertslab:
     description: Convert double slab to block
