@@ -52,6 +52,7 @@ public class Configuration {
 
 
     private int timelapse_max_block_per_tick;
+    private int max_timelapse_in_same_time;
 
     private Double arm_correction_factor;
     private String default_material;
@@ -108,6 +109,7 @@ public class Configuration {
             this.terraforming_tool_2 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_2")));
 
             this.timelapse_max_block_per_tick = yml.getInt("build.timelapse_max_block_per_tick");
+            this.max_timelapse_in_same_time = yml.getInt("build.max_timelapse_in_same_time");
 
             this.arm_correction_factor = yml.getDouble("build.GOHA.arm_correction_factor");
             this.default_material = yml.getString("build.GOHA.default_material");
@@ -219,6 +221,9 @@ public class Configuration {
 
     public int getTimelapse_max_block_per_tick() {
         return timelapse_max_block_per_tick;
+    }
+    public int max_timelapse_in_same_time() {
+        return max_timelapse_in_same_time;
     }
 
     public Double getArm_correction_factor() {
@@ -447,6 +452,7 @@ public class Configuration {
             yml.set("build.period_particle", 10);
 
             yml.set("build.timelapse_max_block_per_tick", 40);
+            yml.set("build.max_timelapse_in_same_time", 2);
 
             yml.set("build.version", "1.18.1.17");
             this.version = "1.18.1.17";

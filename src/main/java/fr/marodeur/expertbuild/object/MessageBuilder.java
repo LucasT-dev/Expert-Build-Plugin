@@ -131,6 +131,7 @@ public class MessageBuilder {
     private String timelapse_estimate_time;
     private String timelapse_stopped;
     private String timelapse_no_in_progress;
+    private StringBuilder too_many_timelapses;
 
 
     private StringBuilder back;
@@ -303,11 +304,12 @@ public class MessageBuilder {
             this.clipboardAddAndEnable = this.yml.getString("expbuild.message.commands.clipboard_add_and_enable");
             this.clipboardRemove = this.yml.getString("expbuild.message.commands.clipboard_remove");
 
-            this.timelapse_already_running = this.yml.getString("expbuild.message.commands.timelapse_finish_recap");
-            this.timelapse_finish_recap = this.yml.getString("expbuild.message.commands.timelapse_already_running");
+            this.timelapse_already_running = this.yml.getString("expbuild.message.commands.timelapse_already_running");
+            this.timelapse_finish_recap = this.yml.getString("expbuild.message.commands.timelapse_finish_recap");
             this.timelapse_estimate_time = this.yml.getString("expbuild.message.commands.timelapse_estimate_time");
             this.timelapse_stopped = this.yml.getString("expbuild.message.commands.timelapse_stopped");
             this.timelapse_no_in_progress = this.yml.getString("expbuild.message.commands.timelapse_no_in_progress");
+            this.too_many_timelapses = new StringBuilder(this.yml.getString("expbuild.message.commands.too_many_timelapses"));
 
 
 
@@ -722,6 +724,9 @@ public class MessageBuilder {
         return this.timelapse_no_in_progress;
     }
 
+    public StringBuilder getTooManyTimelapses() {
+        return this.too_many_timelapses;
+    }
 
     // GUI
 

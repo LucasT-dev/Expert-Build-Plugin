@@ -15,6 +15,7 @@ import fr.marodeur.expertbuild.object.AbstractCommand;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Configuration;
 import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -22,7 +23,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -31,21 +31,6 @@ public class CommandTimelapse extends AbstractCommand {
 
     private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.configuration();
-
-    private final Vector[] CHECK_FACES = {
-            new Vector(0, 0, 1),
-            new Vector(0, 0, -1),
-            new Vector(0, 1, 0),
-            new Vector(0, -1, 0),
-            new Vector(1, 0, 0),
-            new Vector(-1, 0, 0)};
-
-    private final Vector[] CHECK_HORIZONTAL_FACES = {
-            new Vector(0, 0, 1),
-            new Vector(0, 0, -1),
-            new Vector(1, 0, 0),
-            new Vector(-1, 0, 0)};
-
 
     @Override
     public String getCommand() {
@@ -76,8 +61,7 @@ public class CommandTimelapse extends AbstractCommand {
     public void execute(CommandSender executor, Command command, @NotNull String label, @NotNull String[] args) {
 
         Player p = (Player) executor;
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
-
+        TimelapseBuilder timelapseBuilder = BrushBuilder.getBrushBuilderPlayer(p, false).getTimeLapseProfile();
 
         if (args[0].equalsIgnoreCase("start")) {
 
@@ -106,15 +90,22 @@ public class CommandTimelapse extends AbstractCommand {
                 loopNumber[0] = 1;
             }
 
-            if (new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().hasTimelapseRunning()) {
-                brushBuilder.sendMessage(msg.getTimelapseAlreadyRunning());
+            // Has already timelapse running
+            if (timelapseBuilder.hasTimelapseRunning()) {
+                timelapseBuilder.sendMessage(msg.getTimelapseAlreadyRunning());
+                return;
+            }
+
+            // Max timelapse on server
+            if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilder::hasTimelapseRunning).count() > conf.getTimelapse_max_block_per_tick()) {
+                timelapseBuilder.sendMessage(msg.getTooManyTimelapses());
                 return;
             }
 
             Region r = actor.getSelection();
             HashMap<Integer, Deque<BlockVector3>> hashMap = new HashMap<>();
 
-            new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setHasTimelapseRunning(true).setSelection(r.getMinimumPoint(), r.getMaximumPoint());
+            timelapseBuilder.setHasTimelapseRunning(true).setSelection(r.getMinimumPoint(), r.getMaximumPoint());
 
             //Loading block
 
@@ -162,9 +153,9 @@ public class CommandTimelapse extends AbstractCommand {
                 public void run() {
 
                     // Stop timelapse
-                    if (new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().stopTimelapse()) {
+                    if (timelapseBuilder.stopTimelapse()) {
                         cancel();
-                        new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setStopTimelapse(false).setHasTimelapseRunning(false);
+                        timelapseBuilder.setStopTimelapse(false).setHasTimelapseRunning(false);
                         return;
                     }
 
@@ -181,21 +172,21 @@ public class CommandTimelapse extends AbstractCommand {
 
                             if (sec < 60) {
                                 timeEnd = sec;
-                                brushBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.second().toString() ));
+                                timelapseBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.second().toString() ));
                             }
 
                             if (sec >= 60 && sec < 3600) {
                                 timeEnd = sec / 60;
-                                brushBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.minute().toString() ));
+                                timelapseBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.minute().toString() ));
                             }
 
                             if (sec >= 3600) {
                                 timeEnd = sec / 60 / 60;
-                                brushBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.hour().toString() ));
+                                timelapseBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.hour().toString() ));
                             }
 
                             p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 10, 10);
-                            new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setHasTimelapseRunning(false);
+                            timelapseBuilder.setHasTimelapseRunning(false);
 
                             cancel();
                             return;
@@ -220,11 +211,9 @@ public class CommandTimelapse extends AbstractCommand {
                 }
             }.runTaskTimer(Main.getInstance(), 0, 0);
 
-
             // Estimate timing
 
             float time = 0;
-            String unit = "s";
 
             // Limite a 5 heure a mettre en config
             if ((int) ((volumeBlock / loopNumber[0]) / 20) > 18000) {
@@ -243,38 +232,36 @@ public class CommandTimelapse extends AbstractCommand {
 
             if (sec < 60) {
                 time = sec;
-                brushBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.second().toString()));
+                timelapseBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.second().toString()));
 
             }
 
             if (sec >= 60 && sec < 3600) {
                 time = sec / 60;
-                brushBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.minute().toString()));
+                timelapseBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.minute().toString()));
 
             }
 
             if (sec >= 3600) {
                 time = sec / 60 / 60;
-                brushBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.hour().toString()));
+                timelapseBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.hour().toString()));
             }
             return;
         }
 
         if (args[0].equalsIgnoreCase("stop")) {
 
-            if (new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().hasTimelapseRunning()) {
+            if (timelapseBuilder.hasTimelapseRunning()) {
 
-                new BrushBuilder(p.getUniqueId()).getTimeLapseProfile().setStopTimelapse(true);
-
-                brushBuilder.sendMessage(msg.getTimelapseStopped());
+                timelapseBuilder
+                        .setStopTimelapse(true)
+                        .sendMessage(msg.getTimelapseStopped());
 
             } else {
-                brushBuilder.sendMessage(msg.getTimelapseNoInProgress());
+                timelapseBuilder.sendMessage(msg.getTimelapseNoInProgress());
             }
         } else {
-
-            brushBuilder.sendMessage(msg.getUse(getSyntax()));
-
+            timelapseBuilder.sendMessage(msg.getUse(getSyntax()));
         }
     }
 

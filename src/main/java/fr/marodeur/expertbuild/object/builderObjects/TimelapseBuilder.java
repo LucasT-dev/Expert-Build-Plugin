@@ -1,7 +1,8 @@
 package fr.marodeur.expertbuild.object.builderObjects;
 
 import com.sk89q.worldedit.math.BlockVector3;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.Main;
+import org.bukkit.Bukkit;
 
 import java.util.UUID;
 
@@ -58,5 +59,9 @@ public class TimelapseBuilder {
     public void setSelection(BlockVector3 corner1, BlockVector3 corner2) {
         this.selection[0] = corner1;
         this.selection[1] = corner2;
+    }
+
+    public <T> void sendMessage(T message) {
+        Bukkit.getPlayer(profileID).sendMessage(Main.prefix + message.toString());
     }
 }

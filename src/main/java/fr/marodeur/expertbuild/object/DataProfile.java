@@ -1,8 +1,10 @@
 package fr.marodeur.expertbuild.object;
 
+import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -24,6 +26,11 @@ public class DataProfile {
 
     public TimelapseBuilder getTimelapseProfile(UUID uuid) {
         return this.timelapseHashMap.get(uuid);
+    }
+    public GlueList<TimelapseBuilder> getTimelapseHashMap() {
+        GlueList<TimelapseBuilder> g = new GlueList<>();
+        g.addAll(timelapseHashMap.values());
+        return g;
     }
 }
 

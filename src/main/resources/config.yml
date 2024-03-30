@@ -134,6 +134,10 @@ build:
   # Use integer value > 1
   timelapse_max_block_per_tick: 40
 
+  # Maximum number of timelapses that can be launched at the same time on a server
+  # Default : 2
+  # Use integer value > 0
+  max_timelapse_in_same_time: 2
 
   GOHA:
     #Arm length correction factor

@@ -105,6 +105,7 @@ expbuild:
       timelapse_estimate_time: "Estimation : 'quantity' blocks detruit en 'time' 'unit'"
       timelapse_stopped: Timelapse stoppé avec succes
       timelapse_no_in_progress: Vous n'avez pas de timelapse en cours
+      too_many_timelapses: Vous avez déja trop de timelapse lancé sur le serveur
 
 
     gui:
