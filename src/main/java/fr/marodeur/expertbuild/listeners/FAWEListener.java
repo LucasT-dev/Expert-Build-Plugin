@@ -222,7 +222,7 @@ public class FAWEListener implements Listener {
 			final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
 
 			goha_builder.setPregen(false)
-					.setMomentallyParticleStop(false)
+					.setParticleID()
 					.setStartLoc(null);
 
 		}

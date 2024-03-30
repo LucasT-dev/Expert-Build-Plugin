@@ -37,7 +37,17 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
         this.z = z;
         this.particle = particle;
         this.rescheduledParticleTable = rescheduledParticleTable;
-        this.Id = BrushBuilder.getBrushBuilderPlayer(p, false).getParticleID();
+
+        Arrays.stream(rescheduledParticleTable).forEach(rescheduledParticle -> {
+
+            if (rescheduledParticle.particleClearUpdateId) {
+                this.Id = BrushBuilder.getBrushBuilderPlayer(p, false).getParticleID();
+            }
+
+            if (rescheduledParticle.particleClearOrga) {
+                this.Id = GOHA_Builder.getGOHABuilder(p).getParticleID();
+            }
+        });
     }
 
     public AdvancedParticleVisualisation particle(double x, double y, double z, Particle particle, RescheduledParticle[] rescheduledParticleTable) {
@@ -168,7 +178,6 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
 
         private boolean particleClearRegion;
         private boolean particleClearOrga;
-
         private boolean particleClearUpdateId;
 
         public RescheduledParticle() {
@@ -200,10 +209,11 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
             return true;
         }
 
-        private boolean analyseParticleClearOrga(Player p) {
+        private boolean analyseParticleClearOrga(Player p, UUID Id) {
 
             GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
-            return goha_builder.getMomentallyParticleStop().equals(false) || goha_builder.getPregen().equals(false);
+
+            return goha_builder.getParticleID().equals(Id);
         }
 
         private boolean analyseParticleClearUpdateId(Player p, UUID Id) {
@@ -217,7 +227,7 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
         public boolean analyse(Player p, UUID Id) {
 
             if (this.particleClearOrga) {
-                return analyseParticleClearOrga(p);
+                return analyseParticleClearOrga(p, Id);
             }
 
             if (this.particleClearRegion) {

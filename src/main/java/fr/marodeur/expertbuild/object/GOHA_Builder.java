@@ -1,14 +1,17 @@
 package fr.marodeur.expertbuild.object;
 
+import com.sk89q.worldedit.math.BlockVector3;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.utils.LineVisualize;
+import fr.marodeur.expertbuild.object.LISON.AdvancedParticleVisualisation;
 
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
 
 public class GOHA_Builder {
 
@@ -18,72 +21,71 @@ public class GOHA_Builder {
 
 	private int Height;
 	private String MaterialOrga;
-	private int Commutateur;
-	private Boolean Pregen;
+	private short Commutateur;
 	private Location StartLoc;
-	private Boolean stopParticle;
-	private Boolean update;
+	private UUID particleID;
+
+	private boolean pregen;
 
 	private Boolean ArmD;
-	private int ArmDXAngle;
-	private int ArmDYAngle;
+	private short ArmDXAngle;
+	private short ArmDYAngle;
 
 	private Boolean ArmG;
-	private int ArmGXAngle;
-	private int ArmGYAngle;
+	private short ArmGXAngle;
+	private short ArmGYAngle;
 
 	private Boolean ForeArmD;
-	private int ForeArmDXAngle;
-	private int ForeArmDYAngle;
+	private short ForeArmDXAngle;
+	private short ForeArmDYAngle;
 
 	private Boolean ForeArmG;
-	private int ForeArmGXAngle;
-	private int ForeArmGYAngle;
+	private short ForeArmGXAngle;
+	private short ForeArmGYAngle;
 
 	private Boolean Torso;
-	private int TorsoXAngle;
-	private int TorsoYAngle;
+	private short TorsoXAngle;
+	private short TorsoYAngle;
 
 	private Boolean Head;
-	private int HeadXAngle;
-	private int HeadYAngle;
+	private short HeadXAngle;
+	private short HeadYAngle;
 
 	private Boolean LegD;
-	private int LegDXAngle;
-	private int LegDYAngle;
+	private short LegDXAngle;
+	private short LegDYAngle;
 
 	private Boolean LegG;
-	private int LegGXAngle;
-	private int LegGYAngle;
+	private short LegGXAngle;
+	private short LegGYAngle;
 
 	private Boolean TibiaD;
-	private int TibiaDXAngle;
-	private int TibiaDYAngle;
+	private short TibiaDXAngle;
+	private short TibiaDYAngle;
 
 	private Boolean TibiaG;
-	private int TibiaGXAngle;
-	private int TibiaGYAngle;
+	private short TibiaGXAngle;
+	private short TibiaGYAngle;
 
-	public GOHA_Builder(Player player, int height, String materialOrga, int commutateur, Boolean pregen, Location startLoc, Boolean stopParticle, Boolean update,
-									Boolean armD, int armDXAngle, int armDYAngle,
-									Boolean armG, int armGXAngle, int armGYAngle,
-									Boolean foreArmD, int foreArmDXAngle, int foreArmDYAngle,
-									Boolean foreArmG, int foreArmGXAngle, int foreArmGYAngle,
-									Boolean torso, int torsoXAngle, int torsoYAngle,
-									Boolean head, int headXAngle, int headYAngle,
-									Boolean legD, int legDXAngle, int legDYAngle,
-									Boolean legG, int legGXAngle, int legGYAngle,
-									Boolean tibiaD, int tibiaDXAngle, int tibiaDYAngle,
-									Boolean tibiaG, int tibiaGXAngle, int tibiaGYAngle) {
+	public GOHA_Builder(Player player, int height, String materialOrga, short commutateur, Location startLoc, UUID particleID, boolean pregen,
+						Boolean armD, short armDXAngle, short armDYAngle,
+						Boolean armG, short armGXAngle, short armGYAngle,
+						Boolean foreArmD, short foreArmDXAngle, short foreArmDYAngle,
+						Boolean foreArmG, short foreArmGXAngle, short foreArmGYAngle,
+						Boolean torso, short torsoXAngle, short torsoYAngle,
+						Boolean head, short headXAngle, short headYAngle,
+						Boolean legD, short legDXAngle, short legDYAngle,
+						Boolean legG, short legGXAngle, short legGYAngle,
+						Boolean tibiaD, short tibiaDXAngle, short tibiaDYAngle,
+						Boolean tibiaG, short tibiaGXAngle, short tibiaGYAngle) {
 
 		this.player = player;
 		this.Height = height;
 		this.MaterialOrga = materialOrga;
 		this.Commutateur = commutateur;
-		this.Pregen = pregen;
 		this.StartLoc = startLoc;
-		this.stopParticle = stopParticle;
-		this.update = update;
+		this.particleID = particleID;
+		this.pregen = pregen;
 		this.ArmD = armD;
 		this.ArmDXAngle = armDXAngle;
 		this.ArmDYAngle = armDYAngle;
@@ -161,13 +163,8 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setCommutateur(int commutateur) {
+	public GOHA_Builder setCommutateur(short commutateur) {
 		this.Commutateur = commutateur;
-		return this;
-	}
-
-	public GOHA_Builder setPregen(Boolean pregen) {
-		this.Pregen = pregen;
 		return this;
 	}
 
@@ -176,13 +173,13 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setMomentallyParticleStop(Boolean stopParticle) {
-		this.stopParticle = stopParticle;
+	public GOHA_Builder setParticleID() {
+		this.particleID = UUID.randomUUID();
 		return this;
 	}
 
-	public GOHA_Builder setUpdate(Boolean update) {
-		this.update = update;
+	public GOHA_Builder setPregen(boolean pregen) {
+		this.pregen = pregen;
 		return this;
 	}
 
@@ -191,20 +188,20 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setArmDXAngle(int armDXAngle) {
+	public GOHA_Builder setArmDXAngle(short armDXAngle) {
 		this.ArmDXAngle = armDXAngle;
 		return this;
 	}
-	public GOHA_Builder addArmDXAngle(int armDXAngle) {
+	public GOHA_Builder addArmDXAngle(short armDXAngle) {
 		this.ArmDXAngle += armDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setArmDYAngle(int armDYAngle) {
+	public GOHA_Builder setArmDYAngle(short armDYAngle) {
 		this.ArmDYAngle = armDYAngle;
 		return this;
 	}
-	public GOHA_Builder addArmDYAngle(int armDYAngle) {
+	public GOHA_Builder addArmDYAngle(short armDYAngle) {
 		this.ArmDYAngle += armDYAngle;
 		return this;
 	}
@@ -214,22 +211,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setArmGXAngle(int armGXAngle) {
+	public GOHA_Builder setArmGXAngle(short armGXAngle) {
 		this.ArmGXAngle = armGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addArmGXAngle(int armGXAngle) {
+	public GOHA_Builder addArmGXAngle(short armGXAngle) {
 		this.ArmGXAngle += armGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setArmGYAngle(int armGYAngle) {
+	public GOHA_Builder setArmGYAngle(short armGYAngle) {
 		this.ArmGYAngle = armGYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addArmGYAngle(int armGYAngle) {
+	public GOHA_Builder addArmGYAngle(short armGYAngle) {
 		this.ArmGYAngle += armGYAngle;
 		return this;
 	}
@@ -239,22 +236,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setForeArmDXAngle(int foreArmDXAngle) {
+	public GOHA_Builder setForeArmDXAngle(short foreArmDXAngle) {
 		this.ForeArmDXAngle = foreArmDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addForeArmDXAngle(int foreArmDXAngle) {
+	public GOHA_Builder addForeArmDXAngle(short foreArmDXAngle) {
 		this.ForeArmDXAngle += foreArmDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setForeArmDYAngle(int foreArmDYAngle) {
+	public GOHA_Builder setForeArmDYAngle(short foreArmDYAngle) {
 		this.ForeArmDYAngle = foreArmDYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addForeArmDYAngle(int foreArmDYAngle) {
+	public GOHA_Builder addForeArmDYAngle(short foreArmDYAngle) {
 		this.ForeArmDYAngle += foreArmDYAngle;
 		return this;
 	}
@@ -264,22 +261,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setForeArmGXAngle(int foreArmGXAngle) {
+	public GOHA_Builder setForeArmGXAngle(short foreArmGXAngle) {
 		this.ForeArmGXAngle = foreArmGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addForeArmGXAngle(int foreArmGXAngle) {
+	public GOHA_Builder addForeArmGXAngle(short foreArmGXAngle) {
 		this.ForeArmGXAngle += foreArmGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setForeArmGYAngle(int foreArmGYAngle) {
+	public GOHA_Builder setForeArmGYAngle(short foreArmGYAngle) {
 		this.ForeArmGYAngle = foreArmGYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addForeArmGYAngle(int foreArmGYAngle) {
+	public GOHA_Builder addForeArmGYAngle(short foreArmGYAngle) {
 		this.ForeArmGYAngle += foreArmGYAngle;
 		return this;
 	}
@@ -289,22 +286,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setTorsoXAngle(int torsoXAngle) {
+	public GOHA_Builder setTorsoXAngle(short torsoXAngle) {
 		this.TorsoXAngle = torsoXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addTorsoXAngle(int torsoXAngle) {
+	public GOHA_Builder addTorsoXAngle(short torsoXAngle) {
 		this.TorsoXAngle += torsoXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setTorsoYAngle(int torsoYAngle) {
+	public GOHA_Builder setTorsoYAngle(short torsoYAngle) {
 		this.TorsoYAngle = torsoYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addTorsoYAngle(int torsoYAngle) {
+	public GOHA_Builder addTorsoYAngle(short torsoYAngle) {
 		this.TorsoYAngle += torsoYAngle;
 		return this;
 	}
@@ -314,22 +311,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setHeadXAngle(int headXAngle) {
+	public GOHA_Builder setHeadXAngle(short headXAngle) {
 		this.HeadXAngle = headXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addHeadXAngle(int headXAngle) {
+	public GOHA_Builder addHeadXAngle(short headXAngle) {
 		this.HeadXAngle += headXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setHeadYAngle(int headYAngle) {
+	public GOHA_Builder setHeadYAngle(short headYAngle) {
 		this.HeadYAngle = headYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addHeadYAngle(int headYAngle) {
+	public GOHA_Builder addHeadYAngle(short headYAngle) {
 		this.HeadYAngle += headYAngle;
 		return this;
 	}
@@ -339,22 +336,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setLegDXAngle(int legDXAngle) {
+	public GOHA_Builder setLegDXAngle(short legDXAngle) {
 		this.LegDXAngle = legDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addLegDXAngle(int legDXAngle) {
+	public GOHA_Builder addLegDXAngle(short legDXAngle) {
 		this.LegDXAngle += legDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setLegDYAngle(int legDYAngle) {
+	public GOHA_Builder setLegDYAngle(short legDYAngle) {
 		this.LegDYAngle = legDYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addLegDYAngle(int legDYAngle) {
+	public GOHA_Builder addLegDYAngle(short legDYAngle) {
 		this.LegDYAngle += legDYAngle;
 		return this;
 	}
@@ -364,22 +361,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setLegGXAngle(int legGXAngle) {
+	public GOHA_Builder setLegGXAngle(short legGXAngle) {
 		this.LegGXAngle = legGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addLegGXAngle(int legGXAngle) {
+	public GOHA_Builder addLegGXAngle(short legGXAngle) {
 		this.LegGXAngle += legGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setLegGYAngle(int legGYAngle) {
+	public GOHA_Builder setLegGYAngle(short legGYAngle) {
 		this.LegGYAngle = legGYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addLegGYAngle(int legGYAngle) {
+	public GOHA_Builder addLegGYAngle(short legGYAngle) {
 		this.LegGYAngle += legGYAngle;
 		return this;
 	}
@@ -389,22 +386,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setTibiaDXAngle(int tibiaDXAngle) {
+	public GOHA_Builder setTibiaDXAngle(short tibiaDXAngle) {
 		this.TibiaDXAngle = tibiaDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addTibiaDXAngle(int tibiaDXAngle) {
+	public GOHA_Builder addTibiaDXAngle(short tibiaDXAngle) {
 		this.TibiaDXAngle += tibiaDXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setTibiaDYAngle(int tibiaDYAngle) {
+	public GOHA_Builder setTibiaDYAngle(short tibiaDYAngle) {
 		this.TibiaDYAngle = tibiaDYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addTibiaDYAngle(int tibiaDYAngle) {
+	public GOHA_Builder addTibiaDYAngle(short tibiaDYAngle) {
 		this.TibiaDYAngle += tibiaDYAngle;
 		return this;
 	}
@@ -414,22 +411,22 @@ public class GOHA_Builder {
 		return this;
 	}
 
-	public GOHA_Builder setTibiaGXAngle(int tibiaGXAngle) {
+	public GOHA_Builder setTibiaGXAngle(short tibiaGXAngle) {
 		this.TibiaGXAngle = tibiaGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder addTibiaGXAngle(int tibiaGXAngle) {
+	public GOHA_Builder addTibiaGXAngle(short tibiaGXAngle) {
 		this.TibiaGXAngle += tibiaGXAngle;
 		return this;
 	}
 
-	public GOHA_Builder setTibiaGYAngle(int tibiaGYAngle) {
+	public GOHA_Builder setTibiaGYAngle(short tibiaGYAngle) {
 		this.TibiaGYAngle = tibiaGYAngle;
 		return this;
 	}
 
-	public GOHA_Builder addTibiaGYAngle(int tibiaGYAngle) {
+	public GOHA_Builder addTibiaGYAngle(short tibiaGYAngle) {
 		this.TibiaGYAngle += tibiaGYAngle;
 		return this;
 	}
@@ -447,24 +444,20 @@ public class GOHA_Builder {
 		return MaterialOrga;
 	}
 
-	public int getCommutateur() {
+	public short getCommutateur() {
 		return Commutateur;
-	}
-
-	public Boolean getPregen() {
-		return Pregen;
 	}
 
 	public Location getStartLoc() {
 		return StartLoc;
 	}
 
-	public Boolean getMomentallyParticleStop() {
-		return this.stopParticle;
+	public UUID getParticleID() {
+		return particleID;
 	}
 
-	public Boolean getUpdate() {
-		return this.update;
+	public boolean getPregen() {
+		return pregen;
 	}
 
 	// Arm D
@@ -473,10 +466,10 @@ public class GOHA_Builder {
 		return ArmD;
 	}
 
-	public int getArmDXAngle() {
+	public short getArmDXAngle() {
 		return ArmDXAngle;
 	}
-	public int getArmDYAngle() {
+	public short getArmDYAngle() {
 		return ArmDYAngle;
 	}
 
@@ -486,10 +479,10 @@ public class GOHA_Builder {
 		return ArmG;
 	}
 
-	public int getArmGXAngle() {
+	public short getArmGXAngle() {
 		return ArmGXAngle;
 	}
-	public int getArmGYAngle() {
+	public short getArmGYAngle() {
 		return ArmGYAngle;
 	}
 
@@ -499,10 +492,10 @@ public class GOHA_Builder {
 		return ForeArmD;
 	}
 
-	public int getForeArmDXAngle() {
+	public short getForeArmDXAngle() {
 		return ForeArmDXAngle;
 	}
-	public int getForeArmDYAngle() {
+	public short getForeArmDYAngle() {
 		return ForeArmDYAngle;
 	}
 
@@ -512,10 +505,10 @@ public class GOHA_Builder {
 		return ForeArmG;
 	}
 
-	public int getForeArmGXAngle() {
+	public short getForeArmGXAngle() {
 		return ForeArmGXAngle;
 	}
-	public int getForeArmGYAngle() {
+	public short getForeArmGYAngle() {
 		return ForeArmGYAngle;
 	}
 
@@ -525,10 +518,10 @@ public class GOHA_Builder {
 		return Torso;
 	}
 
-	public int getTorsoXAngle() {
+	public short getTorsoXAngle() {
 		return TorsoXAngle;
 	}
-	public int getTorsoYAngle() {
+	public short getTorsoYAngle() {
 		return TorsoYAngle;
 	}
 
@@ -538,10 +531,10 @@ public class GOHA_Builder {
 		return Head;
 	}
 
-	public int getHeadXAngle() {
+	public short getHeadXAngle() {
 		return HeadXAngle;
 	}
-	public int getHeadYAngle() {
+	public short getHeadYAngle() {
 		return HeadYAngle;
 	}
 
@@ -551,10 +544,10 @@ public class GOHA_Builder {
 		return LegD;
 	}
 
-	public int getLegDXAngle() {
+	public short getLegDXAngle() {
 		return LegDXAngle;
 	}
-	public int getLegDYAngle() {
+	public short getLegDYAngle() {
 		return LegDYAngle;
 	}
 
@@ -564,10 +557,10 @@ public class GOHA_Builder {
 		return LegG;
 	}
 
-	public int getLegGXAngle() {
+	public short getLegGXAngle() {
 		return LegGXAngle;
 	}
-	public int getLegGYAngle() {
+	public short getLegGYAngle() {
 		return LegGYAngle;
 	}
 
@@ -577,10 +570,10 @@ public class GOHA_Builder {
 		return TibiaD;
 	}
 
-	public int getTibiaDXAngle() {
+	public short getTibiaDXAngle() {
 		return TibiaDXAngle;
 	}
-	public int getTibiaDYAngle() {
+	public short getTibiaDYAngle() {
 		return TibiaDYAngle;
 	}
 
@@ -589,16 +582,16 @@ public class GOHA_Builder {
 	public Boolean getTibiaG() {
 		return TibiaG;
 	}
-	public int getTibiaGXAngle() {
+	public short getTibiaGXAngle() {
 		return TibiaGXAngle;
 	}
-	public int getTibiaGYAngle() {
+	public short getTibiaGYAngle() {
 		return TibiaGYAngle;
 	}
 
 	@Override
 	public String toString() {
-		return "GOHA : " + Height + MaterialOrga + Commutateur + Pregen + StartLoc +
+		return "GOHA : " + Height + MaterialOrga + Commutateur + StartLoc + particleID +
 
 				" ArmD > " + ArmD + " Pitch : " + ArmDXAngle + " Yaw : " + ArmDYAngle +
 				" ArmG > " + ArmG + " Pitch : " + ArmGXAngle + " Y : " + ArmGYAngle +
@@ -625,18 +618,17 @@ public class GOHA_Builder {
 				p,
 				conf.getDefault_orga_height(),
 				conf.getDefault_material().toUpperCase(),
-				0, false, null,
-				true, false,
-				false, 70, 180,
-				true, 60, 0,
-				true, 30, 180,
-				true, 60, 180,
-				true, -75, 180,
-				true, -85, 180,
-				true, 70, 180,
-				true, 70, 180,
-				true, 60, 0,
-				true, 60, 0));
+				(short)0, null, UUID.randomUUID(), false,
+				true, (short)70, (short)180,
+				true, (short)60, (short)0,
+				true, (short)30, (short)180,
+				true, (short)60, (short)180,
+				true, (short)-75, (short)180,
+				true, (short)-85, (short)180,
+				true, (short)70, (short)180,
+				true, (short)70, (short)180,
+				true, (short)60, (short)0,
+				true, (short)60, (short)0));
 	}
 
 	public static GOHA_Builder getGOHABuilder(@NotNull Player p) {
@@ -783,9 +775,31 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getTorso()) {
 
-				LineVisualize.genLineParticle(p, startLoc, l);
-				LineVisualize.genLineParticle(p, JepaulG, JepaulD);
-				LineVisualize.genLineParticle(p, JbassinG, JbassinD);
+				//LineVisualize.genLineParticle(p, startLoc, l);
+				//LineVisualize.genLineParticle(p, JepaulG, JepaulD);
+				//LineVisualize.genLineParticle(p, JbassinG, JbassinD);
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(startLoc.getX(), startLoc.getY(), startLoc.getZ()),
+								BlockVector3.at(l.getX(), l.getY(), l.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JepaulG.getX(), JepaulG.getY(), JepaulG.getZ()),
+								BlockVector3.at(JepaulD.getX(), JepaulD.getY(), JepaulD.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JbassinG.getX(), JbassinG.getY(), JbassinG.getZ()),
+								BlockVector3.at(JbassinD.getX(), JbassinD.getY(), JbassinD.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
 			}
 
 			return this;
@@ -795,10 +809,10 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getHead()) {
 
-				LineVisualize.genLineParticle(p, l, Jcerveau);
-				LineVisualize.genSphereParticle(p, (int) (seven / 1.5), Jcerveau);
+				//LineVisualize.genLineParticle(p, l, Jcerveau);
+				//LineVisualize.genSphereParticle(p, (int) (seven / 1.5), Jcerveau);
 
-				/*new AdvancedParticleVisualisation(p)
+				new AdvancedParticleVisualisation(p)
 						.lineParticle(
 								BlockVector3.at(l.getX(), l.getY(), l.getZ()),
 								BlockVector3.at(Jcerveau.getX(), Jcerveau.getY(), Jcerveau.getZ()),
@@ -809,9 +823,9 @@ public class GOHA_Builder {
 						.sphereParticle(
 								Jcerveau,
 								(int) (seven / 1.5),
-								Particle.CLOUD,
+								conf.getParticle_convex_type_line(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
-				*/
+
 			}
 
 			return this;
@@ -821,7 +835,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getArmG()) {
 
-				LineVisualize.genLineParticle(p, JarmG, JepaulG);
+				//LineVisualize.genLineParticle(p, JarmG, JepaulG);
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JarmG.getX(), JarmG.getY(), JarmG.getZ()),
+								BlockVector3.at(JepaulG.getX(), JepaulG.getY(), JepaulG.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
 			}
 
 			return this;
@@ -831,7 +853,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getArmD()) {
 
-				LineVisualize.genLineParticle(p, JarmD, JepaulD);
+				//LineVisualize.genLineParticle(p, JarmD, JepaulD);
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JarmD.getX(), JarmD.getY(), JarmD.getZ()),
+								BlockVector3.at(JepaulD.getX(), JepaulD.getY(), JepaulD.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
 			}
 
 			return this;
@@ -841,9 +871,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getForeArmG()) {
 
-				LineVisualize.genLineParticle(p, JarmG, handG);
-			}
+				//LineVisualize.genLineParticle(p, JarmG, handG);
 
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JarmG.getX(), JarmG.getY(), JarmG.getZ()),
+								BlockVector3.at(handG.getX(), handG.getY(), handG.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+			}
 			return this;
 		}
 
@@ -851,9 +887,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getForeArmD()) {
 
-				LineVisualize.genLineParticle(p, JarmD, handD);
-			}
+				//LineVisualize.genLineParticle(p, JarmD, handD);
 
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JarmD.getX(), JarmD.getY(), JarmD.getZ()),
+								BlockVector3.at(handD.getX(), handD.getY(), handD.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+			}
 			return this;
 		}
 
@@ -861,9 +903,16 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getLegG()) {
 
-				LineVisualize.genLineParticle(p, JbassinG, JlegG);
-			}
+				//LineVisualize.genLineParticle(p, JbassinG, JlegG);
 
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JbassinG.getX(), JbassinG.getY(), JbassinG.getZ()),
+								BlockVector3.at(JlegG.getX(), JlegG.getY(), JlegG.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
+			}
 			return this;
 		}
 
@@ -871,7 +920,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getLegD()) {
 
-				LineVisualize.genLineParticle(p, JbassinD, JlegD);
+				//LineVisualize.genLineParticle(p, JbassinD, JlegD);
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JbassinD.getX(), JbassinD.getY(), JbassinD.getZ()),
+								BlockVector3.at(JlegD.getX(), JlegD.getY(), JlegD.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
 			}
 
 			return this;
@@ -881,7 +938,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getTibiaG()) {
 
-				LineVisualize.genLineParticle(p, JlegG, footG);
+				//LineVisualize.genLineParticle(p, JlegG, footG);
+
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JlegG.getX(), JlegG.getY(), JlegG.getZ()),
+								BlockVector3.at(footG.getX(), footG.getY(), footG.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+
 			}
 
 			return this;
@@ -891,9 +956,15 @@ public class GOHA_Builder {
 
 			if (this.goha_builder.getTibiaD()) {
 
-				LineVisualize.genLineParticle(p, JlegD, footD);
-			}
+				//LineVisualize.genLineParticle(p, JlegD, footD);
 
+				new AdvancedParticleVisualisation(p)
+						.lineParticle(
+								BlockVector3.at(JlegD.getX(), JlegD.getY(), JlegD.getZ()),
+								BlockVector3.at(footD.getX(), footD.getY(), footD.getZ()),
+								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
+			}
 			return this;
 		}
 
