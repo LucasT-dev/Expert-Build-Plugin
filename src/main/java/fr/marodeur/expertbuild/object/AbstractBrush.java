@@ -10,15 +10,14 @@
 package fr.marodeur.expertbuild.object;
 
 import fr.marodeur.expertbuild.Main;
-
 import fr.marodeur.expertbuild.api.GlueList;
+
 import org.bukkit.Material;
 
 import java.util.logging.Logger;
 
 public abstract class AbstractBrush {
 
-    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.configuration();
 
     public abstract String getBrushName();
@@ -38,12 +37,12 @@ public abstract class AbstractBrush {
     void execute(BrushBuilder brushBuilder, Material tool, Object loc, Object ploc) {
 
         if (!brushBuilder.hasPermission(this.getPermission())) {
-            brushBuilder.sendMessage(msg.getNoPermissionNode(getPermission()));
+            brushBuilder.sendMessage("expbuild.message.permission.no_permission_node", true, new String[]{getPermission()});
             return;
         }
 
         if (!brushBuilder.getEnable()) {
-            brushBuilder.sendMessage(msg.getBrushDisable());
+            brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
             return;
         }
 
@@ -77,8 +76,7 @@ public abstract class AbstractBrush {
         public RegisterBrush createBrush(AbstractBrush aClass) {
 
             this.save(aClass);
-            logger.info(msg.getBrushRegistered(aClass.getClass().getSimpleName()));
-
+            logger.info(new Message.MessageSender("expbuild.message.brush.brush_registered", false, new String[]{aClass.getClass().getSimpleName()} ).getMessage());
             return this;
         }
 

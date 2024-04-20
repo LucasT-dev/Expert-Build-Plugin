@@ -29,7 +29,7 @@ public class OngroundMask extends RichParser<Mask> {
         try {
             return new OngroundExtendMask(Objects.requireNonNull(context.getSession()).createEditSession(context.getActor()), arguments);
         } catch (InputParseException inputParseException) {
-            throw new InputParseException("#onground[ Ground block ][ Applied on (air) ]");
+            throw new InputParseException("#onground[ Ground block ][ Applied on (air) ], Example : onground[grass_block][air]");
         }
     }
 }

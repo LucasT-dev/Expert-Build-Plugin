@@ -3,7 +3,7 @@ package fr.marodeur.expertbuild.gui;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.GOHA_Builder;
 import fr.marodeur.expertbuild.object.ItemBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.Message;
 
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
@@ -22,8 +22,6 @@ import org.bukkit.inventory.ItemStack;
 
 public class OrganicGUI {
 
-    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
-
     //private final String X = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzM4YWIxNDU3NDdiNGJkMDljZTAzNTQzNTQ5NDhjZTY5ZmY2ZjQxZDllMDk4YzY4NDhiODBlMTg3ZTkxOSJ9fX0=";
     //private final String Y = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTcxMDcxYmVmNzMzZjQ3NzAyMWIzMjkxZGMzZDQ3ZjBiZGYwYmUyZGExYjE2NWExMTlhOGZmMTU5NDU2NyJ9fX0=";
     //public final String RightArrow = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTlkZGRhM2RkMTkxZDYwNTk5MDA3MDBlZDBjYWY1NGZjNzdjM2Q4MTVhYTI5NDZiYzA5YjY5YWIyZjJmZjk5NiJ9fX0=";
@@ -35,7 +33,7 @@ public class OrganicGUI {
     public void openOrganicGUI(Player p) {
 
         RyseInventory.builder()
-                .title(Main.prefix + msg.getOrganicGuiTitle())
+                .title(new Message.MessageSender("expbuild.message.gui.organic_gui_title", true).getMessage())
                 .rows(6)
                 .listener(new EventCreator<>(InventoryClickEvent.class, event -> {
 
@@ -51,8 +49,8 @@ public class OrganicGUI {
                         if (goha_builder.getPregen()) {
 
                             inventory.setItem(43,
-                                    new ItemBuilder(msg.getPregeneration(), Material.ARMOR_STAND, 1)
-                                            .addLore(msg.getClickPregen())
+                                    new ItemBuilder("expbuild.message.commands.pregeneration", false, Material.ARMOR_STAND, 1)
+                                            .addLore("expbuild.message.gui.click_pregen", false)
                                             .build());
 
                             goha_builder.setPregen(false)
@@ -63,8 +61,8 @@ public class OrganicGUI {
                         } else {
 
                             inventory.setItem(43,
-                                    new ItemBuilder(msg.getGenerate(), Material.ARMOR_STAND, 1)
-                                            .addLore(msg.getClickClearParticle())
+                                    new ItemBuilder("expbuild.message.commands.generate", false, Material.ARMOR_STAND, 1)
+                                            .addLore("expbuild.message.gui.click_generate", false)
                                             .build());
 
                             goha_builder.setPregen(true)
@@ -113,9 +111,9 @@ public class OrganicGUI {
                         }
 
                         inventory.setItem(24,
-                                new ItemBuilder(msg.getPitchAngleConf(), Material.PLAYER_HEAD, 1)
+                                new ItemBuilder("expbuild.message.gui.pitch_angle_conf", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(X)
-                                        .addLore(msg.getClickChangeAngle("pitch"))
+                                        .addLore("expbuild.message.gui.click_change_angle", false, new String[]{"pitch"})
                                         .build());
                     }
 
@@ -131,9 +129,9 @@ public class OrganicGUI {
                         }
 
                         inventory.setItem(25,
-                                new ItemBuilder(msg.getYawAngleConf(), Material.PLAYER_HEAD, 1)
+                                new ItemBuilder("expbuild.message.gui.yaw_angle_conf", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(Y)
-                                        .addLore(msg.getClickChangeAngle("yaw"))
+                                        .addLore("expbuild.message.gui.click_change_angle", false, new String[]{"yaw"})
                                         .build());
                     }
 
@@ -149,8 +147,8 @@ public class OrganicGUI {
                         }
 
                         inventory.setItem(26,
-                                new ItemBuilder(msg.getMemberConf(), Material.BARRIER, 1)
-                                        .addLore(msg.getClickEnableDisable())
+                                new ItemBuilder("expbuild.message.gui.member_conf", false, Material.BARRIER, 1)
+                                        .addLore("expbuild.message.gui.click_enable_disable", false)
                                         .build());
                     }
 
@@ -178,8 +176,8 @@ public class OrganicGUI {
                         goha_builder.addHeight(event.isShiftClick(), event.isRightClick());
 
                         inventory.setItem(42,
-                                new ItemBuilder(msg.getHeight(), Material.BROWN_MUSHROOM, 1)
-                                        .addLore(msg.getOrganicHeight(String.valueOf(goha_builder.getHeight())))
+                                new ItemBuilder("expbuild.message.gui.height", false, Material.BROWN_MUSHROOM, 1)
+                                        .addLore("expbuild.message.gui.organic_height", false, new String[]{String.valueOf(goha_builder.getHeight())})
                                         .build());
                     }
 
@@ -197,10 +195,10 @@ public class OrganicGUI {
                         inventory.setItem(2,
                                 new ItemBuilder(Main.prefix, Material.PLAYER_HEAD, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Head", String.valueOf(goha_builder.getHead())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getHeadXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getHeadYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Head", String.valueOf(goha_builder.getHead())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getHeadXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getHeadYAngle())})
                                         .build());
 
                     }
@@ -219,10 +217,10 @@ public class OrganicGUI {
                         inventory.setItem(10,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right arm", String.valueOf(goha_builder.getArmD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getArmDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getArmDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right arm", String.valueOf(goha_builder.getArmD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getArmDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getArmDYAngle())})
                                         .build());
                     }
 
@@ -239,10 +237,10 @@ public class OrganicGUI {
                         inventory.setItem(12,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Arm", String.valueOf(goha_builder.getArmG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getArmGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getArmGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Arm", String.valueOf(goha_builder.getArmG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getArmGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getArmGYAngle())})
                                         .build());
                     }
 
@@ -260,10 +258,10 @@ public class OrganicGUI {
                         inventory.setItem(18,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right Fore Arm", String.valueOf(goha_builder.getForeArmD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getForeArmDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getForeArmDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Fore Arm", String.valueOf(goha_builder.getForeArmD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getForeArmDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getForeArmDYAngle())})
                                         .build());
                     }
 
@@ -280,10 +278,10 @@ public class OrganicGUI {
                         inventory.setItem(22,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Fore Arm", String.valueOf(goha_builder.getForeArmG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getForeArmGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getForeArmGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Fore Arm", String.valueOf(goha_builder.getForeArmG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getForeArmGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getForeArmGYAngle())})
                                         .build());
                     }
 
@@ -301,10 +299,10 @@ public class OrganicGUI {
                         inventory.setItem(20,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Torso", String.valueOf(goha_builder.getTorso())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getTorsoXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getTorsoYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Torso", String.valueOf(goha_builder.getTorso())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getTorsoXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTorsoYAngle())})
                                         .build());
                     }
 
@@ -323,10 +321,10 @@ public class OrganicGUI {
                         inventory.setItem(37,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right Leg", String.valueOf(goha_builder.getLegD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getLegDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getLegDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Leg", String.valueOf(goha_builder.getLegD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getLegDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getLegDYAngle())})
                                         .build());
                     }
 
@@ -343,10 +341,10 @@ public class OrganicGUI {
                         inventory.setItem(39,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Leg", String.valueOf(goha_builder.getLegG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getLegGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getLegGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Leg", String.valueOf(goha_builder.getLegG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getLegGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getLegGYAngle())})
                                         .build());
                     }
 
@@ -364,10 +362,10 @@ public class OrganicGUI {
                         inventory.setItem(46,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right Tibia", String.valueOf(goha_builder.getTibiaD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getTibiaDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getTibiaDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Tibia", String.valueOf(goha_builder.getTibiaD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getTibiaDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTibiaDYAngle())})
                                         .build());
                     }
 
@@ -384,10 +382,10 @@ public class OrganicGUI {
                         inventory.setItem(48,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Tibia", String.valueOf(goha_builder.getTibiaG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getTibiaGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getTibiaGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Tibia", String.valueOf(goha_builder.getTibiaG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getTibiaGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTibiaGYAngle())})
                                         .build());
                     }
 
@@ -421,9 +419,9 @@ public class OrganicGUI {
                     @Override
                     public void init(Player player, InventoryContents contents) {
 
-                        contents.set(0,8, IntelligentItem.of(new ItemBuilder(msg.getBack(), Material.PLAYER_HEAD, 1)
+                        contents.set(0,8, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.back", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)
-                                        .addLore(msg.getBack())
+                                        .addLore("expbuild.message.gui.back", false)
                                         .build(),
                                 event -> new MainGUI().openMainInventory(p)));
 
@@ -459,20 +457,20 @@ public class OrganicGUI {
 
                         //X rotation
                         contents.set(24,
-                                new ItemBuilder(msg.getPitchAngleConf(), Material.PLAYER_HEAD, 1)
+                                new ItemBuilder("expbuild.message.gui.pitch_angle_conf", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(X)
-                                        .addLore(msg.getClickChangeAngle("pitch"))
+                                        .addLore("expbuild.message.gui.click_change_angle", false, new String[]{"pitch"})
                                         .build());
                         //Y rotation
                         contents.set(25,
-                                new ItemBuilder(msg.getYawAngleConf(), Material.PLAYER_HEAD, 1)
+                                new ItemBuilder("expbuild.message.gui.yaw_angle_conf", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(Y)
-                                        .addLore(msg.getClickChangeAngle("yaw"))
+                                        .addLore("expbuild.message.gui.click_change_angle", false, new String[]{"yaw"})
                                         .build());
 
                         contents.set(26,
-                                new ItemBuilder(msg.getMemberConf(), Material.BARRIER, 1)
-                                    .addLore(msg.getClickEnableDisable())
+                                new ItemBuilder("expbuild.message.gui.member_conf", false, Material.BARRIER, 1)
+                                    .addLore("expbuild.message.gui.click_enable_disable", false)
                                     .build());
 
 
@@ -495,49 +493,49 @@ public class OrganicGUI {
 
                         //Height
                         contents.set(42,
-                                new ItemBuilder(msg.getHeight(), Material.BROWN_MUSHROOM, 1)
-                                    .addLore(msg.getOrganicHeight(String.valueOf(goha_builder.getHeight())))
+                                new ItemBuilder("expbuild.message.gui.height", false, Material.BROWN_MUSHROOM, 1)
+                                    .addLore("expbuild.message.gui.organic_height", false, new String[]{String.valueOf(goha_builder.getHeight())})
                                     .build());
 
                         //Pregen
                         if (goha_builder.getPregen()) {
 
                             contents.set(43,
-                                    new ItemBuilder(msg.getPregeneration(), Material.ARMOR_STAND, 1)
-                                            .addLore(msg.getClickClearParticle())
+                                    new ItemBuilder("expbuild.message.commands.pregeneration", false, Material.ARMOR_STAND, 1)
+                                            .addLore("expbuild.message.gui.click_clear_particle", false)
                                             .build());
 
                         } else {
                             contents.set(43,
-                                    new ItemBuilder(msg.getPregeneration(), Material.ARMOR_STAND, 1)
-                                            .addLore(msg.getClickPregen())
+                                    new ItemBuilder("expbuild.message.commands.pregeneration", false, Material.ARMOR_STAND, 1)
+                                            .addLore("expbuild.message.gui.click_pregen", false)
                                             .build());
                         }
 
                         //Generate
                         contents.set(44,
-                                new ItemBuilder(msg.getGenerate(), Material.ARMOR_STAND, 1)
-                                        .addLore(msg.getClickGenerate())
+                                new ItemBuilder("expbuild.message.commands.generate", false, Material.ARMOR_STAND, 1)
+                                        .addLore("expbuild.message.gui.click_generate", false)
                                         .build());
 
                         //tete
                         contents.set(2,
                                 new ItemBuilder(Main.prefix, Material.PLAYER_HEAD, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Head", String.valueOf(goha_builder.getHead())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getHeadXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getHeadYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Head", String.valueOf(goha_builder.getHead())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getHeadXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getHeadYAngle())})
                                         .build());
 
                         //bras
                         contents.set(10,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right arm", String.valueOf(goha_builder.getArmD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getArmDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getArmDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right arm", String.valueOf(goha_builder.getArmD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getArmDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getArmDYAngle())})
                                         .build());
 
                         contents.set(11, new ItemBuilder(Main.prefix, Material.BONE, 1).build());
@@ -545,38 +543,38 @@ public class OrganicGUI {
                         contents.set(12,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Arm", String.valueOf(goha_builder.getArmG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getArmGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getArmGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Arm", String.valueOf(goha_builder.getArmG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getArmGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getArmGYAngle())})
                                         .build());
                         // Avant bras
                         contents.set(18,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right Fore Arm", String.valueOf(goha_builder.getForeArmD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getForeArmDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getForeArmDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Fore Arm", String.valueOf(goha_builder.getForeArmD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getForeArmDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getForeArmDYAngle())})
                                         .build());
 
                         contents.set(22,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Fore Arm", String.valueOf(goha_builder.getForeArmG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getForeArmGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getForeArmGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Fore Arm", String.valueOf(goha_builder.getForeArmG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getForeArmGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getForeArmGYAngle())})
                                         .build());
 
                         // torse
                         contents.set(20,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Torso", String.valueOf(goha_builder.getTorso())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getTorsoXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getTorsoYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Torso", String.valueOf(goha_builder.getTorso())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getTorsoXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTorsoYAngle())})
                                         .build());
 
                         contents.set(29, new ItemBuilder(Main.prefix, Material.BONE, 1).build());
@@ -585,37 +583,37 @@ public class OrganicGUI {
                         contents.set(37,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right Leg", String.valueOf(goha_builder.getLegD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getLegDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getLegDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Leg", String.valueOf(goha_builder.getLegD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getLegDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getLegDYAngle())})
                                         .build());
 
                         contents.set(39,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Leg", String.valueOf(goha_builder.getLegG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getLegGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getLegGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Leg", String.valueOf(goha_builder.getLegG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getLegGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getLegGYAngle())})
                                         .build());
                         // tibia
                         contents.set(46,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Right Tibia", String.valueOf(goha_builder.getTibiaD())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getTibiaDXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getTibiaDYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Tibia", String.valueOf(goha_builder.getTibiaD())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getTibiaDXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTibiaDYAngle())})
                                         .build());
 
                         contents.set(48,
                                 new ItemBuilder(Main.prefix, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
-                                        .addLore(msg.getInteractMember())
-                                        .addLore(msg.getSwitchMember("Left Tibia", String.valueOf(goha_builder.getTibiaG())))
-                                        .addLore(msg.getPitchLevel(String.valueOf(goha_builder.getTibiaGXAngle())))
-                                        .addLore(msg.getYawLevel(String.valueOf(goha_builder.getTibiaGYAngle())))
+                                        .addLore("expbuild.message.gui.interact_member", false)
+                                        .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Tibia", String.valueOf(goha_builder.getTibiaG())})
+                                        .addLore("expbuild.message.gui.pitch_level", false, new String[]{String.valueOf(goha_builder.getTibiaGXAngle())})
+                                        .addLore("expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTibiaGYAngle())})
                                         .build());
 
                     }

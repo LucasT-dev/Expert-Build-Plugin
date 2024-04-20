@@ -55,6 +55,7 @@ expbuild:
       block_modified_with_time: "'num' blocs ont été modifiés ('num2' blocks/s)"
       player_log_command: "'player' a executé 'cmd'"
       copy_block: "'num' block(s) copié"
+      no_selection_save: You have no selection to save
 
     error:
       error_region: Erreur région n° 'num' ! 'error'

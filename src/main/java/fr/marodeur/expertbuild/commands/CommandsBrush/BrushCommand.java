@@ -26,7 +26,6 @@ import java.util.List;
 
 public class BrushCommand extends AbstractCommand {
 
-    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.configuration();
 
     @Override
@@ -75,7 +74,8 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setPattern(pattern).sendMessage(msg.getMaterialSet());
+                brushBuilder.setPattern(pattern)
+                        .sendMessage("expbuild.message.brush.material_set", true);
             }
 
             case "radius" -> {
@@ -87,7 +87,8 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                brushBuilder.setRadius(radius).sendMessage(msg.getRadiusSet());
+                brushBuilder.setRadius(radius)
+                        .sendMessage("expbuild.message.brush.radius_set", true);
             }
 
             case "biome" -> {
@@ -110,7 +111,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setBiome(biome)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Biome"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Biome"});
             }
 
             // TYPE : Brush Pattern Radius
@@ -134,7 +135,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Overlay"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Overlay"});
 
             }
             case "spike" -> {
@@ -157,7 +158,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Spike"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Spike"});
 
             }
             case "cube" -> {
@@ -180,7 +181,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Cube"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Cube"});
             }
 
             case "sphere", "s" -> {
@@ -203,7 +204,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Sphere"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Sphere"});
             }
 
             case "rot2Dcube" -> {
@@ -226,7 +227,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Rot2Dcube"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Rot2Dcube"});
             }
 
             // TYPE : Brush pattern
@@ -242,7 +243,7 @@ public class BrushCommand extends AbstractCommand {
                 brushBuilder.setBrush(new LineBrush())
                         .setEnable(true)
                         .setPattern(pattern)
-                        .sendMessage(msg.getBrushEnable("Line"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Line"});
             }
 
             // TYPE : Brush integer
@@ -258,7 +259,7 @@ public class BrushCommand extends AbstractCommand {
                 brushBuilder.setBrush(new BlendBallBrush())
                         .setEnable(true)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("blendBall"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"blendBall"});
 
             }
 
@@ -274,7 +275,7 @@ public class BrushCommand extends AbstractCommand {
                 brushBuilder.setBrush(new DrainBrush())
                         .setEnable(true)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Drain"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Drain"});
 
             }
 
@@ -290,7 +291,7 @@ public class BrushCommand extends AbstractCommand {
                 brushBuilder.setBrush(new UpdateChunkBrush())
                         .setEnable(true)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("UpdateChunk"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"UpdateChunk"});
 
             }
 
@@ -306,7 +307,7 @@ public class BrushCommand extends AbstractCommand {
                 brushBuilder.setBrush(new EraserBrush())
                         .setEnable(true)
                         .setRadius(radius)
-                        .sendMessage(msg.getBrushEnable("Eraser"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Eraser"});
 
             }
 
@@ -343,7 +344,7 @@ public class BrushCommand extends AbstractCommand {
 
                 brushBuilder.setBrush(new Clipboard3DBrush())
                         .setEnable(true)
-                        .sendMessage(msg.getBrushEnable("3DClipboard"))
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"3DClipboard"})
                         .getClipboardBrush().setClipboardsBrush(list);
             }
 
@@ -365,7 +366,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(1)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("Erode lift"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -374,7 +375,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(5)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("Erode melt"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -383,7 +384,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(2)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("Erode fill"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -392,7 +393,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(3)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("Erode smooth"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -401,7 +402,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(6)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("Erode floatClean"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode floatClean"});
                 }
             }
 
@@ -423,7 +424,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(1)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("ErodeBlend lift"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
@@ -432,7 +433,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(5)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("ErodeBlend melt"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
@@ -441,7 +442,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(2)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("ErodeBlend fill"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
@@ -450,7 +451,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(3)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("ErodeBlend smooth"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
@@ -459,7 +460,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces(6)
                             .setFillRecursion(1)
                             .setEnable(true)
-                            .sendMessage(msg.getBrushEnable("ErodeBlend floatClean"));
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend floatClean"});
 
                 }
             }
@@ -513,13 +514,13 @@ public class BrushCommand extends AbstractCommand {
                         .setFillRecursion(parameter4)
                         .setRadius(radius)
                         .setEnable(true)
-                        .sendMessage(msg.getBrushEnable("Custom"));
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Custom"});
 
             }
 
             case "none" -> brushBuilder.setBrush(new NoneBrush())
                     .setEnable(false)
-                    .sendMessage(msg.getBrushDisable());
+                    .sendMessage("expbuild.message.brush.brush_disable", true);
 
             case "register" -> {
 
@@ -697,10 +698,10 @@ public class BrushCommand extends AbstractCommand {
         if (args[1].equalsIgnoreCase("autoRotation")) {
 
             if (brushBuilder.getClipboardsParameter().isRandomRotation()) {
-                brushBuilder.sendMessage(msg.getDisable("Auto-rotation"))
+                brushBuilder.sendMessage("expbuild.message.commands.disable", true, new String[]{"Auto-rotation"})
                         .getClipboardsParameter().setRandomRotation(false);
             } else {
-                brushBuilder.sendMessage(msg.getEnable("Auto-rotation"))
+                brushBuilder.sendMessage("expbuild.message.commands.enable", true, new String[]{"Auto-rotation"})
                         .getClipboardsParameter().setRandomRotation(true);
             }
         }
@@ -709,22 +710,22 @@ public class BrushCommand extends AbstractCommand {
 
             brushBuilder.setBrush(new NoneBrush())
                     .setEnable(false)
-                    .sendMessage(msg.getAllClipboardDelete())
+                    .sendMessage("expbuild.message.commands.all_clipboards_delete", true)
                     .getClipboardsParameter().clearAll();
             return;
         }
         if (args[1].equalsIgnoreCase("remove")) {
 
             if (args.length == 2) {
-                brushBuilder.sendMessage(msg.getUse("/fw clipboard remove <clipboard-name>"));
+                brushBuilder.sendMessage("expbuild.message.commands.use", true, new String[]{"/fw clipboard remove <clipboard-name>"});
                 return;
             }
 
             if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
-                brushBuilder.sendMessage(msg.getClipboardRemove(args[2]))
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_remove", true, new String[]{args[2]})
                         .getClipboardsParameter().removeClipboards(args[2]);
             } else {
-                brushBuilder.sendMessage(msg.getClipboardDoesNotExist(args[2]));
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_does_not_exist", true, new String[]{args[2]});
             }
             return;
 
@@ -743,7 +744,7 @@ public class BrushCommand extends AbstractCommand {
             if (args.length >= 3) {
 
                 if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
-                    brushBuilder.sendMessage(msg.getClipboardAlreadyExist(args[2]));
+                    brushBuilder.sendMessage("expbuild.message.commands.clipboard_already_exist", true, new String[]{args[2]});
                     return;
                 } else {
                     clipboardName = args[2];
@@ -778,7 +779,7 @@ public class BrushCommand extends AbstractCommand {
 
             brushBuilder.setBrush(new ClipboardsBrush())
                     .setEnable(true)
-                    .sendMessage(msg.getClipboardAddAndEnable(clipboardName))
+                    .sendMessage("expbuild.message.commands.clipboard_add_and_enable", true, new String[]{clipboardName})
                     .getClipboardsParameter().addClipboards(list, clipboardName);
 
         }

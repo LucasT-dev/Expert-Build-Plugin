@@ -57,6 +57,16 @@ public class ItemBuilder {
 		itemStack.setItemMeta(itemMeta);
 	}
 
+	public ItemBuilder(String path, boolean prefix, Material material, int amount, String[]... var){
+
+		String name = new Message.MessageSender(path, prefix, var).getMessage();
+
+		itemStack = new ItemStack(material,amount);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(name.toString());
+		itemStack.setItemMeta(itemMeta);
+	}
+
 	public ItemBuilder(Material material, int amount, short data)
 	{
 		itemStack = new ItemStack(material, amount, data);
@@ -108,6 +118,19 @@ public class ItemBuilder {
 		return this;
 	}
 
+	public ItemBuilder addLore(String path, boolean prefix, String[]... var)
+	{
+		String line = new Message.MessageSender(path, prefix, var).getMessage();
+
+		ItemMeta im = itemStack.getItemMeta();
+		List<String> lore = new ArrayList<>();
+		if (im.hasLore()) lore = new ArrayList<>(im.getLore());
+		lore.add(line);
+		im.setLore(lore);
+		itemStack.setItemMeta(im);
+		return this;
+	}
+
 	public ItemBuilder addLoreLineTest(String lineIfTrue, String lineIfFalse, Boolean b)
 	{
 		ItemMeta im = itemStack.getItemMeta();
@@ -127,6 +150,19 @@ public class ItemBuilder {
 		if (im.hasLore()) lore = new ArrayList<>(im.getLore());
 		if (b) lore.add(lineIfTrue.toString());
 		if (!b) lore.add(lineIfFalse.toString());
+		im.setLore(lore);
+		itemStack.setItemMeta(im);
+		return this;
+	}
+
+	public ItemBuilder addLoreLineTest(String pathLineIfTrue, String pathLineIfFalse, boolean condition, boolean prefix)
+	{
+
+		ItemMeta im = itemStack.getItemMeta();
+		List<String> lore = new ArrayList<>();
+		if (im.hasLore()) lore = new ArrayList<>(im.getLore());
+		if (condition) lore.add(new Message.MessageSender(pathLineIfTrue, false).getMessage());
+		if (!condition) lore.add(new Message.MessageSender(pathLineIfFalse, false).getMessage());
 		im.setLore(lore);
 		itemStack.setItemMeta(im);
 		return this;

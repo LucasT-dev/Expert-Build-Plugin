@@ -1,7 +1,7 @@
 package fr.marodeur.expertbuild.commands;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.Message;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -19,7 +19,6 @@ import java.util.UUID;
 
 public class CommandAutoCb implements CommandExecutor {
 
-    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     public static List<String> list = new ArrayList<>();
     public static int state;
 
@@ -40,12 +39,12 @@ public class CommandAutoCb implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (! (s instanceof Player p)) {
-            s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
+            s.sendMessage(new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).getMessage());
             return false;
         }
 
         if (!p.hasPermission("exp.command.autocb")) {
-            p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.autocb"));
+            s.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.command.autocb"}).getMessage());
             return false;
         }
 
@@ -53,7 +52,7 @@ public class CommandAutoCb implements CommandExecutor {
 
             try {
                 if (uuid.equals(p.getUniqueId())) {
-                    p.sendMessage(Main.prefix + "Autocb disable");
+                    p.sendMessage(new Message.MessageSender("expbuild.message.commands.disable", true, new String[]{"Autocb"}).getMessage());
                     uuid = null;
                 }
             } catch (NullPointerException e) {

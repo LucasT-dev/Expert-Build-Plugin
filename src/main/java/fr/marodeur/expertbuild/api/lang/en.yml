@@ -36,8 +36,9 @@ expbuild:
       player_registered: Player 'player' registered
       builder_profile_registered: Builder profile registered
       player_already_registered: You have already registered
+      player_not_registered: "You are not registered, execute: /fw register"
       point_add: Point add at ('point')
-      point_not_save: Limite size, point not save
+      point_not_save: Limit size, point not save
 
     permission:
       dont_perm: You don't have the permission
@@ -57,6 +58,7 @@ expbuild:
       block_modified_with_time: "'num' block have ben modified ('num2' blocks/s)"
       player_log_command: "'player' executed 'cmd'"
       copy_block: "'num' block(s) copied"
+      no_selection_save: You have no selection to save
 
     error:
       error_region: Region error n° 'num' ! 'error'
@@ -125,9 +127,9 @@ expbuild:
       red_color: §8RED color
       green_color: §8GREEN color
       blue_color: §8BLUE color
-      red: RED§7 'level'
-      green: GREEN§7 'level'
-      blue: BLUE§7 'level'
+      red: "RED :§7 'level'"
+      green: "GREEN :§7 'level'"
+      blue: "BLUE :§7 'level'"
       organic_gui_title: Organic generator
       organic_item: Humanoid-Organic-Generator
       pitch_angle_conf: Pitch angle configuration

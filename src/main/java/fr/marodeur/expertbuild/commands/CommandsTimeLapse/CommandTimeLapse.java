@@ -1,5 +1,6 @@
 package fr.marodeur.expertbuild.commands.CommandsTimeLapse;
 
+import com.plotsquared.core.location.Location;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
@@ -11,14 +12,12 @@ import com.sk89q.worldedit.regions.Region;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.BlockChanger;
 import fr.marodeur.expertbuild.enums.ExecutorType;
-import fr.marodeur.expertbuild.object.AbstractCommand;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.Configuration;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,7 +28,6 @@ import java.util.*;
 
 public class CommandTimelapse extends AbstractCommand {
 
-    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.configuration();
 
     @Override
@@ -65,6 +63,7 @@ public class CommandTimelapse extends AbstractCommand {
 
         if (args[0].equalsIgnoreCase("start")) {
 
+            World world = p.getWorld();
             BukkitPlayer actor = BukkitAdapter.adapt(p);
 
             LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
@@ -92,23 +91,31 @@ public class CommandTimelapse extends AbstractCommand {
 
             // Has already timelapse running
             if (timelapseBuilder.hasTimelapseRunning()) {
-                timelapseBuilder.sendMessage(msg.getTimelapseAlreadyRunning());
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_already_running");
                 return;
             }
 
             // Max timelapse on server
             if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilder::hasTimelapseRunning).count() > conf.getTimelapse_max_block_per_tick()) {
-                timelapseBuilder.sendMessage(msg.getTooManyTimelapses());
+                timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses");
+
                 return;
             }
 
             Region r = actor.getSelection();
             HashMap<Integer, Deque<BlockVector3>> hashMap = new HashMap<>();
 
+            // FAWE LIMIT
+            if (actor.getLimit().MAX_CHANGES()) {
+                if (actor.getLimit().MAX_CHANGES > r.getVolume()) {
+
+                    return;
+                }
+            }
+
             timelapseBuilder.setHasTimelapseRunning(true).setSelection(r.getMinimumPoint(), r.getMaximumPoint());
 
             //Loading block
-
             if (Ymax == Ymin) {
 
                 int finalY = Ymax;
@@ -117,8 +124,28 @@ public class CommandTimelapse extends AbstractCommand {
                 r.forEach(blockVector3 -> {
 
                     if (blockVector3.getBlockY() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
-                        layer.add(BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ()));
+                        BlockVector3 b =  BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ());
+
+                        // PlotSquared condition
+                        if (world.getGenerator() != null) {
+                            if (world.getGenerator().toString().equals("PlotSquared")) {
+                                Location l = Location.at(world.getName(), b);
+                                if (l.isPlotArea()) {
+                                    if (!l.isUnownedPlotArea()) {
+                                        if (l.getOwnedPlot().getOwner().equals(p.getUniqueId())) {
+                                            layer.add(b);
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                layer.add(b);
+                            }
+                        } else {
+                            layer.add(b);
+                        }
                     }
+
                 });
 
                 hashMap.put(Ymax, layer);
@@ -135,7 +162,25 @@ public class CommandTimelapse extends AbstractCommand {
 
                         if (blockVector3.getBlockY() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
                             BlockVector3 b = BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ());
-                            layer.add(b);
+
+                            // PlotSquared condition
+                            if (world.getGenerator() != null) {
+                                if (world.getGenerator().toString().equals("PlotSquared")) {
+                                    Location l = Location.at(world.getName(), b);
+                                    if (l.isPlotArea()) {
+                                        if (!l.isUnownedPlotArea()) {
+                                            if (l.getOwnedPlot().getOwner().equals(p.getUniqueId())) {
+                                                layer.add(b);
+                                            }
+                                        }
+                                    }
+                                }
+                                else {
+                                    layer.add(b);
+                                }
+                            } else {
+                                layer.add(b);
+                            }
                         }
                     });
 
@@ -172,17 +217,17 @@ public class CommandTimelapse extends AbstractCommand {
 
                             if (sec < 60) {
                                 timeEnd = sec;
-                                timelapseBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.second().toString() ));
+                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.second", true).getMessage(), String.valueOf(finalVolumeBlock)});
                             }
 
                             if (sec >= 60 && sec < 3600) {
                                 timeEnd = sec / 60;
-                                timelapseBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.minute().toString() ));
+                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.minute", true).getMessage(), String.valueOf(finalVolumeBlock)});
                             }
 
                             if (sec >= 3600) {
                                 timeEnd = sec / 60 / 60;
-                                timelapseBuilder.sendMessage(msg.getTimelapseFinishRecap( String.valueOf(finalVolumeBlock), String.valueOf(timeEnd), msg.hour().toString() ));
+                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.hour", true).getMessage(), String.valueOf(finalVolumeBlock)});
                             }
 
                             p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 10, 10);
@@ -232,19 +277,17 @@ public class CommandTimelapse extends AbstractCommand {
 
             if (sec < 60) {
                 time = sec;
-                timelapseBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.second().toString()));
-
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.second", true).getMessage()});
             }
 
             if (sec >= 60 && sec < 3600) {
                 time = sec / 60;
-                timelapseBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.minute().toString()));
-
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.minute", true).getMessage()});
             }
 
             if (sec >= 3600) {
                 time = sec / 60 / 60;
-                timelapseBuilder.sendMessage(msg.getTimelapseEstimateTime(String.valueOf(volumeBlock), String.valueOf(time), msg.hour().toString()));
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.hour", true).getMessage()});
             }
             return;
         }
@@ -255,13 +298,13 @@ public class CommandTimelapse extends AbstractCommand {
 
                 timelapseBuilder
                         .setStopTimelapse(true)
-                        .sendMessage(msg.getTimelapseStopped());
+                        .sendMessage("expbuild.message.commands.timelapse_stopped");
 
             } else {
-                timelapseBuilder.sendMessage(msg.getTimelapseNoInProgress());
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_no_in_progress");
             }
         } else {
-            timelapseBuilder.sendMessage(msg.getUse(getSyntax()));
+            timelapseBuilder.sendMessage("expbuild.message.commands.use", new String[]{getSyntax()});
         }
     }
 

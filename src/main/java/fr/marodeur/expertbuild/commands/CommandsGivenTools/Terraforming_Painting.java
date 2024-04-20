@@ -10,7 +10,7 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.Message;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -40,22 +40,20 @@ public class Terraforming_Painting implements CommandExecutor {
 	@Override
 	public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, String[] args) {
 
-		MessageBuilder message = Main.getInstance().getMessageConfig();
-
 		if (!(s instanceof Player p)) {
-			s.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
+			s.sendMessage(new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).getMessage());
 			return false;
 		}
 
 		if (!p.hasPermission("exp.command.tool")) {
-			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.tool"));
+			p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.command.tool"}).getMessage());
 			return false;
 		}
 
 		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
 
 		if (bb == null) {
-			p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.register"));
+			p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());
 			return false;
 		}
 
@@ -90,20 +88,22 @@ public class Terraforming_Painting implements CommandExecutor {
 				p.getInventory().setItem(slot, itArrow);
 				p.getInventory().setItem(slot + 1, itGunPowder);
 
-				bb.sendMessage(message.getGiveTool("Voxel/FAVS"));
+				p.sendMessage(new Message.MessageSender("expbuild.message.tools.give_tool", true, new String[]{"Voxel/FAVS"}).getMessage());
 
 			}
 			case "plume" -> {
 
 				p.getInventory().setItem(slot, itFeather);
 
-				bb.sendMessage(message.getGiveTool("GoPaint"));
+				p.sendMessage(new Message.MessageSender("expbuild.message.tools.give_tool", true, new String[]{"GoPaint"}).getMessage());
+
 			}
 			case "silex" -> {
 
 				p.getInventory().setItem(slot, itFlint);
 
-				bb.sendMessage(message.getGiveTool("GoBrush"));
+				p.sendMessage(new Message.MessageSender("expbuild.message.tools.give_tool", true, new String[]{"GoBrush"}).getMessage());
+
 			}
 			case "terra" -> {
 
@@ -113,7 +113,8 @@ public class Terraforming_Painting implements CommandExecutor {
 				p.getInventory().setItem(3, itFlint);
 				p.getInventory().setItem(4, itHoney);
 
-				bb.sendMessage(message.getGiveTool("terraforming and painting"));
+				p.sendMessage(new Message.MessageSender("expbuild.message.tools.give_tool", true, new String[]{"terraforming and painting"}).getMessage());
+
 			}
 			case "1" -> {
 
@@ -128,16 +129,25 @@ public class Terraforming_Painting implements CommandExecutor {
 
 					BukkitPlayer actor = BukkitAdapter.adapt(p);
 
-					bb.sendMessage(message.getSetPos1WithArea(
-							(int) p.getLocation().getX() + ", "
-									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+					bb.sendMessage("expbuild.message.selection.set_pos_1_with_area",
+							true,
+							new String[]{
+									(int) p.getLocation().getX() + ", "
+							+ (int) p.getLocation().getY() + ", "
+							+ (int) p.getLocation().getZ(),
+									String.valueOf(actor.getSelection().getVolume())
+					});
+
 				} else {
 
-					bb.sendMessage(message.getSetPos1(
+
+					bb.sendMessage("expbuild.message.selection.set_pos_1",
+							true,
+							new String[]{
 							(int) p.getLocation().getX() + ", "
 									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ()));
+									+ (int) p.getLocation().getZ()
+					});
 				}
 			}
 
@@ -154,16 +164,24 @@ public class Terraforming_Painting implements CommandExecutor {
 
 					BukkitPlayer actor = BukkitAdapter.adapt(p);
 
-					bb.sendMessage(message.getSetPos2WithArea(
-							(int) p.getLocation().getX() + ", "
-									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+					bb.sendMessage("expbuild.message.selection.set_pos_2_with_area",
+							true,
+							new String[]{
+									(int) p.getLocation().getX() + ", "
+											+ (int) p.getLocation().getY() + ", "
+											+ (int) p.getLocation().getZ(),
+									String.valueOf(actor.getSelection().getVolume())
+					});
+
 				} else {
 
-					bb.sendMessage(message.getSetPos2(
+					bb.sendMessage("expbuild.message.selection.set_pos_2",
+							true,
+							new String[]{
 							(int) p.getLocation().getX() + ", "
 									+ (int) p.getLocation().getY() + ", "
-									+ (int) p.getLocation().getZ()));
+									+ (int) p.getLocation().getZ()
+					});
 				}
 			}
 
@@ -181,46 +199,42 @@ public class Terraforming_Painting implements CommandExecutor {
 
 			case "cube" -> {
 				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CUBOID);
-				bb.sendMessage(message.getSetSelection("cuboid"));
-
+				bb.sendMessage("expbuild.message.selection.set_selection", true, new String[]{"cuboid"});
 			}
 
 			case "convex" -> {
 				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CONVEX_POLYHEDRON);
-				bb.sendMessage(message.getSetSelection("convex"));
+				bb.sendMessage("expbuild.message.selection.set_selection", true, new String[]{"convex"});
+
 			}
 
 			case "poly" -> {
 				new UtilsFAWE(p).setSelectionType(RegionSelectorType.POLYGON);
-				bb.sendMessage(message.getSetSelection("polygon"));
+				bb.sendMessage("expbuild.message.selection.set_selection", true, new String[]{"poly"});
+
 			}
 
 			case "sel" -> {
 				new UtilsFAWE(p).clearSelection();
-				bb.sendMessage(message.getSelectionClear());
+				bb.sendMessage("expbuild.message.selection.selection_clear", true);
+
 			}
 
 			case "getcommand" -> {
 
 				if (Main.getCommand.contains(p.getUniqueId())) {
 					Main.getCommand.remove(p.getUniqueId());
-					p.sendMessage(Main.prefix + "GetCommand Disable");
+					bb.sendMessage("expbuild.message.commands.disable", true, new String[]{"GetCommand"});
 				} else {
 					Main.getCommand.add(p.getUniqueId());
-					p.sendMessage(Main.prefix + "GetCommand Enable");
+					bb.sendMessage("expbuild.message.commands.enable", true, new String[]{"GetCommand"});
+
 				}
 			}
 
 			case "repeater" -> {
 
-				BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-
-				if (brushBuilder == null) {
-					p.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.tool"));
-					return false;
-				}
-
-				if (brushBuilder.getEnable().equals(false)) {
+                if (bb.getEnable().equals(false)) {
 
 					if (args.length == 1) {
 
@@ -233,7 +247,7 @@ public class Terraforming_Painting implements CommandExecutor {
 								return false;
 							}
 						} catch (NumberFormatException ignored) {
-							p.sendMessage(Main.prefix + "Invlid number, use /repeater <delay (1-4)>");
+							p.sendMessage(Main.prefix + "Invalid number, use /repeater <delay (1-4)>");
 							return false;
 						}
 

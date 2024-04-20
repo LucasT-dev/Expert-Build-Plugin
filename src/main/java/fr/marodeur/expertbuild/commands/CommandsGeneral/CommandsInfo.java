@@ -2,7 +2,7 @@ package fr.marodeur.expertbuild.commands.CommandsGeneral;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.Message;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -15,7 +15,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
-import org.jetbrains.annotations.NotNull;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -24,11 +23,10 @@ import java.util.List;
 
 public class CommandsInfo implements CommandExecutor, TabCompleter {
 
-	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	private final List<String> list = Arrays.asList("info", "version", "help", "reload", "sel_mode", "fly_mode");
 
 	@Override
-	public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, String @NotNull [] args) {
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
 		if (args.length <= 1) {
 			List<String> l = new ArrayList<>();
 			StringUtil.copyPartialMatches(args[0], this.list, l);
@@ -39,16 +37,17 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String msg, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 
 		if (!sender.hasPermission("exp.command.build")) {
-			sender.sendMessage(Main.prefix + message.getNoPermissionNode("exp.command.build"));
+			new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.command.build"}).send(sender);
 			return false;
 		}
 
 		if (cmd.getName().equalsIgnoreCase("expbuild")) {
+
 			if (args.length == 0) {
-				sender.sendMessage(Main.prefix + message.getUse("/expbuild <info/version/help/reload>"));
+				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info/version/help/reload>"}).send(sender);
 				return false;
 			}
 			if (args[0].equalsIgnoreCase("info")) {
@@ -93,8 +92,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				} catch (URISyntaxException e) {
 					e.printStackTrace();
 				}
-
-				sender.sendMessage(Main.prefix + message.getConfigLoad());
+				new Message.MessageSender("expbuild.message.main.config_load", true).send(sender);
 			}
 
 			if (args[0].equalsIgnoreCase("sel_mode")) {
@@ -104,17 +102,17 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 					if (bb.getSelMode().equals(false)) {
 						bb.setSelMode(true)
-								.sendMessage("Shift click executing /sel, enable");
+								.sendMessage("Shift click executing /sel, enable", true);
 						return false;
 
 					} else {
 						bb.setSelMode(false)
-								.sendMessage("Shift click executing /sel, disable");
+								.sendMessage("Shift click executing /sel, disable", true);
 						return false;
 					}
 
 				} else {
-					sender.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
+					new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).send(sender);
 					return false;
 				}
 			}
@@ -126,16 +124,16 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 					if (bb.getFlyMode().equals(false)) {
 						bb.setFlyMode(true)
-								.sendMessage("Click air selection enable");
+								.sendMessage("Click air selection enable", true);
 						return false;
 					} else {
 						bb.setFlyMode(false)
-								.sendMessage("Click air selection disable");
+								.sendMessage("Click air selection disable", true);
 						return false;
 					}
 
 				} else {
-					sender.sendMessage(Main.prefix + message.getConsoleNotExecuteCmd());
+					new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).send(sender);
 					return false;
 				}
 			}

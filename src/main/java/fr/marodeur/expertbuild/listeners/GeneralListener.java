@@ -31,7 +31,6 @@ import java.util.Objects;
 public class GeneralListener implements Listener {
 
 	private final Configuration conf = Main.configuration();
-	private final MessageBuilder message = Main.getInstance().getMessageConfig();
 
 	@EventHandler
 	public void onJoin(@NotNull PlayerJoinEvent e) {
@@ -46,19 +45,19 @@ public class GeneralListener implements Listener {
 
 		if (!Main.containsBrushBuilder(p)) {
 			BrushBuilder bb = BrushBuilder.registerPlayer(p, false);
-			bb.sendMessage(message.getBuilderProfileRegistered());
-
+			bb.sendMessage("expbuild.message.brush.builder_profile_registered", true);
 		} else {
 			BrushBuilder.registerPlayer(p, Main.getBrushBuilder(p));
 		}
 
 		if (p.isOp()) {
+
 			//update system
 			Main.updateChecker(version -> {
 				if (Main.getVersion().equals(version)) {
-					p.sendMessage(Main.prefix + message.getNotNewUpdate());
+					p.sendMessage(new Message.MessageSender("expbuild.message.main.not_new_update", true).getMessage());
 				} else {
-					p.sendMessage(Main.prefix + message.getNewUpdateAvailable(Main.latestVersion, Main.getVersion(), Main.latestVersion));
+					p.sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{Main.lateVersion, Main.getVersion(), Main.latestVersion}).getMessage());
 				}
 			}, Main.id);
 		}

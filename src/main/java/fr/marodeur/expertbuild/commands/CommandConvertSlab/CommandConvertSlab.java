@@ -7,12 +7,10 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.AbstractCommand;
 import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -26,8 +24,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class CommandConvertSlab extends AbstractCommand {
-
-    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
     private static final List<BlockVec4> bv4 = new ArrayList<>();
 

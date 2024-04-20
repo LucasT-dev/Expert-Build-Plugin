@@ -5,7 +5,6 @@ import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.api.TransferSchema;
 import fr.marodeur.expertbuild.object.Configuration;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,9 +20,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class CommandTransferSchem implements CommandExecutor, TabCompleter {
+public class CommandTransferSchem /*implements CommandExecutor, TabCompleter*/ {
 
-	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
+	/*private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	private final Configuration conf = Main.configuration();
 
 	private final List<String> serv =
@@ -178,5 +177,5 @@ public class CommandTransferSchem implements CommandExecutor, TabCompleter {
 
 		new TransferSchema(p, file, addressServer, port, user, mdp, server);
 
-	}
+	}*/
 }

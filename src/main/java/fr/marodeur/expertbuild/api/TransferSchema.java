@@ -37,7 +37,7 @@ package fr.marodeur.expertbuild.api;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+import fr.marodeur.expertbuild.object.Message;
 
 import com.jcraft.jsch.*;
 
@@ -49,8 +49,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.logging.Logger;
 
 public class TransferSchema {
-
-	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 
 	public TransferSchema(final @NotNull Player p, String nameFile, String ip, int Port, String User,
 						  String PassWord, String serverName) {
@@ -66,7 +64,7 @@ public class TransferSchema {
 
 				Bukkit.getOnlinePlayers().stream()
 						.filter(ServerOperator::isOp)
-						.forEach(player -> player.sendMessage(Main.prefix + message.getDontRestart()));
+						.forEach(player -> player.sendMessage(new Message.MessageSender("expbuild.message.commands.dont_restart", true).getMessage()));
 
 				session = jsch.getSession(User, ip, Port);
 				session.setConfig("StrictHostKeyChecking", "no");
@@ -83,17 +81,15 @@ public class TransferSchema {
 
 				sftpChannel.exit();
 				session.disconnect();
-				brushBuilder.sendMessage(message.getSuccesTransfert(nameFile, serverName));
 
-				log.info(message.getTransfertLog(nameFile, p.getName(), serverName));
+				brushBuilder.sendMessage("expbuild.message.commands.succes_transfert", true, new String[]{nameFile, serverName});
+				log.info(new Message.MessageSender("expbuild.message.commands.transfert_log", false, new String[]{nameFile, p.getName(), serverName}).getMessage());
 
 			} catch (JSchException e) {
-				e.printStackTrace();
-				brushBuilder.sendMessage(message.getErrorJschException());
+				brushBuilder.sendMessage("expbuild.message.error.error_jsch_exception", true);
 
 			} catch (SftpException e) {
-				e.printStackTrace();
-				brushBuilder.sendMessage(message.getErrorSftpException());
+				brushBuilder.sendMessage("expbuild.message.error.error_sftp_exception", true);
 			}
 		});
 	}

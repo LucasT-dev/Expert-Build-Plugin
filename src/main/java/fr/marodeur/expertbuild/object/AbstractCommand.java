@@ -11,10 +11,12 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.biome.BiomeType;
 import com.sk89q.worldedit.world.block.BlockType;
+
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.enums.BlocksDataColor;
 import fr.marodeur.expertbuild.enums.ExecutorType;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.block.CommandBlock;
@@ -30,8 +32,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
-
-    static MessageBuilder msg = Main.getInstance().getMessageConfig();
 
     public abstract String getCommand();
 
@@ -50,21 +50,6 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
     public boolean hasPermission(@NotNull Player p) {
         return p.hasPermission(this.getPermission());
-    }
-
-    public void sendMessageInvalidPattern(@NotNull CommandSender sender, String arg, String patternName) {
-
-        if (sender instanceof Player p) {
-
-            if (Main.containsBrushBuilder(p)) {
-                getBrushBuilder(p).sendMessage(msg.getInvalidArgument(arg, patternName));
-
-            } else {
-                p.sendMessage(Main.prefix + msg.getInvalidArgument(arg, patternName));
-            }
-        } else if (sender instanceof ConsoleCommandSender commandSender) {
-            commandSender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, patternName));
-        }
     }
 
     /**
@@ -175,7 +160,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
                     if (!p.hasPermission(subCommand.getPermission()) && !subCommand.getPermission().equalsIgnoreCase("none")) {
 
-                        p.sendMessage(Main.prefix + msg.getNoPermissionNode(subCommand.getPermission()));
+                        new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{subCommand.getPermission()}).send(sender);
 
                         return false;
                     }
@@ -188,20 +173,20 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
     boolean validInitialCondition(List<ExecutorType> executorTypeArrayList, CommandSender sender, Command command, String label, String[] args) {
 
         if (!this.executorCanExecuteCommand(executorTypeArrayList, sender)) {
-            sender.sendMessage(Main.prefix + msg.getInvalidInstance(String.valueOf(sender)));
+            sender.sendMessage(new Message.MessageSender("expbuild.message.error.invalid_instance", true, new String[]{String.valueOf(sender)}).getMessage());
             return false;
         }
 
         if (sender instanceof Player p) {
 
             if (!this.hasPermission(p)) {
-                p.sendMessage(Main.prefix + msg.getNoPermissionNode(this.getPermission()));
+                new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{this.getPermission()}).send(sender);
                 return false;
             }
         }
 
         if (args.length < this.getMinimumArgsLength()) {
-            sender.sendMessage(Main.prefix + msg.getUse(getSyntax()));
+            sender.sendMessage(new Message.MessageSender("expbuild.message.commands.use", true, new String[]{getSyntax()}).getMessage());
             return false;
         }
 
@@ -244,7 +229,8 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
                          .sorted(Comparator.comparing(ArgumentLength::getPriority))
                          .toList().get(0);
 
-                 sender.sendMessage(Main.prefix + msg.getUse(argumentLength.getSyntaxCommand()));
+                new Message.MessageSender("expbuild.message.commands.use", true, new String[]{argumentLength.getSyntaxCommand()}).send(sender);
+
                  return false;
              }
          }
@@ -687,8 +673,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             LocalSession session = bukkitPlayer.getSession();
 
             if (!session.getRegionSelector(bukkitPlayer.getWorld()).isDefined()) {
-
-                getBrushBuilder().sendMessage(msg.getErrorIncompleteSelection());
+                new Message.MessageSender("expbuild.message.error.error_incomplete_selection", true).send(this.getPlayer());
                 return false;
 
             } else { return true; }
@@ -699,7 +684,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             if (Main.containsBrushBuilder(this.getPlayer())) {
                 return true;
             } else {
-                this.getPlayer().sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+                new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"'exp.register'"}).send(this.getPlayer());
                 return false;
             }
         }
@@ -810,7 +795,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public void sendMessageInvalidPattern(@NotNull CommandSender sender, String arg) {
-            sender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, "pattern"));
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "pattern"}).send(sender);
         }
 
         // Integer
@@ -829,7 +814,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public void sendMessageInvalidInteger(@NotNull CommandSender sender, String arg, int min, int max) {
-            sender.sendMessage(Main.prefix + msg.getInvalidArgumentInteger(arg, Integer.toString(min), Integer.toString(max)));
+            new Message.MessageSender("expbuild.message.error.invalid_argument_integer", true, new String[]{arg, Integer.toString(min), Integer.toString(max)}).send(sender);
         }
 
         // Double
@@ -848,7 +833,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public void sendMessageInvalidDouble(@NotNull CommandSender sender, String arg, Double min, Double max) {
-            sender.sendMessage(Main.prefix + msg.getInvalidArgumentInteger(arg, Double.toString(min), Double.toString(max)));
+            new Message.MessageSender("expbuild.message.error.invalid_argument_integer", true, new String[]{arg, Double.toString(min), Double.toString(max)}).send(sender);
         }
 
         // Biome
@@ -862,7 +847,9 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public void sendMessageInvalidBiome(@NotNull CommandSender sender, String arg) {
-            sender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, "biome"));
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "biome"}).send(sender);
+
+            //sender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, "biome"));
         }
 
         // Selection
@@ -879,7 +866,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public void sendMessageInvalidSelection(@NotNull CommandSender sender) {
-            sender.sendMessage(Main.prefix + msg.getErrorIncompleteSelection());
+            new Message.MessageSender("expbuild.message.error.error_incomplete_selection", true).send(sender);
         }
 
         // BlockDataColor
@@ -892,7 +879,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public void sendMessageInvalidBlockDataColor(@NotNull CommandSender sender, String arg) {
-            sender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, "pattern"));
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "pattern"}).send(sender);
         }
     }
 }

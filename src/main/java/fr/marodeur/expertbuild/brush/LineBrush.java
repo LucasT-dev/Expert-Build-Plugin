@@ -20,7 +20,6 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ public class LineBrush extends AbstractBrush {
 
     private final HashMap<UUID,ArrayList<BlockVec4>> point = new HashMap<>();
     Configuration conf = Main.configuration();
-    MessageBuilder msg = Main.getInstance().getMessageConfig();
 
 
     @Override
@@ -60,9 +58,8 @@ public class LineBrush extends AbstractBrush {
             pointList.add(new BlockVec4(l));
 
             point.put(brushBuilder.getUUID(), pointList);
-            brushBuilder.sendMessage(msg.getPointAdd(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
-            //p.sendMessage(Main.prefix + "Point add at (" + l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() + ")");
-            return;
+            brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
+
         } else {
 
             ArrayList<BlockVec4> pointList = new ArrayList<>();
@@ -71,15 +68,14 @@ public class LineBrush extends AbstractBrush {
             //en config
             if (pointList.size() >= conf.getMax_point_saved()) {
                 point.replace(brushBuilder.getUUID(), pointList);
-                brushBuilder.sendMessage(msg.getPointNotSave());
-                //p.sendMessage(Main.prefix + "limite size, point not save");
+                brushBuilder.sendMessage("expbuild.message.brush.point_not_save", true);
 
                 return;
             }
 
             pointList.add(new BlockVec4(l));
             point.replace(brushBuilder.getUUID(), pointList);
-            brushBuilder.sendMessage(msg.getPointAdd(l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ()));
+            brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
 
         }
     }
@@ -93,50 +89,48 @@ public class LineBrush extends AbstractBrush {
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         GlueList<BlockVec4> bv4 = new GlueList<>();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        try (EditSession editsession = localSession.createEditSession(actor)) {
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+            try {
+                editsession.setFastMode(false);
 
-                    spectralToolBrush(brushBuilder, loc, ploc);
+                spectralToolBrush(brushBuilder, loc, ploc);
 
-                    if (point.containsKey(brushBuilder.getUUID())) {
+                if (point.containsKey(brushBuilder.getUUID())) {
 
-                        ArrayList<BlockVec4> bv41 = point.get(brushBuilder.getUUID());
+                    ArrayList<BlockVec4> bv41 = point.get(brushBuilder.getUUID());
 
-                        for (int i = 0; i <= bv41.size(); i++) {
+                    for (int i = 0; i <= bv41.size(); i++) {
 
-                            if (i == bv41.size() - 1) {
+                        if (i == bv41.size() - 1) {
 
-                                point.get(brushBuilder.getUUID()).stream().forEach(blockVec4 -> {
+                            point.get(brushBuilder.getUUID()).stream().forEach(blockVec4 -> {
 
-                                    blockVec4.setMat(brushBuilder.getMaterial());
-                                    bv4.add(blockVec4);
+                                blockVec4.setMat(brushBuilder.getMaterial());
+                                bv4.add(blockVec4);
 
-                                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
+                                new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
 
-                                    point.remove(brushBuilder.getUUID());
+                                point.remove(brushBuilder.getUUID());
 
-                                });
-                                return;
-                            }
-
-                            BlockVec4 bv42 = bv41.get(i);
-
-                            BlockVec4 bv421 = bv41.get(i + 1);
-                            bv4.addAll(new BlockVec4()
-                                    .getPointInto2Point(new Location(pl.getWorld(), bv42.getX(), bv42.getY(), bv42.getZ()),
-                                            new Location(pl.getWorld(), bv421.getX(), bv421.getY(), bv421.getZ()),
-                                            1,
-                                            brushBuilder.getMaterial()
-                                    ));
+                            });
+                            return;
                         }
+
+                        BlockVec4 bv42 = bv41.get(i);
+
+                        BlockVec4 bv421 = bv41.get(i + 1);
+                        bv4.addAll(new BlockVec4()
+                                .getPointInto2Point(new Location(pl.getWorld(), bv42.getX(), bv42.getY(), bv42.getZ()),
+                                        new Location(pl.getWorld(), bv421.getX(), bv421.getY(), bv421.getZ()),
+                                        1,
+                                        brushBuilder.getMaterial()
+                                ));
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
+        }
     }
 }

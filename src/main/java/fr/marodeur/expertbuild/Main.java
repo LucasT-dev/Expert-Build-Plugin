@@ -57,7 +57,8 @@ public class Main extends JavaPlugin {
 
 	private static AbstractBrush.RegisterBrush brush;
 	private static Configuration configuration;
-	private static MessageBuilder messageBuilder;
+	private static Message fileMessageManager;
+
 	private static DataProfile dataProfile;
 
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
@@ -70,8 +71,6 @@ public class Main extends JavaPlugin {
 
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
 	public static String FawePrefix = "§8(§4FAWE§8) §7";
-
-	public static String help = ("§8[§5§oEXP-Build§8] §l(§l§5§ohelp§o§8§l)§l§8 §l>§l§7 ");
 
 	private static final Logger log = Logger.getLogger("Expert-Build");
 
@@ -95,7 +94,7 @@ public class Main extends JavaPlugin {
 			e.printStackTrace();
 		}
 
-		getServer().getConsoleSender().sendMessage(prefix + messageBuilder.getPluginEnable());
+		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_enable", true).getMessage());
 		getLogger().info(" ____          ___  ");
 		getLogger().info("|      \\  /  |   ) ");
 		getLogger().info("|__     \\/   |___) ");
@@ -106,6 +105,11 @@ public class Main extends JavaPlugin {
 		getLogger().info("This plugin is not affiliated with Mojang Studios");
 
 		WorldEditPlugin = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
+
+		if (Bukkit.getPluginManager().getPlugin("PlotSquared") != null) {
+			// Do something
+			System.out.println("PLOTSQUARED detected");
+		}
 
 		//bstat
 		bstatsManager(new Metrics(this, 16755));
@@ -118,7 +122,7 @@ public class Main extends JavaPlugin {
 		try {
 			serverFileBuilder();
 		} catch (IOException e) {
-			getLogger().severe(messageBuilder.getFileConfigurationError().toString());
+			getLogger().severe(new Message.MessageSender("expbuild.message.error.file_configuration_error", true).getMessage());
 		}
 
 		loadBrush();
@@ -138,15 +142,17 @@ public class Main extends JavaPlugin {
 		// LOAD MASK
 		loadCustomMask();
 
+		// LOAD MESSAGE 2
+		fileMessageManager = new Message().loadFileConfig();
+
 		// UPDATE CHECKER
-		Main.getInstance().getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getCheckingUpdate());
+		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
 
 		updateChecker(version -> {
 			if (!this.getDescription().getVersion().equals(version)) {
-				getServer().getConsoleSender().sendMessage(Main.prefix + messageBuilder.getNewUpdateAvailable(lateVersion, this.getDescription().getVersion(), latestVersion));
+				getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{Main.lateVersion, Main.getVersion(), Main.latestVersion}).getMessage());
 			}
 		},id);
-
 	}
 
 	private void registerListeners() {
@@ -158,8 +164,8 @@ public class Main extends JavaPlugin {
 		pm.registerEvents(new RotationEntity(), this);
 		pm.registerEvents(new BrushListener(), this);
 
+		getLogger().info(new Message.MessageSender("expbuild.message.main.listeners_load", false).getMessage());
 
-		getLogger().info(messageBuilder.getListenersLoad().toString());
 	}
 
 	@SuppressWarnings("ConstantConditions")
@@ -183,15 +189,14 @@ public class Main extends JavaPlugin {
 		getCommand("repeater").setExecutor(new Terraforming_Painting());
 		getCommand("flower").setExecutor(new BrushCommand());
 		getCommand("expbuild").setExecutor(new CommandsInfo());
-		getCommand("schemtrans").setExecutor(new CommandTransferSchem());
+		//getCommand("schemtrans").setExecutor(new CommandTransferSchem());
 		getCommand("timelapse").setExecutor(new CommandTimelapse());
-		getCommand("perlin").setExecutor(new CommandPerlin());
+		//getCommand("perlin").setExecutor(new CommandPerlin());
 		getCommand("autocb").setExecutor(new CommandAutoCb());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
 		getCommand("painting").setExecutor(new CommandPainting());
 
-
-		getLogger().info(messageBuilder.getCommandsLoad().toString());
+		getLogger().info(new Message.MessageSender("expbuild.message.main.commands_load", false).getMessage());
 
 	}
 
@@ -205,7 +210,8 @@ public class Main extends JavaPlugin {
 				registerPlayer(player, false);
 				GOHA_Builder.registerPlayer(player);
 
-				getLogger().info(messageBuilder.getPlayerRegistered(player.getName()));
+				getLogger().info(new Message.MessageSender("expbuild.message.brush.player_registered", false, new String[]{player.getName()}).getMessage());
+
 			}
 		});
 	}
@@ -229,7 +235,7 @@ public class Main extends JavaPlugin {
 	 */
 	public void reloadMessageConfig() throws URISyntaxException {
 
-		messageBuilder = new MessageBuilder().loadConfiguration();
+		fileMessageManager = new Message().loadFileConfig();
 
 		getLogger().info("Message load");
 
@@ -254,7 +260,9 @@ public class Main extends JavaPlugin {
 		return configuration;
 	}
 
-    public MessageBuilder getMessageConfig() { return messageBuilder; }
+	public static Message getFileMessageManager() {
+		return fileMessageManager;
+	}
 
 	public static BrushBuilder getBrushBuilder(@NotNull Player p) {
 		return BrushBuilder.get(p.getUniqueId());
@@ -359,9 +367,7 @@ public class Main extends JavaPlugin {
 		brush.createBrush(new SpikeBrush());
 		brush.createBrush(new UpdateChunkBrush());
 
-
-		getLogger().info(messageBuilder.getBrushLoad().toString());
-
+		getLogger().info(new Message.MessageSender("expbuild.message.main.brush_load", false).getMessage());
 	}
 
 	private void serverFileBuilder() throws IOException {
@@ -381,7 +387,7 @@ public class Main extends JavaPlugin {
 				c.set("Server.port", 1234);
 				c.save(new File("plugins/ExpertBuild", "Server" + i + ".yml"));
 
-				getLogger().info(messageBuilder.getSchematicTransfertFile(String.valueOf(i)));
+				getLogger().info(new Message.MessageSender("expbuild.message.main.schematic_transfert_file", true).getMessage());
 			}
 		}
 	}
@@ -421,7 +427,7 @@ public class Main extends JavaPlugin {
 				}
 
 			} catch (IOException e) {
-				Main.getInstance().getLogger().severe(messageBuilder.getUnableCheckUpdate(e.getMessage()));
+				Main.getInstance().getLogger().severe(new Message.MessageSender("expbuild.message.main.unable_check_update", true, new String[]{e.getMessage()}).getMessage());
 			}
 		});
 	}
@@ -447,6 +453,6 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		getServer().getConsoleSender().sendMessage(prefix + messageBuilder.getPluginDisable());
+		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_disable", true).getMessage());
 	}
 }

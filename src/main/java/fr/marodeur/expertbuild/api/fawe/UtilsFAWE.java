@@ -30,7 +30,8 @@ import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
-import fr.marodeur.expertbuild.object.MessageBuilder;
+
+import fr.marodeur.expertbuild.object.Message;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -45,8 +46,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class UtilsFAWE {
-
-    private final MessageBuilder message = Main.getInstance().getMessageConfig();
 
     private BukkitPlayer bukkitPlayer;
     private RegionSelector regionSelector;
@@ -215,9 +214,9 @@ public class UtilsFAWE {
         if (sendMessageBlock & r > 1000) {
             float t = r / 1000;
             float d = (blocks.size() / t);
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified_with_time", true, new String[]{String.valueOf(blocks.size()), String.valueOf(d)}).getMessage());
         } else if (sendMessageBlock) {
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified", true, new String[]{String.valueOf(blocks.size())}).getMessage());
         }
     }
 
@@ -255,9 +254,9 @@ public class UtilsFAWE {
         if (sendMessageBlock & r > 1000) {
             float t = r / 1000;
             float d = (blocks.size() / t);
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified_with_time", true, new String[]{String.valueOf(blocks.size()), String.valueOf(d)}).getMessage());
         } else if (sendMessageBlock) {
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified", true, new String[]{String.valueOf(blocks.size())}).getMessage());
         }
     }
 
@@ -295,9 +294,9 @@ public class UtilsFAWE {
         if (sendMessageBlock & r > 1000) {
             float t = r / 1000;
             float d = (blocks.size() / t);
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModifiedWithTime(String.valueOf(blocks.size()), String.valueOf(d)));
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified_with_time", true, new String[]{String.valueOf(blocks.size()), String.valueOf(d)}).getMessage());
         } else if (sendMessageBlock) {
-            BrushBuilder.getBrushBuilderPlayer(p, true).sendMessage(message.getBlockModified(String.valueOf(blocks.size())));
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified", true, new String[]{String.valueOf(blocks.size())}).getMessage());
         }
     }
 
@@ -552,7 +551,7 @@ public class UtilsFAWE {
         Operations.completeLegacy(copy);
         session.setClipboard(new ClipboardHolder(clipboard));
 
-        if (sendMessage) p.sendMessage(Main.prefix + message.getCopyBlock(String.valueOf(region.getArea())));
+        if (sendMessage) p.sendMessage(new Message.MessageSender("expbuild.message.selection.copy_block", true, new String[]{String.valueOf(region.getArea())}).getMessage());
 
         return clipboard;
     }

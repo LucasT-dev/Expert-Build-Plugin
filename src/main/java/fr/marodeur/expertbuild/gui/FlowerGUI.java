@@ -37,18 +37,16 @@ public class FlowerGUI {
     //public static final String RightArrow = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTlkZGRhM2RkMTkxZDYwNTk5MDA3MDBlZDBjYWY1NGZjNzdjM2Q4MTVhYTI5NDZiYzA5YjY5YWIyZjJmZjk5NiJ9fX0=";
 
     private final String RightArrow = "16227036b8afed6935d53143d16488d39cf4fb73a671f2b2955e80fc9dfe458";
-    private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
-    private static final Configuration conf = Main.configuration();
 
     public void openFlowerInventory(Player p) {
 
         RyseInventory.builder()
-                .title(Main.prefix + msg.getFlowerGuiTitle())
+                .title(new Message.MessageSender("expbuild.message.gui.flower_gui_title", true).getMessage())
                 .rows(6)
                 .period(1, TimeSetting.SECONDS)
                 .listener(new EventCreator<>(InventoryCloseEvent.class, event -> {
 
-                    if (event.getView().getTitle().equalsIgnoreCase(Main.prefix + msg.getFlowerGuiTitle())) {
+                    if (event.getView().getTitle().equalsIgnoreCase(new Message.MessageSender("expbuild.message.gui.flower_gui_title", true).getMessage())) {
                         buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false));
                     }
                 }))
@@ -72,13 +70,13 @@ public class FlowerGUI {
                         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
                         if (brushBuilder == null) {
-                            p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+                            p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());
                             return;
                         }
 
                         contents.set(0, 8, IntelligentItem.of(new ItemBuilder(Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)
-                                        .addLore(msg.getBack())
+                                        .addLore("expbuild.message.gui.back", false)
                                         .build(),
                                 event -> {
 
@@ -88,47 +86,47 @@ public class FlowerGUI {
 
                         //FLOWER
                         contents.set(1, IntelligentItem.of(
-                                new ItemBuilder(msg.getFlowerGuiTitle().toString(), Material.HONEYCOMB, 1)
-                                        .addLoreLineTest(msg.getBrushEnable2(), msg.getBrushDisable2(), brushBuilder.getEnable())
+                                new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.HONEYCOMB, 1)
+                                        .addLoreLineTest("expbuild.message.gui.brush_enable", "expbuild.message.gui.brush_disable", brushBuilder.getEnable(), false)
                                         .build(), event -> brushBuilder.setEnable(!brushBuilder.getEnable())));
 
                         //SET BRUSH FALSE
                         if (brushBuilder.getEnable().equals(true)) {
                             contents.set(0, IntelligentItem.of(
-                                    new ItemBuilder(msg.getFlowerGuiTitle(), Material.LIME_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getBrushEnable2())
+                                    new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.LIME_STAINED_GLASS_PANE, 1)
+                                            .addLore("expbuild.message.gui.brush_enable", false)
                                             .build(), event -> {
 
                                         brushBuilder.setEnable(false);
                                         contents.updateMaterial(0, Material.RED_STAINED_GLASS_PANE);
-                                        contents.updateLore(0, 0, msg.getBrushDisable2().toString());
+                                        contents.updateLore(0, 0, new Message.MessageSender("expbuild.message.gui.brush_disable", false).getMessage());
                                     }));
 
                             //SET BRUSH TRUE
                         } else {
                             contents.set(0, IntelligentItem.of(
-                                    new ItemBuilder(msg.getFlowerGuiTitle(), Material.RED_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getBrushDisable2())
+                                    new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.RED_STAINED_GLASS_PANE, 1)
+                                            .addLore("expbuild.message.gui.brush_disable", false)
                                             .build(), event -> {
 
                                         brushBuilder.setEnable(true);
                                         contents.updateMaterial(0, Material.LIME_STAINED_GLASS_PANE);
-                                        contents.updateLore(0, 0, msg.getBrushEnable2().toString());
+                                        contents.updateLore(0, 0, new Message.MessageSender("expbuild.message.gui.brush_enable", false).getMessage());
                                     }));
                         }
 
                         //SET RADIUS
                         contents.set(3, IntelligentItem.of(
-                                new ItemBuilder(msg.getRadiusText(), Material.BROWN_MUSHROOM, 1)
-                                        .addLore(msg.getRadiusValue(String.valueOf(brushBuilder.getRadius())))
+                                new ItemBuilder("expbuild.message.gui.radius_text", false, Material.BROWN_MUSHROOM, 1)
+                                        .addLore("expbuild.message.gui.radius_value", false, new String[]{String.valueOf(brushBuilder.getRadius())})
                                         .build(), event -> brushBuilder.setRadius(event.isShiftClick(), event.isRightClick()))
                         );
 
                         //SET AIR BRUSH
                         contents.set(5, IntelligentItem.of(
-                                new ItemBuilder(msg.getAirText(), Material.POTION, 1)
-                                        .addLore(msg.getAirValue(String.valueOf(brushBuilder.getAirBrush())))
-                                        .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
+                                new ItemBuilder("expbuild.message.gui.air_text", false, Material.POTION, 1)
+                                        .addLore("expbuild.message.gui.air_value", false, new String[]{String.valueOf(brushBuilder.getAirBrush())})
+                                        .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
                                         .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
                         //SET MATERIAL PROPORTION
@@ -136,9 +134,9 @@ public class FlowerGUI {
                             int finalI = i;
                             contents.set(i, IntelligentItem.of(
                                     new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getRightArrow(brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)))
-                                            .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
-                                            .addLore(msg.getClickForChange())
+                                            .addLore("expbuild.message.gui.right_arrow", false, new String[]{brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)})
+                                            .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
+                                            .addLore("expbuild.message.gui.click_for_change", false)
                                             .build(), event -> brushBuilder.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick())));
                         }
 
@@ -161,9 +159,9 @@ public class FlowerGUI {
                                 iter++;
 
                                 contents.updateOrSet(finalI - (iter * 9), IntelligentItem.of(new ItemBuilder(Material.YELLOW_BANNER)
-                                        .addLore(msg.getPropertyKey(set.getKey().getName()))
-                                        .addLore(msg.getValuePropertykey(set.getValue().toString().toUpperCase()))
-                                        .addLore(msg.getClickForChangeProperty())
+                                        .addLore("expbuild.message.gui.property_key", false, new String[]{set.getKey().getName()})
+                                        .addLore("expbuild.message.gui.value_propertykey", false, new String[]{set.getValue().toString().toUpperCase()})
+                                        .addLore("expbuild.message.gui.click_for_change_property", false)
                                         .build(), event -> itemBrushManager(finalI-45, event, event, brushBuilder, set, contents, baseBlock)));
 
                                 if (iter == 3) break;
@@ -177,7 +175,7 @@ public class FlowerGUI {
                         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
                         if (brushBuilder == null) {
-                            p.sendMessage(Main.prefix + msg.getNoPermissionNode("exp.register"));
+                            p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", false, new String[]{"exp.register"}).getMessage());
                             return;
                         }
 
@@ -186,9 +184,9 @@ public class FlowerGUI {
                             int finalI = i;
                             contents.updateOrSet(i, IntelligentItem.of(
                                     new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getRightArrow(brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)))
-                                            .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
-                                            .addLore(msg.getClickForChange())
+                                            .addLore("expbuild.message.gui.right_arrow", false, new String[]{brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)})
+                                            .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
+                                            .addLore("expbuild.message.gui.click_for_change", false)
                                             .build(), event -> {
                                         brushBuilder.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick());
                                     }));
@@ -197,39 +195,39 @@ public class FlowerGUI {
                         //SET BRUSH FALSE
                         if (brushBuilder.getEnable().equals(true)) {
                             contents.updateOrSet(0, IntelligentItem.of(
-                                    new ItemBuilder(msg.getFlowerGuiTitle(), Material.LIME_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getBrushEnable2())
+                                    new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.LIME_STAINED_GLASS_PANE, 1)
+                                            .addLore("expbuild.message.gui.brush_enable", false)
                                             .build(), event -> brushBuilder.setEnable(false)));
 
                             contents.updateOrSet(1, IntelligentItem.of(
-                                    new ItemBuilder(msg.getFlowerGuiTitle(), Material.HONEYCOMB, 1)
-                                            .addLore(msg.getBrushEnable2())
+                                    new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.HONEYCOMB, 1)
+                                            .addLore("expbuild.message.gui.brush_enable", false)
                                             .build(), event -> brushBuilder.setEnable(false)));
 
                             //SET BRUSH TRUE
                         } else {
                             contents.updateOrSet(0, IntelligentItem.of(
-                                    new ItemBuilder(msg.getFlowerGuiTitle(), Material.RED_STAINED_GLASS_PANE, 1)
-                                            .addLore(msg.getBrushDisable2())
+                                    new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.RED_STAINED_GLASS_PANE, 1)
+                                            .addLore("expbuild.message.gui.brush_disable", false)
                                             .build(), event -> brushBuilder.setEnable(true)));
 
                             contents.updateOrSet(1, IntelligentItem.of(
-                                    new ItemBuilder(msg.getFlowerGuiTitle(), Material.HONEYCOMB, 1)
-                                            .addLore(msg.getBrushDisable2())
+                                    new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.HONEYCOMB, 1)
+                                            .addLore("expbuild.message.gui.brush_disable", false)
                                             .build(), event -> brushBuilder.setEnable(true)));
                         }
 
                         //SET RADIUS
                         contents.updateOrSet(3, IntelligentItem.of(
-                                new ItemBuilder(msg.getRadiusText(), Material.BROWN_MUSHROOM, 1)
-                                        .addLore(msg.getRadiusValue(String.valueOf(brushBuilder.getRadius())))
+                                new ItemBuilder("expbuild.message.gui.radius_text", false, Material.BROWN_MUSHROOM, 1)
+                                        .addLore("expbuild.message.gui.radius_value", false, new String[]{String.valueOf(brushBuilder.getRadius())})
                                         .build(), event -> brushBuilder.setRadius(event.isShiftClick(), event.isRightClick())));
 
                         //SET AIR BRUSH
                         contents.updateOrSet(5, IntelligentItem.of(
-                                new ItemBuilder(msg.getAirText(), Material.POTION, 1)
-                                        .addLore(msg.getAirValue(String.valueOf(brushBuilder.getAirBrush())))
-                                        .addLore(msg.getTotal((brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"))
+                                new ItemBuilder("expbuild.message.gui.air_text", false, Material.POTION, 1)
+                                        .addLore("expbuild.message.gui.air_value", false, new String[]{String.valueOf(brushBuilder.getAirBrush())})
+                                        .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
                                         .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
 
@@ -283,9 +281,9 @@ public class FlowerGUI {
                                                 iter++;
 
                                                 contents.updateOrSet(finalI - (iter * 9), IntelligentItem.of(new ItemBuilder(Material.YELLOW_BANNER)
-                                                        .addLore(msg.getPropertyKey(set.getKey().getName()))
-                                                        .addLore(msg.getValuePropertykey(set.getValue().toString().toUpperCase()))
-                                                        .addLore(msg.getClickForChangeProperty())
+                                                        .addLore("expbuild.message.gui.property_key", false, new String[]{set.getKey().getName()})
+                                                        .addLore("expbuild.message.gui.value_propertykey", false, new String[]{set.getValue().toString().toUpperCase()})
+                                                        .addLore("expbuild.message.gui.click_for_change_property", false)
                                                         .build(), event1 -> {
 
                                                     itemBrushManager(event.getSlot()-45, event, event1, brushBuilder, set, contents, baseBlock);

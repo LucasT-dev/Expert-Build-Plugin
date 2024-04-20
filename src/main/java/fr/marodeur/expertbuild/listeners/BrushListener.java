@@ -4,7 +4,6 @@ import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.gui.MainGUI;
 import fr.marodeur.expertbuild.object.Configuration;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +26,6 @@ public class BrushListener implements Listener {
         ItemStack it = e.getItem();
         Location loc;
         Configuration conf = Main.configuration();
-        MessageBuilder msg = Main.getInstance().getMessageConfig();
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
         if (brushBuilder == null) {
@@ -43,7 +41,7 @@ public class BrushListener implements Listener {
             if (it.getType() == Material.HONEYCOMB) {
 
                 if (!brushBuilder.getEnable()) {
-                    brushBuilder.sendMessage(msg.getBrushDisable());
+                    brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
                     return;
                 }
                 brushBuilder.executeBrush(brushBuilder, Material.HONEYCOMB, loc, p.getLocation());
@@ -62,7 +60,7 @@ public class BrushListener implements Listener {
         if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
 
             if (!Main.containsBrushBuilder(p)) {
-                p.sendMessage(Main.prefix + "You are not registered, execute: /fw register");
+                brushBuilder.sendMessage("expbuild.message.brush.player_not_registered", true);
                 return;
             }
 

@@ -31,8 +31,6 @@ import java.util.logging.Logger;
 
 public class FAWEListener implements Listener {
 
-	private static final MessageBuilder msg = Main.getInstance().getMessageConfig();
-
 	@EventHandler
 	public void CLickAirWand(@NotNull PlayerInteractEvent event) {
 
@@ -66,21 +64,22 @@ public class FAWEListener implements Listener {
 
 					if (new UtilsFAWE(p).isCompleteSelection()) {
 
-						bb.sendMessage(msg.getSetPos1WithArea(
+						bb.sendMessage("expbuild.message.selection.set_pos_1_with_area",
+                                true, new String[]{
 								(int) p.getLocation().getX() + ", "
 										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
+										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume()) });
+
 					} else {
 
-						bb.sendMessage(msg.getSetPos1(
-								(int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ()));
+						bb.sendMessage("expbuild.message.selection.set_pos_1",
+                                true, new String[]{
+										(int) p.getLocation().getX() + ", "
+												+ (int) p.getLocation().getY() + ", "
+												+ (int) p.getLocation().getZ()
+								});
 					}
-
-
-					if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos1"));
-
+					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", true, new String[]{p.getName(), "//pos1"}).getMessage());
 				}
 			}
 
@@ -95,24 +94,25 @@ public class FAWEListener implements Listener {
 
 					if (new UtilsFAWE(p).isCompleteSelection()) {
 
-						bb.sendMessage(msg.getSetPos2WithArea(
-								(int) p.getLocation().getX() + ", "
+						bb.sendMessage("expbuild.message.selection.set_pos_2_with_area",
+                                true, new String[]{(int) p.getLocation().getX() + ", "
 										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())));
-					} else {
+										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())});
 
-						bb.sendMessage(msg.getSetPos2(
-								(int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ()));
+						} else {
+
+						bb.sendMessage("expbuild.message.selection.set_pos_2",
+                                true, new String[]{
+										(int) p.getLocation().getX() + ", "
+												+ (int) p.getLocation().getY() + ", "
+												+ (int) p.getLocation().getZ()
+								});
 					}
-
-					if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//pos2"));
+					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", true, new String[]{p.getName(), "//pos2"}).getMessage());
 				}
 			}
 
 			if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
-
 
 				try {
 
@@ -160,7 +160,7 @@ public class FAWEListener implements Listener {
 						}
 					}
 				} catch (IncompleteRegionException e) {
-						log.info(msg.getErrorRegion("1", e.toString()));
+					log.info(new Message.MessageSender("expbuild.message.error.error_region", true, new String[]{"1", e.toString()}).getMessage());
 				}
 			}
 		}
@@ -172,7 +172,7 @@ public class FAWEListener implements Listener {
 					actor.getSelection();
 
 				} catch (IncompleteRegionException e) {
-					log.info(msg.getErrorRegion("3", e.toString()));
+					log.info(new Message.MessageSender("expbuild.message.error.error_region", true, new String[]{"3", e.toString()}).getMessage());
 				}
 			}
 		}
@@ -185,10 +185,10 @@ public class FAWEListener implements Listener {
 				}
 
 				new UtilsFAWE(p).clearSelection();
+				bb.sendMessage("expbuild.message.selection.selection_clear", true);
 
-				bb.sendMessage(msg.getSelectionClear());
+				if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", true, new String[]{p.getName(), "//sel"}).getMessage());
 
-				if (conf.getlog_shortcut()) log.info(msg.getPlayerLogCommand(p.getName(), "//sel"));
 			}
 		}
 	}

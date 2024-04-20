@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.commands.CommandsPerlin;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.api.exception.IncompleteSelectionException;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -10,7 +9,6 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 
-import fr.marodeur.expertbuild.object.MessageBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -28,9 +26,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
-public class CommandPerlin implements CommandExecutor, TabCompleter {
+public class CommandPerlin /*implements CommandExecutor, TabCompleter*/ {
 
-    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
+    /*private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     private static List<BlockVec4> bv4 = new ArrayList<>();
 
     private final List<String> list = Arrays
@@ -52,7 +50,7 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
      * @return A List of possible completions for the final argument, or null
      * to default to the command executor
      */
-    @Nullable
+    /*@Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String label, @NotNull String[] args) {
 
@@ -76,7 +74,7 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
      * @param args    Passed command arguments
      * @return true if a valid command, otherwise false
      */
-    @Override
+    /*@Override
     public boolean onCommand(@NotNull CommandSender s, @NotNull Command cmd, @NotNull String msg, @NotNull String[] args) {
 
         if (!(s instanceof Player p)) {
@@ -248,7 +246,7 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
                     }
                 }
             }
-        }
+        }*/
 
 
         //sphere
@@ -275,7 +273,7 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
                 }
             }
         }*/
-    }
+    /*}
 
     @Contract("_ -> new")
     private static @NotNull Vector getDirection(float degrees){
@@ -332,6 +330,6 @@ public class CommandPerlin implements CommandExecutor, TabCompleter {
         random.setSeed((long) var);
 
         return random.nextDouble();
-    }
+    }*/
 }
 

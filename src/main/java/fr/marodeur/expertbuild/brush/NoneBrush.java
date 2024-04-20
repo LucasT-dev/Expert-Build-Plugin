@@ -9,14 +9,10 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.MessageBuilder;
 
 public class NoneBrush extends AbstractBrush {
-
-    private MessageBuilder message = Main.getInstance().getMessageConfig();
 
     @Override
     public String getBrushName() {
@@ -30,16 +26,16 @@ public class NoneBrush extends AbstractBrush {
 
     @Override
     public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        brushBuilder.sendMessage(message.getBrushDisable());
+        brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
     }
 
     @Override
     public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        brushBuilder.sendMessage(message.getBrushDisable());
+        brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
     }
 
     @Override
     public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        brushBuilder.sendMessage(message.getBrushDisable());
+        brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
     }
 }

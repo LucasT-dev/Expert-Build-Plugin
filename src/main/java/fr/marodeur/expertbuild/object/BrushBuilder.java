@@ -27,7 +27,6 @@ import java.util.logging.Logger;
 public class BrushBuilder {
 
     private static final Logger log = Logger.getLogger("Expert-Build");
-    private static final MessageBuilder message = Main.getInstance().getMessageConfig();
     private static final Configuration conf = Main.configuration();
 
 
@@ -466,13 +465,21 @@ public class BrushBuilder {
         return Main.FawePrefix;
     }*/
 
-    public BrushBuilder sendMessage(String msg) {
+    public BrushBuilder sendMessage(String path, boolean prefix, String[]... var) {
+
+        new Message.MessageSender(path, prefix, var).send(Bukkit.getPlayer(uuid));
+
+        return this;
+
+    }
+
+    /*public BrushBuilder sendMessage(String msg) {
 
         Bukkit.getPlayer(this.uuid).sendMessage(getMainPrefix() + msg);
 
         return this;
 
-    }
+    }*/
 
     public BrushBuilder sendMessage(StringBuilder msg) {
 
@@ -492,7 +499,7 @@ public class BrushBuilder {
     public static BrushBuilder registerPlayer(@NotNull Player p, Boolean sendError) {
 
         if (Main.containsBrushBuilder(p)) {
-            p.sendMessage(Main.prefix + message.getPlayerAlreadyRegistered());
+            p.sendMessage(new Message.MessageSender("expbuild.message.brush.player_already_registered", true).getMessage());
             return getBrushBuilderPlayer(p, sendError);
         }
 
@@ -556,8 +563,7 @@ public class BrushBuilder {
         } else {
 
             if (sendError) {
-                log.severe(message.getErrorBrushbuilder(p.getName()));
-                log.severe(message.getNoPermissionNode("exp.register"));
+                log.severe(new Message.MessageSender("expbuild.message.error.error_brushbuilder", true, new String[]{p.getName()}).getMessage());
             }
             return null;
         }

@@ -16,7 +16,6 @@ import java.util.UUID;
 public class GOHA_Builder {
 
 	private final Player player;
-	private static final MessageBuilder message = Main.getInstance().getMessageConfig();
 	private static final Configuration conf = Main.configuration();
 
 	private int Height;

@@ -9,7 +9,6 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
@@ -45,7 +44,7 @@ public class ClipboardsBrush extends AbstractBrush {
 
         if (brushBuilder.getClipboardsParameter().getClipboardsBlock().size() == 0) {
 
-            brushBuilder.sendMessage(Main.prefix + "Any selection register");
+            brushBuilder.sendMessage("expbuild.message.selection.no_selection_save", true);
             return;
         }
 
