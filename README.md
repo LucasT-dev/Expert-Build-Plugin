@@ -1,16 +1,16 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.14
+* Latest plugin version : 1.18.1.17
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
-* [Supported Minecraft version : 1.18 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
+* [Supported Minecraft version : 1.18, 1.19, 1.20 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
 
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.15-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.17-purple)
 
 ------------------
 <p align="center">
@@ -205,6 +205,8 @@ preset a tick to the repeater when you set it
 ------------------
 `/schemtrans` :
 
+deactivate to be reworked
+
 transfer schematic on other sftp server
 
 *permission : exp.command.schemtrans*
@@ -212,15 +214,22 @@ transfer schematic on other sftp server
 ------------------
 `/timelapse` :
 
-launch automatic timelapse
+This allows timelapses to automatically deconstruct a selection layer by layer according to our desires.
 
-WARNING, this command is not compatible with fawe (//undo, //redo),
-and does not respect plot restrictions (example: plotsquared)️
+WARNING, this command is not compatible with //undo and //redo
+
+Command : /timelapse <start-stop> [ block per tick ]
+
+Example : ```/timelapse start 5```, ```/timelapse stop```
 
 *permission : exp.command.timelapse*
 
+<img src="https://i.imgur.com/62yXy0d.gif" title="Image_1" alt="deco">
+
 ------------------
 `/perlin` :
+
+deactivate to be reworked
 
 generate perlin, predefined for the hair
 
@@ -233,16 +242,6 @@ pastes all commands separated by a semicolon into a command block. Then execute 
 this will allow when the cb to automatically include the command
 
 *permission : exp.command.autocb*
-
-------------------
-`/autoflip` :
-
-Use your selection as a plane of symmetry
-
-WARNING, this command is not compatible with fawe (//undo, //redo),
-and does not respect plot restrictions (example: plotsquared)️
-
-*permission : exp.command.autoflip*
 
 ------------------
 `/expbuild` aliases `/exp` :
