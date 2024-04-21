@@ -79,7 +79,7 @@ public class FAWEListener implements Listener {
 												+ (int) p.getLocation().getZ()
 								});
 					}
-					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", true, new String[]{p.getName(), "//pos1"}).getMessage());
+					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//pos1"}).getMessage());
 				}
 			}
 
@@ -108,7 +108,7 @@ public class FAWEListener implements Listener {
 												+ (int) p.getLocation().getZ()
 								});
 					}
-					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", true, new String[]{p.getName(), "//pos2"}).getMessage());
+					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//pos2"}).getMessage());
 				}
 			}
 
@@ -187,7 +187,7 @@ public class FAWEListener implements Listener {
 				new UtilsFAWE(p).clearSelection();
 				bb.sendMessage("expbuild.message.selection.selection_clear", true);
 
-				if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", true, new String[]{p.getName(), "//sel"}).getMessage());
+				if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//sel"}).getMessage());
 
 			}
 		}

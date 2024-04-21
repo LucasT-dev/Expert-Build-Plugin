@@ -108,7 +108,6 @@ public class Main extends JavaPlugin {
 
 		if (Bukkit.getPluginManager().getPlugin("PlotSquared") != null) {
 			// Do something
-			System.out.println("PLOTSQUARED detected");
 		}
 
 		//bstat
@@ -161,8 +160,10 @@ public class Main extends JavaPlugin {
 
 		pm.registerEvents(new GeneralListener(), this);
 		pm.registerEvents(new FAWEListener(), this);
-		pm.registerEvents(new RotationEntity(), this);
 		pm.registerEvents(new BrushListener(), this);
+
+		//Todo :
+		//pm.registerEvents(new RotationEntity(), this);
 
 		getLogger().info(new Message.MessageSender("expbuild.message.main.listeners_load", false).getMessage());
 
