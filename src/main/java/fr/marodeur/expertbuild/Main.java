@@ -387,7 +387,7 @@ public class Main extends JavaPlugin {
 				c.set("Server.port", 1234);
 				c.save(new File("plugins/ExpertBuild", "Server" + i + ".yml"));
 
-				getLogger().info(new Message.MessageSender("expbuild.message.main.schematic_transfert_file", true).getMessage());
+				getLogger().info(new Message.MessageSender("expbuild.message.main.schematic_transfert_file", false).getMessage());
 			}
 		}
 	}

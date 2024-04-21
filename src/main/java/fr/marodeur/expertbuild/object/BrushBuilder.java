@@ -10,6 +10,7 @@ import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
 
+import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -49,7 +50,6 @@ public class BrushBuilder {
 
     private UUID particleID;
 
-    private TerraParameter terraParameter;
     private ClipboardParameter clipboardParameter;
     private ClipboardBrush clipboardBrush;
 
@@ -60,7 +60,7 @@ public class BrushBuilder {
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern, UUID particleID,
-                        TerraParameter terraParameter, ClipboardParameter clipboardParameter, ClipboardBrush clipboardBrush) {
+                        ClipboardParameter clipboardParameter, ClipboardBrush clipboardBrush) {
 
         this.uuid = uuid;
         this.abstractBrush = abstractBrush;
@@ -80,7 +80,6 @@ public class BrushBuilder {
         this.pattern = pattern;
         this.particleID = particleID;
 
-        this.terraParameter = terraParameter;
         this.clipboardParameter = clipboardParameter;
         this.clipboardBrush = clipboardBrush;
 
@@ -95,6 +94,10 @@ public class BrushBuilder {
 
     public TimelapseBuilder getTimeLapseProfile() {
         return Main.getDataProfile().getTimelapseProfile(this.uuid);
+    }
+
+    public TerraParameter getTerraparameterProfile() {
+        return Main.getDataProfile().getTerraparameterProfile(this.uuid);
     }
 
 
@@ -173,25 +176,6 @@ public class BrushBuilder {
         return particleID;
     }
 
-    public TerraParameter getTerraParameter() {
-        return this.terraParameter;
-    }
-
-    public int getErosionFaces() {
-        return this.terraParameter.getErosionFaces();
-    }
-
-    public int getErosionRecursion() {
-        return this.terraParameter.getErosionRecursion();
-    }
-
-    public int getFillFaces() {
-        return this.terraParameter.getFillFaces();
-    }
-
-    public int getFillRecursion() {
-        return this.terraParameter.getFillRecursion();
-    }
 
     public ClipboardParameter getClipboardsParameter() {
         return this.clipboardParameter;
@@ -393,30 +377,6 @@ public class BrushBuilder {
         this.particleID = UUID.randomUUID();
     }
 
-    public void setTerraParameter(TerraParameter terraParameter) {
-        this.terraParameter = terraParameter;
-    }
-
-    public BrushBuilder setErosionFaces(int erosionFaces) {
-        this.terraParameter.setErosionFaces(erosionFaces);
-        return this;
-    }
-
-    public BrushBuilder setErosionRecursion(int erosionRecursion) {
-        this.terraParameter.setErosionRecursion(erosionRecursion);
-        return this;
-    }
-
-    public BrushBuilder setFillFaces(int fillFaces) {
-        this.terraParameter.setFillFaces(fillFaces);
-        return this;
-    }
-
-    public BrushBuilder setFillRecursion(int fillRecursion) {
-        this.terraParameter.setFillRecursion(fillRecursion);
-        return this;
-    }
-
     public ClipboardBrush clipboardBrush() {
         return clipboardBrush;
     }
@@ -440,7 +400,6 @@ public class BrushBuilder {
                 ", blockFace=" + blockFace +
                 ", bv4=" + bv4 +
                 ", pattern=" + pattern.toString() +
-                ", terraParameter=" + terraParameter.toString() +
                 ", clipboardParameter=" + clipboardParameter.toString() +
                 '}';
     }
@@ -528,7 +487,6 @@ public class BrushBuilder {
                 new ArrayList<>(),
                 new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
                 UUID.randomUUID(),
-                new TerraParameter(0, 0, 0, 0),
                 new ClipboardParameter(new ArrayList<>(), new ArrayList<>(), false),
                 new ClipboardBrush(new GlueList<>())));
     }
@@ -571,64 +529,6 @@ public class BrushBuilder {
 
     public boolean isEmpty(BrushBuilder bb) {
         return (bb == null);
-    }
-
-
-    private static class TerraParameter {
-
-        private int erosionFaces;
-        private int erosionRecursion;
-        private int fillFaces;
-        private int fillRecursion;
-
-        public TerraParameter(int erosionFaces, int erosionRecursion, int fillFaces, int fillRecursion) {
-            this.erosionFaces = erosionFaces;
-            this.erosionRecursion = erosionRecursion;
-            this.fillFaces = fillFaces;
-            this.fillRecursion = fillRecursion;
-        }
-
-        public int getErosionFaces() {
-            return erosionFaces;
-        }
-
-        public void setErosionFaces(int erosionFaces) {
-            this.erosionFaces = erosionFaces;
-        }
-
-        public int getErosionRecursion() {
-            return erosionRecursion;
-        }
-
-        public void setErosionRecursion(int erosionRecursion) {
-            this.erosionRecursion = erosionRecursion;
-        }
-
-        public int getFillFaces() {
-            return fillFaces;
-        }
-
-        public void setFillFaces(int fillFaces) {
-            this.fillFaces = fillFaces;
-        }
-
-        public int getFillRecursion() {
-            return fillRecursion;
-        }
-
-        public void setFillRecursion(int fillRecursion) {
-            this.fillRecursion = fillRecursion;
-        }
-
-        @Override
-        public String toString() {
-            return "TerraParameter{" +
-                    "erosionFaces=" + erosionFaces +
-                    ", erosionRecursion=" + erosionRecursion +
-                    ", fillFaces=" + fillFaces +
-                    ", fillRecursion=" + fillRecursion +
-                    '}';
-        }
     }
 
     public static class ClipboardParameter {

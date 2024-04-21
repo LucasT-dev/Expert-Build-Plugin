@@ -61,7 +61,7 @@ public class TimelapseBuilder {
         this.selection[1] = corner2;
     }
 
-    public <T> void sendMessage(String path, String[]... var) {
-        new Message.MessageSender(path, true, var[0]).send(Bukkit.getPlayer(profileID));
+    public <T> void sendMessage(String path, boolean prefix, String[]... var) {
+        new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
     }
 }

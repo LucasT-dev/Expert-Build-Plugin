@@ -12,6 +12,7 @@ import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
 
+import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
@@ -361,47 +362,54 @@ public class BrushCommand extends AbstractCommand {
 
                     case "lift" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
-                            .setErosionFaces(6)
-                            .setErosionRecursion(0)
-                            .setFillFaces(1)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+
+                            .setErosionFaces((byte) 6)
+                            .setErosionRecursion((byte)0)
+                            .setFillFaces((byte)1)
+                            .setFillRecursion((byte)1)
+
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
-                            .setErosionFaces(2)
-                            .setErosionRecursion(1)
-                            .setFillFaces(5)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 2)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 5)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
-                            .setErosionFaces(5)
-                            .setErosionRecursion(1)
-                            .setFillFaces(2)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 5)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 2)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
-                            .setErosionFaces(3)
-                            .setErosionRecursion(1)
-                            .setFillFaces(3)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 3)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 3)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
-                            .setErosionFaces(6)
-                            .setErosionRecursion(1)
-                            .setFillFaces(6)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 6)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 6)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode floatClean"});
                 }
             }
@@ -419,47 +427,52 @@ public class BrushCommand extends AbstractCommand {
 
                     case "lift" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
-                            .setErosionFaces(6)
-                            .setErosionRecursion(0)
-                            .setFillFaces(1)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 6)
+                            .setErosionRecursion((byte) 0)
+                            .setFillFaces((byte) 1)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
-                            .setErosionFaces(2)
-                            .setErosionRecursion(1)
-                            .setFillFaces(5)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 2)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 5)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
-                            .setErosionFaces(5)
-                            .setErosionRecursion(1)
-                            .setFillFaces(2)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 5)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 2)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
-                            .setErosionFaces(3)
-                            .setErosionRecursion(1)
-                            .setFillFaces(3)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 3)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 3)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBlendBrush())
                             .setRadius(radius)
-                            .setErosionFaces(6)
-                            .setErosionRecursion(1)
-                            .setFillFaces(6)
-                            .setFillRecursion(1)
                             .setEnable(true)
+                            .getTerraparameterProfile()
+                            .setErosionFaces((byte) 6)
+                            .setErosionRecursion((byte) 1)
+                            .setFillFaces((byte) 6)
+                            .setFillRecursion((byte) 1)
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend floatClean"});
 
                 }
@@ -508,12 +521,13 @@ public class BrushCommand extends AbstractCommand {
                 }
 
                 brushBuilder.setBrush(new ErodeBrush())
-                        .setErosionFaces(parameter1)
-                        .setErosionRecursion(parameter2)
-                        .setFillFaces(parameter3)
-                        .setFillRecursion(parameter4)
                         .setRadius(radius)
                         .setEnable(true)
+                        .getTerraparameterProfile()
+                        .setErosionFaces((byte) parameter1)
+                        .setErosionRecursion((byte) parameter2)
+                        .setFillFaces((byte) parameter3)
+                        .setFillRecursion((byte) parameter4)
                         .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Custom"});
 
             }

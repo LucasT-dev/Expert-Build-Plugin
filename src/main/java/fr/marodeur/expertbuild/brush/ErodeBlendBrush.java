@@ -21,6 +21,8 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 
+import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -74,6 +76,7 @@ public class ErodeBlendBrush extends AbstractBrush {
         BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
+        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraparameterProfile();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
 
@@ -85,7 +88,7 @@ public class ErodeBlendBrush extends AbstractBrush {
                 bv4.clear();
 
 
-                erorionParameter = new int[]{brushBuilder.getErosionFaces(), brushBuilder.getErosionRecursion(), brushBuilder.getFillFaces(), brushBuilder.getFillRecursion()};
+                erorionParameter = new int[]{terraParameter.getErosionFaces(), terraParameter.getErosionRecursion(), terraParameter.getFillFaces(), terraParameter.getFillRecursion()};
                 final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
 
@@ -119,6 +122,8 @@ public class ErodeBlendBrush extends AbstractBrush {
 
     @Override
     public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraparameterProfile();
+
 
         bv4.clear();
         Location l = (Location) loc;
@@ -135,7 +140,7 @@ public class ErodeBlendBrush extends AbstractBrush {
                 bv4.clear();
 
 
-                erorionParameter = new int[]{brushBuilder.getFillFaces(), brushBuilder.getFillRecursion(), brushBuilder.getErosionFaces(), brushBuilder.getErosionRecursion()};
+                erorionParameter = new int[]{terraParameter.getFillFaces(), terraParameter.getFillRecursion(), terraParameter.getErosionFaces(), terraParameter.getErosionRecursion()};
                 final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
 

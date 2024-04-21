@@ -91,13 +91,13 @@ public class CommandTimelapse extends AbstractCommand {
 
             // Has already timelapse running
             if (timelapseBuilder.hasTimelapseRunning()) {
-                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_already_running");
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_already_running", true);
                 return;
             }
 
             // Max timelapse on server
             if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilder::hasTimelapseRunning).count() > conf.getTimelapse_max_block_per_tick()) {
-                timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses");
+                timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses", true);
 
                 return;
             }
@@ -217,17 +217,17 @@ public class CommandTimelapse extends AbstractCommand {
 
                             if (sec < 60) {
                                 timeEnd = sec;
-                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.second", true).getMessage(), String.valueOf(finalVolumeBlock)});
+                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", true, new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.second", true).getMessage(), String.valueOf(finalVolumeBlock)});
                             }
 
                             if (sec >= 60 && sec < 3600) {
                                 timeEnd = sec / 60;
-                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.minute", true).getMessage(), String.valueOf(finalVolumeBlock)});
+                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", true, new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.minute", true).getMessage(), String.valueOf(finalVolumeBlock)});
                             }
 
                             if (sec >= 3600) {
                                 timeEnd = sec / 60 / 60;
-                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.hour", true).getMessage(), String.valueOf(finalVolumeBlock)});
+                                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_finish_recap", true, new String[]{String.valueOf(timeEnd), new Message.MessageSender("expbuild.message.main.hour", true).getMessage(), String.valueOf(finalVolumeBlock)});
                             }
 
                             p.playSound(p.getLocation(), Sound.BLOCK_AMETHYST_CLUSTER_BREAK, 10, 10);
@@ -277,17 +277,17 @@ public class CommandTimelapse extends AbstractCommand {
 
             if (sec < 60) {
                 time = sec;
-                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.second", true).getMessage()});
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", true, new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.second", true).getMessage()});
             }
 
             if (sec >= 60 && sec < 3600) {
                 time = sec / 60;
-                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.minute", true).getMessage()});
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", true, new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.minute", true).getMessage()});
             }
 
             if (sec >= 3600) {
                 time = sec / 60 / 60;
-                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.hour", true).getMessage()});
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_estimate_time", true, new String[]{String.valueOf(volumeBlock), String.valueOf(time), new Message.MessageSender("expbuild.message.main.hour", true).getMessage()});
             }
             return;
         }
@@ -298,13 +298,13 @@ public class CommandTimelapse extends AbstractCommand {
 
                 timelapseBuilder
                         .setStopTimelapse(true)
-                        .sendMessage("expbuild.message.commands.timelapse_stopped");
+                        .sendMessage("expbuild.message.commands.timelapse_stopped", true);
 
             } else {
-                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_no_in_progress");
+                timelapseBuilder.sendMessage("expbuild.message.commands.timelapse_no_in_progress", true);
             }
         } else {
-            timelapseBuilder.sendMessage("expbuild.message.commands.use", new String[]{getSyntax()});
+            timelapseBuilder.sendMessage("expbuild.message.commands.use", true, new String[]{getSyntax()});
         }
     }
 
