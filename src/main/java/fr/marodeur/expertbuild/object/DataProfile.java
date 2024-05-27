@@ -1,11 +1,13 @@
 package fr.marodeur.expertbuild.object;
 
+import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.marodeur.expertbuild.api.GlueList;
+import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 
@@ -15,10 +17,13 @@ public class DataProfile {
 
     private final HashMap<UUID, TerraParameter> terraParameterHashMap;
 
+    private final HashMap<UUID, ClipboardParameter> clipboardParameterHashMap;
+
 
     public DataProfile() {
         this.timelapseHashMap = new HashMap<>();
         this.terraParameterHashMap = new HashMap<>();
+        this.clipboardParameterHashMap = new HashMap<>();
     }
 
     void registerPlayer(UUID uuid) {
@@ -30,6 +35,11 @@ public class DataProfile {
         if (! terraParameterHashMap.containsKey(uuid)) {
             terraParameterHashMap.put(uuid, new TerraParameter(uuid, (byte) 0, (byte) 0, (byte) 0, (byte) 0));
         }
+
+        if (! clipboardParameterHashMap.containsKey(uuid)) {
+            clipboardParameterHashMap.put(uuid, new ClipboardParameter(uuid, new ArrayList<>(), new ArrayList<>(), false));
+        }
+
     }
 
     public TimelapseBuilder getTimelapseProfile(UUID uuid) {
@@ -41,7 +51,7 @@ public class DataProfile {
         return g;
     }
 
-    public TerraParameter getTerraparameterProfile(UUID uuid) {
+    public TerraParameter getTerraParameterProfile(UUID uuid) {
         return this.terraParameterHashMap.get(uuid);
     }
     public GlueList<TerraParameter> getTerraParameterHashMap() {
@@ -50,9 +60,13 @@ public class DataProfile {
         return g;
     }
 
-
-
-
+    public ClipboardParameter getClipboardParameterProfile(UUID uuid) {
+        return this.clipboardParameterHashMap.get(uuid);
+    }
+    public GlueList<ClipboardParameter> getClipboardParameterHashMap() {
+        GlueList<ClipboardParameter> g = new GlueList<>();
+        g.addAll(clipboardParameterHashMap.values());
+        return g;
+    }
 }
-
 

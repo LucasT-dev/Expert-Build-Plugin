@@ -7,12 +7,15 @@ import com.sk89q.worldedit.regions.Region;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
 
+import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
@@ -699,7 +702,7 @@ public class BrushCommand extends AbstractCommand {
 
             // Clipboard
             subCommandSender.addSubCommand(new SubCommandSelector().getList(1, clipboardBrush).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("clipboard", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardsParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("remove", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("remove", 1)));
 
         }
         return subCommandSender;
@@ -708,15 +711,19 @@ public class BrushCommand extends AbstractCommand {
     private static void clipboardCommand(Player p, String @NotNull [] args, ValidArgument validArgument) {
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
+        ClipboardParameter clipboardParameter = BrushBuilder.getBrushBuilderPlayer(p, false).getClipboardParameter();
 
         if (args[1].equalsIgnoreCase("autoRotation")) {
 
-            if (brushBuilder.getClipboardsParameter().isRandomRotation()) {
-                brushBuilder.sendMessage("expbuild.message.commands.disable", true, new String[]{"Auto-rotation"})
-                        .getClipboardsParameter().setRandomRotation(false);
+            if (clipboardParameter.isRandomRotation()) {
+                clipboardParameter
+                        .setRandomRotation(false)
+                        .sendMessage("expbuild.message.commands.disable", true, new String[]{"Auto-rotation"});
+
             } else {
-                brushBuilder.sendMessage("expbuild.message.commands.enable", true, new String[]{"Auto-rotation"})
-                        .getClipboardsParameter().setRandomRotation(true);
+                clipboardParameter
+                        .setRandomRotation(true)
+                        .sendMessage("expbuild.message.commands.enable", true, new String[]{"Auto-rotation"});
             }
         }
 
@@ -724,8 +731,10 @@ public class BrushCommand extends AbstractCommand {
 
             brushBuilder.setBrush(new NoneBrush())
                     .setEnable(false)
-                    .sendMessage("expbuild.message.commands.all_clipboards_delete", true)
-                    .getClipboardsParameter().clearAll();
+                    .sendMessage("expbuild.message.commands.all_clipboards_delete", true);
+
+            clipboardParameter.clearAll();
+
             return;
         }
         if (args[1].equalsIgnoreCase("remove")) {
@@ -735,9 +744,11 @@ public class BrushCommand extends AbstractCommand {
                 return;
             }
 
-            if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
-                brushBuilder.sendMessage("expbuild.message.commands.clipboard_remove", true, new String[]{args[2]})
-                        .getClipboardsParameter().removeClipboards(args[2]);
+            if (clipboardParameter.getClipboardsNameExist(args[2])) {
+                clipboardParameter
+                        .removeClipboards(args[2])
+                        .sendMessage("expbuild.message.commands.clipboard_remove", true, new String[]{args[2]});
+
             } else {
                 brushBuilder.sendMessage("expbuild.message.commands.clipboard_does_not_exist", true, new String[]{args[2]});
             }
@@ -757,7 +768,7 @@ public class BrushCommand extends AbstractCommand {
 
             if (args.length >= 3) {
 
-                if (brushBuilder.getClipboardsParameter().getClipboardsNameExist(args[2])) {
+                if (clipboardParameter.getClipboardsNameExist(args[2])) {
                     brushBuilder.sendMessage("expbuild.message.commands.clipboard_already_exist", true, new String[]{args[2]});
                     return;
                 } else {
@@ -765,36 +776,14 @@ public class BrushCommand extends AbstractCommand {
                 }
 
             } else {
-                clipboardName = "clipboards_" + brushBuilder.getClipboardsParameter().getClipboardsBlock().size();
+                clipboardName = "clipboards_" + clipboardParameter.getClipboardHolders().size();
             }
-
-
-            Clipboard clip = new UtilsFAWE(p).CopySelection(false);
-            List<BlockVec4> list = new ArrayList<>();
-
-            clip.iterator().forEachRemaining(blockVector3 -> {
-
-                BlockVector3 blockVector31 = clip.getOrigin().add(blockVector3);
-
-                int blockX = blockVector31.getBlockX() - clip.getOrigin().getX();
-                int blockY = blockVector31.getBlockY() - clip.getOrigin().getY();
-                int blockZ = blockVector31.getBlockZ() - clip.getOrigin().getZ();
-
-                int deltaX = blockX - clip.getOrigin().getX();
-                int deltaY = blockY - clip.getOrigin().getY();
-                int deltaZ = blockZ - clip.getOrigin().getZ();
-
-                list.add(new BlockVec4(
-                        deltaX,
-                        deltaY,
-                        deltaZ,
-                        clip.getFullBlock(blockX, blockY, blockZ)));
-            });
 
             brushBuilder.setBrush(new ClipboardsBrush())
                     .setEnable(true)
-                    .sendMessage("expbuild.message.commands.clipboard_add_and_enable", true, new String[]{clipboardName})
-                    .getClipboardsParameter().addClipboards(list, clipboardName);
+                    .sendMessage("expbuild.message.commands.clipboard_add_and_enable", true, new String[]{clipboardName});
+
+            clipboardParameter.addClipboards(new FaweAPI(p).copySelection(false, false, false, false), clipboardName);
 
         }
     }

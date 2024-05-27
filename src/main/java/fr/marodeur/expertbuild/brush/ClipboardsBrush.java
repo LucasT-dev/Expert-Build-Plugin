@@ -9,11 +9,13 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.api.GlueList;
+import com.sk89q.worldedit.session.ClipboardHolder;
+
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 
 import org.bukkit.Location;
 
@@ -38,43 +40,42 @@ public class ClipboardsBrush extends AbstractBrush {
     @Override
     public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        Location l = (Location) loc;
-        Random r = new Random();
-        GlueList<BlockVec4> bv4 = new GlueList<>();
+        ClipboardParameter clipboardParameter = brushBuilder.getClipboardParameter();
 
-        if (brushBuilder.getClipboardsParameter().getClipboardsBlock().size() == 0) {
+        Location l = (Location) loc;
+
+        if (clipboardParameter.getClipboardHolders().isEmpty()) {
 
             brushBuilder.sendMessage("expbuild.message.selection.no_selection_save", true);
             return;
         }
 
-        int randomRotation = 0;
-        int index = r.nextInt(brushBuilder.getClipboardsParameter().getClipboardsName().size());
+        //Clipboard
+        int index = new Random().nextInt(clipboardParameter.getClipboardsName().size());
+        //Y rotation
 
-        if (brushBuilder.getClipboardsParameter().isRandomRotation()) {
-            randomRotation = rotation.get(r.nextInt(rotation.size()));
+
+        ClipboardHolder clipboardHolder = clipboardParameter.getClipboardHolders().get(index);
+
+
+        if (clipboardParameter.isRandomRotation()) {
+            int randomRotation = rotation.get(new Random().nextInt(rotation.size()));
+
+            clipboardHolder = new FaweAPI(brushBuilder.getPlayer()).rotateClipboard(clipboardHolder, 0, randomRotation, 0);
+
         }
-
-        int finalRandomRotation = randomRotation;
-        brushBuilder.getClipboardsParameter().getClipboardsBlock().get(index)
-                .iterator()
-                .forEachRemaining(bv3 ->
-                        bv4.add(bv3.rotateAroundY(l.getBlockX(), l.getBlockZ(),
-                                l.getBlockX() + bv3.getX(),
-                                l.getBlockZ() + bv3.getZ(),
-                                finalRandomRotation, bv3.getBaseblock(),
-                                l.getBlockY() + bv3.getY() + 1)));
-
-        new UtilsFAWE(brushBuilder.getPlayer()).setBlockList(brushBuilder.getPlayer(), bv4, false);
+        // paste clipboard holder
+        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, false, new BlockVectorTool().toBlockVectorTool(l), false);
     }
 
     @Override
     public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        honeycombToolBrush(brushBuilder, loc, ploc);
 
     }
 
     @Override
     public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+        honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }

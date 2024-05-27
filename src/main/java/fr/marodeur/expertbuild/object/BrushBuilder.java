@@ -10,6 +10,7 @@ import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
 
+import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import org.bukkit.Bukkit;
@@ -50,7 +51,6 @@ public class BrushBuilder {
 
     private UUID particleID;
 
-    private ClipboardParameter clipboardParameter;
     private ClipboardBrush clipboardBrush;
 
     /**
@@ -60,7 +60,7 @@ public class BrushBuilder {
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
                         Integer rayon, int tickRT, Region region,
                         BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern, UUID particleID,
-                        ClipboardParameter clipboardParameter, ClipboardBrush clipboardBrush) {
+                        ClipboardBrush clipboardBrush) {
 
         this.uuid = uuid;
         this.abstractBrush = abstractBrush;
@@ -80,7 +80,6 @@ public class BrushBuilder {
         this.pattern = pattern;
         this.particleID = particleID;
 
-        this.clipboardParameter = clipboardParameter;
         this.clipboardBrush = clipboardBrush;
 
     }
@@ -97,7 +96,11 @@ public class BrushBuilder {
     }
 
     public TerraParameter getTerraparameterProfile() {
-        return Main.getDataProfile().getTerraparameterProfile(this.uuid);
+        return Main.getDataProfile().getTerraParameterProfile(this.uuid);
+    }
+
+    public ClipboardParameter getClipboardParameter() {
+        return Main.getDataProfile().getClipboardParameterProfile(this.uuid);
     }
 
 
@@ -177,14 +180,11 @@ public class BrushBuilder {
     }
 
 
-    public ClipboardParameter getClipboardsParameter() {
-        return this.clipboardParameter;
-    }
-
 
     public ClipboardBrush getClipboardBrush() {
         return clipboardBrush;
     }
+
 
     public boolean hasPermission(String permission) {
         return getPlayer().hasPermission(permission);
@@ -400,7 +400,6 @@ public class BrushBuilder {
                 ", blockFace=" + blockFace +
                 ", bv4=" + bv4 +
                 ", pattern=" + pattern.toString() +
-                ", clipboardParameter=" + clipboardParameter.toString() +
                 '}';
     }
 
@@ -487,7 +486,6 @@ public class BrushBuilder {
                 new ArrayList<>(),
                 new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
                 UUID.randomUUID(),
-                new ClipboardParameter(new ArrayList<>(), new ArrayList<>(), false),
                 new ClipboardBrush(new GlueList<>())));
     }
 
@@ -531,7 +529,7 @@ public class BrushBuilder {
         return (bb == null);
     }
 
-    public static class ClipboardParameter {
+    /*public static class ClipboardParameter {
 
         private ArrayList<List<BlockVec4>> clipboardsBlock;
         private ArrayList<String> clipboardsName;
@@ -606,7 +604,7 @@ public class BrushBuilder {
                     ", isRandomRotation=" + isRandomRotation +
                     '}';
         }
-    }
+    }*/
 
     public static class ClipboardBrush {
 
