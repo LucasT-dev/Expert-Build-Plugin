@@ -89,12 +89,13 @@ public class GeneralListener implements Listener {
 		Player p = e.getPlayer();
 
 		//Clear all particle
-		final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+		if (Main.containsGohaBuilder(p)) {
+			final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
 
-		goha_builder.setPregen(false)
-				.setParticleID()
-				.setStartLoc(null);
-
+			goha_builder.setPregen(false)
+					.setParticleID()
+					.setStartLoc(null);
+		}
 	}
 
 	@EventHandler
