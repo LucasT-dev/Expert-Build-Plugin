@@ -17,6 +17,7 @@ public class ClipboardParameter {
     private boolean isRandomRotation;
 
     public ClipboardParameter(UUID profileID, ArrayList<ClipboardHolder> clipboardsBlock, ArrayList<String> clipboardsName, boolean isRandomRotation) {
+        this.profileID = profileID;
         this.clipboardHolders = clipboardsBlock;
         this.clipboardsName = clipboardsName;
         this.isRandomRotation = isRandomRotation;

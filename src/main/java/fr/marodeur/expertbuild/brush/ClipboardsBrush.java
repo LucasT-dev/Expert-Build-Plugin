@@ -53,19 +53,17 @@ public class ClipboardsBrush extends AbstractBrush {
         //Clipboard
         int index = new Random().nextInt(clipboardParameter.getClipboardsName().size());
         //Y rotation
-
+        int randomRotation = 0;
 
         ClipboardHolder clipboardHolder = clipboardParameter.getClipboardHolders().get(index);
 
 
         if (clipboardParameter.isRandomRotation()) {
-            int randomRotation = rotation.get(new Random().nextInt(rotation.size()));
-
-            clipboardHolder = new FaweAPI(brushBuilder.getPlayer()).rotateClipboard(clipboardHolder, 0, randomRotation, 0);
-
+            randomRotation = rotation.get(new Random().nextInt(rotation.size()));
         }
+
         // paste clipboard holder
-        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, false, new BlockVectorTool().toBlockVectorTool(l), false);
+        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, false, false, false, new BlockVectorTool().toBlockVectorTool(l), false, 0, randomRotation, 0);
     }
 
     @Override

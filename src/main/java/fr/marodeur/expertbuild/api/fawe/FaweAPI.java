@@ -2,11 +2,10 @@ package fr.marodeur.expertbuild.api.fawe;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
@@ -24,7 +23,7 @@ import org.bukkit.entity.Player;
 
 public class FaweAPI {
 
-    BukkitPlayer bukkitPlayer;
+    private final BukkitPlayer bukkitPlayer;
 
     public FaweAPI(Player p) {
         this.bukkitPlayer = BukkitAdapter.adapt(p);
@@ -49,11 +48,8 @@ public class FaweAPI {
         copy.setCopyingBiomes(copingBiomes);
         copy.setCopyingEntities(copingEntities);
 
-        if (editSession.getMask() != null) {
-            copy.setSourceMask(editSession.getMask());
-        }
 
-        Operations.completeLegacy(copy);
+        Operations.complete(copy);
 
         if (saveInClipboard) {
             session.setClipboard(new ClipboardHolder(clipboard));
@@ -80,28 +76,64 @@ public class FaweAPI {
     }
 
     public void pasteClipboard(boolean ignoreAirBlock, BlockVectorTool to , boolean sendMessage) {
-        pasteClipboard(this.bukkitPlayer.getSession().getClipboard(), ignoreAirBlock, to, sendMessage);
+        pasteClipboard(this.bukkitPlayer.getSession().getClipboard(), ignoreAirBlock, false, false , to, sendMessage, 0, 0, 0);
     }
 
-    public void pasteClipboard(ClipboardHolder clipboardHolder, boolean ignoreAirBlock, BlockVectorTool to , boolean sendMessage) {
+    public void pasteClipboard(ClipboardHolder clipboardHolder, boolean ignoreAirBlock, boolean copingEntities, boolean copingBiomes, BlockVectorTool to , boolean sendMessage, double rotateX, double rotateY, double rotateZ) {
 
-        try (EditSession editSession = WorldEdit.getInstance().newEditSession(bukkitPlayer.getWorld())) {
+        LocalSession localSession = this.bukkitPlayer.getSession();
+        EditSession editSession = localSession.createEditSession(this.bukkitPlayer);
 
-            Operation operation = clipboardHolder
-
-                    .createPaste(editSession)
-                    .ignoreAirBlocks(ignoreAirBlock)
-                    .maskSource(editSession.getMask())
-                    .copyBiomes(true)
-
-                    .to(BlockVector3.at(to.getBlockX(), to.getBlockY(), to.getBlockZ()))
-                    .build();
-
-            Operations.complete(operation);
+        // Vérification de l'initialisation de clipboardHolder
+        if (clipboardHolder == null || clipboardHolder.getClipboard() == null) {
+            this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "ClipboardHolder or Clipboard is null.");
+            return;
         }
 
-        if (sendMessage) this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Clipboard paste at (" + this.bukkitPlayer.getLocation().getBlockX() + ", "
-                + this.bukkitPlayer.getLocation().getBlockY() + ", " + this.bukkitPlayer.getLocation().getBlockZ() + ")");
+        // Appliquer les rotations
+        AffineTransform transform = new AffineTransform();
 
+        if (rotateX != 0) {
+            transform = transform.rotateX(-rotateX);
+        }
+        if (rotateY != 0) {
+            transform = transform.rotateY(-rotateY);
+        }
+        if (rotateZ != 0) {
+            transform = transform.rotateZ(-rotateZ);
+        }
+
+        // Créer une nouvelle instance de ClipboardHolder avec la transformation
+        ClipboardHolder transformedClipboardHolder = new ClipboardHolder(clipboardHolder.getClipboard());
+        transformedClipboardHolder.setTransform(transform);
+
+
+        Operation operation = transformedClipboardHolder
+
+                .createPaste(editSession)
+                .to(BlockVector3.at(to.getBlockX(), to.getBlockY(), to.getBlockZ()))
+                .ignoreAirBlocks(ignoreAirBlock)
+                .copyBiomes(copingBiomes)
+                .copyEntities(copingEntities)
+                .build();
+
+        try {
+
+            Operations.completeLegacy(operation);
+
+            // Enregistrer l'opération pour permettre dans l'historique du joueur
+            localSession.remember(editSession);
+
+        } catch (WorldEditException e) {
+
+            this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Failed to paste clipboard: " + e.getMessage());
+
+        } finally {
+            // Assurer que l'editSession est fermée pour éviter les fuites de ressources
+            editSession.close();
+
+            if (sendMessage) this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Clipboard paste at (" +
+                    to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ")");
+        }
     }
 }
