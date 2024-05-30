@@ -58,7 +58,12 @@ public class TerraParameter {
     }
 
     public <T> void sendMessage(String path, boolean prefix, String[]... var) {
-        new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
+
+        if (var.length == 0) {
+            new Message.MessageSender(path, prefix).send(Bukkit.getPlayer(profileID));
+        } else {
+            new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
+        }
     }
 
     @Override

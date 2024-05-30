@@ -4,6 +4,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import fr.marodeur.expertbuild.object.Message;
 import org.bukkit.Bukkit;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -62,6 +63,22 @@ public class TimelapseBuilder {
     }
 
     public <T> void sendMessage(String path, boolean prefix, String[]... var) {
-        new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
+
+        if (var.length == 0) {
+            new Message.MessageSender(path, prefix).send(Bukkit.getPlayer(profileID));
+        } else {
+            new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "TimelapseBuilder{" +
+                "profileID=" + profileID +
+                ", hasTimelapseRunning=" + hasTimelapseRunning +
+                ", stopTimelapse=" + stopTimelapse +
+                ", Corner 1 =" +selection[0] +
+                ", Corner 2 =" +selection[1] +
+                '}';
     }
 }
