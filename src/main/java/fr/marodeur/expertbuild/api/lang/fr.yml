@@ -76,6 +76,7 @@ expbuild:
       invalid_instance: "§cInstance invalide: §8<§6 'sender' §8> \n §7 Cette instance d'executeur n'est pas autorisé a executer cette commande."
       invalid_argument: "§cArgument invalide : §8<§6 'arg' §8>\n §7 La valeur doit etre de type 'type'."
       invalid_argument_integer: "§cArgument invalide: §8<§6 'arg' §8> \n §7 La valeur acceptable doit etre supérieur a 'min' et inférieur a 'max'."
+      invalid_max_change: "§cRegion invalid: §7 Votre région est trop grande; max: §6 'value'"
 
     tools:
       give_tool: L'outil 'tool' donné

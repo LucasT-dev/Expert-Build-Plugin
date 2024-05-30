@@ -79,6 +79,7 @@ expbuild:
       invalid_instance: "§cInvalid instance : §8<§6 'sender' §8>\n §7 This sender instance is not authorized to execute this command"
       invalid_argument: "§cInvalid argument : §8<§6 'arg' §8>\n §7 The value must be of type 'type'"
       invalid_argument_integer: "§cInvalid argument : §8<§6 'value' §8>\n §7 The acceptable value must be greater than §6 'min' §7and less than §6 'max'"
+      invalid_max_change: "§cInvalid region : §7 Your region is too big; max: §6 'value'"
 
     tools:
       give_tool: The 'tool' tools given
