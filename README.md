@@ -1,7 +1,7 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.17
+* Latest plugin version : 1.18.1.18
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
@@ -10,7 +10,7 @@ Minecraft build plugin, Expert-Build Documentation
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.17-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.18-purple)
 
 ------------------
 <p align="center">
@@ -216,7 +216,7 @@ transfer schematic on other sftp server
 
 This allows timelapses to automatically deconstruct a selection layer by layer according to our desires.
 
-WARNING, this command is not compatible with //undo and //redo
+WARNING, this command is not compatible with //undo and //redo. Your selection is copied to your clipboard ! 
 
 Command : /timelapse <start-stop> [ block per tick ]
 
@@ -460,7 +460,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.17
+  version: 1.18.1.18
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)
