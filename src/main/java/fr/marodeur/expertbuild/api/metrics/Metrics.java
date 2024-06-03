@@ -37,6 +37,9 @@ import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.zip.GZIPOutputStream;
 
+
+// https://github.com/Bastian/bstats-metrics/blob/1.x.x/bstats-bukkit/src/main/java/org/bstats/bukkit/Metrics.java
+
 public class Metrics {
 
     private final Plugin plugin;
