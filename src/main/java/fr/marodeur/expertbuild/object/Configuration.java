@@ -465,6 +465,15 @@ public class Configuration {
         if (this.version.equals("1.18.1.17")) {
             //Update config file from 1.18.1.17 to 1.18.1.18
 
+            yml.set("build.version", "1.18.1.18");
+            this.version = "1.18.1.18";
+
+            yml.save(file);
+        }
+
+        if (this.version.equals("1.18.1.18")) {
+            //Update config file from 1.18.1.18 to 1.18.1.19
+
             //for next update
         }
 
