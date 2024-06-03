@@ -55,6 +55,8 @@ public enum BlocksDataColor {
     SOUL_SAND("soul_sand", 81, 62, 51, 1.07),
     SNOW("snow", 249, 254, 254, 1.07),
     //SMOOTH_STONE_SLAB("smooth_stone_slab", 168, 168, 168),
+
+    SMOOTH_QUARTZ("smooth_quartz", 250, 240, 230, 1.13),
     SMOOTH_STONE("smooth_stone", 161, 161, 161, 1.07),
     SMOOTH_BASALT("smooth_basalt", 72, 72, 78, 1.17),
     SMOKER("smoker", 103, 93, 79, 1.14),
