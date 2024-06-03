@@ -160,7 +160,7 @@ public class FAWEListener implements Listener {
 						}
 					}
 				} catch (IncompleteRegionException e) {
-					log.info(new Message.MessageSender("expbuild.message.error.error_region", true, new String[]{"1", e.toString()}).getMessage());
+					log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"1", e.toString()}).getMessage());
 				}
 			}
 		}
@@ -172,7 +172,7 @@ public class FAWEListener implements Listener {
 					actor.getSelection();
 
 				} catch (IncompleteRegionException e) {
-					log.info(new Message.MessageSender("expbuild.message.error.error_region", true, new String[]{"3", e.toString()}).getMessage());
+					log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"3", e.toString()}).getMessage());
 				}
 			}
 		}
