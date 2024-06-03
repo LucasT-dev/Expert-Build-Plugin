@@ -701,8 +701,11 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 5).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("custom", 0)));
 
             // Clipboard
-            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, clipboardBrush).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("clipboard", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.custom", new ConditionArgumentBefore("remove", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(1, clipboardBrush).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("clipboard", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("remove", 1)));
+
+            //subCommandSender.addSubCommand(new SubCommandSelector().getTag(args, 3, "eab").toSubCommand("exp.brush.custom", new ConditionArgumentBefore("add", 1)));
+
 
         }
         return subCommandSender;
