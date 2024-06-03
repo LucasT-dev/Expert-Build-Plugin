@@ -68,7 +68,6 @@ public class UtilsFAWE {
         this.bukkitPlayer = BukkitAdapter.adapt(p);
         this.session = bukkitPlayer.getSession();
         this.world = bukkitPlayer.getWorld();
-        this.session = bukkitPlayer.getSession();
         this.regionSelector = this.session.getRegionSelector(world);
 
         if (Main.containsBrushBuilder(p)) {
