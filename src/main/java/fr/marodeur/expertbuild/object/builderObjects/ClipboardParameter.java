@@ -23,16 +23,6 @@ public class ClipboardParameter {
         this.isRandomRotation = isRandomRotation;
     }
 
-    public ClipboardParameter setClipboardHolders(ArrayList<ClipboardHolder> clipboardHolders) {
-        this.clipboardHolders = clipboardHolders;
-        return this;
-    }
-
-    public ClipboardParameter setClipboardsName(ArrayList<String> clipboardsName) {
-        this.clipboardsName = clipboardsName;
-        return this;
-    }
-
     public ClipboardParameter addClipboards(ClipboardHolder clipboardsBlock, String clipboardsName) {
         this.clipboardHolders.add(clipboardsBlock);
         this.clipboardsName.add(clipboardsName);
