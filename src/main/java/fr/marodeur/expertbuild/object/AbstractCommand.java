@@ -599,6 +599,90 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             return this;
         }
 
+        /**
+         * Get player position x/y/z
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @param p Player
+         * @param coordinate char
+         *
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getPlayerPosition(@NotNull String @NotNull [] args, int argsIndex, Player p, char coordinate) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex  + 1 ) {
+
+                if (coordinate == 'x') this.subCommand = List.of(String.valueOf(p.getLocation().getBlockX()));
+                if (coordinate == 'y') this.subCommand = List.of(String.valueOf(p.getLocation().getBlockY()));
+                if (coordinate == 'z') this.subCommand = List.of(String.valueOf(p.getLocation().getBlockZ()));
+
+            } else {
+                this.subCommand = List.of("");
+            }
+            return this;
+        }
+
+        /**
+         * Get player target position x/y/z
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @param p Player
+         * @param coordinate char (x or y or z) in minuscule
+         *
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getPlayerTargetPosition(@NotNull String @NotNull [] args, int argsIndex, Player p, char coordinate) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex  + 1 ) {
+                if (coordinate == 'x') this.subCommand = List.of(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockX()));
+                if (coordinate == 'y') this.subCommand = List.of(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockY()));
+                if (coordinate == 'z') this.subCommand = List.of(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockZ()));
+
+            } else {
+                this.subCommand = List.of("");
+            }
+            return this;
+        }
+
+
+        public SubCommandSelector getFlag(@NotNull String[] args, int argsIndex, String tag) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex  + 1 ) {
+
+                // Condition use tag
+                if (args[argsIndex].startsWith("-")) {
+
+                    this.subCommand = new ArrayList<>();
+
+                    String tagEdit = tag;
+
+                    // Remove tag already used
+                    if (args[argsIndex].length() > 1)
+
+                        for (char c : args[argsIndex].toCharArray()) {
+                            tagEdit = tagEdit.replace(String.valueOf(c), "");
+                        }
+
+                    //Add tag to subCommand
+                    for (char c : tagEdit.toCharArray()) {
+                        this.subCommand.add(args[argsIndex] + c);
+                    }
+                }
+                else {
+                    this.subCommand = List.of("");
+                }
+            } else {
+                this.subCommand = List.of("");
+            }
+            return this;
+        }
+
+
         public List<SubCommand> toSubCommand(String permission) {
             List<SubCommand> subCommandsList = new ArrayList<>();
 
