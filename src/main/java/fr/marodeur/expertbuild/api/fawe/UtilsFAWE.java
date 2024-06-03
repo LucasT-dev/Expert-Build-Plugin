@@ -300,32 +300,42 @@ public class UtilsFAWE {
         }
     }
 
-    public void setBlockPersonnalBlockPattern(Player p, List<BlockVec4> blocks) {
+    public void setBlockPersonnalBlockPattern(Player p, List<BlockVec4> blocks, boolean sendMessageBlock) {
 
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         EditSession editsession = localSession.createEditSession(actor);
+        long startTime = System.currentTimeMillis();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        try {
+            editsession.setFastMode(false);
 
-            try {
-                editsession.setFastMode(false);
+            blocks.forEach(block -> {
 
-                blocks.forEach(block -> {
+                try {
+                    editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
+                            block.getPattern());
 
-                    try {
-                        editsession.setBlock(Vector3.at(block.getX(), block.getY(), block.getZ()).toBlockPoint(),
-                                block.getPattern());
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            });
+            localSession.remember(editsession);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-                });
-                localSession.remember(editsession);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        long endTime = System.currentTimeMillis();
+        float r = (endTime - startTime);
+
+        if (sendMessageBlock & r > 1000) {
+            float t = r / 1000;
+            float d = (blocks.size() / t);
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified_with_time", true, new String[]{String.valueOf(blocks.size()), String.valueOf(d)}).getMessage());
+        } else if (sendMessageBlock) {
+            p.sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified", true, new String[]{String.valueOf(blocks.size())}).getMessage());
+        }
+
     }
 
     public Pattern getPattern(String s) {

@@ -12,10 +12,8 @@ import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
-
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
-import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
-import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
@@ -24,7 +22,6 @@ import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -786,7 +783,8 @@ public class BrushCommand extends AbstractCommand {
                     .setEnable(true)
                     .sendMessage("expbuild.message.commands.clipboard_add_and_enable", true, new String[]{clipboardName});
 
-            clipboardParameter.addClipboards(new FaweAPI(p).copySelection(false, false, false, false), clipboardName);
+            clipboardParameter
+                    .addClipboards(new FaweAPI(p).copySelection(false, false, false, false), clipboardName);
 
         }
     }
