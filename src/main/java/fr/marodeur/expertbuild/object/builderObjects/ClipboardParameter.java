@@ -1,7 +1,10 @@
 package fr.marodeur.expertbuild.object.builderObjects;
 
 import com.sk89q.worldedit.session.ClipboardHolder;
+
+import fr.marodeur.expertbuild.object.Flag;
 import fr.marodeur.expertbuild.object.Message;
+
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -14,18 +17,22 @@ public class ClipboardParameter {
 
     private ArrayList<ClipboardHolder> clipboardHolders;
     private ArrayList<String> clipboardsName;
+
+    private ArrayList<Flag> flags;
     private boolean isRandomRotation;
 
-    public ClipboardParameter(UUID profileID, ArrayList<ClipboardHolder> clipboardsBlock, ArrayList<String> clipboardsName, boolean isRandomRotation) {
+    public ClipboardParameter(UUID profileID, ArrayList<ClipboardHolder> clipboardsBlock, ArrayList<String> clipboardsName, ArrayList<Flag> flags, boolean isRandomRotation) {
         this.profileID = profileID;
         this.clipboardHolders = clipboardsBlock;
         this.clipboardsName = clipboardsName;
+        this.flags = flags;
         this.isRandomRotation = isRandomRotation;
     }
 
-    public ClipboardParameter addClipboards(ClipboardHolder clipboardsBlock, String clipboardsName) {
+    public ClipboardParameter addClipboards(ClipboardHolder clipboardsBlock, String clipboardsName, Flag flag) {
         this.clipboardHolders.add(clipboardsBlock);
         this.clipboardsName.add(clipboardsName);
+        this.flags.add(flag);
         return this;
     }
 
@@ -34,6 +41,7 @@ public class ClipboardParameter {
         int index = this.clipboardsName.indexOf(clipboardsName);
         this.clipboardsName.remove(index);
         this.clipboardHolders.remove(index);
+        this.flags.remove(index);
 
         return this;
     }
@@ -51,8 +59,16 @@ public class ClipboardParameter {
         return this.clipboardHolders;
     }
 
+    public ClipboardHolder getClipboardHolder(int index) {
+        return this.clipboardHolders.get(index);
+    }
+
     public ArrayList<String> getClipboardsName() {
         return this.clipboardsName;
+    }
+
+    public String getClipboardName(int index) {
+        return this.clipboardsName.get(index);
     }
 
     public boolean getClipboardsNameExist(String clipboardsName) {
@@ -62,9 +78,16 @@ public class ClipboardParameter {
     public ClipboardParameter clearAll() {
         this.clipboardsName.clear();
         this.clipboardHolders.clear();
+        this.flags.clear();
 
         return this;
     }
+
+    public Flag getFlag(int index) {
+        return flags.get(index);
+    }
+
+
 
     public <T> void sendMessage(String path, boolean prefix, String[]... var) {
 

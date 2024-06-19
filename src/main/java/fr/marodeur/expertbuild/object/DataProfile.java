@@ -1,6 +1,5 @@
 package fr.marodeur.expertbuild.object;
 
-import com.sk89q.worldedit.session.ClipboardHolder;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
@@ -37,7 +36,7 @@ public class DataProfile {
         }
 
         if (! clipboardParameterHashMap.containsKey(uuid)) {
-            clipboardParameterHashMap.put(uuid, new ClipboardParameter(uuid, new ArrayList<>(), new ArrayList<>(), false));
+            clipboardParameterHashMap.put(uuid, new ClipboardParameter(uuid, new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), false));
         }
 
     }
@@ -54,6 +53,7 @@ public class DataProfile {
     public TerraParameter getTerraParameterProfile(UUID uuid) {
         return this.terraParameterHashMap.get(uuid);
     }
+
     public GlueList<TerraParameter> getTerraParameterHashMap() {
         GlueList<TerraParameter> g = new GlueList<>();
         g.addAll(terraParameterHashMap.values());
@@ -63,6 +63,7 @@ public class DataProfile {
     public ClipboardParameter getClipboardParameterProfile(UUID uuid) {
         return this.clipboardParameterHashMap.get(uuid);
     }
+
     public GlueList<ClipboardParameter> getClipboardParameterHashMap() {
         GlueList<ClipboardParameter> g = new GlueList<>();
         g.addAll(clipboardParameterHashMap.values());

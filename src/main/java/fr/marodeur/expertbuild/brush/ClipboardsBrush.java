@@ -15,6 +15,7 @@ import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
+import fr.marodeur.expertbuild.object.Flag;
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 
 import org.bukkit.Location;
@@ -55,7 +56,8 @@ public class ClipboardsBrush extends AbstractBrush {
         //Y rotation
         int randomRotation = 0;
 
-        ClipboardHolder clipboardHolder = clipboardParameter.getClipboardHolders().get(index);
+        ClipboardHolder clipboardHolder = clipboardParameter.getClipboardHolder(index);
+        Flag flag = clipboardParameter.getFlag(index);
 
 
         if (clipboardParameter.isRandomRotation()) {
@@ -63,7 +65,7 @@ public class ClipboardsBrush extends AbstractBrush {
         }
 
         // paste clipboard holder
-        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, false, false, false, new BlockVectorTool().toBlockVectorTool(l), false, 0, randomRotation, 0);
+        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, false, flag.get('e'), flag.get('b'), new BlockVectorTool().toBlockVectorTool(l), false, 0, randomRotation, 0);
     }
 
     @Override

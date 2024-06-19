@@ -33,15 +33,18 @@ public class FaweAPI {
         this.bukkitPlayer = BukkitAdapter.adapt(brushBuilder.getPlayer());
     }
 
-
     public ClipboardHolder copySelection(boolean copingBiomes, boolean copingEntities, boolean saveInClipboard, boolean sendMessage) {
+        return this.copySelection(copingBiomes, copingEntities, saveInClipboard, sendMessage, new BlockVectorTool().toBlockVectorTool(this.bukkitPlayer.getSession().getPlacementPosition(this.bukkitPlayer)));
+    }
+
+    public ClipboardHolder copySelection(boolean copingBiomes, boolean copingEntities, boolean saveInClipboard, boolean sendMessage, BlockVectorTool origin) {
 
         Region region = this.bukkitPlayer.getSelection();
         LocalSession session = this.bukkitPlayer.getSession();
         EditSession editSession = session.createEditSession(this.bukkitPlayer);
 
         BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-        clipboard.setOrigin(session.getPlacementPosition(this.bukkitPlayer));
+        clipboard.setOrigin(origin.toBlockVector3());
 
         ForwardExtentCopy copy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
 

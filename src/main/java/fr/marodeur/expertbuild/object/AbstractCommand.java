@@ -28,7 +28,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
@@ -71,11 +70,12 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             return false;
         }
 
-        //Check Optional condition (Selection)
+        // Check Optional condition (Selection, BrushBuilder ...)
         if (!this.getArgumentLengthList(sender).verifyOptionalCondition()) {
             return false;
         }
 
+        // Check length args is correct
         if (!compareArgumentLengthWithArgsLength(sender, args)) {
             return false;
         }
@@ -437,7 +437,9 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         private List<String> subCommand;
         private int argsIndex;
 
-        public SubCommandSelector() {}
+        public SubCommandSelector() {
+            this.subCommand = new ArrayList<>();
+        }
 
         public SubCommandSelector(List<String> subCommand) {
             this.subCommand = subCommand;
@@ -475,10 +477,10 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex + 1 ) {
-                this.subCommand = SuggestionHelper.getNamespacedRegistrySuggestions(BiomeType.REGISTRY, args[argsIndex])
+                this.subCommand.addAll(SuggestionHelper.getNamespacedRegistrySuggestions(BiomeType.REGISTRY, args[argsIndex])
                         .map(value -> value.toLowerCase(Locale.ENGLISH).replace("minecraft:", ""))
                         .filter(value -> value.startsWith(args[argsIndex].toLowerCase(Locale.ENGLISH)))
-                        .collect(Collectors.toList());
+                        .toList());
             } else {
                 this.subCommand = List.of("");
             }
@@ -496,10 +498,10 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand = SuggestionHelper.getNamespacedRegistrySuggestions(BlockType.REGISTRY, args[argsIndex])
+                this.subCommand.addAll(SuggestionHelper.getNamespacedRegistrySuggestions(BlockType.REGISTRY, args[argsIndex])
                         .map(value -> value.toLowerCase(Locale.ENGLISH).replace("minecraft:", ""))
                         //.filter(value -> value.startsWith(args[indexArg].toLowerCase(Locale.ENGLISH)))
-                        .collect(Collectors.toList());
+                        .toList());
             } else {
                 this.subCommand = List.of("");
             }
@@ -535,8 +537,8 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand = SuggestionHelper.suggestPositiveIntegers(args[argsIndex])
-                        .collect(Collectors.toList());
+                this.subCommand.addAll(SuggestionHelper.suggestPositiveIntegers(args[argsIndex])
+                        .toList());
             } else {
                 this.subCommand = List.of("");
             }
@@ -554,8 +556,8 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand = SuggestionHelper.suggestPositiveDoubles(args[argsIndex])
-                        .collect(Collectors.toList());
+                this.subCommand.addAll(SuggestionHelper.suggestPositiveDoubles(args[argsIndex])
+                        .toList());
             } else {
                 this.subCommand = List.of("");
             }
@@ -573,8 +575,8 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand = SuggestionHelper.suggestBoolean(args[argsIndex])
-                        .collect(Collectors.toList());
+                this.subCommand.addAll(SuggestionHelper.suggestBoolean(args[argsIndex])
+                        .toList());
             } else {
                 this.subCommand = List.of("");
             }
@@ -592,7 +594,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand = Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList();
+                this.subCommand.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList());
             } else {
                 this.subCommand = List.of("");
             }
@@ -614,9 +616,9 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
             if (args.length == argsIndex  + 1 ) {
 
-                if (coordinate == 'x') this.subCommand = List.of(String.valueOf(p.getLocation().getBlockX()));
-                if (coordinate == 'y') this.subCommand = List.of(String.valueOf(p.getLocation().getBlockY()));
-                if (coordinate == 'z') this.subCommand = List.of(String.valueOf(p.getLocation().getBlockZ()));
+                if (coordinate == 'x') this.subCommand.add(String.valueOf(p.getLocation().getBlockX()));
+                if (coordinate == 'y') this.subCommand.add(String.valueOf(p.getLocation().getBlockY()));
+                if (coordinate == 'z') this.subCommand.add(String.valueOf(p.getLocation().getBlockZ()));
 
             } else {
                 this.subCommand = List.of("");
@@ -638,9 +640,9 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                if (coordinate == 'x') this.subCommand = List.of(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockX()));
-                if (coordinate == 'y') this.subCommand = List.of(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockY()));
-                if (coordinate == 'z') this.subCommand = List.of(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockZ()));
+                if (coordinate == 'x') this.subCommand.add(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockX()));
+                if (coordinate == 'y') this.subCommand.add(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockY()));
+                if (coordinate == 'z') this.subCommand.add(String.valueOf(p.getTargetBlock(null, 500).getLocation().getBlockZ()));
 
             } else {
                 this.subCommand = List.of("");
@@ -964,6 +966,27 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         public void sendMessageInvalidBlockDataColor(@NotNull CommandSender sender, String arg) {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "pattern"}).send(sender);
+        }
+
+        public boolean isFlag(String arg) {
+            return (arg.startsWith("-"));
+        }
+
+        public <T> Flag getFlag(@NotNull String arg) {
+
+            Flag flag = new Flag("bcem");
+
+            arg = arg.replace("-", "");
+
+            for (char c : arg.toCharArray()) {
+                flag.add(c);
+
+            }
+            return flag;
+        }
+
+        public void sendMessageInvalidIFlag(Player p, String arg) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "flag"}).send(p);
         }
     }
 }

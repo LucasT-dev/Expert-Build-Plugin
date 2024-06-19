@@ -1,5 +1,6 @@
 package fr.marodeur.expertbuild.commands.CommandsBrush;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
@@ -701,14 +702,16 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getList(1, clipboardBrush).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("clipboard", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("remove", 1)));
 
-            //subCommandSender.addSubCommand(new SubCommandSelector().getTag(args, 3, "eab").toSubCommand("exp.brush.custom", new ConditionArgumentBefore("add", 1)));
+            // Clipboard add flag
+            subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 2, "bcem").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 3, "bcem").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
 
 
         }
         return subCommandSender;
     }
 
-    private static void clipboardCommand(Player p, String @NotNull [] args, ValidArgument validArgument) {
+    private void clipboardCommand(Player p, String @NotNull [] args, ValidArgument validArgument) {
 
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         ClipboardParameter clipboardParameter = BrushBuilder.getBrushBuilderPlayer(p, false).getClipboardParameter();
@@ -764,15 +767,61 @@ public class BrushCommand extends AbstractCommand {
                 return;
             }
 
-            String clipboardName;
+            String clipboardName = "";
+            Flag flag = new Flag("bcem");
 
-            if (args.length >= 3) {
+            if (args.length == 3) {
 
-                if (clipboardParameter.getClipboardsNameExist(args[2])) {
+                System.out.println("3 -> " + args.length);
+
+                if (args[2].startsWith("-")) {
+
+                    if (this.getValidArgument().isFlag(args[2])) {
+                        flag = this.getValidArgument().getFlag(args[2]);
+                    } else {
+                        this.getValidArgument().sendMessageInvalidIFlag(p, args[2]);
+                        return;
+                    }
+
+                    System.out.println("flag = " + flag.toString());
+
+
+                } else if (clipboardParameter.getClipboardsNameExist(args[2])) {
+
                     brushBuilder.sendMessage("expbuild.message.commands.clipboard_already_exist", true, new String[]{args[2]});
                     return;
                 } else {
                     clipboardName = args[2];
+                }
+
+            } else if (args.length >= 4) {
+
+                System.out.println("4 -> " + args.length);
+
+                if (args[3].startsWith("-")) {
+
+                    if (this.getValidArgument().isFlag(args[3])) {
+                        flag = this.getValidArgument().getFlag(args[3]);
+                    } else {
+                        this.getValidArgument().sendMessageInvalidIFlag(p, args[3]);
+                        return;
+                    }
+
+
+                    if (clipboardParameter.getClipboardsNameExist(args[2])) {
+
+                        brushBuilder.sendMessage("expbuild.message.commands.clipboard_already_exist", true, new String[]{args[2]});
+                        return;
+                    } else {
+                        clipboardName = args[2];
+                    }
+
+                    System.out.println("flag = " + flag.toString());
+
+                } else {
+                    // Flag invalid
+                    this.getValidArgument().sendMessageInvalidIFlag(p, args[3]);
+                    return;
                 }
 
             } else {
@@ -784,7 +833,14 @@ public class BrushCommand extends AbstractCommand {
                     .sendMessage("expbuild.message.commands.clipboard_add_and_enable", true, new String[]{clipboardName});
 
             clipboardParameter
-                    .addClipboards(new FaweAPI(p).copySelection(false, false, false, false), clipboardName);
+                    .addClipboards(new FaweAPI(p)
+                            .copySelection(
+                                    flag.get('b'),
+                                    flag.get('e'),
+                                    false,
+                                    false,
+                                    flag.get('c') ? new BlockVectorTool().toBlockVectorTool(BukkitAdapter.adapt(p).getSession().getSelection().getCenter().toBlockPoint()) : new BlockVectorTool().toBlockVectorTool(p.getLocation())
+                            ), clipboardName, flag);
 
         }
     }
