@@ -65,7 +65,7 @@ public class ClipboardsBrush extends AbstractBrush {
         }
 
         // paste clipboard holder
-        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, false, flag.get('e'), flag.get('b'), new BlockVectorTool().toBlockVectorTool(l), false, 0, randomRotation, 0);
+        new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, flag.get('a'), flag.get('e'), flag.get('b'), new BlockVectorTool().toBlockVectorTool(l), false, 0, randomRotation, 0);
     }
 
     @Override

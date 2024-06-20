@@ -703,8 +703,8 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("remove", 1)));
 
             // Clipboard add flag
-            subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 2, "bcem").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 3, "bcem").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 2, "abce").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 3, "abce").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
 
 
         }
@@ -768,11 +768,9 @@ public class BrushCommand extends AbstractCommand {
             }
 
             String clipboardName = "";
-            Flag flag = new Flag("bcem");
+            Flag flag = new Flag("abce");
 
             if (args.length == 3) {
-
-                System.out.println("3 -> " + args.length);
 
                 if (args[2].startsWith("-")) {
 
@@ -783,9 +781,6 @@ public class BrushCommand extends AbstractCommand {
                         return;
                     }
 
-                    System.out.println("flag = " + flag.toString());
-
-
                 } else if (clipboardParameter.getClipboardsNameExist(args[2])) {
 
                     brushBuilder.sendMessage("expbuild.message.commands.clipboard_already_exist", true, new String[]{args[2]});
@@ -795,8 +790,6 @@ public class BrushCommand extends AbstractCommand {
                 }
 
             } else if (args.length >= 4) {
-
-                System.out.println("4 -> " + args.length);
 
                 if (args[3].startsWith("-")) {
 
@@ -815,8 +808,6 @@ public class BrushCommand extends AbstractCommand {
                     } else {
                         clipboardName = args[2];
                     }
-
-                    System.out.println("flag = " + flag.toString());
 
                 } else {
                     // Flag invalid
