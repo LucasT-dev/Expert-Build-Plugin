@@ -558,12 +558,13 @@ public class BrushCommand extends AbstractCommand {
 
 
     @Override
-    protected OptionalConditionExecution getArgumentLengthList(CommandSender sender) {
+    protected OptionalConditionExecution optionalConditionExecution(CommandSender sender) {
         return new OptionalConditionExecution(sender).AddBrushBuilderProfile();
     }
 
     @Override
     protected ArgumentLengthList getArgumentLengthList() {
+
         return new ArgumentLengthList(Arrays.asList(
 
                 new ArgumentLength(2, "material", 0, "/flower material <pattern>", 2),

@@ -127,10 +127,10 @@ public class CommandPainting extends AbstractCommand {
                 int level = 0;
 
                 if (isFaceAdjacentToAir(bv3, BlockFace.UP, editSession)) {
-                    level = p.getWorld().getBlockAt(bv3.getBlockX(), bv3.getBlockY(), bv3.getBlockZ()).getRelative(BlockFace.UP).getLightFromBlocks();
+                    level = p.getWorld().getBlockAt(bv3.x(), bv3.y(), bv3.z()).getRelative(BlockFace.UP).getLightFromBlocks();
 
                 } else if (isAirFace(bv3, editSession)) {
-                    level = p.getWorld().getBlockAt(bv3.getBlockX(), bv3.getBlockY(), bv3.getBlockZ()).getRelative(getAirFace(bv3, editSession)).getLightFromBlocks();
+                    level = p.getWorld().getBlockAt(bv3.x(), bv3.y(), bv3.z()).getRelative(getAirFace(bv3, editSession)).getLightFromBlocks();
                 }
 
                 int index = Math.round(level / LightStep);
@@ -149,7 +149,7 @@ public class CommandPainting extends AbstractCommand {
     }
 
     @Override
-    protected OptionalConditionExecution getArgumentLengthList(CommandSender sender) {
+    protected OptionalConditionExecution optionalConditionExecution(CommandSender sender) {
         return new OptionalConditionExecution(sender).AddConditionSelection();
     }
 

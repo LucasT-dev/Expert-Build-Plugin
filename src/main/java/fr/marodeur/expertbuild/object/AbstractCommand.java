@@ -71,7 +71,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         // Check Optional condition (Selection, BrushBuilder ...)
-        if (!this.getArgumentLengthList(sender).verifyOptionalCondition()) {
+        if (!this.optionalConditionExecution(sender).verifyOptionalCondition()) {
             return false;
         }
 
@@ -86,7 +86,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         return true;
     }
 
-    protected abstract OptionalConditionExecution getArgumentLengthList(CommandSender sender);
+    protected abstract OptionalConditionExecution optionalConditionExecution(CommandSender sender);
 
     protected abstract ArgumentLengthList getArgumentLengthList();
 
@@ -95,6 +95,13 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
+
+        // player has perm but not brushbuilder create
+        if (this.optionalConditionExecution(sender).haveBrushBuilderProfile) {
+            if (!Main.containsBrushBuilder((Player) sender)) {
+                BrushBuilder.registerPlayer((Player) sender, false);
+            }
+        }
 
         if (args.length <= 1) {
             List<String> l = new ArrayList<>();
@@ -107,6 +114,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         return l2;
 
     }
+
 
     /**
      * Checks if the sender command is authorized to execute the command

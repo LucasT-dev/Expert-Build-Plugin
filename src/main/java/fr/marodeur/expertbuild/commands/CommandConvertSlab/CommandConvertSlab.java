@@ -118,7 +118,7 @@ public class CommandConvertSlab extends AbstractCommand {
     }
 
     @Override
-    protected OptionalConditionExecution getArgumentLengthList(CommandSender sender) {
+    protected OptionalConditionExecution optionalConditionExecution(CommandSender sender) {
         return new OptionalConditionExecution(sender).AddConditionSelection();
     }
 
