@@ -28,8 +28,10 @@ public class CommandConvertSlab extends AbstractCommand {
     private static final List<BlockVec4> bv4 = new ArrayList<>();
 
     private static final List<String> WOODEN_MATERIAL = Arrays.asList(
-            "OAK_SLAB", "DARK_OAK_SLAB", "SPRUCE_SLAB", "BIRCH_SLAB", "JUNGLE_SLAB", "ACACIA_SLAB", "MANGROVE_SLAB", "BAMBOO_SLAB", "CHERRY_SLAB", "WARPED_SLAB", "CRIMSON_SLAB");
-    private static final List<String> SPECIAL_BLOCK = List.of("PURPUR_SLAB");
+            "OAK_SLAB", "DARK_OAK_SLAB", "SPRUCE_SLAB", "BIRCH_SLAB", "JUNGLE_SLAB", "ACACIA_SLAB", "MANGROVE_SLAB", "BAMBOO_SLAB", "BAMBOO_MOSAIC_SLAB", "CHERRY_SLAB", "WARPED_SLAB", "CRIMSON_SLAB");
+    private static final List<String> SPECIAL_BLOCK = List.of("PURPUR_SLAB", "QUARTZ_SLAB");
+
+    private static final List<String> SPECIAL_BLOCKS = List.of("BRICK_SLAB", "PRISMARINE_BRICK_SLAB", "MUD_BRICK_SLAB");
 
 
     @Override
@@ -89,7 +91,7 @@ public class CommandConvertSlab extends AbstractCommand {
 
                     material = Material.matchMaterial(editSession.getBlock(bv3).getBlockType().toString().replace("slab", "planks"));
 
-                } else if (materialBase.toString().contains("BRICK")) {
+                } else if (SPECIAL_BLOCKS.contains(materialBase.toString())) {
 
                     material = Material.matchMaterial(editSession.getBlock(bv3).getBlockType().toString().replace("_slab", "s"));
 
