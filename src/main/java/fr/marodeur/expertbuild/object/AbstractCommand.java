@@ -13,7 +13,7 @@ import com.sk89q.worldedit.world.biome.BiomeType;
 import com.sk89q.worldedit.world.block.BlockType;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.enums.BlocksDataColor;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 
@@ -869,7 +869,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         public boolean isPattern(Player p, String arg) {
 
             try {
-                Pattern pattern = new UtilsFAWE(p).getPattern(arg);
+                Pattern pattern = new FaweAPI(p).getPattern(arg);
                 return true;
             } catch (NullPointerException | SuggestInputParseException ignored) {
                 return false;
@@ -877,7 +877,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         public Pattern getPattern(Player p, String arg) {
-            return new UtilsFAWE(p).getPattern(arg);
+            return new FaweAPI(p).getPattern(arg);
         }
 
         public void sendMessageInvalidPattern(@NotNull CommandSender sender, String arg) {
