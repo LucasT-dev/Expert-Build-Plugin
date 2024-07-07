@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.object;
 
 import fr.marodeur.expertbuild.Main;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
