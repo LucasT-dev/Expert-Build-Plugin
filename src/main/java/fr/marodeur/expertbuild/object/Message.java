@@ -77,7 +77,14 @@ public class Message {
     }
 
     private void cleanDirectory() throws IOException {
-        FileUtils.cleanDirectory(new File(Main.getInstance().getDataFolder() + "/fr/marodeur/expertbuild/api/lang"));
+
+        File[] files = new File(Main.getInstance().getDataFolder() + "/fr/marodeur/expertbuild/api/lang").listFiles();
+
+        for (File file : files) {
+            file.delete();
+        }
+
+        //FileUtils.cleanDirectory(new File(Main.getInstance().getDataFolder() + "/fr/marodeur/expertbuild/api/lang"));
     }
 
     public static class MessageSender {
