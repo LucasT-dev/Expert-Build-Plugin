@@ -2,13 +2,17 @@ package fr.marodeur.expertbuild.api.fawe;
 
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
+import com.sk89q.worldedit.extension.input.ParserContext;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.Region;
@@ -21,6 +25,8 @@ import fr.marodeur.expertbuild.object.Message;
 
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class FaweAPI {
 
     private final BukkitPlayer bukkitPlayer;
@@ -32,6 +38,43 @@ public class FaweAPI {
     public FaweAPI(BrushBuilder brushBuilder) {
         this.bukkitPlayer = BukkitAdapter.adapt(brushBuilder.getPlayer());
     }
+
+
+    public List<String> getSuggestionsPattern(String s) {
+        return WorldEdit.getInstance().getPatternFactory().getSuggestions(s);
+    }
+
+    public Pattern getPattern(String s) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(bukkitPlayer);
+        ParserContext context = new ParserContext();
+
+        context.setActor(bukkitPlayer);
+        context.setWorld(bukkitPlayer.getWorld());
+        context.setExtent(bukkitPlayer.getExtent());
+        context.setSession(localSession);
+
+        return WorldEdit.getInstance().getPatternFactory().parseFromInput(s, context);
+    }
+
+
+    public List<String> getSuggestionsMask(String s) {
+        return WorldEdit.getInstance().getMaskFactory().getSuggestions(s);
+    }
+    public Mask getMask(String s) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(bukkitPlayer);
+        ParserContext context = new ParserContext();
+
+        context.setActor(bukkitPlayer);
+        context.setWorld(bukkitPlayer.getWorld());
+        context.setExtent(bukkitPlayer.getExtent());
+        context.setSession(localSession);
+
+        return WorldEdit.getInstance().getMaskFactory().parseFromInput(s, context);
+    }
+
+
 
     public ClipboardHolder copySelection(boolean copingBiomes, boolean copingEntities, boolean saveInClipboard, boolean sendMessage) {
         return this.copySelection(copingBiomes, copingEntities, saveInClipboard, sendMessage, new BlockVectorTool().toBlockVectorTool(this.bukkitPlayer.getSession().getPlacementPosition(this.bukkitPlayer)));

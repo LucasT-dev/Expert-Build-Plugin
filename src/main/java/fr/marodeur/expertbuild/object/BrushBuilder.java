@@ -6,13 +6,13 @@ import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
 
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
-
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -463,10 +463,7 @@ public class BrushBuilder {
 
         BaseBlock ib = Objects.requireNonNull(BlockTypes.BARRIER).getDefaultState().toBaseBlock();
         List<BaseBlock> it = new ArrayList<>(Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib));
-
         List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-
         Main.getDataProfile().registerPlayer(p.getUniqueId());
 
 
@@ -484,7 +481,7 @@ public class BrushBuilder {
                 null,
                 null,
                 new ArrayList<>(),
-                new UtilsFAWE(p).getPattern(conf.getDefault_pattern_brush()),
+                new FaweAPI(p).getPattern(conf.getDefault_pattern_brush()),
                 UUID.randomUUID(),
                 new ClipboardBrush(new GlueList<>())));
     }
