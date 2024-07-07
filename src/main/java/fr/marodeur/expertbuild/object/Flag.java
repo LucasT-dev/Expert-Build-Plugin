@@ -10,7 +10,6 @@ public class Flag {
         flags = new GlueList<>();
 
         for (char c : acceptableValue.toCharArray()) {
-            System.out.println("char = " + c);
             this.add(c, false);
         }
     }
