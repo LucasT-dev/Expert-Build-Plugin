@@ -8,15 +8,12 @@ import fr.marodeur.expertbuild.api.metrics.Metrics;
 import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.commands.CommandConvertSlab.CommandConvertSlab;
-import fr.marodeur.expertbuild.commands.CommandTransferSchem;
 import fr.marodeur.expertbuild.commands.CommandsBrush.BrushCommand;
 import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
 import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
-import fr.marodeur.expertbuild.commands.CommandsPerlin.CommandPerlin;
 import fr.marodeur.expertbuild.listeners.BrushListener;
 import fr.marodeur.expertbuild.listeners.FAWEListener;
 import fr.marodeur.expertbuild.listeners.GeneralListener;
-import fr.marodeur.expertbuild.listeners.RotationEntity;
 import fr.marodeur.expertbuild.object.*;
 
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
@@ -70,7 +67,6 @@ public class Main extends JavaPlugin {
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
 
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
-	public static String FawePrefix = "§8(§4FAWE§8) §7";
 
 	private static final Logger log = Logger.getLogger("Expert-Build");
 
@@ -196,6 +192,8 @@ public class Main extends JavaPlugin {
 		getCommand("autocb").setExecutor(new CommandAutoCb());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
 		getCommand("painting").setExecutor(new CommandPainting());
+
+		//getCommand("explsystem").setExecutor(new CommandsLSystem());
 
 		getLogger().info(new Message.MessageSender("expbuild.message.main.commands_load", false).getMessage());
 
