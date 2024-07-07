@@ -1,7 +1,7 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.18
+* Latest plugin version : 1.18.1.19
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
@@ -10,7 +10,7 @@ Minecraft build plugin, Expert-Build Documentation
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.18-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.19-purple)
 
 ------------------
 <p align="center">
@@ -288,7 +288,7 @@ General brush command,
 
 
 - clipboards : 
-  - < add > : Add a clipboard to the brush
+  - < add > : Add a clipboard to the brush (flag : -a, -e, -c -b)
   - < remove > : Remove a clipboard from the brush
   - < removeAll > : Remove all clipboards from the brush
   - < autoRotation > : Paste the clipboard with a random rotation of 0, 90, 180 or 270
@@ -460,7 +460,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.18
+  version: 1.18.1.19
 
   # Open or close the schematic transfer
   # Value : Boolean (true or false)

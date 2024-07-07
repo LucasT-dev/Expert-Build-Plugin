@@ -145,11 +145,6 @@
             </exclusions>
         </dependency>
 
-
-
-
-
-
         <!-- https://mvnrepository.com/artifact/org.bstats/bstats-bukkit -->
         <dependency>
             <groupId>org.bstats</groupId>
