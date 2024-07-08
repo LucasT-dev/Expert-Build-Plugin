@@ -11,7 +11,7 @@
 
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <finalName>${project.name}-v${project.version}</finalName>
+        <finalName>${project.name}-2.11.1-v${project.version}</finalName>
         <sourceDirectory>${basedir}</sourceDirectory>
         <resources>
             <resource>
