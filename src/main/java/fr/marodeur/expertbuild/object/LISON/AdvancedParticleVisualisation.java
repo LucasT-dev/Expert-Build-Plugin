@@ -4,6 +4,7 @@ import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.math.BlockVector3;
 
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.GOHA_Builder;
 
@@ -54,7 +55,7 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
         return new AdvancedParticleVisualisation(this.p, x, y, z, particle, rescheduledParticleTable);
     }
 
-    public void lineParticle(BlockVector3 bv1, BlockVector3 bv2, Particle particle, int spacingParticles, RescheduledParticle[] rescheduledParticleTable) {
+    public void lineParticle(BlockVectorTool bv1, BlockVectorTool bv2, Particle particle, int spacingParticles, RescheduledParticle[] rescheduledParticleTable) {
 
         Location l1 = new Location(p.getWorld(), bv1.getX(), bv1.getY(), bv1.getZ());
         Location l2 = new Location(p.getWorld(), bv2.getX(), bv2.getY(), bv2.getZ());
@@ -153,9 +154,9 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
 
             double dernsteinCoef = bernsteinPolynomials[i];
             double[] cloneControlePoint = new double[] {
-                    controlPoints.get(i).getX() * dernsteinCoef,
-                    controlPoints.get(i).getY() * dernsteinCoef,
-                    controlPoints.get(i).getZ() * dernsteinCoef };
+                    controlPoints.get(i).x() * dernsteinCoef,
+                    controlPoints.get(i).y() * dernsteinCoef,
+                    controlPoints.get(i).z() * dernsteinCoef };
 
             result[0] += cloneControlePoint[0];
             result[1] += cloneControlePoint[1];

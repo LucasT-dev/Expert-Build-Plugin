@@ -358,7 +358,7 @@ public class BlockVectorTool implements Cloneable {
     }
 
     public BlockVectorTool toBlockVectorTool(BlockVector3 blockVector3) {
-        return new BlockVectorTool(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ());
+        return new BlockVectorTool(blockVector3.x(), blockVector3.y(), blockVector3.z());
     }
 
     public BlockVectorTool toBlockVectorTool(Location location) {

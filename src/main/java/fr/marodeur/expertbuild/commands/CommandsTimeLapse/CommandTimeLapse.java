@@ -70,8 +70,8 @@ public class CommandTimelapse extends AbstractCommand {
             LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
             EditSession editsession = localSession.createEditSession(actor);
 
-            int Ymin = actor.getSelection().getMinimumPoint().getY();
-            int Ymax = actor.getSelection().getMaximumPoint().getY();
+            int Ymin = actor.getSelection().getMinimumPoint().y();
+            int Ymax = actor.getSelection().getMaximumPoint().y();
 
             long volumeBlock = 0;
 
@@ -126,8 +126,8 @@ public class CommandTimelapse extends AbstractCommand {
 
                 r.forEach(blockVector3 -> {
 
-                    if (blockVector3.getBlockY() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
-                        BlockVector3 b =  BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ());
+                    if (blockVector3.y() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
+                        BlockVector3 b =  BlockVector3.at(blockVector3.x(), blockVector3.y(), blockVector3.z());
 
                         // PlotSquared condition
                         if (world.getGenerator() != null) {
@@ -163,8 +163,8 @@ public class CommandTimelapse extends AbstractCommand {
 
                     r.forEach(blockVector3 -> {
 
-                        if (blockVector3.getBlockY() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
-                            BlockVector3 b = BlockVector3.at(blockVector3.getX(), blockVector3.getY(), blockVector3.getZ());
+                        if (blockVector3.y() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
+                            BlockVector3 b = BlockVector3.at(blockVector3.x(), blockVector3.y(), blockVector3.z());
 
                             // PlotSquared condition
                             if (world.getGenerator() != null) {
@@ -253,7 +253,7 @@ public class CommandTimelapse extends AbstractCommand {
                         if (!hashMap.get(y).isEmpty()) {
 
                             BlockVector3 bv3 = hashMap.get(y).poll();
-                            BlockChanger.setBlock(p.getWorld(), bv3.getX(), bv3.getY(), bv3.getZ(), Material.AIR, false);
+                            BlockChanger.setBlock(p.getWorld(), bv3.x(), bv3.y(), bv3.z(), Material.AIR, false);
                         }
                     }
                 }
@@ -312,7 +312,7 @@ public class CommandTimelapse extends AbstractCommand {
     }
 
     @Override
-    protected OptionalConditionExecution getArgumentLengthList(CommandSender sender) {
+    protected OptionalConditionExecution optionalConditionExecution(CommandSender sender) {
         return new OptionalConditionExecution(sender).AddConditionSelection();
     }
 

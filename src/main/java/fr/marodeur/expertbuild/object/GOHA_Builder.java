@@ -780,22 +780,22 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(startLoc.getX(), startLoc.getY(), startLoc.getZ()),
-								BlockVector3.at(l.getX(), l.getY(), l.getZ()),
+								new BlockVectorTool(startLoc.getX(), startLoc.getY(), startLoc.getZ()),
+								new BlockVectorTool(l.getX(), l.getY(), l.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JepaulG.getX(), JepaulG.getY(), JepaulG.getZ()),
-								BlockVector3.at(JepaulD.getX(), JepaulD.getY(), JepaulD.getZ()),
+								new BlockVectorTool(JepaulG.getX(), JepaulG.getY(), JepaulG.getZ()),
+								new BlockVectorTool(JepaulD.getX(), JepaulD.getY(), JepaulD.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JbassinG.getX(), JbassinG.getY(), JbassinG.getZ()),
-								BlockVector3.at(JbassinD.getX(), JbassinD.getY(), JbassinD.getZ()),
+								new BlockVectorTool(JbassinG.getX(), JbassinG.getY(), JbassinG.getZ()),
+								new BlockVectorTool(JbassinD.getX(), JbassinD.getY(), JbassinD.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -813,8 +813,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(l.getX(), l.getY(), l.getZ()),
-								BlockVector3.at(Jcerveau.getX(), Jcerveau.getY(), Jcerveau.getZ()),
+								new BlockVectorTool(l.getX(), l.getY(), l.getZ()),
+								new BlockVectorTool(Jcerveau.getX(), Jcerveau.getY(), Jcerveau.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -838,8 +838,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JarmG.getX(), JarmG.getY(), JarmG.getZ()),
-								BlockVector3.at(JepaulG.getX(), JepaulG.getY(), JepaulG.getZ()),
+								new BlockVectorTool(JarmG.getX(), JarmG.getY(), JarmG.getZ()),
+								new BlockVectorTool(JepaulG.getX(), JepaulG.getY(), JepaulG.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -856,8 +856,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JarmD.getX(), JarmD.getY(), JarmD.getZ()),
-								BlockVector3.at(JepaulD.getX(), JepaulD.getY(), JepaulD.getZ()),
+								new BlockVectorTool(JarmD.getX(), JarmD.getY(), JarmD.getZ()),
+								new BlockVectorTool(JepaulD.getX(), JepaulD.getY(), JepaulD.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -874,8 +874,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JarmG.getX(), JarmG.getY(), JarmG.getZ()),
-								BlockVector3.at(handG.getX(), handG.getY(), handG.getZ()),
+								new BlockVectorTool(JarmG.getX(), JarmG.getY(), JarmG.getZ()),
+								new BlockVectorTool(handG.getX(), handG.getY(), handG.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 			}
@@ -890,8 +890,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JarmD.getX(), JarmD.getY(), JarmD.getZ()),
-								BlockVector3.at(handD.getX(), handD.getY(), handD.getZ()),
+								new BlockVectorTool(JarmD.getX(), JarmD.getY(), JarmD.getZ()),
+								new BlockVectorTool(handD.getX(), handD.getY(), handD.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 			}
@@ -906,8 +906,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JbassinG.getX(), JbassinG.getY(), JbassinG.getZ()),
-								BlockVector3.at(JlegG.getX(), JlegG.getY(), JlegG.getZ()),
+								new BlockVectorTool(JbassinG.getX(), JbassinG.getY(), JbassinG.getZ()),
+								new BlockVectorTool(JlegG.getX(), JlegG.getY(), JlegG.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -923,8 +923,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JbassinD.getX(), JbassinD.getY(), JbassinD.getZ()),
-								BlockVector3.at(JlegD.getX(), JlegD.getY(), JlegD.getZ()),
+								new BlockVectorTool(JbassinD.getX(), JbassinD.getY(), JbassinD.getZ()),
+								new BlockVectorTool(JlegD.getX(), JlegD.getY(), JlegD.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -941,8 +941,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JlegG.getX(), JlegG.getY(), JlegG.getZ()),
-								BlockVector3.at(footG.getX(), footG.getY(), footG.getZ()),
+								new BlockVectorTool(JlegG.getX(), JlegG.getY(), JlegG.getZ()),
+								new BlockVectorTool(footG.getX(), footG.getY(), footG.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 
@@ -959,8 +959,8 @@ public class GOHA_Builder {
 
 				new AdvancedParticleVisualisation(p)
 						.lineParticle(
-								BlockVector3.at(JlegD.getX(), JlegD.getY(), JlegD.getZ()),
-								BlockVector3.at(footD.getX(), footD.getY(), footD.getZ()),
+								new BlockVectorTool(JlegD.getX(), JlegD.getY(), JlegD.getZ()),
+								new BlockVectorTool(footD.getX(), footD.getY(), footD.getZ()),
 								conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 								new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearOrga(true) });
 			}

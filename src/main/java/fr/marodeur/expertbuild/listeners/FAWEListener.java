@@ -128,8 +128,8 @@ public class FAWEListener implements Listener {
 
 								new AdvancedParticleVisualisation(p)
 										.lineParticle(
-												BlockVector3.get(i),
-												BlockVector3.get(i-1),
+												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i)),
+												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i-1)),
 												conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 												new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true) });
 
@@ -139,8 +139,8 @@ public class FAWEListener implements Listener {
 
 							new AdvancedParticleVisualisation(p)
 									.lineParticle(
-											BlockVector3.get(BlockVector3.size() - 1),
-											BlockVector3.get(BlockVector3.size() - 2),
+											new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 1)),
+											new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 2)),
 											conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 											new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true) });
 

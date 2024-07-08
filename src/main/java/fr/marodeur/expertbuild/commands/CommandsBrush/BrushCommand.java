@@ -329,13 +329,13 @@ public class BrushCommand extends AbstractCommand {
 
                     BlockVector3 blockVector31 = clip.getOrigin().add(blockVector3);
 
-                    int blockX = blockVector31.getBlockX() - clip.getOrigin().getX();
-                    int blockY = blockVector31.getBlockY() - clip.getOrigin().getY();
-                    int blockZ = blockVector31.getBlockZ() - clip.getOrigin().getZ();
+                    int blockX = blockVector31.x() - clip.getOrigin().x();
+                    int blockY = blockVector31.y() - clip.getOrigin().y();
+                    int blockZ = blockVector31.z() - clip.getOrigin().z();
 
-                    int deltaX = blockX - clip.getOrigin().getX();
-                    int deltaY = blockY - clip.getOrigin().getY();
-                    int deltaZ = blockZ - clip.getOrigin().getZ();
+                    int deltaX = blockX - clip.getOrigin().x();
+                    int deltaY = blockY - clip.getOrigin().y();
+                    int deltaZ = blockZ - clip.getOrigin().z();
 
                     list.add(new BlockVec4(
                             deltaX,
