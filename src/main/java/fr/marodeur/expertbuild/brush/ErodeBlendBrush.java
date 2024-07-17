@@ -22,7 +22,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
-import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -76,7 +75,7 @@ public class ErodeBlendBrush extends AbstractBrush {
         BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
-        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraparameterProfile();
+        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
 
         try (EditSession editsession = localSession.createEditSession(actor)) {
 
@@ -122,7 +121,7 @@ public class ErodeBlendBrush extends AbstractBrush {
 
     @Override
     public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraparameterProfile();
+        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
 
 
         bv4.clear();
