@@ -2,7 +2,7 @@ package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.*;
-import fr.marodeur.expertbuild.object.LISON.AdvancedParticleVisualisation;
+import fr.marodeur.expertbuild.object.LISON.AdvancedParticleOperation;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import com.sk89q.worldedit.IncompleteRegionException;
@@ -126,23 +126,23 @@ public class FAWEListener implements Listener {
 
 							for (int i = 1; i < BlockVector3.size(); i++) {
 
-								new AdvancedParticleVisualisation(p)
+								new AdvancedParticleOperation(p)
 										.lineParticle(
 												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i)),
 												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i-1)),
 												conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
-												new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true) });
+												new AdvancedParticleOperation.RescheduledParticle[] { new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true) });
 
 							}
 
 						} else if (BlockVector3.size() > 3 && conf.getDisplay_convex_line()) {
 
-							new AdvancedParticleVisualisation(p)
+							new AdvancedParticleOperation(p)
 									.lineParticle(
 											new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 1)),
 											new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 2)),
 											conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
-											new AdvancedParticleVisualisation.RescheduledParticle[] { new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true) });
+											new AdvancedParticleOperation.RescheduledParticle[] { new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true) });
 
 						}
 
@@ -150,13 +150,13 @@ public class FAWEListener implements Listener {
 
 							bb.setParticleID();
 
-							new AdvancedParticleVisualisation(p)
+							new AdvancedParticleOperation(p)
 									.bezierLineParticle(
 											BlockVector3,
 											conf.getParticle_bezier_curve_type(), conf.getCoefficient_particle_number(),
-											new AdvancedParticleVisualisation.RescheduledParticle[]
-													{new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearRegion(true),
-															new AdvancedParticleVisualisation.RescheduledParticle().setParticleClearUpdateId(true)});
+											new AdvancedParticleOperation.RescheduledParticle[]
+													{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true),
+															new AdvancedParticleOperation.RescheduledParticle().setParticleClearUpdateId(true)});
 						}
 					}
 				} catch (IncompleteRegionException e) {
