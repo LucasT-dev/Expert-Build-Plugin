@@ -17,21 +17,22 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-public class AdvancedParticleVisualisation implements ScheduledWorkload {
+public class AdvancedParticleOperation implements ScheduledWorkload {
 
     private final Player p;
     private double x, y, z;
     private Particle particle;
 
+
     private UUID Id;
 
     private RescheduledParticle[] rescheduledParticleTable;
 
-    public AdvancedParticleVisualisation(Player p) {
+    public AdvancedParticleOperation(Player p) {
         this.p = p;
     }
 
-    private AdvancedParticleVisualisation(Player p, double x, double y, double z, Particle particle, RescheduledParticle[] rescheduledParticleTable) {
+    private AdvancedParticleOperation(Player p, double x, double y, double z, Particle particle, RescheduledParticle[] rescheduledParticleTable) {
         this.p = p;
         this.x = x;
         this.y = y;
@@ -51,8 +52,8 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
         });
     }
 
-    public AdvancedParticleVisualisation particle(double x, double y, double z, Particle particle, RescheduledParticle[] rescheduledParticleTable) {
-        return new AdvancedParticleVisualisation(this.p, x, y, z, particle, rescheduledParticleTable);
+    public AdvancedParticleOperation particle(double x, double y, double z, Particle particle, RescheduledParticle[] rescheduledParticleTable) {
+        return new AdvancedParticleOperation(this.p, x, y, z, particle, rescheduledParticleTable);
     }
 
     public void lineParticle(BlockVectorTool bv1, BlockVectorTool bv2, Particle particle, int spacingParticles, RescheduledParticle[] rescheduledParticleTable) {
@@ -70,7 +71,7 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
 
             new LightweightInteractiveSystemforOptimizedParticleNavigation()
                     .addScheduledWorkloadRunnable(
-                            new AdvancedParticleVisualisation(p)
+                            new AdvancedParticleOperation(p)
                                     .particle(p1.getX(), p1.getY(), p1.getZ(), particle, rescheduledParticleTable));
 
             length += spacingParticles;
@@ -93,7 +94,7 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
                     if (loc.distance(center) < (rayon + 0.5) && loc.distance(center) > (rayon - 0.5)) {
 
                         new LightweightInteractiveSystemforOptimizedParticleNavigation()
-                                .addScheduledWorkloadRunnable(new AdvancedParticleVisualisation(p)
+                                .addScheduledWorkloadRunnable(new AdvancedParticleOperation(p)
                                         .particle(loc.getX(), loc.getY(), loc.getZ(), particle, rescheduledParticleTable));
                     }
                 }
@@ -136,7 +137,7 @@ public class AdvancedParticleVisualisation implements ScheduledWorkload {
             double[] point = evaluateBezierCurve(controlPoints, t);
 
             new LightweightInteractiveSystemforOptimizedParticleNavigation()
-                    .addScheduledWorkloadRunnable(new AdvancedParticleVisualisation(p)
+                    .addScheduledWorkloadRunnable(new AdvancedParticleOperation(p)
                             .particle(point[0], point[1], point[2], particle, rescheduledParticleTable));
 
         }

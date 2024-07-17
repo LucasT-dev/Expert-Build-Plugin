@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.object.LISON;
 
 import fr.marodeur.expertbuild.Main;
 
-import fr.marodeur.expertbuild.object.Configuration;
 import org.bukkit.Bukkit;
 
 public class LightweightInteractiveSystemforOptimizedParticleNavigation {
