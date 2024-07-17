@@ -1,20 +1,17 @@
 package fr.marodeur.expertbuild.object.builderObjects;
 
-import fr.marodeur.expertbuild.object.Message;
-import org.bukkit.Bukkit;
-
 import java.util.UUID;
 
-public class TerraParameter {
+public class TerraParameter extends IDataProfile {
 
-    private UUID profileID;
     private byte erosionFaces;
     private byte erosionRecursion;
     private byte fillFaces;
     private byte fillRecursion;
 
     public TerraParameter(UUID profileID, byte erosionFaces, byte erosionRecursion, byte fillFaces, byte fillRecursion) {
-        this.profileID = profileID;
+        super(profileID);
+
         this.erosionFaces = erosionFaces;
         this.erosionRecursion = erosionRecursion;
         this.fillFaces = fillFaces;
@@ -55,15 +52,6 @@ public class TerraParameter {
     public TerraParameter setFillRecursion(byte fillRecursion) {
         this.fillRecursion = fillRecursion;
         return this;
-    }
-
-    public <T> void sendMessage(String path, boolean prefix, String[]... var) {
-
-        if (var.length == 0) {
-            new Message.MessageSender(path, prefix).send(Bukkit.getPlayer(profileID));
-        } else {
-            new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
-        }
     }
 
     @Override

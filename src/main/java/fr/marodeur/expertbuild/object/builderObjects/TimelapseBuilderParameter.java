@@ -4,42 +4,32 @@ import com.sk89q.worldedit.math.BlockVector3;
 import fr.marodeur.expertbuild.object.Message;
 import org.bukkit.Bukkit;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 
-public class TimelapseBuilder {
-
-    private UUID profileID;
+public class TimelapseBuilderParameter extends IDataProfile {
 
     private boolean hasTimelapseRunning;
 
     private boolean stopTimelapse;
 
-    private BlockVector3[] selection;
+    private final BlockVector3[] selection;
 
 
-    public TimelapseBuilder(UUID profileID, boolean hasTimelapseRunning, boolean stopTimelapse) {
-        this.profileID = profileID;
+    public TimelapseBuilderParameter(UUID profileID, boolean hasTimelapseRunning, boolean stopTimelapse) {
+        super(profileID);
+
+        //this.profileID = profileID;
         this.hasTimelapseRunning = hasTimelapseRunning;
         this.stopTimelapse = stopTimelapse;
         this.selection = new BlockVector3[2];
-    }
-
-    public UUID profileID() {
-        return profileID;
-    }
-
-    public TimelapseBuilder setProfileID(UUID profileID) {
-        this.profileID = profileID;
-        return this;
     }
 
     public boolean hasTimelapseRunning() {
         return hasTimelapseRunning;
     }
 
-    public TimelapseBuilder setHasTimelapseRunning(boolean hasTimelapseRunning) {
+    public TimelapseBuilderParameter setHasTimelapseRunning(boolean hasTimelapseRunning) {
         this.hasTimelapseRunning = hasTimelapseRunning;
         return this;
     }
@@ -48,7 +38,7 @@ public class TimelapseBuilder {
         return stopTimelapse;
     }
 
-    public TimelapseBuilder setStopTimelapse(boolean stopTimelapse) {
+    public TimelapseBuilderParameter setStopTimelapse(boolean stopTimelapse) {
         this.stopTimelapse = stopTimelapse;
         return this;
     }
@@ -62,19 +52,12 @@ public class TimelapseBuilder {
         this.selection[1] = corner2;
     }
 
-    public <T> void sendMessage(String path, boolean prefix, String[]... var) {
 
-        if (var.length == 0) {
-            new Message.MessageSender(path, prefix).send(Bukkit.getPlayer(profileID));
-        } else {
-            new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
-        }
-    }
 
     @Override
     public String toString() {
         return "TimelapseBuilder{" +
-                "profileID=" + profileID +
+                "profileID=" + getProfileID().toString() +
                 ", hasTimelapseRunning=" + hasTimelapseRunning +
                 ", stopTimelapse=" + stopTimelapse +
                 ", Corner 1 =" +selection[0] +

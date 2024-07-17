@@ -11,18 +11,17 @@ import java.util.ArrayList;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ClipboardParameter {
+public class ClipboardParameter extends IDataProfile {
 
-    private UUID profileID;
+    private final ArrayList<ClipboardHolder> clipboardHolders;
+    private final ArrayList<String> clipboardsName;
 
-    private ArrayList<ClipboardHolder> clipboardHolders;
-    private ArrayList<String> clipboardsName;
-
-    private ArrayList<Flag> flags;
+    private final ArrayList<Flag> flags;
     private boolean isRandomRotation;
 
     public ClipboardParameter(UUID profileID, ArrayList<ClipboardHolder> clipboardsBlock, ArrayList<String> clipboardsName, ArrayList<Flag> flags, boolean isRandomRotation) {
-        this.profileID = profileID;
+        super(profileID);
+
         this.clipboardHolders = clipboardsBlock;
         this.clipboardsName = clipboardsName;
         this.flags = flags;
@@ -87,16 +86,6 @@ public class ClipboardParameter {
         return flags.get(index);
     }
 
-
-
-    public <T> void sendMessage(String path, boolean prefix, String[]... var) {
-
-        if (var.length == 0) {
-            new Message.MessageSender(path, prefix).send(Bukkit.getPlayer(profileID));
-        } else {
-            new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(profileID));
-        }
-    }
 
     @Override
     public String toString() {
