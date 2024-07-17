@@ -10,8 +10,9 @@ import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
+import fr.marodeur.expertbuild.object.builderObjects.LeatherParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
-import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilderParameter;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -91,16 +92,20 @@ public class BrushBuilder {
         this.uuid = uuid;
     }
 
-    public TimelapseBuilder getTimeLapseProfile() {
+    public TimelapseBuilderParameter getTimeLapseProfile() {
         return Main.getDataProfile().getTimelapseProfile(this.uuid);
     }
 
-    public TerraParameter getTerraparameterProfile() {
+    public TerraParameter getTerraParameterProfile() {
         return Main.getDataProfile().getTerraParameterProfile(this.uuid);
     }
 
     public ClipboardParameter getClipboardParameter() {
         return Main.getDataProfile().getClipboardParameterProfile(this.uuid);
+    }
+
+    public LeatherParameter getLeatherParameter() {
+        return Main.getDataProfile().getLeatherParameterProfile(this.uuid);
     }
 
 
