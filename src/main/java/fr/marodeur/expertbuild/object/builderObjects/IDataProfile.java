@@ -8,20 +8,15 @@ import java.util.UUID;
 
 public abstract class IDataProfile {
 
-    private UUID IProfileID;
+    private final UUID IProfileID;
 
     protected IDataProfile(UUID ProfileID) {
-        IProfileID = ProfileID;
+        this.IProfileID = ProfileID;
     }
 
     public UUID getProfileID() {
         return IProfileID;
     }
-
-    void setProfileID(UUID ProfileID) {
-        IProfileID = ProfileID;
-    }
-
 
     public void sendMessage(String path, boolean prefix, String[]... var) {
 

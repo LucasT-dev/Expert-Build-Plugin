@@ -15,10 +15,10 @@ import fr.marodeur.expertbuild.listeners.BrushListener;
 import fr.marodeur.expertbuild.listeners.FAWEListener;
 import fr.marodeur.expertbuild.listeners.GeneralListener;
 import fr.marodeur.expertbuild.object.*;
-
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
+
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 
 import com.sk89q.worldedit.WorldEdit;
@@ -30,7 +30,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -242,7 +241,7 @@ public class Main extends JavaPlugin {
 
 	/**
 	 * get WorldEdit plugin
-	 * @return
+	 * @return WorldEditPlugin
 	 */
 	public WorldEditPlugin getWorldEditPlugin() {
 		return WorldEditPlugin;

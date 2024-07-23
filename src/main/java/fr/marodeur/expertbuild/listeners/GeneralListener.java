@@ -6,7 +6,7 @@ import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.object.*;
 
 
-import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilderParameter;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -197,7 +197,7 @@ public class GeneralListener implements Listener {
 
 		Main.getHashMapBrushBuilder().forEach((uuid, brushBuilder) -> {
 
-			TimelapseBuilder timelapseBuilder = Main.getDataProfile().getTimelapseProfile(uuid);
+			TimelapseBuilderParameter timelapseBuilder = Main.getDataProfile().getTimelapseProfile(uuid);
 			Location l = e.getBlock().getLocation();
 
 			if (timelapseBuilder.hasTimelapseRunning()) {
