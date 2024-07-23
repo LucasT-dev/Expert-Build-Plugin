@@ -6,7 +6,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.command.util.SuggestionHelper;
-import com.sk89q.worldedit.extension.factory.PatternFactory;
+import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.biome.BiomeType;
@@ -464,13 +464,13 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         public SubCommandSelector getList(int argsIndex, List<String> stringList) {
             this.argsIndex = argsIndex;
-            this.subCommand = stringList;
+            this.subCommand.addAll(stringList);
             return this;
         }
 
         public SubCommandSelector getArgs(int argsIndex, String stringArgs) {
             this.argsIndex = argsIndex;
-            this.subCommand = Collections.singletonList(stringArgs);
+            this.subCommand.add(stringArgs);
             return this;
         }
 
@@ -489,8 +489,6 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
                         .map(value -> value.toLowerCase(Locale.ENGLISH).replace("minecraft:", ""))
                         .filter(value -> value.startsWith(args[argsIndex].toLowerCase(Locale.ENGLISH)))
                         .toList());
-            } else {
-                this.subCommand = List.of("");
             }
             return this;
         }
@@ -502,7 +500,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
          * @param argsIndex int
          * @return SubCommandSelector
          */
-        public SubCommandSelector getMaterialList(@NotNull String @NotNull [] args, int argsIndex) {
+        public SubCommandSelector getMaterialList(String[] args, int argsIndex) {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
@@ -510,8 +508,6 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
                         .map(value -> value.toLowerCase(Locale.ENGLISH).replace("minecraft:", ""))
                         //.filter(value -> value.startsWith(args[indexArg].toLowerCase(Locale.ENGLISH)))
                         .toList());
-            } else {
-                this.subCommand = List.of("");
             }
             return this;
         }
@@ -523,13 +519,27 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
          * @param argsIndex int
          * @return SubCommandSelector
          */
-        public SubCommandSelector getPatternFactoryList(@NotNull String[] args, int argsIndex) {
+        public SubCommandSelector getPatternFactoryList(String[] args, int argsIndex) {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex + 1 ) {
-                this.subCommand = new PatternFactory(WorldEdit.getInstance()).getSuggestions(args[argsIndex]);
-            } else {
-                this.subCommand = List.of("");
+                this.subCommand.addAll(WorldEdit.getInstance().getPatternFactory().getSuggestions(args[argsIndex]));
+            }
+            return this;
+        }
+
+        /**
+         * Get Mask list of FAWE
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getMaskFactoryList(String[] args, int argsIndex) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex + 1 ) {
+                this.subCommand.addAll(WorldEdit.getInstance().getMaskFactory().getSuggestions(args[argsIndex]));
             }
             return this;
         }
@@ -545,10 +555,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand.addAll(SuggestionHelper.suggestPositiveIntegers(args[argsIndex])
-                        .toList());
-            } else {
-                this.subCommand = List.of("");
+                this.subCommand.addAll(SuggestionHelper.suggestPositiveIntegers(args[argsIndex]).toList());
             }
             return this;
         }
@@ -564,10 +571,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             this.argsIndex = argsIndex;
 
             if (args.length == argsIndex  + 1 ) {
-                this.subCommand.addAll(SuggestionHelper.suggestPositiveDoubles(args[argsIndex])
-                        .toList());
-            } else {
-                this.subCommand = List.of("");
+                this.subCommand.addAll(SuggestionHelper.suggestPositiveDoubles(args[argsIndex]).toList());
             }
             return this;
         }
@@ -585,8 +589,6 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             if (args.length == argsIndex  + 1 ) {
                 this.subCommand.addAll(SuggestionHelper.suggestBoolean(args[argsIndex])
                         .toList());
-            } else {
-                this.subCommand = List.of("");
             }
             return this;
         }
@@ -603,8 +605,6 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
             if (args.length == argsIndex  + 1 ) {
                 this.subCommand.addAll(Bukkit.getOnlinePlayers().stream().map(HumanEntity::getName).toList());
-            } else {
-                this.subCommand = List.of("");
             }
             return this;
         }
@@ -892,6 +892,25 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "pattern"}).send(sender);
         }
 
+        // Mask
+        public boolean isMask(Player p, String arg) {
+
+            try {
+                Mask mask = new FaweAPI(p).getMask(arg);
+                return true;
+            } catch (NullPointerException | SuggestInputParseException ignored) {
+                return false;
+            }
+        }
+
+        public Mask getMask(Player p, String arg) {
+            return new FaweAPI(p).getMask(arg);
+        }
+
+        public void sendMessageInvalidMask(@NotNull CommandSender sender, String arg) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "mask"}).send(sender);
+        }
+
         // Integer
         public boolean isInteger(String arg, int min, int max) {
 
@@ -982,7 +1001,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         public <T> Flag getFlag(@NotNull String arg) {
 
-            Flag flag = new Flag("bcem");
+            Flag flag = new Flag("abcem");
 
             arg = arg.replace("-", "");
 
