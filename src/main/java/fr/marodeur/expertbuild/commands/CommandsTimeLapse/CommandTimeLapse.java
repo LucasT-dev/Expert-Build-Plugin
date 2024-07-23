@@ -6,15 +6,14 @@ import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.fawe.BlockChanger;
+import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
-import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilder;
+import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilderParameter;
 
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -38,7 +37,7 @@ public class CommandTimelapse extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/timelapse <start-stop>";
+        return "/timelapse <start-stop> [block/tick = 1] [shape destroy block]";
     }
 
     @Override
@@ -60,7 +59,7 @@ public class CommandTimelapse extends AbstractCommand {
     public void execute(CommandSender executor, Command command, @NotNull String label, @NotNull String[] args) {
 
         Player p = (Player) executor;
-        TimelapseBuilder timelapseBuilder = BrushBuilder.getBrushBuilderPlayer(p, false).getTimeLapseProfile();
+        TimelapseBuilderParameter timelapseBuilder = BrushBuilder.getBrushBuilderPlayer(p, false).getTimeLapseProfile();
 
         if (args[0].equalsIgnoreCase("start")) {
 
@@ -78,17 +77,19 @@ public class CommandTimelapse extends AbstractCommand {
             long startTime = System.currentTimeMillis();
 
             final int[] loopNumber = new int[1];
-            if (args.length == 2 ) {
+
+            if (args.length >= 2 ) {
 
                 if (this.getValidArgument().isInteger(args[1], 1, conf.getTimelapse_max_block_per_tick())) {
                     loopNumber[0] = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 1, conf.getTimelapse_max_block_per_tick());
+                    this.getValidArgument().sendMessageInvalidInteger(p, args[1], 1, conf.getTimelapse_max_block_per_tick());
                     return;
                 }
             } else {
                 loopNumber[0] = 1;
             }
+
 
             // Has already timelapse running
             if (timelapseBuilder.hasTimelapseRunning()) {
@@ -97,13 +98,13 @@ public class CommandTimelapse extends AbstractCommand {
             }
 
             // Max timelapse on server
-            if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilder::hasTimelapseRunning).count() > conf.getTimelapse_max_block_per_tick()) {
+            if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilderParameter::hasTimelapseRunning).count() > conf.getTimelapse_max_block_per_tick()) {
                 timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses", true);
                 return;
             }
 
             Region r = actor.getSelection();
-            HashMap<Integer, Deque<BlockVector3>> hashMap = new HashMap<>();
+            HashMap<Integer, Deque<BlockVectorTool>> hashMap = new HashMap<>();
 
             // FAWE LIMIT
             if (actor.getLimit().MAX_CHANGES()) {
@@ -122,34 +123,63 @@ public class CommandTimelapse extends AbstractCommand {
             if (Ymax == Ymin) {
 
                 int finalY = Ymax;
-                Deque<BlockVector3> layer = new ArrayDeque<>();
+                Deque<BlockVectorTool> layer = new ArrayDeque<>();
 
+                Deque<BlockVectorTool> finalLayer = layer;
                 r.forEach(blockVector3 -> {
 
                     if (blockVector3.y() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
-                        BlockVector3 b =  BlockVector3.at(blockVector3.x(), blockVector3.y(), blockVector3.z());
+                        BlockVectorTool b = new BlockVectorTool(blockVector3.x(), blockVector3.y(), blockVector3.z());
 
                         // PlotSquared condition
                         if (world.getGenerator() != null) {
                             if (world.getGenerator().toString().equals("PlotSquared")) {
-                                Location l = Location.at(world.getName(), b);
+                                Location l = Location.at(world.getName(), b.toBlockVector3());
                                 if (l.isPlotArea()) {
                                     if (!l.isUnownedPlotArea()) {
                                         if (l.getOwnedPlot().getOwner().equals(p.getUniqueId())) {
-                                            layer.add(b);
+                                            finalLayer.add(b);
                                         }
                                     }
                                 }
                             }
                             else {
-                                layer.add(b);
+                                finalLayer.add(b);
                             }
                         } else {
-                            layer.add(b);
+                            finalLayer.add(b);
                         }
                     }
-
                 });
+
+                // Trier la Queue de bloc a retirer
+                if (args.length >= 3) {
+
+                    GlueList<BlockVectorTool> sortList = new GlueList<>();
+                    sortList.addAll(finalLayer.stream().toList());
+
+                    if (args[2].contains("creasing")) {
+
+                        layer = new BlockVectorTool().XZcreasing(sortList);
+                    }
+                    if (args[2].contains("diagonal")) {
+
+                        layer = new BlockVectorTool().XZDiagonal(sortList);
+                    }
+                    if (args[2].contains("cylinder")) {
+
+                        layer = new BlockVectorTool().XZCylinder(sortList);
+                    }
+                    if (args[2].contains("spiral")) {
+
+                        layer = new BlockVectorTool().XZSpiral(sortList);
+                    }
+
+                    // Inverse la Queue de block a retirer
+                    if (args[2].startsWith("inverse_")) {
+                        layer = new BlockVectorTool().reverseDeque(layer);
+                    }
+                }
 
                 hashMap.put(Ymax, layer);
                 volumeBlock += layer.size();
@@ -159,33 +189,63 @@ public class CommandTimelapse extends AbstractCommand {
                 for (int y = Ymax; y >= Ymin; y--) {
 
                     int finalY = y;
-                    Deque<BlockVector3> layer = new ArrayDeque<>();
+                    Deque<BlockVectorTool> layer = new ArrayDeque<>();
 
+                    Deque<BlockVectorTool> finalLayer = layer;
                     r.forEach(blockVector3 -> {
 
                         if (blockVector3.y() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
-                            BlockVector3 b = BlockVector3.at(blockVector3.x(), blockVector3.y(), blockVector3.z());
+                            BlockVectorTool b = new BlockVectorTool(blockVector3.x(), blockVector3.y(), blockVector3.z());
 
                             // PlotSquared condition
                             if (world.getGenerator() != null) {
                                 if (world.getGenerator().toString().equals("PlotSquared")) {
-                                    Location l = Location.at(world.getName(), b);
+                                    Location l = Location.at(world.getName(), b.toBlockVector3());
                                     if (l.isPlotArea()) {
                                         if (!l.isUnownedPlotArea()) {
                                             if (l.getOwnedPlot().getOwner().equals(p.getUniqueId())) {
-                                                layer.add(b);
+                                                finalLayer.add(b);
                                             }
                                         }
                                     }
                                 }
                                 else {
-                                    layer.add(b);
+                                    finalLayer.add(b);
                                 }
                             } else {
-                                layer.add(b);
+                                finalLayer.add(b);
                             }
                         }
                     });
+
+                    // Trier la Queue de bloc a retirer
+                    if (args.length >= 3) {
+
+                        GlueList<BlockVectorTool> sortList = new GlueList<>();
+                        sortList.addAll(finalLayer.stream().toList());
+
+                        if (args[2].contains("creasing")) {
+
+                            layer = new BlockVectorTool().XZcreasing(sortList);
+                        }
+                        if (args[2].contains("diagonal")) {
+
+                            layer = new BlockVectorTool().XZDiagonal(sortList);
+                        }
+                        if (args[2].contains("cylinder")) {
+
+                            layer = new BlockVectorTool().XZCylinder(sortList);
+                        }
+                        if (args[2].contains("spiral")) {
+
+                            layer = new BlockVectorTool().XZSpiral(sortList);
+                        }
+
+                        // Inverse la Queue de block a retirer
+                        if (args[2].startsWith("inverse_")) {
+                            layer = new BlockVectorTool().reverseDeque(layer);
+                        }
+                    }
 
                     hashMap.put(y, layer);
                     volumeBlock += layer.size();
@@ -195,6 +255,7 @@ public class CommandTimelapse extends AbstractCommand {
             // Loop execution
 
             long finalVolumeBlock = volumeBlock;
+
             new BukkitRunnable() {
 
                 @Override
@@ -252,8 +313,19 @@ public class CommandTimelapse extends AbstractCommand {
 
                         if (!hashMap.get(y).isEmpty()) {
 
-                            BlockVector3 bv3 = hashMap.get(y).poll();
-                            BlockChanger.setBlock(p.getWorld(), bv3.x(), bv3.y(), bv3.z(), Material.AIR, false);
+                            BlockVectorTool bv3 = hashMap.get(y).poll();
+
+                            world.setType(bv3.getBlockX(), bv3.getBlockY(), bv3.getBlockZ(), Material.AIR);
+
+                            // fake remove block
+                            //p.sendBlockChange(bv3.toLocation(world), Material.AIR.createBlockData());
+
+                            /*new AdvancedBlockOperation(p)
+                                    .setBlock(world,
+                                            new BlockVectorTool().toBlockVectorTool(bv3),
+                                            Material.AIR);*/
+
+                            //BlockChanger.setBlock(p.getWorld(), bv3.x(), bv3.y(), bv3.z(), Material.AIR, false);
                         }
                     }
                 }
@@ -313,7 +385,7 @@ public class CommandTimelapse extends AbstractCommand {
 
     @Override
     protected OptionalConditionExecution optionalConditionExecution(CommandSender sender) {
-        return new OptionalConditionExecution(sender).AddConditionSelection();
+        return new OptionalConditionExecution(sender).AddConditionSelection().AddBrushBuilderProfile();
     }
 
     @Override
@@ -341,6 +413,19 @@ public class CommandTimelapse extends AbstractCommand {
         // START int
         subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1)
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
+
+        // START int trier
+        subCommandSender.addSubCommand(new SubCommandSelector().getList(2,Arrays.asList("creasing", "diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral"))
+                .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
+
+        // START - flag
+        //subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 1, "m").toSubCommand("None", new ConditionArgumentBefore("start", 0)));
+        //subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 2, "m").toSubCommand("None", new ConditionArgumentBefore("start", 0)));
+        //subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 3, "m").toSubCommand("None", new ConditionArgumentBefore("start", 0)));
+
+        // /timelapse start 100 -m mask
+        //subCommandSender.addSubCommand(new SubCommandSelector().getMaskFactoryList(args, args.length-1).toSubCommand("None", new ConditionArgumentBefore("-m", args.length-2)));
+
 
         return subCommandSender;
     }
