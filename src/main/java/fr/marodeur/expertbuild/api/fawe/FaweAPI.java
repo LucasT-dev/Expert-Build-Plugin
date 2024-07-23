@@ -14,11 +14,13 @@ import com.sk89q.worldedit.function.operation.Operation;
 import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
@@ -180,6 +182,55 @@ public class FaweAPI {
 
             if (sendMessage) this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Clipboard paste at (" +
                     to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ")");
+        }
+    }
+
+    public void setBlock(GlueList<BlockVectorTool> blocks, Pattern pattern, boolean sendMessage) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(this.bukkitPlayer);
+        EditSession editsession = localSession.createEditSession(this.bukkitPlayer);
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+
+            editsession.setFastMode(false);
+
+            blocks.forEach(block -> {
+
+                try {
+                    editsession.setBlock(Vector3.at(
+                            block.getX(),
+                            block.getY(),
+                            block.getZ()).toBlockPoint(),
+                            pattern);
+
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            });
+            localSession.remember(editsession);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        if (sendMessage) this.sendSetBlockMessage(startTime, endTime, blocks.size(), 0, 0);
+
+    }
+
+    private void sendSetBlockMessage(long startTime, long endTime, int blockModified, int biomeModified, int entityModified) {
+
+        float r = (endTime - startTime);
+
+        if (r > 1000) {
+            float t = r / 1000;
+            float d = (blockModified / t);
+
+            bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified_with_time", true, new String[]{String.valueOf(blockModified), String.valueOf(d)}).getMessage());
+        } else {
+            bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified", true, new String[]{String.valueOf(blockModified)}).getMessage());
         }
     }
 }
