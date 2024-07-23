@@ -484,7 +484,11 @@ public class Configuration {
         if (this.version.equals("1.18.1.19")) {
             //Update config file from 1.18.1.19 to 1.18.1.20
 
-            //for next update
+            yml.set("build.version", "1.18.1.20");
+            this.version = "1.18.1.21";
+
+            yml.save(file);
+
         }
 
         if (this.version.equals("1.18.1.20")) {

@@ -7,6 +7,7 @@ import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.extension.input.ParserContext;
+import com.sk89q.worldedit.extension.platform.permission.ActorSelectorLimits;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
 import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
@@ -16,7 +17,10 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.regions.RegionSelector;
+import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
 import fr.marodeur.expertbuild.Main;
@@ -25,7 +29,10 @@ import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -42,9 +49,60 @@ public class FaweAPI {
     }
 
 
-    public List<String> getSuggestionsPattern(String s) {
-        return WorldEdit.getInstance().getPatternFactory().getSuggestions(s);
+    private LocalSession getLocalSession() {
+        return this.bukkitPlayer.getSession();
     }
+
+    private RegionSelector getRegionSelector() {
+        return getLocalSession().getRegionSelector(this.bukkitPlayer.getWorld());
+    }
+
+
+
+    public FaweAPI setSelectionType(@NotNull RegionSelectorType regionSelectorType) {
+
+        this.getLocalSession().setRegionSelector(this.bukkitPlayer.getWorld(), regionSelectorType.createSelector());
+        return this;
+    }
+
+    public FaweAPI setPrimaryPos(BlockVector3 bv3) {
+
+        this.getRegionSelector().selectPrimary(bv3, ActorSelectorLimits.forActor(this.bukkitPlayer));
+        return this;
+    }
+
+    public BlockVector3 getPrimaryPos() {
+
+        return this.getRegionSelector().getPrimaryPosition();
+    }
+
+    public Boolean isCompleteSelection() {
+
+        return this.getRegionSelector().isDefined();
+
+    }
+
+    public FaweAPI setSecondaryPos(BlockVector3 bv3) {
+
+        this.getRegionSelector().selectSecondary(bv3, ActorSelectorLimits.forActor(bukkitPlayer));
+        return this;
+    }
+
+    public FaweAPI clearSelection() {
+
+        this.getRegionSelector().clear();
+        return this;
+    }
+
+    public FaweAPI refreshChunk(@NotNull Chunk chunk) {
+
+        this.bukkitPlayer.getWorldForEditing().refreshChunk(chunk.getX(), chunk.getZ());
+        return this;
+    }
+
+
+
+
 
     public Pattern getPattern(String s) {
 
@@ -59,10 +117,6 @@ public class FaweAPI {
         return WorldEdit.getInstance().getPatternFactory().parseFromInput(s, context);
     }
 
-
-    public List<String> getSuggestionsMask(String s) {
-        return WorldEdit.getInstance().getMaskFactory().getSuggestions(s);
-    }
     public Mask getMask(String s) {
 
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(bukkitPlayer);
@@ -183,6 +237,30 @@ public class FaweAPI {
             if (sendMessage) this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Clipboard paste at (" +
                     to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ")");
         }
+    }
+
+    @Deprecated
+    public void setCuboidRegion(Region region, Pattern pattern, boolean sendMessage) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(this.bukkitPlayer);
+        EditSession editsession = localSession.createEditSession(this.bukkitPlayer);
+
+        long startTime = System.currentTimeMillis();
+        int editedBlock;
+
+        try {
+
+            editsession.setFastMode(false);
+
+            editedBlock = editsession.setBlocks(region, pattern);
+
+        } finally {
+            localSession.remember(editsession);
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        if (sendMessage) this.sendSetBlockMessage(startTime, endTime, editedBlock, 0, 0);
     }
 
     public void setBlock(GlueList<BlockVectorTool> blocks, Pattern pattern, boolean sendMessage) {
