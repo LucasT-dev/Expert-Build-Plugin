@@ -11,19 +11,29 @@ import org.bukkit.block.Block;
 import org.bukkit.util.NumberConversions;
 import org.bukkit.util.Vector;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class BlockVectorTool implements Cloneable {
 
     // int | 4 byte | -2 147 483 648 to 2 147 483 648
     // double | 8 byte | 15 significant decimal digit
 
-    public static final BlockVectorTool ZERO = new BlockVectorTool(0, 0, 0);
-    public static final BlockVectorTool ONE = new BlockVectorTool(1, 1, 1);
+    public static final BlockVectorTool ZERO;
+    public static final BlockVectorTool ONE;
 
+    public static final double PI;
+    public static final double E;
+
+    static {
+
+        ZERO = new BlockVectorTool(0, 0, 0);
+        ONE = new BlockVectorTool(1, 1, 1);
+
+        PI = Math.PI;
+        E = Math.E;
+
+    }
 
     private double x;
     private double y;
@@ -42,31 +52,37 @@ public class BlockVectorTool implements Cloneable {
 
     // Set double value
 
-    public void setX(double x) {
+    public BlockVectorTool setX(double x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(double y) {
+    public BlockVectorTool setY(double y) {
         this.y = y;
+        return this;
     }
 
-    public void setZ(double z) {
+    public BlockVectorTool setZ(double z) {
         this.z = z;
+        return this;
     }
 
 
     // Set int value
 
-    public void setX(int x) {
+    public BlockVectorTool setX(int x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(int y) {
+    public BlockVectorTool setY(int y) {
         this.y = y;
+        return this;
     }
 
-    public void setZ(int z) {
+    public BlockVectorTool setZ(int z) {
         this.z = z;
+        return this;
     }
 
 
@@ -232,11 +248,14 @@ public class BlockVectorTool implements Cloneable {
     // edition
 
     public GlueList<BlockVectorTool> getBlockVectorBetweenTwoPoint(BlockVectorTool secondPoint, int space) {
+        return this.getBlockVectorBetweenTwoPoint(this, secondPoint, space);
+    }
+    public GlueList<BlockVectorTool> getBlockVectorBetweenTwoPoint(BlockVectorTool firstPoint, BlockVectorTool secondPoint, int space) {
 
         GlueList<BlockVectorTool> bvtArray = new GlueList<>();
 
         double distance = this.distance(secondPoint);
-        Vector p1 = this.toVector();
+        Vector p1 = firstPoint.toVector();
         Vector p2 = secondPoint.toVector();
         Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
         double length = 0;
@@ -252,8 +271,8 @@ public class BlockVectorTool implements Cloneable {
 
     public BlockVectorTool getBlockVectorAngle(float pitch, float yaw, double distance, World world) {
 
-        double pitch1 = ((pitch + 90) * Math.PI) / 180;
-        double yaw1 = ((yaw + 90) * Math.PI) / 180;
+        double pitch1 = ((pitch + 90) * PI) / 180;
+        double yaw1 = ((yaw + 90) * PI) / 180;
 
         double x = Math.sin(pitch1) * Math.cos(yaw1);
         double y = Math.sin(pitch1) * Math.sin(yaw1);
@@ -281,7 +300,6 @@ public class BlockVectorTool implements Cloneable {
     public int hashCode() {
         return Objects.hash(x, y, z);
     }
-
 
     // toString
 
@@ -335,6 +353,75 @@ public class BlockVectorTool implements Cloneable {
         );
     }
 
+    // Trier une liste de BlockVectorTool
+
+    public Deque<BlockVectorTool> XZcreasing(GlueList<BlockVectorTool> blockVectorTools) {
+
+        // Trier la Deque en utilisant l'API Stream
+        return blockVectorTools.stream()
+                .sorted(Comparator.comparing(BlockVectorTool::getBlockX).reversed()
+                        .thenComparing(BlockVectorTool::getBlockZ).reversed())
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    public Deque<BlockVectorTool> XZDiagonal(GlueList<BlockVectorTool> blockVectorTools) {
+
+        // Trier la Deque en utilisant l'API Stream
+        return blockVectorTools.stream()
+                .sorted(Comparator.comparingInt(block -> block.getBlockX() + block.getBlockZ()))
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    public Deque<BlockVectorTool> XZCylinder(GlueList<BlockVectorTool> blockVectorTools) {
+
+        // Définir un point central (par exemple, la moyenne des positions)
+        double centerX = blockVectorTools.stream().mapToInt(BlockVectorTool::getBlockX).average().orElse(0);
+        double centerZ = blockVectorTools.stream().mapToInt(BlockVectorTool::getBlockZ).average().orElse(0);
+
+        // Trier la Deque en utilisant l'API Stream
+        return blockVectorTools.stream()
+                .sorted(Comparator.comparingDouble(bv -> {
+                    double deltaX = bv.getX() - centerX;
+                    double deltaZ = bv.getZ() - centerZ;
+                    double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+                    return distance;
+                }))
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    public Deque<BlockVectorTool> XZSpiral(GlueList<BlockVectorTool> blockVectorTools) {
+
+        // Trier la Deque en utilisant l'API Stream
+        double centerX = blockVectorTools.stream().mapToInt(BlockVectorTool::getBlockX).average().orElse(0);
+        double centerZ = blockVectorTools.stream().mapToInt(BlockVectorTool::getBlockZ).average().orElse(0);
+
+        // Trier la Deque en utilisant l'API Stream
+
+        return blockVectorTools.stream()
+                .sorted(Comparator.comparingDouble(bv -> {
+                    double deltaX = bv.getBlockX() - centerX;
+                    double deltaZ = bv.getBlockZ() - centerZ;
+                    double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+                    double angle = Math.atan2(deltaZ, deltaX);
+                    return distance + angle; // Trier par distance et angle pour effet spirale
+                }))
+
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
+    public <T> Deque<T> reverseDeque(Deque<T> originalDeque) {
+        Deque<T> reversedDeque = new ArrayDeque<>();
+
+        // Utiliser un itérateur pour parcourir la deque originale
+        Iterator<T> iterator = originalDeque.descendingIterator();
+        while (iterator.hasNext()) {
+            reversedDeque.add(iterator.next());
+        }
+
+        return reversedDeque;
+    }
+
+
     // conversion
 
     public Location toLocation(World world) {
@@ -358,6 +445,7 @@ public class BlockVectorTool implements Cloneable {
     }
 
     public BlockVectorTool toBlockVectorTool(BlockVector3 blockVector3) {
+
         return new BlockVectorTool(blockVector3.x(), blockVector3.y(), blockVector3.z());
     }
 
@@ -406,7 +494,7 @@ public class BlockVectorTool implements Cloneable {
 // Shape
 class ShapeTool {
 
-    private GlueList<BlockVectorTool> toolGlueList;
+    private final GlueList<BlockVectorTool> toolGlueList;
 
 
     public ShapeTool(int capacity) {
