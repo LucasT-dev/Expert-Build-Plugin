@@ -86,7 +86,7 @@ public class Main extends JavaPlugin {
 		try {
 			reloadMessageConfig();
 		} catch (URISyntaxException e) {
-			e.printStackTrace();
+			getLogger().severe("Error loading plugin messages");
 		}
 
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_enable", true).getMessage());
@@ -222,7 +222,7 @@ public class Main extends JavaPlugin {
 		try {
 			configuration = new Configuration().loadConfiguration();
 		} catch (IOException e) {
-			e.printStackTrace();
+			getLogger().severe("Error loading plugin config");
 		}
 
 		getLogger().info("Configuration load");
@@ -248,9 +248,7 @@ public class Main extends JavaPlugin {
 	}
 
 	private void loadCustomMask() {
-
 		WorldEditPlugin.getWorldEdit().getMaskFactory().register(new OngroundMask(WorldEditPlugin.getWorldEdit()));
-
 	}
 
 	// BrushBuilder
@@ -277,7 +275,6 @@ public class Main extends JavaPlugin {
 	 * @param brushBuilder register player
 	 * @return brushBuilder
 	 */
-	@Contract("_ -> param1")
 	public static @NotNull BrushBuilder registerBrushBuilder(BrushBuilder brushBuilder) {
 		BrushBuilder.put(brushBuilder.getUUID(), brushBuilder);
 		return brushBuilder;
