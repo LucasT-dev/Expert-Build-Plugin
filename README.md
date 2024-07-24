@@ -1,14 +1,14 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.19
+* Latest plugin version : 1.18.1.20
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
 * [Supported Minecraft version : 1.18, 1.19, 1.20 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
 
 
-![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)
+![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)  
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
 ![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.19-purple)
 
@@ -218,7 +218,7 @@ This allows timelapses to automatically deconstruct a selection layer by layer a
 
 WARNING, this command is not compatible with //undo and //redo. Your selection is copied to your clipboard ! 
 
-Command : /timelapse <start-stop> [ block per tick ]
+Command : /timelapse <start-stop> [ block per tick ] [ shape destroy block ]
 
 Example : ```/timelapse start 5```, ```/timelapse stop```
 
