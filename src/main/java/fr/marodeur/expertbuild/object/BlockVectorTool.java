@@ -372,6 +372,43 @@ public class BlockVectorTool implements Cloneable {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
+    public Deque<BlockVectorTool> XZRandomDiagonal(GlueList<BlockVectorTool> blockVectorTools) {
+
+        Random random = new Random();
+        int corner = random.nextInt(4);
+
+        System.out.println("corner = " + corner);
+
+        // Ajuster le tri en fonction du coin sélectionné
+        Comparator<BlockVectorTool> comparator;
+        switch (corner) {
+            case 0:
+                // Diagonale depuis le coin bas-gauche (x + z)
+                comparator = Comparator.comparingInt(block -> block.getBlockX() + block.getBlockZ());
+                break;
+            case 1:
+                // Diagonale depuis le coin bas-droit (x - z)
+                comparator = Comparator.comparingInt(block -> block.getBlockX() - block.getBlockZ());
+                break;
+            case 2:
+                // Diagonale depuis le coin haut-gauche (-x + z)
+                comparator = Comparator.comparingInt(block -> -block.getBlockX() + block.getBlockZ());
+                break;
+            case 3:
+                // Diagonale depuis le coin haut-droit (-x - z)
+                comparator = Comparator.comparingInt(block -> -block.getBlockX() - block.getBlockZ());
+                break;
+            default:
+                comparator = Comparator.comparingInt(block -> block.getBlockX() + block.getBlockZ());
+                break;
+        }
+
+        // Trier la GlueList en utilisant l'API Stream
+        return blockVectorTools.stream()
+                .sorted(comparator)
+                .collect(Collectors.toCollection(ArrayDeque::new));
+    }
+
     public Deque<BlockVectorTool> XZCylinder(GlueList<BlockVectorTool> blockVectorTools) {
 
         // Définir un point central (par exemple, la moyenne des positions)

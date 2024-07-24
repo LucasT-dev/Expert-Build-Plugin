@@ -166,6 +166,10 @@ public class CommandTimelapse extends AbstractCommand {
 
                         layer = new BlockVectorTool().XZDiagonal(sortList);
                     }
+                    if (args[2].contains("random_diagonal")) {
+
+                        layer = new BlockVectorTool().XZRandomDiagonal(sortList);
+                    }
                     if (args[2].contains("cylinder")) {
 
                         layer = new BlockVectorTool().XZCylinder(sortList);
@@ -231,6 +235,10 @@ public class CommandTimelapse extends AbstractCommand {
                         if (args[2].contains("diagonal")) {
 
                             layer = new BlockVectorTool().XZDiagonal(sortList);
+                        }
+                        if (args[2].contains("random_diagonal")) {
+
+                            layer = new BlockVectorTool().XZRandomDiagonal(sortList);
                         }
                         if (args[2].contains("cylinder")) {
 
@@ -415,7 +423,7 @@ public class CommandTimelapse extends AbstractCommand {
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // START int trier
-        subCommandSender.addSubCommand(new SubCommandSelector().getList(2,Arrays.asList("creasing", "diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral"))
+        subCommandSender.addSubCommand(new SubCommandSelector().getList(2,Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral"))
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // START - flag
