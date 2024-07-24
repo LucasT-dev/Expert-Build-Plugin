@@ -1,9 +1,11 @@
 package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.AdvancedParticleOperation;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -57,12 +59,12 @@ public class FAWEListener implements Listener {
 
 				if (bb.getFlyMode()) {
 
-					new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
+					new FaweAPI(p).setPrimaryPos(BlockVector3.at(
 							p.getLocation().getX(),
 							p.getLocation().getY(),
 							p.getLocation().getZ()));
 
-					if (new UtilsFAWE(p).isCompleteSelection()) {
+					if (new FaweAPI(p).isCompleteSelection()) {
 
 						bb.sendMessage("expbuild.message.selection.set_pos_1_with_area",
                                 true, new String[]{
@@ -87,12 +89,12 @@ public class FAWEListener implements Listener {
 
 				if (bb.getFlyMode()) {
 
-					new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
+					new FaweAPI(p).setSecondaryPos(BlockVector3.at(
 							p.getLocation().getX(),
 							p.getLocation().getY(),
 							p.getLocation().getZ()));
 
-					if (new UtilsFAWE(p).isCompleteSelection()) {
+					if (new FaweAPI(p).isCompleteSelection()) {
 
 						bb.sendMessage("expbuild.message.selection.set_pos_2_with_area",
                                 true, new String[]{(int) p.getLocation().getX() + ", "
@@ -184,7 +186,7 @@ public class FAWEListener implements Listener {
 					return;
 				}
 
-				new UtilsFAWE(p).clearSelection();
+				new FaweAPI(p).clearSelection();
 				bb.sendMessage("expbuild.message.selection.selection_clear", true);
 
 				if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//sel"}).getMessage());

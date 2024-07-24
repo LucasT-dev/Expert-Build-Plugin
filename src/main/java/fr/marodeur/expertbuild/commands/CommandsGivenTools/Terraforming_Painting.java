@@ -1,6 +1,7 @@
 package fr.marodeur.expertbuild.commands.CommandsGivenTools;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.ItemBuilder;
@@ -120,12 +121,12 @@ public class Terraforming_Painting implements CommandExecutor {
 
 				if (!p.hasPermission("worldedit.selection.pos")) return false;
 
-				new UtilsFAWE(p).setPrimaryPos(BlockVector3.at(
+				new FaweAPI(p).setPrimaryPos(BlockVector3.at(
 						p.getLocation().getX(),
 						p.getLocation().getY(),
 						p.getLocation().getZ()));
 
-				if (new UtilsFAWE(p).isCompleteSelection()) {
+				if (new FaweAPI(p).isCompleteSelection()) {
 
 					BukkitPlayer actor = BukkitAdapter.adapt(p);
 
@@ -155,7 +156,7 @@ public class Terraforming_Painting implements CommandExecutor {
 
 				if (!p.hasPermission("worldedit.selection.pos")) return false;
 
-				new UtilsFAWE(p).setSecondaryPos(BlockVector3.at(
+				new FaweAPI(p).setSecondaryPos(BlockVector3.at(
 						p.getLocation().getX(),
 						p.getLocation().getY(),
 						p.getLocation().getZ()));
@@ -198,24 +199,24 @@ public class Terraforming_Painting implements CommandExecutor {
 			}
 
 			case "cube" -> {
-				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CUBOID);
+				new FaweAPI(p).setSelectionType(RegionSelectorType.CUBOID);
 				bb.sendMessage("expbuild.message.selection.set_selection", true, new String[]{"cuboid"});
 			}
 
 			case "convex" -> {
-				new UtilsFAWE(p).setSelectionType(RegionSelectorType.CONVEX_POLYHEDRON);
+				new FaweAPI(p).setSelectionType(RegionSelectorType.CONVEX_POLYHEDRON);
 				bb.sendMessage("expbuild.message.selection.set_selection", true, new String[]{"convex"});
 
 			}
 
 			case "poly" -> {
-				new UtilsFAWE(p).setSelectionType(RegionSelectorType.POLYGON);
+				new FaweAPI(p).setSelectionType(RegionSelectorType.POLYGON);
 				bb.sendMessage("expbuild.message.selection.set_selection", true, new String[]{"poly"});
 
 			}
 
 			case "sel" -> {
-				new UtilsFAWE(p).clearSelection();
+				new FaweAPI(p).clearSelection();
 				bb.sendMessage("expbuild.message.selection.selection_clear", true);
 
 			}

@@ -17,7 +17,6 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.math.Vector3;
 import com.sk89q.worldedit.math.transform.AffineTransform;
-import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
@@ -29,12 +28,9 @@ import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class FaweAPI {
 
@@ -56,7 +52,6 @@ public class FaweAPI {
     private RegionSelector getRegionSelector() {
         return getLocalSession().getRegionSelector(this.bukkitPlayer.getWorld());
     }
-
 
 
     public FaweAPI setSelectionType(@NotNull RegionSelectorType regionSelectorType) {
@@ -99,9 +94,6 @@ public class FaweAPI {
         this.bukkitPlayer.getWorldForEditing().refreshChunk(chunk.getX(), chunk.getZ());
         return this;
     }
-
-
-
 
 
     public Pattern getPattern(String s) {
