@@ -9,20 +9,11 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
@@ -41,8 +32,7 @@ public class SpikeBrush extends AbstractBrush {
 
     @Override
     public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
-        return false;
+        return spectralToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
@@ -50,32 +40,35 @@ public class SpikeBrush extends AbstractBrush {
 
         Location l = (Location) loc;
         Location pl = (Location) ploc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
-        GlueList<BlockVec4> bv4 = new GlueList<>();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        GlueList<BlockVectorTool> sphere = new GlueList<>();
 
-                    ArrayList<BlockVec4> sphere = new ArrayList<>();
+        Location loc1 = l.clone()
+                .add(-radius, -radius, -radius);
+        Location loc2 = l.clone()
+                .add(+radius, +radius, +radius);
 
-                    sphere.addAll(new BlockVec4().getPointInSphere(pl, radius, brushBuilder.getMaterial()));
+        for (int x = loc1.getBlockX(); x <= loc2.getBlockX(); x++) {
+            for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
+                for (int z = loc1.getBlockZ(); z <= loc2.getBlockZ(); z++) {
 
-                    sphere.forEach(blockVec4 ->
-                            bv4.addAll(blockVec4.getPointInto2Point(blockVec4.toLocation(l.getWorld()), l, 1, brushBuilder.getMaterial())));
+                    Location block = new Location(l.getWorld(), x, y, z);
 
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (l.distance(block) <= radius) {
+                        sphere.add(new BlockVectorTool().toBlockVectorTool(block));
+                    }
                 }
             }
-        });
-        return false;
+        }
+
+        sphere.forEach(bvt ->
+                this.addBlock(bvt.getBlockVectorBetweenTwoPoint(new BlockVectorTool().toBlockVectorTool(pl), 1)));
+
+        return true;
     }
 
     @Override
@@ -83,31 +76,34 @@ public class SpikeBrush extends AbstractBrush {
 
         Location l = (Location) loc;
         Location pl = (Location) ploc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
-        GlueList<BlockVec4> bv4 = new GlueList<>();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        ArrayList<BlockVectorTool> sphere = new ArrayList<>();
 
-                    ArrayList<BlockVec4> sphere = new ArrayList<>();
+        Location loc1 = pl.clone()
+                .add(-radius, -radius, -radius);
+        Location loc2 = pl.clone()
+                .add(+radius, +radius, +radius);
 
-                    sphere.addAll(new BlockVec4().getPointInSphere(l, radius, brushBuilder.getPattern()));
+        for (int x = loc1.getBlockX(); x <= loc2.getBlockX(); x++) {
+            for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
+                for (int z = loc1.getBlockZ(); z <= loc2.getBlockZ(); z++) {
 
-                    sphere.stream().forEach(blockVec4 ->
-                            bv4.addAll(blockVec4.getPointInto2Point(blockVec4.toLocation(l.getWorld()), pl, 1, brushBuilder.getPattern())));
+                    Location block = new Location(l.getWorld(), x, y, z);
 
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    if (pl.distance(block) <= radius) {
+                        sphere.add(new BlockVectorTool().toBlockVectorTool(block));
+                    }
                 }
             }
-        });
-        return false;
+        }
+
+        sphere.forEach(bvt ->
+                this.addBlock(bvt.getBlockVectorBetweenTwoPoint(new BlockVectorTool().toBlockVectorTool(l), 1)));
+
+        return true;
     }
 }

@@ -43,11 +43,10 @@ public class DrainBrush extends AbstractBrush {
         this.setPattern("0");
 
         Location loc1 = l.clone()
-                .add(-radius, -radius, -radius)
-                .getBlock().getLocation();
+                .add(-radius, -radius, -radius);
+
         Location loc2 = l.clone()
-                .add(+radius, +radius, +radius)
-                .getBlock().getLocation();
+                .add(+radius, +radius, +radius);
 
         for (int x = loc1.getBlockX(); x <= loc2.getBlockX(); x++) {
             for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {

@@ -9,24 +9,11 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.function.pattern.Pattern;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 public class SphereBrush extends AbstractBrush {
 
@@ -54,7 +41,7 @@ public class SphereBrush extends AbstractBrush {
         this.setBrushBuilder(brushBuilder);
         this.setPattern(brushBuilder.getPattern());
 
-        apply(middlePoint, radius, brushBuilder.getPattern());
+        apply(middlePoint, radius);
 
         return true;
     }
@@ -69,14 +56,13 @@ public class SphereBrush extends AbstractBrush {
         return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
-    private void apply(@NotNull Location middlePoint, int radius, Pattern pattern) {
+    private void apply(Location middlePoint, int radius) {
 
         Location loc1 = middlePoint.clone()
-                .add(-radius, -radius, -radius)
-                .getBlock().getLocation();
+                .add(-radius, -radius, -radius);
+
         Location loc2 = middlePoint.clone()
-                .add(+radius, +radius, +radius)
-                .getBlock().getLocation();
+                .add(+radius, +radius, +radius);
 
         for (int x = loc1.getBlockX(); x <= loc2.getBlockX(); x++) {
             for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
