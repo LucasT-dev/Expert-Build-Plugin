@@ -37,9 +37,6 @@
                             <paperweight-mappings-namespace>spigot</paperweight-mappings-namespace>
                         </manifestEntries>
 
-                        <source>21</source>
-                        <target>21</target>
-
                     </archive>
 
                 </configuration>
