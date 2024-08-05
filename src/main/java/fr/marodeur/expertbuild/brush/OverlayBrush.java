@@ -10,14 +10,11 @@
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import org.bukkit.Location;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class OverlayBrush extends AbstractBrush {
 
@@ -32,16 +29,48 @@ public class OverlayBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         int brushSize = brushBuilder.getRadius();
         Location l = (Location) loc;
-        List<BlockVec4> bv4 = new ArrayList<>();
+
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
+
+
+        for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
+            for (int z = l.getBlockZ() + brushSize; z >= l.getBlockZ() - brushSize; z--) {
+
+                if (l.distance(new Location(l.getWorld(), x, l.getY(), z)) <= brushSize) {
+
+                    for (int y = l.getBlockY() + brushSize; l.getBlockY() + brushSize >= l.getBlockY() - brushSize; y--) {
+
+                        Location floc = new Location(l.getWorld(), x, y, z);
+
+                        if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
+                            this.addBlock(new BlockVectorTool().toBlockVectorTool(floc));
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
+        int brushSize = brushBuilder.getRadius();
+        Location l = (Location) loc;
+
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
         for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
 
@@ -54,42 +83,12 @@ public class OverlayBrush extends AbstractBrush {
                         Location floc = new Location(l.getWorld(), x, y, z);
 
                         if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
-                            bv4.add(new BlockVec4(floc, brushBuilder.getPattern()));
-                            break;
+                            this.addBlock(new BlockVectorTool().toBlockVectorTool(floc).add(0, 1, 0));
                         }
                     }
                 }
             }
         }
-        new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-    }
-
-    @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
-        int brushSize = brushBuilder.getRadius();
-        Location l = (Location) loc;
-        List<BlockVec4> bv4 = new ArrayList<>();
-
-        for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
-
-            for (int z = l.getBlockZ() + brushSize; z >= l.getBlockZ() - brushSize; z--) {
-
-                if (l.distance(new Location(l.getWorld(), x, l.getY(), z)) <= brushSize) {
-
-                    for (int y = l.getBlockY() + brushSize; l.getBlockY() + brushSize >= l.getBlockY() - brushSize; y--) {
-
-                        Location floc = new Location(l.getWorld(), x, y, z);
-
-                        if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
-                            floc.setY(y+1);
-                            bv4.add(new BlockVec4(floc, brushBuilder.getPattern()));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
+        return true;
     }
 }

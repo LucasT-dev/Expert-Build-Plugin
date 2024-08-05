@@ -29,6 +29,7 @@ import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -240,15 +241,8 @@ public class FaweAPI {
         long startTime = System.currentTimeMillis();
         int editedBlock;
 
-        try {
-
-            editsession.setFastMode(false);
-
-            editedBlock = editsession.setBlocks(region, pattern);
-
-        } finally {
-            localSession.remember(editsession);
-        }
+        editedBlock = editsession.setBlocks(region, pattern);
+        localSession.remember(editsession);
 
         long endTime = System.currentTimeMillis();
 
@@ -287,7 +281,40 @@ public class FaweAPI {
         long endTime = System.currentTimeMillis();
 
         if (sendMessage) this.sendSetBlockMessage(startTime, endTime, blocks.size(), 0, 0);
+    }
 
+    public void setBlock(GlueList<BlockVectorTool> blocks, Material material, boolean sendMessage) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(this.bukkitPlayer);
+        EditSession editsession = localSession.createEditSession(this.bukkitPlayer);
+
+        long startTime = System.currentTimeMillis();
+
+        try {
+
+            editsession.setFastMode(false);
+
+            blocks.forEach(block -> {
+
+                try {
+                    editsession.setBlock(Vector3.at(
+                                    block.getX(),
+                                    block.getY(),
+                                    block.getZ()).toBlockPoint(),
+                            BukkitAdapter.asBlockType(material));
+
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            });
+            localSession.remember(editsession);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        if (sendMessage) this.sendSetBlockMessage(startTime, endTime, blocks.size(), 0, 0);
     }
 
     private void sendSetBlockMessage(long startTime, long endTime, int blockModified, int biomeModified, int entityModified) {

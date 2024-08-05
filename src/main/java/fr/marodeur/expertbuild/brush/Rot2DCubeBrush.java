@@ -9,23 +9,19 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
+import com.sk89q.worldedit.math.BlockVector2;
+import com.sk89q.worldedit.regions.selector.Polygonal2DRegionSelector;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.math.BlockVector3;
-import com.sk89q.worldedit.regions.Polygonal2DRegion;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Rot2DCubeBrush extends AbstractBrush {
 
@@ -40,68 +36,54 @@ public class Rot2DCubeBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
         Location pl = (Location) ploc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
-        GlueList<BlockVec4> bv4 = new GlueList<>();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        int radiusCube = (int) Math.sqrt(radius * radius + radius * radius);
 
-                    int radiusCube = (int) Math.sqrt(radius * radius + radius * radius);
+        Location ldir = new BlockVec4(l).getPointAngle(0, pl.getYaw(), radiusCube, l.getWorld());
 
-                    Location ldir = new BlockVec4(l).getPointAngle(0, pl.getYaw(), radiusCube, l.getWorld());
+        int dx1 = ldir.getBlockX() - l.getBlockX();
+        int dz1 = ldir.getBlockZ() - l.getBlockZ();
 
-                    int dx1 = ldir.getBlockX() - l.getBlockX();
-                    int dz1 = ldir.getBlockZ() - l.getBlockZ();
+        //Les 4 coins du carré
+        Location l1 = ldir.add(dz1, l.getBlockY(), -dx1);
 
-                    //Les 4 coins du carré
-                    Location l1 = ldir.add(dz1, l.getBlockY(), -dx1);
+        int dx2 = l1.getBlockX() - l.getBlockX();
+        int dz2 = l1.getBlockZ() - l.getBlockZ();
 
-                    int dx2 = l1.getBlockX() - l.getBlockX();
-                    int dz2 = l1.getBlockZ() - l.getBlockZ();
+        Location l2 = l.clone().add(dz2, l.getBlockY(), -dx2);
+        Location l3 = l.clone().add(-dz2, l.getBlockY(), dx2);
+        Location l4 = l.clone().add(-dx2, l.getBlockY(), -dz2);
 
-                    Location l2 = l.clone().add(dz2, l.getBlockY(), -dx2);
-                    Location l3 = l.clone().add(-dz2, l.getBlockY(), dx2);
-                    Location l4 = l.clone().add(-dx2, l.getBlockY(), -dz2);
 
-                    Polygonal2DRegion polygonal2DRegion = new Polygonal2DRegion(BukkitAdapter.adapt(l.getWorld()));
+        List<BlockVector2> point = new ArrayList<>(4);
+        point.add(BlockVector2.at(l1.getBlockX(), l1.getBlockZ()));
+        point.add(BlockVector2.at(l2.getBlockX(), l2.getBlockZ()));
+        point.add(BlockVector2.at(l4.getBlockX(), l4.getBlockZ()));
+        point.add(BlockVector2.at(l3.getBlockX(), l3.getBlockZ()));
 
-                    polygonal2DRegion.addPoint(BlockVector3.at(l1.getBlockX(), l.getBlockY(), l1.getBlockZ()));
-                    polygonal2DRegion.addPoint(BlockVector3.at(l2.getBlockX(), l.getBlockY(), l2.getBlockZ()));
-                    polygonal2DRegion.addPoint(BlockVector3.at(l4.getBlockX(), l.getBlockY(), l4.getBlockZ()));
-                    polygonal2DRegion.addPoint(BlockVector3.at(l3.getBlockX(), l.getBlockY(), l3.getBlockZ()));
 
-                    polygonal2DRegion.forEach(blockVector3 -> {
+        Polygonal2DRegionSelector polygonal2DRegionSelector = new Polygonal2DRegionSelector(BukkitAdapter.adapt(l.getWorld()), point, l.getBlockY(), l.getBlockY() + radiusCube);
 
-                        for (int i = l.getBlockY(); i < l.getBlockY() + (2 * radiusCube); i++) {
-                            bv4.add(new BlockVec4(blockVector3.getBlockX(), i, blockVector3.getBlockZ(), brushBuilder.getPattern()));
-                        }
-                    });
+        polygonal2DRegionSelector.getRegion().stream().forEach(bv3 ->  this.addBlock(new BlockVectorTool(bv3.x(), bv3.y(), bv3.z())));
 
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        return true;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }

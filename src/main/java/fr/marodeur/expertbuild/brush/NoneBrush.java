@@ -25,17 +25,20 @@ public class NoneBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
         brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
         brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
+        return false;
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
         brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
+        return false;
     }
 }

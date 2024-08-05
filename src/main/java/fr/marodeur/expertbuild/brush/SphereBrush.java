@@ -13,6 +13,7 @@ import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
@@ -28,8 +29,6 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 public class SphereBrush extends AbstractBrush {
-
-    private static final GlueList<BlockVec4> bv4 = new GlueList<>();
 
     @Override
     public String getBrushName() {
@@ -47,37 +46,27 @@ public class SphereBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        bv4.clear();
         Location middlePoint = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        apply(middlePoint, radius, brushBuilder.getPattern());
 
-                    apply(middlePoint, radius, brushBuilder.getPattern());
-
-                } finally {
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-                }
-            }
-        });
+        return true;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     private void apply(@NotNull Location middlePoint, int radius, Pattern pattern) {
@@ -96,7 +85,7 @@ public class SphereBrush extends AbstractBrush {
                     Location loc = new Location(middlePoint.getWorld(), x, y, z);
 
                     if (middlePoint.distance(loc) <= radius) {
-                        bv4.add(new BlockVec4(loc, pattern));
+                        this.addBlock(new BlockVectorTool().toBlockVectorTool(loc));
                     }
                 }
             }

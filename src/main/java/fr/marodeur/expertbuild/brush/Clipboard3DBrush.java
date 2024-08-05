@@ -30,7 +30,7 @@ public class Clipboard3DBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
 
@@ -70,15 +70,16 @@ public class Clipboard3DBrush extends AbstractBrush {
                 ));
 
         new UtilsFAWE(brushBuilder.getPlayer()).setBlockList(brushBuilder.getPlayer(), bv4, false);
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }

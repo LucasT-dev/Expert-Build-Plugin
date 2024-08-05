@@ -9,22 +9,11 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 public class DrainBrush extends AbstractBrush {
 
@@ -39,19 +28,19 @@ public class DrainBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
         Location pl = (Location) ploc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
-        GlueList<BlockVec4> bv4 = new GlueList<>();
+
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern("0");
 
         Location loc1 = l.clone()
                 .add(-radius, -radius, -radius)
@@ -60,39 +49,26 @@ public class DrainBrush extends AbstractBrush {
                 .add(+radius, +radius, +radius)
                 .getBlock().getLocation();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        for (int x = loc1.getBlockX(); x <= loc2.getBlockX(); x++) {
+            for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
+                for (int z = loc1.getBlockZ(); z <= loc2.getBlockZ(); z++) {
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+                    Location bloc = new Location(pl.getWorld(), x, y, z);
 
-                    for (int x = loc1.getBlockX(); x <= loc2.getBlockX(); x++) {
-                        for (int y = loc1.getBlockY(); y <= loc2.getBlockY(); y++) {
-                            for (int z = loc1.getBlockZ(); z <= loc2.getBlockZ(); z++) {
+                    if (l.distance(bloc) <= radius) {
 
-                                Location bloc = new Location(pl.getWorld(), x, y, z);
-
-                                if (l.distance(bloc) <= radius) {
-
-                                    if (bloc.getBlock().isLiquid()) {
-                                        bv4.add(new BlockVec4(bloc, Material.AIR, brushBuilder.getPlayer()));
-                                    }
-                                }
-                            }
+                        if (bloc.getBlock().isLiquid()) {
+                            this.addBlock(new BlockVectorTool().toBlockVectorTool(bloc));
                         }
                     }
-
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
             }
-        });
+        }
+        return true;
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        spectralToolBrush(brushBuilder, loc, ploc);
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return spectralToolBrush(brushBuilder, loc, ploc);
     }
 }

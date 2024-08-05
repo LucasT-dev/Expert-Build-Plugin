@@ -9,26 +9,17 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
-import java.util.List;
 import java.util.Set;
 
 public class EraserBrush extends AbstractBrush {
@@ -50,59 +41,39 @@ public class EraserBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location middlePoint = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern("0");
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        apply(middlePoint, radius, true);
 
-                    apply(middlePoint, radius, true);
-
-                } finally {
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), (List<BlockVec4>) bv4.clone(), false);
-                }
-            }
-            bv4.clear();
-        });
+        return true;
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location middlePoint = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern("0");
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        apply(middlePoint, radius, false);
 
-                    apply(middlePoint, radius, false);
-
-                } finally {
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), (List<BlockVec4>) bv4.clone(), false);
-                }
-            }
-            bv4.clear();
-        });
+        return true;
     }
 
-    private static void apply(@NotNull Location middlePoint, int radius, boolean deleteFluid) {
+    private void apply(@NotNull Location middlePoint, int radius, boolean deleteFluid) {
 
         Location loc1 = middlePoint.clone()
                 .add(-radius, -radius, -radius)
@@ -120,11 +91,11 @@ public class EraserBrush extends AbstractBrush {
                     if (middlePoint.distance(loc) <= radius) {
 
                         if (!EXCLUSIVE_MATERIALS.contains(loc.getBlock().getType())) {
-                            bv4.add(new BlockVec4(loc, Material.AIR));
+                            this.addBlock(new BlockVectorTool().toBlockVectorTool(loc));
                         }
 
                         if (loc.getBlock().isLiquid() && deleteFluid) {
-                            bv4.add(new BlockVec4(loc, Material.AIR));
+                            this.addBlock(new BlockVectorTool().toBlockVectorTool(loc));
                         }
                     }
                 }

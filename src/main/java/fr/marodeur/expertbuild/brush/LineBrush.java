@@ -10,15 +10,7 @@
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.*;
-
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
 
 import org.bukkit.Location;
 
@@ -28,7 +20,7 @@ import java.util.UUID;
 
 public class LineBrush extends AbstractBrush {
 
-    private final HashMap<UUID,ArrayList<BlockVec4>> point = new HashMap<>();
+    private final HashMap<UUID,ArrayList<BlockVectorTool>> point = new HashMap<>();
     Configuration conf = Main.configuration();
 
 
@@ -43,94 +35,68 @@ public class LineBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
 
         if (!point.containsKey(brushBuilder.getUUID())) {
 
-            ArrayList<BlockVec4> pointList = new ArrayList<>();
-            pointList.add(new BlockVec4(l));
+            ArrayList<BlockVectorTool> pointList = new ArrayList<>();
+            pointList.add(new BlockVectorTool().toBlockVectorTool(l));
 
             point.put(brushBuilder.getUUID(), pointList);
             brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
 
         } else {
 
-            ArrayList<BlockVec4> pointList = new ArrayList<>();
-            pointList.addAll(point.get(brushBuilder.getUUID()));
+            ArrayList<BlockVectorTool> pointList = new ArrayList<>(point.get(brushBuilder.getUUID()));
 
             //en config
             if (pointList.size() >= conf.getMax_point_saved()) {
                 point.replace(brushBuilder.getUUID(), pointList);
                 brushBuilder.sendMessage("expbuild.message.brush.point_not_save", true);
 
-                return;
+                return false;
             }
 
-            pointList.add(new BlockVec4(l));
+            pointList.add(new BlockVectorTool().toBlockVectorTool(l));
             point.replace(brushBuilder.getUUID(), pointList);
             brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
 
         }
+        return false;
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        Location l = (Location) loc;
-        Location pl = (Location) ploc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        GlueList<BlockVec4> bv4 = new GlueList<>();
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
-        try (EditSession editsession = localSession.createEditSession(actor)) {
+        if (point.containsKey(brushBuilder.getUUID())) {
 
-            try {
-                editsession.setFastMode(false);
+            ArrayList<BlockVectorTool> points = point.get(brushBuilder.getUUID());
 
-                spectralToolBrush(brushBuilder, loc, ploc);
+            for (int i = 0; i < points.size() - 1; i++) {
 
-                if (point.containsKey(brushBuilder.getUUID())) {
+                BlockVectorTool start = points.get(i);
+                BlockVectorTool end = points.get(i + 1);
 
-                    ArrayList<BlockVec4> bv41 = point.get(brushBuilder.getUUID());
+                this.addBlock(start.getBlockVectorBetweenTwoPoint(end, 1));
 
-                    for (int i = 0; i <= bv41.size(); i++) {
-
-                        if (i == bv41.size() - 1) {
-
-                            point.get(brushBuilder.getUUID()).stream().forEach(blockVec4 -> {
-
-                                blockVec4.setMat(brushBuilder.getMaterial());
-                                bv4.add(blockVec4);
-
-                                new UtilsFAWE(brushBuilder.getPlayer()).setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-
-                                point.remove(brushBuilder.getUUID());
-
-                            });
-                            return;
-                        }
-
-                        BlockVec4 bv42 = bv41.get(i);
-
-                        BlockVec4 bv421 = bv41.get(i + 1);
-                        bv4.addAll(new BlockVec4()
-                                .getPointInto2Point(new Location(pl.getWorld(), bv42.getX(), bv42.getY(), bv42.getZ()),
-                                        new Location(pl.getWorld(), bv421.getX(), bv421.getY(), bv421.getZ()),
-                                        1,
-                                        brushBuilder.getMaterial()
-                                ));
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
             }
+            point.remove(brushBuilder.getUUID());
+            return true;
+        } else {
+
+            //Todo Mettre en config et recup spectral arrow en config
+            brushBuilder.getPlayer().sendMessage(Main.prefix + " Use the spectral arrow for add new point");
         }
+        return false;
     }
 }

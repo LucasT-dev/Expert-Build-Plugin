@@ -28,7 +28,12 @@ import java.util.List;
 
 public class BrushCommand extends AbstractCommand {
 
-    private static final Configuration conf = Main.configuration();
+    private static final Configuration CONFIG;
+
+    static {
+
+        CONFIG = Main.configuration();
+    }
 
     @Override
     public String getCommand() {
@@ -65,7 +70,7 @@ public class BrushCommand extends AbstractCommand {
         Integer radius = 0;
         Biome biome;
 
-        switch (args[0]) {
+        switch (args[0].toLowerCase()) {
 
             case "material" -> {
 
@@ -82,10 +87,10 @@ public class BrushCommand extends AbstractCommand {
 
             case "radius" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -102,10 +107,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -126,10 +131,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -149,10 +154,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -172,10 +177,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -195,10 +200,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -209,7 +214,7 @@ public class BrushCommand extends AbstractCommand {
                         .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Sphere"});
             }
 
-            case "rot2Dcube" -> {
+            case "2dcube" -> {
 
                 if (this.getValidArgument().isPattern(p, args[1])) {
                     pattern = this.getValidArgument().getPattern(p, args[1]);
@@ -218,10 +223,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -229,7 +234,7 @@ public class BrushCommand extends AbstractCommand {
                         .setEnable(true)
                         .setPattern(pattern)
                         .setRadius(radius)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Rot2Dcube"});
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"2Dcube"});
             }
 
             // TYPE : Brush pattern
@@ -245,16 +250,16 @@ public class BrushCommand extends AbstractCommand {
                 brushBuilder.setBrush(new LineBrush())
                         .setEnable(true)
                         .setPattern(pattern)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Line"});
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"line"});
             }
 
             // TYPE : Brush integer
             case "blendball", "bb" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -267,26 +272,26 @@ public class BrushCommand extends AbstractCommand {
 
             case "drain" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
                 brushBuilder.setBrush(new DrainBrush())
                         .setEnable(true)
                         .setRadius(radius)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Drain"});
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"drain"});
 
             }
 
             case "updatechunk" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -299,21 +304,21 @@ public class BrushCommand extends AbstractCommand {
 
             case "eraser" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
                 brushBuilder.setBrush(new EraserBrush())
                         .setEnable(true)
                         .setRadius(radius)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Eraser"});
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"eraser"});
 
             }
 
-            case "clipboard3D" -> {
+            case "clipboard3d" -> {
 
                 if (this.getValidArgument().hasSelection(p)) {
                     Region selection = this.getValidArgument().getSelection(p);
@@ -352,10 +357,12 @@ public class BrushCommand extends AbstractCommand {
 
             case "erode", "e" -> {
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                System.out.println("E/ERODE");
+
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -371,7 +378,7 @@ public class BrushCommand extends AbstractCommand {
                             .setFillFaces((byte)1)
                             .setFillRecursion((byte)1)
 
-                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode lift"});
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -381,7 +388,7 @@ public class BrushCommand extends AbstractCommand {
                             .setErosionRecursion((byte) 1)
                             .setFillFaces((byte) 5)
                             .setFillRecursion((byte) 1)
-                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode melt"});
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -391,7 +398,7 @@ public class BrushCommand extends AbstractCommand {
                             .setErosionRecursion((byte) 1)
                             .setFillFaces((byte) 2)
                             .setFillRecursion((byte) 1)
-                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode fill"});
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -401,7 +408,7 @@ public class BrushCommand extends AbstractCommand {
                             .setErosionRecursion((byte) 1)
                             .setFillFaces((byte) 3)
                             .setFillRecursion((byte) 1)
-                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode smooth"});
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBrush())
                             .setRadius(radius)
@@ -411,16 +418,18 @@ public class BrushCommand extends AbstractCommand {
                             .setErosionRecursion((byte) 1)
                             .setFillFaces((byte) 6)
                             .setFillRecursion((byte) 1)
-                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Erode floatClean"});
+                            .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode floatClean"});
                 }
             }
 
             case "eb", "erodeblend" -> {
 
-                if (this.getValidArgument().isInteger(args[2], 0, conf.getMaxRayonBrush())) {
+                System.out.println("EB/ERODEBLEND");
+
+                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, conf.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -514,7 +523,7 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[4], 0, conf.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[4], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[4]);
                 } else {
                     this.getValidArgument().sendMessageInvalidInteger(executor, args[4], 0, 6);
@@ -574,12 +583,12 @@ public class BrushCommand extends AbstractCommand {
 
                 new ArgumentLength(3, "biome", 0, "/flower biome <biome> <radius>", 2),
 
-                new ArgumentLength(3, "line", 0, "/flower line <pettern>", 2),
+                new ArgumentLength(2, "line", 0, "/flower line <pattern>", 2),
 
                 new ArgumentLength(3, "overlay", 0, "/flower overlay <pattern> <radius>", 2),
                 new ArgumentLength(3, "spike", 0, "/flower spike <pattern> <radius>", 2),
-                new ArgumentLength(3, "cube", 0, "/flower cube <pattern> <radius>", 2),
-                new ArgumentLength(3, "rot2Dcube", 0, "/flower rot2Dcube <pattern> <radius>", 2),
+                new ArgumentLength(3, "cube", 0, "/flower cube <pattern> <height>", 2),
+                new ArgumentLength(3, "2dcube", 0, "/flower 2Dcube <pattern> <height>", 2),
                 new ArgumentLength(3, "sphere", 0, "/flower sphere <pattern> <radius>", 2),
 
                 new ArgumentLength(2, "updatechunk", 0, "/flower updatechunk <radius>", 2),
@@ -647,7 +656,7 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.line", new ConditionArgumentBefore("line", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("s", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("rot2Dcube", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("2Dcube", 0)));
 
             // Brush with pattern/biome and integer <integer>
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.overlay", new ConditionArgumentBefore("overlay", 0)));

@@ -63,12 +63,12 @@ public class ErodeBlendBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         bv4.clear();
         Location l = (Location) loc;
@@ -91,7 +91,18 @@ public class ErodeBlendBrush extends AbstractBrush {
                 final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
 
+                // cylinder
                 for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
+                    for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
+                        if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
+                            for (int y = v.getBlockY()-radius; y <= v.getBlockY() + radius; ++y) {
+                                spherePoint.add(new Vector(x, y, z));
+                            }
+                        }
+                    }
+                }
+
+                /*for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
                     for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
                         for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
                             if (new Vector(x, y, z).isInSphere(v, radius)) {
@@ -99,7 +110,7 @@ public class ErodeBlendBrush extends AbstractBrush {
                             }
                         }
                     }
-                }
+                }*/
 
                 for (int i = 0; i < erorionParameter[1]; ++i) {
                     erosionIteration(iterationBlockManager);
@@ -117,10 +128,12 @@ public class ErodeBlendBrush extends AbstractBrush {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+
         TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
 
 
@@ -143,7 +156,18 @@ public class ErodeBlendBrush extends AbstractBrush {
                 final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
                 final Vector v = l.toVector();
 
+                // cylinder
                 for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
+                    for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
+                        if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
+                            for (int y = v.getBlockY()-radius; y <= v.getBlockY() + radius; ++y) {
+                                spherePoint.add(new Vector(x, y, z));
+                            }
+                        }
+                    }
+                }
+
+                /*for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
                     for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
                         for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
                             if (new Vector(x, y, z).isInSphere(v, radius)) {
@@ -151,7 +175,7 @@ public class ErodeBlendBrush extends AbstractBrush {
                             }
                         }
                     }
-                }
+                }*/
 
                 for (int i = 0; i < erorionParameter[1]; ++i) {
                     erosionIteration(blockChangeTracker);
@@ -169,6 +193,7 @@ public class ErodeBlendBrush extends AbstractBrush {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
     private void erosionIteration(final @NotNull ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
@@ -248,6 +273,12 @@ public class ErodeBlendBrush extends AbstractBrush {
                     iterationBlockManager.put(currentPosition, new BlockVec4(currentBlock.getBlock().getLocation(), currentMaterial.getMat()), currentIteration);
 
                 }
+
+                /*if (!currentPosition.toLocation(iterationBlockManager.world).getBlock().getType().equals(currentMaterial.getMat())) {
+
+                    iterationBlockManager.put(currentPosition, new BlockVec4(currentBlock.getBlock().getLocation(), currentMaterial.getMat()), currentIteration);
+
+                }*/
             }
         });
     }

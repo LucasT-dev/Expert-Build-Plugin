@@ -9,9 +9,9 @@
 
 package fr.marodeur.expertbuild.brush;
 
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import org.bukkit.Location;
 
@@ -28,17 +28,18 @@ public class UpdateChunkBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        new UtilsFAWE(brushBuilder.getPlayer()).refreshChunk(((Location) loc).getChunk());
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        new FaweAPI(brushBuilder.getPlayer()).refreshChunk(((Location) loc).getChunk());
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }

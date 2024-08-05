@@ -40,12 +40,13 @@ public class SpikeBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
         Location pl = (Location) ploc;
@@ -74,10 +75,11 @@ public class SpikeBrush extends AbstractBrush {
                 }
             }
         });
+        return false;
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
         Location pl = (Location) ploc;
@@ -106,5 +108,6 @@ public class SpikeBrush extends AbstractBrush {
                 }
             }
         });
+        return false;
     }
 }

@@ -49,6 +49,11 @@ public class BlockVectorTool implements Cloneable {
         this(0, 0, 0);
     }
 
+    // Using for chunk location, and 2d position
+    public BlockVectorTool(double x, double z) {
+        this(x, 0, z);
+    }
+
 
     // Set double value
 
@@ -194,7 +199,7 @@ public class BlockVectorTool implements Cloneable {
     }
 
 
-    // rotate
+    // rotate around X axis
 
     public BlockVectorTool rotateAroundX(BlockVectorTool bvt, double degreeAngle) {
         return rotateAroundZ(bvt.getBlockY(), bvt.getBlockZ(), degreeAngle, bvt.getBlockX());
@@ -212,6 +217,8 @@ public class BlockVectorTool implements Cloneable {
         return new BlockVectorTool(x, (int) newY, (int) newZ);
     }
 
+    // rotate around Y axis
+
     public BlockVectorTool rotateAroundY(BlockVectorTool bvt, double degreeAngle) {
         return rotateAroundZ(bvt.getBlockX(), bvt.getBlockZ(), degreeAngle, bvt.getBlockY());
     }
@@ -227,6 +234,8 @@ public class BlockVectorTool implements Cloneable {
 
         return new BlockVectorTool((int) newX, y, (int) newZ);
     }
+
+    // rotate around Z axis
 
     public BlockVectorTool rotateAroundZ(BlockVectorTool bvt, double degreeAngle) {
         return rotateAroundZ(bvt.getBlockX(), bvt.getBlockY(), degreeAngle, bvt.getBlockZ());
@@ -511,6 +520,21 @@ public class BlockVectorTool implements Cloneable {
         return shapeTool;
     }
 
+    public ShapeTool getCylinderPoint(int radius, int height) {
+        ShapeTool shapeTool = new ShapeTool((2 * radius) * (2 * radius) * height);
+
+        for (int x = this.getBlockX() - radius; x <= this.getBlockX() + radius; x++) {
+            for (int z = this.getBlockZ() - radius; z <= this.getBlockZ() + radius; z++) {
+                if (new BlockVectorTool(x, this.getBlockY(), z).distance(this) < radius) {
+                    for (int y = this.getBlockY(); y <= this.getBlockY() + height; y++) {
+                        shapeTool.add(new BlockVectorTool(x, y, z));
+                    }
+                }
+            }
+        }
+        return shapeTool;
+    }
+
     public ShapeTool getCubePoint(int radius) {
 
         ShapeTool shapeTool = new ShapeTool((2 * radius) * (2 * radius));
@@ -550,7 +574,6 @@ class ShapeTool {
     public int size() {
         return toolGlueList.size();
     }
-
 
     public BlockVectorTool getRandomPoint() {
 

@@ -9,8 +9,11 @@
 
 package fr.marodeur.expertbuild.object;
 
+import com.sk89q.worldedit.function.pattern.Pattern;
+
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 
 import org.bukkit.Material;
 
@@ -18,7 +21,11 @@ import java.util.logging.Logger;
 
 public abstract class AbstractBrush {
 
+    private final GlueList<BlockVectorTool> blockVectorToolGlueList = new GlueList<>();
+    private BrushBuilder brushBuilder;
+    private Pattern pattern;
     private static final Configuration conf = Main.configuration();
+
 
     public abstract String getBrushName();
 
@@ -28,11 +35,33 @@ public abstract class AbstractBrush {
 
     public abstract String getPermission();
 
-    public abstract void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc);
 
-    public abstract void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc);
 
-    public abstract void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc);
+    public Pattern getPattern() {
+        return this.pattern;
+    }
+
+    public void setPattern(Pattern pattern) {
+        this.pattern = pattern;
+    }
+
+    public void setPattern(String stringPattern) {
+        this.pattern = new FaweAPI(brushBuilder).getPattern(stringPattern);
+    }
+
+    private BrushBuilder getBrushBuilder() {
+        return this.brushBuilder;
+    }
+
+    public void setBrushBuilder(BrushBuilder brushBuilder) {
+        this.brushBuilder = brushBuilder;
+    }
+
+    public abstract boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc);
+
+    public abstract boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc);
+
+    public abstract boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc);
 
     void execute(BrushBuilder brushBuilder, Material tool, Object loc, Object ploc) {
 
@@ -48,17 +77,55 @@ public abstract class AbstractBrush {
 
 
         if (tool.equals(Material.HONEYCOMB)) {
-            this.honeycombToolBrush(brushBuilder, loc, ploc);
+            if (this.honeycombToolBrush(brushBuilder, loc, ploc)) setBlock();
+            return;
         }
 
         if (tool.equals(conf.getTerraforming_tool_1())) {
-            this.spectralToolBrush(brushBuilder, loc, ploc);
+            if (this.spectralToolBrush(brushBuilder, loc, ploc)) setBlock();
+            return;
         }
 
         if (tool.equals(conf.getTerraforming_tool_2())) {
-            this.clayballToolBrush(brushBuilder, loc, ploc);
+            if (this.clayballToolBrush(brushBuilder, loc, ploc)) setBlock();
+            return;
         }
     }
+
+    // for débug
+    /*public void manuallySetBlock() {
+
+        setBlock();
+    }*/
+
+
+    private void setBlock() {
+
+        if (!this.blockVectorToolGlueList.isEmpty()) {
+
+            new FaweAPI(this.brushBuilder.getPlayer()).setBlock(blockVectorToolGlueList, this.pattern, false);
+
+            this.clearBlockList();
+        }
+    }
+
+    public void addBlock(BlockVectorTool blockVectorTool) {
+        blockVectorToolGlueList.add(blockVectorTool);
+    }
+
+    public void addBlock(GlueList<BlockVectorTool> blockVectorTools) {
+        blockVectorToolGlueList.addAll(blockVectorTools);
+    }
+
+    public void clearBlockList() {
+        blockVectorToolGlueList.clear();
+    }
+
+    public int size() {
+        return blockVectorToolGlueList.size();
+    }
+
+
 
     public static class RegisterBrush {
 
@@ -73,11 +140,10 @@ public abstract class AbstractBrush {
             return brushes;
         }
 
-        public RegisterBrush createBrush(AbstractBrush aClass) {
+        public void createBrush(AbstractBrush aClass) {
 
             this.save(aClass);
             logger.info(new Message.MessageSender("expbuild.message.brush.brush_registered", false, new String[]{aClass.getClass().getSimpleName()} ).getMessage());
-            return this;
         }
 
         private void save(AbstractBrush aClass) {

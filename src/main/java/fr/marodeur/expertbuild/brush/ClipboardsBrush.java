@@ -39,7 +39,7 @@ public class ClipboardsBrush extends AbstractBrush {
     }
 
     @Override
-    public void honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+    public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         ClipboardParameter clipboardParameter = brushBuilder.getClipboardParameter();
 
@@ -48,7 +48,7 @@ public class ClipboardsBrush extends AbstractBrush {
         if (clipboardParameter.getClipboardHolders().isEmpty()) {
 
             brushBuilder.sendMessage("expbuild.message.selection.no_selection_save", true);
-            return;
+            return false;
         }
 
         //Clipboard
@@ -66,16 +66,18 @@ public class ClipboardsBrush extends AbstractBrush {
 
         // paste clipboard holder
         new FaweAPI(brushBuilder.getPlayer()).pasteClipboard(clipboardHolder, flag.get('a'), flag.get('e'), flag.get('b'), new BlockVectorTool().toBlockVectorTool(l), false, 0, randomRotation, 0);
+
+        return false;
     }
 
     @Override
-    public void spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
 
     }
 
     @Override
-    public void clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
-        honeycombToolBrush(brushBuilder, loc, ploc);
+    public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
+        return honeycombToolBrush(brushBuilder, loc, ploc);
     }
 }
