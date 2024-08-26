@@ -32,16 +32,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
-
-import static fr.marodeur.expertbuild.object.BrushBuilder.registerPlayer;
 
 public class Main extends JavaPlugin {
 
@@ -205,7 +201,7 @@ public class Main extends JavaPlugin {
 
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			if (player.hasPermission("exp.register")) {
-				registerPlayer(player, false);
+				fr.marodeur.expertbuild.object.BrushBuilder.registerPlayer(player, false);
 				GOHA_Builder.registerPlayer(player);
 
 				getLogger().info(new Message.MessageSender("expbuild.message.brush.player_registered", false, new String[]{player.getName()}).getMessage());

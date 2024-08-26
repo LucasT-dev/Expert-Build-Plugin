@@ -29,8 +29,15 @@ import java.util.logging.Logger;
 
 public class BrushBuilder {
 
-    private static final Logger log = Logger.getLogger("Expert-Build");
-    private static final Configuration conf = Main.configuration();
+private static final Logger LOG;
+    private static final Configuration CONFIG;
+
+    static {
+
+        LOG = Logger.getLogger("Expert-Build");
+        CONFIG = Main.configuration();
+
+    }
 
 
     private final UUID uuid;
@@ -324,7 +331,7 @@ public class BrushBuilder {
 
     public BrushBuilder setRadius(boolean isShiftClick, boolean isRightClick) {
 
-        int maxRadius = conf.getMaxRayonBrush();
+        int maxRadius = CONFIG.getMaxRayonBrush();
         int minRadius = 0;
         int n = this.radius;
         int num;
@@ -444,14 +451,6 @@ public class BrushBuilder {
 
     }*/
 
-    public BrushBuilder sendMessage(StringBuilder msg) {
-
-        Bukkit.getPlayer(this.uuid).sendMessage(getMainPrefix() + msg);
-
-        return this;
-
-    }
-
     /**
      * Register BrushBuilder of player in HashMap
      *
@@ -477,16 +476,16 @@ public class BrushBuilder {
                 false,
                 true,
                 true,
-                conf.getDefault_material_brush(),
+                CONFIG.getDefault_material_brush(),
                 it, flowerMaterialTaux,
-                conf.getDefault_biome_brush(),
-                conf.getDefault_air_brush(),
-                conf.getDefaultBrushRayon(),
+                CONFIG.getDefault_biome_brush(),
+                CONFIG.getDefault_air_brush(),
+                CONFIG.getDefaultBrushRayon(),
                 4,
                 null,
                 null,
                 new ArrayList<>(),
-                new FaweAPI(p).getPattern(conf.getDefault_pattern_brush()),
+                new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),
                 UUID.randomUUID(),
                 new ClipboardBrush(new GlueList<>())));
     }
@@ -521,7 +520,7 @@ public class BrushBuilder {
         } else {
 
             if (sendError) {
-                log.severe(new Message.MessageSender("expbuild.message.error.error_brushbuilder", true, new String[]{p.getName()}).getMessage());
+                LOG.severe(new Message.MessageSender("expbuild.message.error.error_brushbuilder", true, new String[]{p.getName()}).getMessage());
             }
             return null;
         }
