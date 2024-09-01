@@ -172,6 +172,11 @@ public class GeneralListener implements Listener {
 	@EventHandler
 	public void onMove(@NotNull PlayerMoveEvent e) {
 		Player p = e.getPlayer();
+		UUID playerUUID = p.getUniqueId();
+		BlockVectorTool to = new BlockVectorTool().toBlockVectorTool(e.getTo());
+		BlockVectorTool from = new BlockVectorTool().toBlockVectorTool(e.getFrom());
+
+		// GetCommand in cb
 
 		if (Main.getCommand.contains(p.getUniqueId())) {
 
@@ -184,6 +189,28 @@ public class GeneralListener implements Listener {
 			CommandBlock commandBlock = (CommandBlock) b.getState();
 
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent("§7" + commandBlock.getCommand()));
+		}
+
+
+		//AreaTimer command
+
+		for (AreaTimerParameter areaTimerParameter : Main.AREA_TIMER_PARAMETERS) {
+
+			// Verifie si le joueur est entré dans la zone
+			if (areaTimerParameter.isInArea(to, e.getTo().getWorld().getName())) {
+
+				// Verifie si le joueur est pas déja enregistre dans la zone pour pouvoir l'enregister
+				if (!areaTimerParameter.playerIsAlreadyRegisterInArea(playerUUID)) {
+					areaTimerParameter.playerEnteredZone(playerUUID);
+				}
+
+			} else {
+
+				// Verifie si le joueur est pas déja enregistre dans la zone
+				if (areaTimerParameter.playerIsAlreadyRegisterInArea(playerUUID)) {
+					areaTimerParameter.playerExitedZone(playerUUID);
+				}
+			}
 		}
 	}
 
