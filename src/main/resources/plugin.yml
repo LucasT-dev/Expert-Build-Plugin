@@ -126,6 +126,10 @@ commands:
     description: advanced painting tool
     permission: exp.command.painting
 
+  explsystem:
+    description: L system generation
+    permission: exp.command.explsystem
+
   areatimer:
     description: areatimer for timing
     permission: exp.command.areatimer

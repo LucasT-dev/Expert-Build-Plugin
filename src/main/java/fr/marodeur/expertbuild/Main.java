@@ -1,5 +1,6 @@
 package fr.marodeur.expertbuild;
 
+import fr.marodeur.expertbuild.api.fawe.function.mask.StrippedMaskParser;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
 import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
