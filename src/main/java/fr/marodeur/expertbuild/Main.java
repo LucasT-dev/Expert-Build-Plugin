@@ -20,6 +20,8 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
+import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
+import fr.marodeur.expertbuild.object.fileManager.FileManager;
 
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
 
@@ -35,7 +37,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Consumer;
@@ -71,7 +72,10 @@ public class Main extends JavaPlugin {
 
 	private final InventoryManager inventoryManager = new InventoryManager(this);
 
+
 	public static WorldEditPlugin WorldEditPlugin;
+
+	private FileManager fileManager;
 
 
     @Override
@@ -83,11 +87,8 @@ public class Main extends JavaPlugin {
 
 		reloadConfig();
 
-		try {
-			reloadMessageConfig();
-		} catch (URISyntaxException e) {
-			getLogger().severe("Error loading plugin messages");
-		}
+		reloadMessageConfig();
+
 
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_enable", true).getMessage());
 		getLogger().info(" ____          ___  ");
@@ -111,24 +112,29 @@ public class Main extends JavaPlugin {
 		// Check if server is in safe environments
 		if (!isJavaSixteenMin()) onDisable();
 
-		inventoryManager.invoke();
-
 		try {
 			serverFileBuilder();
 		} catch (IOException e) {
 			getLogger().severe(new Message.MessageSender("expbuild.message.error.file_configuration_error", true).getMessage());
 		}
 
+		// LOAD MESSAGE 2
+		fileMessageManager = new Message().loadFileConfig();
+
 		loadBrush();
 
 		registerListeners();
 
+		registerCommand();
+
 		// LOAD DATA PROFILE
 		dataProfile = new DataProfile();
 
-		registerPlayerBuilder();
+		fileManager = new FileManager();
 
-		registerCommand();
+		inventoryManager.invoke();
+
+		registerPlayerBuilder();
 
 		// LISON
 		new LightweightInteractiveSystemforOptimizedParticleNavigation().loadSchedule();
@@ -136,8 +142,7 @@ public class Main extends JavaPlugin {
 		// LOAD MASK
 		loadCustomMask();
 
-		// LOAD MESSAGE 2
-		fileMessageManager = new Message().loadFileConfig();
+
 
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
@@ -200,6 +205,10 @@ public class Main extends JavaPlugin {
 
 	}
 
+	public static Main getInstance() {
+		return instance;
+	}
+
 	/**
 	 * Register player after plugin reload
 	 */
@@ -233,12 +242,10 @@ public class Main extends JavaPlugin {
 	/**
 	 * Load and reload message file (config.yml)
 	 */
-	public void reloadMessageConfig() throws URISyntaxException {
+	public void reloadMessageConfig() {
 
 		fileMessageManager = new Message().loadFileConfig();
-
 		getLogger().info("Message load");
-
 	}
 
 	/**
@@ -339,6 +346,10 @@ public class Main extends JavaPlugin {
 
 	public static AbstractBrush.RegisterBrush getBrush() {
 		return brush;
+	}
+
+	public FileManager getFileManager() {
+		return fileManager;
 	}
 
 	private void loadBrush() {
