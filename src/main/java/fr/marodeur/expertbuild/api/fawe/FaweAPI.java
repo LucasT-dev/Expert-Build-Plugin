@@ -123,6 +123,13 @@ public class FaweAPI {
         return WorldEdit.getInstance().getMaskFactory().parseFromInput(s, context);
     }
 
+    public void setMask(Mask mask) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(bukkitPlayer);
+        localSession.setMask(mask);
+
+    }
+
 
 
     public ClipboardHolder copySelection(boolean copingBiomes, boolean copingEntities, boolean saveInClipboard, boolean sendMessage) {

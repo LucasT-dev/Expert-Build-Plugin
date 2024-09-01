@@ -1,6 +1,7 @@
 package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.gui.MainGUI;
 import fr.marodeur.expertbuild.object.Configuration;
@@ -36,26 +37,52 @@ public class BrushListener implements Listener {
 
         loc = p.getTargetBlock(null, conf.getMax_brush_distance()).getLocation().clone();
 
-        if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
 
-            if (it.getType() == Material.HONEYCOMB) {
+        if (it.getType() == Material.HONEYCOMB) {
 
-                if (!brushBuilder.getEnable()) {
-                    brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
-                    return;
-                }
-                brushBuilder.executeBrush(brushBuilder, Material.HONEYCOMB, loc, p.getLocation());
+            if (!brushBuilder.getEnable()) {
+                brushBuilder.sendMessage("expbuild.message.brush.brush_disable", true);
+                return;
             }
-            if (it.getType() == conf.getTerraforming_tool_1()) {
+            brushBuilder.executeBrush(brushBuilder, Material.HONEYCOMB, loc, p.getLocation());
+        }
 
+        if (it.getType() == conf.getTerraforming_tool_1()) {
+
+            if (action.equals(Action.RIGHT_CLICK_AIR)) {
+                System.out.println("1");
                 brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_1(), loc, p.getLocation());
-            }
 
-            if (it.getType() == conf.getTerraforming_tool_2()) {
+            } else {
 
-                brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_2(), loc, p.getLocation());
+                // défini un mask
+
+                FaweAPI faweAPI = new FaweAPI(p);
+                String blockMaskString = loc.getBlock().getType().toString();
+
+                faweAPI.setMask(faweAPI.getMask(blockMaskString));
+                p.sendMessage(Main.prefix + "Mask set: " + blockMaskString);
             }
         }
+
+
+        if (it.getType() == conf.getTerraforming_tool_2()) {
+
+            if (action.equals(Action.RIGHT_CLICK_AIR)) {
+                brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_2(), loc, p.getLocation());
+
+            } else if (action.equals(Action.LEFT_CLICK_AIR)) {
+
+                // défini un mask
+
+                FaweAPI faweAPI = new FaweAPI(p);
+                String blockMaskString = loc.getBlock().getType().toString();
+
+                faweAPI.setMask(faweAPI.getMask(blockMaskString));
+                p.sendMessage(Main.prefix + "Mask set: " + blockMaskString);
+            }
+        }
+
 
         if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
 
