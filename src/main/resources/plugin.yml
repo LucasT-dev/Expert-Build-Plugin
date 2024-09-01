@@ -126,6 +126,10 @@ commands:
     description: advanced painting tool
     permission: exp.command.painting
 
+  areatimer:
+    description: areatimer for timing
+    permission: exp.command.areatimer
+
 permissions:
 
   exp.register:

@@ -1,5 +1,6 @@
 package fr.marodeur.expertbuild;
 
+import fr.marodeur.expertbuild.commands.AreaTimerCommand;
 import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
 import fr.marodeur.expertbuild.object.BrushBuilder;
@@ -60,6 +61,8 @@ public class Main extends JavaPlugin {
 
 	private static final HashMap<UUID, GOHA_Builder> GOHA = new HashMap<>();
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
+
+	public static List<AreaTimerParameter> AREA_TIMER_PARAMETERS = new ArrayList<>();
 
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
 
@@ -187,6 +190,8 @@ public class Main extends JavaPlugin {
 		getCommand("autocb").setExecutor(new CommandAutoCb());
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
 		getCommand("painting").setExecutor(new CommandPainting());
+		getCommand("areatimer").setExecutor(new AreaTimerCommand());
+
 
 		//getCommand("explsystem").setExecutor(new CommandsLSystem());
 
