@@ -11,7 +11,7 @@ public class LightweightInteractiveSystemforOptimizedParticleNavigation {
     }
 
     public void loadSchedule() {
-        Bukkit.getScheduler().runTaskTimer(Main.getInstance(), Main.scheduledWorkloadRunnable, 1, Main.configuration().getPeriod_particle());
+        Bukkit.getScheduler().runTaskTimer(Main.getInstance(), Main.scheduledWorkloadRunnable, 1, Main.getConfiguration().getPeriod_particle());
     }
 
     public void addScheduledWorkloadRunnable(ScheduledWorkload scheduledWorkload) {
