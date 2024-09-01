@@ -55,6 +55,7 @@ public class BlockVectorTool implements Cloneable {
     }
 
 
+
     // Set double value
 
     public BlockVectorTool setX(double x) {
@@ -256,29 +257,82 @@ public class BlockVectorTool implements Cloneable {
 
     // edition
 
-    public GlueList<BlockVectorTool> getBlockVectorBetweenTwoPoint(BlockVectorTool secondPoint, int space) {
-        return this.getBlockVectorBetweenTwoPoint(this, secondPoint, space);
+    public GlueList<BlockVectorTool> getBlockBetweenTwoPoint(BlockVectorTool secondPoint) {
+        return getBlockBetweenTwoPoint(this, secondPoint);
     }
-    public GlueList<BlockVectorTool> getBlockVectorBetweenTwoPoint(BlockVectorTool firstPoint, BlockVectorTool secondPoint, int space) {
 
-        GlueList<BlockVectorTool> bvtArray = new GlueList<>();
+    // Algorithme de Bresenham 3D
+    public static GlueList<BlockVectorTool> getBlockBetweenTwoPoint(BlockVectorTool start, BlockVectorTool end) {
 
-        double distance = this.distance(secondPoint);
-        Vector p1 = firstPoint.toVector();
-        Vector p2 = secondPoint.toVector();
-        Vector vector = p2.clone().subtract(p1).normalize().multiply(space);
-        double length = 0;
+        GlueList<BlockVectorTool> points = new GlueList<>();
 
-        for (; length < distance; p1.add(vector)) {
+        int x1 = start.getBlockX(), y1 = start.getBlockY(), z1 = start.getBlockZ();
+        int x2 = end.getBlockX(), y2 = end.getBlockY(), z2 = end.getBlockZ();
 
-            bvtArray.add(new BlockVectorTool(p1.getBlockX(), p1.getBlockY(), p1.getBlockZ()));
-            length += space;
+        int dx = Math.abs(x2 - x1), dy = Math.abs(y2 - y1), dz = Math.abs(z2 - z1);
+        int xs = Integer.compare(x2, x1), ys = Integer.compare(y2, y1), zs = Integer.compare(z2, z1);
 
+        int p1, p2;
+        int x = x1, y = y1, z = z1;
+
+        // Déterminer l'axe dominant et ajuster les étapes
+        if (dx >= dy && dx >= dz) {
+            p1 = 2 * dy - dx;
+            p2 = 2 * dz - dx;
+            for (int i = 0; i <= dx; i++) {
+                points.add(new BlockVectorTool(x, y, z));
+                x += xs;
+                if (p1 >= 0) {
+                    y += ys;
+                    p1 -= 2 * dx;
+                }
+                if (p2 >= 0) {
+                    z += zs;
+                    p2 -= 2 * dx;
+                }
+                p1 += 2 * dy;
+                p2 += 2 * dz;
+            }
+        } else if (dy >= dx && dy >= dz) {
+            p1 = 2 * dx - dy;
+            p2 = 2 * dz - dy;
+            for (int i = 0; i <= dy; i++) {
+                points.add(new BlockVectorTool(x, y, z));
+                y += ys;
+                if (p1 >= 0) {
+                    x += xs;
+                    p1 -= 2 * dy;
+                }
+                if (p2 >= 0) {
+                    z += zs;
+                    p2 -= 2 * dy;
+                }
+                p1 += 2 * dx;
+                p2 += 2 * dz;
+            }
+        } else {
+            p1 = 2 * dy - dz;
+            p2 = 2 * dx - dz;
+            for (int i = 0; i <= dz; i++) {
+                points.add(new BlockVectorTool(x, y, z));
+                z += zs;
+                if (p1 >= 0) {
+                    y += ys;
+                    p1 -= 2 * dz;
+                }
+                if (p2 >= 0) {
+                    x += xs;
+                    p2 -= 2 * dz;
+                }
+                p1 += 2 * dy;
+                p2 += 2 * dx;
+            }
         }
-        return bvtArray;
+
+        return points;
     }
 
-    public BlockVectorTool getBlockVectorAngle(float pitch, float yaw, double distance, World world) {
+    public BlockVectorTool getBlockVectorAngle(float pitch, float yaw, double distance) {
 
         double pitch1 = ((pitch + 90) * PI) / 180;
         double yaw1 = ((yaw + 90) * PI) / 180;
@@ -288,8 +342,11 @@ public class BlockVectorTool implements Cloneable {
         double z = Math.cos(pitch1);
 
         Vector vector = new Vector(x, z, y).multiply(distance);
+        BlockVectorTool bvt = new BlockVectorTool(vector.getX(), vector.getY(), vector.getZ());
 
-        return new BlockVectorTool(vector.getX(), vector.getY(), vector.getZ()).add(this.x, this.y, this.z);
+        bvt.add(this.x, this.y, this.z);
+
+        return bvt;
     }
 
 
@@ -319,11 +376,13 @@ public class BlockVectorTool implements Cloneable {
 
     // clone
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    public BlockVectorTool clone() {
+        try {
+            return (BlockVectorTool) super.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
     }
-
 
     // serialize
 
@@ -499,6 +558,7 @@ public class BlockVectorTool implements Cloneable {
         return new BlockVectorTool(location.getX(), location.getY(), location.getZ());
     }
 
+
     // Shape
 
     public ShapeTool getSpherePoint(int radius) {
@@ -521,6 +581,7 @@ public class BlockVectorTool implements Cloneable {
     }
 
     public ShapeTool getCylinderPoint(int radius, int height) {
+
         ShapeTool shapeTool = new ShapeTool((2 * radius) * (2 * radius) * height);
 
         for (int x = this.getBlockX() - radius; x <= this.getBlockX() + radius; x++) {
@@ -549,39 +610,6 @@ public class BlockVectorTool implements Cloneable {
             }
         }
         return shapeTool;
-    }
-}
-
-// Shape
-class ShapeTool {
-
-    private final GlueList<BlockVectorTool> toolGlueList;
-
-
-    public ShapeTool(int capacity) {
-        toolGlueList = new GlueList<>(capacity);
-    }
-
-    public ShapeTool() {
-        toolGlueList = new GlueList<>();
-    }
-
-
-    public void add(BlockVectorTool blockVectorTool) {
-        toolGlueList.add(blockVectorTool);
-    }
-
-    public int size() {
-        return toolGlueList.size();
-    }
-
-    public BlockVectorTool getRandomPoint() {
-
-        if (this.toolGlueList.isEmpty()) {
-            return BlockVectorTool.ZERO;
-        }
-
-        return this.toolGlueList.get(new Random().nextInt(this.toolGlueList.size()));
     }
 }
 

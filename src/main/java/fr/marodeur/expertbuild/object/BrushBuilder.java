@@ -9,10 +9,7 @@ import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
-import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
-import fr.marodeur.expertbuild.object.builderObjects.LeatherParameter;
-import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
-import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilderParameter;
+import fr.marodeur.expertbuild.object.builderObjects.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -35,7 +32,7 @@ private static final Logger LOG;
     static {
 
         LOG = Logger.getLogger("Expert-Build");
-        CONFIG = Main.configuration();
+        CONFIG = Main.getConfiguration();
 
     }
 
@@ -113,6 +110,10 @@ private static final Logger LOG;
 
     public LeatherParameter getLeatherParameter() {
         return Main.getDataProfile().getLeatherParameterProfile(this.uuid);
+    }
+
+    public GohaParameter getGohaParameter() {
+        return Main.getDataProfile().getGohaParameterProfile(this.uuid);
     }
 
 
@@ -468,6 +469,7 @@ private static final Logger LOG;
         BaseBlock ib = Objects.requireNonNull(BlockTypes.BARRIER).getDefaultState().toBaseBlock();
         List<BaseBlock> it = new ArrayList<>(Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib));
         List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
         Main.getDataProfile().registerPlayer(p.getUniqueId());
 
 

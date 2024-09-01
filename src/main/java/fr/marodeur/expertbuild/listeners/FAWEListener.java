@@ -14,6 +14,7 @@ import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.ConvexPolyhedralRegion;
 import com.sk89q.worldedit.regions.Region;
 
+import fr.marodeur.expertbuild.object.builderObjects.GohaParameter;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -42,7 +43,7 @@ public class FAWEListener implements Listener {
 		BukkitPlayer actor = BukkitAdapter.adapt(p);
 		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
 		Logger log = Logger.getLogger("Expert-Build");
-		Configuration conf = Main.configuration();
+		Configuration conf = Main.getConfiguration();
 		Material mat = conf.getWand_item();
 
 		if (it == null) return;
@@ -220,12 +221,16 @@ public class FAWEListener implements Listener {
 
 		if (cmd.equals("//sel")) {
 
-			//Clear all particle
-			final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+			if (Main.containsBrushBuilder(p)) {
 
-			goha_builder.setPregen(false)
-					.setParticleID()
-					.setStartLoc(null);
+				//Clear all particle
+				BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+				GohaParameter gohaParameter = brushBuilder.getGohaParameter();
+
+				gohaParameter.setPregen(false)
+						.setParticleID()
+						.setStartLoc(null);
+			}
 
 		}
 	}

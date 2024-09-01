@@ -1,9 +1,8 @@
 package fr.marodeur.expertbuild.gui;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.object.GOHA_Builder;
-import fr.marodeur.expertbuild.object.ItemBuilder;
-import fr.marodeur.expertbuild.object.Message;
+import fr.marodeur.expertbuild.object.*;
+import fr.marodeur.expertbuild.object.builderObjects.GohaParameter;
 
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
@@ -37,7 +36,8 @@ public class OrganicGUI {
                 .rows(6)
                 .listener(new EventCreator<>(InventoryClickEvent.class, event -> {
 
-                    final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+                    BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+                    final GohaParameter goha_builder = brushBuilder.getGohaParameter();
 
                     short slot = (short) event.getSlot();
                     Inventory inventory = event.getClickedInventory();
@@ -67,9 +67,8 @@ public class OrganicGUI {
 
                             goha_builder.setPregen(true)
                                     .setParticleID()
-                                    .setStartLoc(p.getLocation());
+                                    .setStartLoc(new BlockVectorTool().toBlockVectorTool(p.getLocation()))
 
-                            new GOHA_Builder.OrganicGeneration(p)
                                     .getAllPoint()
                                     .generateAllParticle();
 
@@ -81,13 +80,12 @@ public class OrganicGUI {
 
                         if (goha_builder.getStartLoc() != null) {
 
-                            new GOHA_Builder.OrganicGeneration(p, goha_builder.getStartLoc())
-                                    .getAllPoint()
+                            goha_builder.getAllPoint()
                                     .generateAllBlock()
                                     .buildBlock();
                         } else {
 
-                            new GOHA_Builder.OrganicGeneration(p)
+                            goha_builder.setStartLoc(new BlockVectorTool().toBlockVectorTool(p.getLocation()))
                                     .getAllPoint()
                                     .generateAllBlock()
                                     .buildBlock();
@@ -395,8 +393,7 @@ public class OrganicGUI {
 
                         Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
 
-                            new GOHA_Builder.OrganicGeneration(p, goha_builder.getStartLoc())
-                                    .getAllPoint()
+                            goha_builder.getAllPoint()
                                     .generateAllParticle();
 
                         }, 20);
@@ -414,7 +411,8 @@ public class OrganicGUI {
                 }))
                 .provider(new InventoryProvider() {
 
-                    final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+                    BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+                    final GohaParameter goha_builder = brushBuilder.getGohaParameter();
 
                     @Override
                     public void init(Player player, InventoryContents contents) {

@@ -1,12 +1,14 @@
 package fr.marodeur.expertbuild.listeners;
 
 import com.sk89q.worldedit.math.BlockVector3;
+
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.object.*;
-
-
+import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
+import fr.marodeur.expertbuild.object.builderObjects.GohaParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TimelapseBuilderParameter;
+
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -27,10 +29,11 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class GeneralListener implements Listener {
 
-	private final Configuration conf = Main.configuration();
+	private final Configuration conf = Main.getConfiguration();
 
 	@EventHandler
 	public void onJoin(@NotNull PlayerJoinEvent e) {
@@ -38,10 +41,6 @@ public class GeneralListener implements Listener {
 		Player p = e.getPlayer();
 
 		if (!p.hasPermission("exp.register")) return;
-
-		if (!Main.containsGohaBuilder(p)) {
-			GOHA_Builder.registerPlayer(p);
-		}
 
 		if (!Main.containsBrushBuilder(p)) {
 			BrushBuilder bb = BrushBuilder.registerPlayer(p, false);
@@ -89,8 +88,10 @@ public class GeneralListener implements Listener {
 		Player p = e.getPlayer();
 
 		//Clear all particle
-		if (Main.containsGohaBuilder(p)) {
-			final GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+		if (Main.containsBrushBuilder(p)) {
+
+			BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+			GohaParameter goha_builder = brushBuilder.getGohaParameter();
 
 			goha_builder.setPregen(false)
 					.setParticleID()

@@ -6,7 +6,6 @@ import com.sk89q.worldedit.math.BlockVector3;
 
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.GOHA_Builder;
 
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -42,12 +41,14 @@ public class AdvancedParticleOperation implements ScheduledWorkload {
 
         Arrays.stream(rescheduledParticleTable).forEach(rescheduledParticle -> {
 
+            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
             if (rescheduledParticle.particleClearUpdateId) {
-                this.Id = BrushBuilder.getBrushBuilderPlayer(p, false).getParticleID();
+                this.Id = brushBuilder.getParticleID();
             }
 
             if (rescheduledParticle.particleClearOrga) {
-                this.Id = GOHA_Builder.getGOHABuilder(p).getParticleID();
+                this.Id = brushBuilder.getGohaParameter().getParticleID();
             }
         });
     }
@@ -91,6 +92,30 @@ public class AdvancedParticleOperation implements ScheduledWorkload {
             for (double y = loc1.getY(); y <= loc2.getY(); y++) {
                 for (double z = loc1.getZ(); z <= loc2.getZ(); z++) {
                     Location loc = new Location(loc1.getWorld(), x, y, z);
+                    if (loc.distance(center) < (rayon + 0.5) && loc.distance(center) > (rayon - 0.5)) {
+
+                        new LightweightInteractiveSystemforOptimizedParticleNavigation()
+                                .addScheduledWorkloadRunnable(new AdvancedParticleOperation(p)
+                                        .particle(loc.getX(), loc.getY(), loc.getZ(), particle, rescheduledParticleTable));
+                    }
+                }
+            }
+        }
+    }
+
+    public void sphereParticle(BlockVectorTool center, int rayon, Particle particle, RescheduledParticle[] rescheduledParticleTable) {
+
+        BlockVectorTool loc1 = center.clone()
+                .add(-rayon, -rayon, -rayon);
+
+        BlockVectorTool loc2 = center.clone()
+                .add(+rayon, +rayon, +rayon);
+
+        for (double x = loc1.getX(); x <= loc2.getX(); x++) {
+            for (double y = loc1.getY(); y <= loc2.getY(); y++) {
+                for (double z = loc1.getZ(); z <= loc2.getZ(); z++) {
+
+                    BlockVectorTool loc = new BlockVectorTool(x, y, z);
                     if (loc.distance(center) < (rayon + 0.5) && loc.distance(center) > (rayon - 0.5)) {
 
                         new LightweightInteractiveSystemforOptimizedParticleNavigation()
@@ -213,9 +238,9 @@ public class AdvancedParticleOperation implements ScheduledWorkload {
 
         private boolean analyseParticleClearOrga(Player p, UUID Id) {
 
-            GOHA_Builder goha_builder = GOHA_Builder.getGOHABuilder(p);
+            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
-            return goha_builder.getParticleID().equals(Id);
+            return brushBuilder.getGohaParameter().getParticleID().equals(Id);
         }
 
         private boolean analyseParticleClearUpdateId(Player p, UUID Id) {
