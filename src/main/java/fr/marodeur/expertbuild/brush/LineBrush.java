@@ -21,7 +21,7 @@ import java.util.UUID;
 public class LineBrush extends AbstractBrush {
 
     private final HashMap<UUID,ArrayList<BlockVectorTool>> point = new HashMap<>();
-    Configuration conf = Main.configuration();
+    Configuration conf = Main.getConfiguration();
 
 
     @Override
@@ -87,7 +87,7 @@ public class LineBrush extends AbstractBrush {
                 BlockVectorTool start = points.get(i);
                 BlockVectorTool end = points.get(i + 1);
 
-                this.addBlock(start.getBlockVectorBetweenTwoPoint(end, 1));
+                this.addBlock(start.getBlockBetweenTwoPoint(end));
 
             }
             point.remove(brushBuilder.getUUID());

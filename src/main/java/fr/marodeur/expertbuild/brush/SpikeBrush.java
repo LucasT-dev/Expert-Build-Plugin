@@ -66,7 +66,7 @@ public class SpikeBrush extends AbstractBrush {
         }
 
         sphere.forEach(bvt ->
-                this.addBlock(bvt.getBlockVectorBetweenTwoPoint(new BlockVectorTool().toBlockVectorTool(pl), 1)));
+                this.addBlock(bvt.getBlockBetweenTwoPoint(new BlockVectorTool().toBlockVectorTool(pl))));
 
         return true;
     }
@@ -102,7 +102,7 @@ public class SpikeBrush extends AbstractBrush {
         }
 
         sphere.forEach(bvt ->
-                this.addBlock(bvt.getBlockVectorBetweenTwoPoint(new BlockVectorTool().toBlockVectorTool(l), 1)));
+                this.addBlock(bvt.getBlockBetweenTwoPoint(new BlockVectorTool().toBlockVectorTool(l))));
 
         return true;
     }

@@ -1015,5 +1015,12 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         public void sendMessageInvalidIFlag(Player p, String arg) {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "flag"}).send(p);
         }
+
+
+
+
+        public void sendMessageInvalidArgument(Player p, String arg, String arg1) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, arg1}).send(p);
+        }
     }
 }

@@ -26,15 +26,11 @@ public class Message {
 
     public Message loadFileConfig() {
 
-        try {
-            this.yml = createLanguageFile();
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        this.yml = createLanguageFile();
         return this;
     }
 
-    private YamlConfiguration createLanguageFile() throws URISyntaxException {
+    private YamlConfiguration createLanguageFile() {
 
         Main main = Main.getInstance();
 
@@ -45,7 +41,7 @@ public class Message {
 
                 JarEntry jarEntry = jarFiles.nextElement();
 
-                if (jarEntry.getRealName().equalsIgnoreCase("fr/marodeur/expertbuild/api/lang/" + Main.configuration().getLang() + ".yml")) {
+                if (jarEntry.getRealName().equalsIgnoreCase("fr/marodeur/expertbuild/api/lang/" + Main.getConfiguration().getLang() + ".yml")) {
 
                     File langFile = new File(main.getDataFolder() ,jarEntry.getName());
 
@@ -71,6 +67,8 @@ public class Message {
 
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
         return null;
     }

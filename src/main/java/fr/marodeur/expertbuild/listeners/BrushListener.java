@@ -25,7 +25,7 @@ public class BrushListener implements Listener {
         Action action = e.getAction();
         ItemStack it = e.getItem();
         Location loc;
-        Configuration conf = Main.configuration();
+        Configuration conf = Main.getConfiguration();
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
 
         if (brushBuilder == null) {

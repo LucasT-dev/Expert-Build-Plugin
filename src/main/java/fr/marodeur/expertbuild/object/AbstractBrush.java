@@ -24,7 +24,7 @@ public abstract class AbstractBrush {
     private final GlueList<BlockVectorTool> blockVectorToolGlueList = new GlueList<>();
     private BrushBuilder brushBuilder;
     private Pattern pattern;
-    private static final Configuration conf = Main.configuration();
+    private static final Configuration conf = Main.getConfiguration();
 
 
     public abstract String getBrushName();

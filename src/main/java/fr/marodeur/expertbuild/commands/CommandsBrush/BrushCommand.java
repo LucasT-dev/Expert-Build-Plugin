@@ -32,7 +32,7 @@ public class BrushCommand extends AbstractCommand {
 
     static {
 
-        CONFIG = Main.configuration();
+        CONFIG = Main.getConfiguration();
     }
 
     @Override

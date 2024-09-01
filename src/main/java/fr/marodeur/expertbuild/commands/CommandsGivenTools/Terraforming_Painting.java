@@ -161,7 +161,7 @@ public class Terraforming_Painting implements CommandExecutor {
 						p.getLocation().getY(),
 						p.getLocation().getZ()));
 
-				if (new UtilsFAWE(p).isCompleteSelection()) {
+				if (new FaweAPI(p).isCompleteSelection()) {
 
 					BukkitPlayer actor = BukkitAdapter.adapt(p);
 

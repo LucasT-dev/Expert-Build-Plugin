@@ -87,11 +87,9 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("reload")) {
 
 				Main.getInstance().reloadConfig();
-				try {
-					Main.getInstance().reloadMessageConfig();
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
+
+				Main.getInstance().reloadMessageConfig();
+
 				new Message.MessageSender("expbuild.message.main.config_load", true).send(sender);
 			}
 

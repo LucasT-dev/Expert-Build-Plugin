@@ -61,7 +61,6 @@ public class Main extends JavaPlugin {
 
 	public static List<UUID> getCommand = new ArrayList<>();
 
-	private static final HashMap<UUID, GOHA_Builder> GOHA = new HashMap<>();
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
 
 	public static List<AreaTimerParameter> AREA_TIMER_PARAMETERS = new ArrayList<>();
@@ -217,7 +216,6 @@ public class Main extends JavaPlugin {
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			if (player.hasPermission("exp.register")) {
 				fr.marodeur.expertbuild.object.BrushBuilder.registerPlayer(player, false);
-				GOHA_Builder.registerPlayer(player);
 
 				getLogger().info(new Message.MessageSender("expbuild.message.brush.player_registered", false, new String[]{player.getName()}).getMessage());
 
@@ -261,7 +259,7 @@ public class Main extends JavaPlugin {
 	}
 
 	// BrushBuilder
-	public static Configuration configuration() {
+	public static Configuration getConfiguration() {
 		return configuration;
 	}
 
@@ -461,6 +459,9 @@ public class Main extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+
+		fileManager.saveFileOnDisable();
+
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_disable", true).getMessage());
 	}
 }

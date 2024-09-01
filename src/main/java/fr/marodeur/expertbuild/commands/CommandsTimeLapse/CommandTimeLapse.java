@@ -28,7 +28,7 @@ import java.util.*;
 
 public class CommandTimelapse extends AbstractCommand {
 
-    private static final Configuration conf = Main.configuration();
+    private static final Configuration conf = Main.getConfiguration();
 
     @Override
     public String getCommand() {
