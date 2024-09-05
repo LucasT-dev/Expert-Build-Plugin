@@ -9,9 +9,7 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 
@@ -24,11 +22,8 @@ import java.util.Set;
 
 public class EraserBrush extends AbstractBrush {
 
-    private static final GlueList<BlockVec4> bv4 = new GlueList<>();
-
     private static final Set<Material> EXCLUSIVE_MATERIALS = EnumSet.of(
             Material.AIR, Material.WATER, Material.STONE, Material.GRASS_BLOCK, Material.DIRT, Material.SAND, Material.DEEPSLATE, Material.SANDSTONE);
-
 
     @Override
     public String getBrushName() {
