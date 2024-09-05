@@ -1,9 +1,10 @@
-package fr.marodeur.expertbuild.object;
+package fr.marodeur.expertbuild.object.builderObjects;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
-import fr.marodeur.expertbuild.object.builderObjects.*;
+import fr.marodeur.expertbuild.object.Configuration;
+
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ public class DataProfile {
         this.gohaParameterHashMap = new HashMap<>();
     }
 
-    void registerPlayer(UUID uuid) {
+    public void registerPlayer(UUID uuid) {
 
         if (! timelapseHashMap.containsKey(uuid)) {
             timelapseHashMap.put(uuid, new TimelapseBuilderParameter(uuid, false, false));
