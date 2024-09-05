@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.listeners;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.AdvancedParticleOperation;
 
@@ -193,23 +192,6 @@ public class FAWEListener implements Listener {
 				if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//sel"}).getMessage());
 
 			}
-		}
-	}
-
-	@EventHandler
-	public void AddTabCompleteOnSchem(@NotNull TabCompleteEvent e) {
-
-		if (e.getBuffer().equals("/schem load ") || e.getBuffer().equals("/schematic load ")) {
-
-			CommandSender sender = e.getSender();
-
-			if (!(sender instanceof Player)) {
-				return;
-			}
-
-			Player p = ((Player) sender).getPlayer();
-
-			e.setCompletions(new UtilsFAWE(p).getFileList());
 		}
 	}
 
