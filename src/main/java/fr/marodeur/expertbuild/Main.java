@@ -1,6 +1,5 @@
 package fr.marodeur.expertbuild;
 
-import fr.marodeur.expertbuild.api.fawe.function.mask.StrippedMaskParser;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
 import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
@@ -117,7 +116,7 @@ public class Main extends JavaPlugin {
 			getLogger().severe(new Message.MessageSender("expbuild.message.error.file_configuration_error", true).getMessage());
 		}
 
-		// LOAD MESSAGE 2
+		// LOAD MESSAGE
 		fileMessageManager = new Message().loadFileConfig();
 
 		loadBrush();
@@ -140,7 +139,6 @@ public class Main extends JavaPlugin {
 
 		// LOAD MASK
 		loadCustomMask();
-
 
 
 		// UPDATE CHECKER
@@ -255,7 +253,7 @@ public class Main extends JavaPlugin {
 	}
 
 	private void loadCustomMask() {
-		WorldEditPlugin.getWorldEdit().getMaskFactory().register(new OngroundMask(WorldEditPlugin.getWorldEdit()));
+		WorldEditPlugin.getWorldEdit().getMaskFactory().register(new OngroundMask(getWorldEditPlugin().getWorldEdit()));
 	}
 
 	// BrushBuilder
@@ -301,27 +299,6 @@ public class Main extends JavaPlugin {
 
 	public static DataProfile getDataProfile() {
 		return dataProfile;
-	}
-
-	//goha Builder
-	public static GOHA_Builder getGohaBuilder(@NotNull Player p) {
-		return GOHA.get(p.getUniqueId());
-	}
-
-	public static void updateGohaBuilder(GOHA_Builder gohaBuilder) {
-		GOHA.replace(gohaBuilder.getPlayer().getUniqueId(), gohaBuilder);
-	}
-
-	public static void registerGohaBuilder(GOHA_Builder gohaBuilder) {
-		GOHA.put(gohaBuilder.getPlayer().getUniqueId(), gohaBuilder);
-	}
-
-	public static @NotNull Boolean containsGohaBuilder(@NotNull Player p) {
-		return GOHA.containsKey(p.getUniqueId());
-	}
-
-	public static Main getInstance() {
-		return instance;
 	}
 
 	public static void addScheduledWorkloadRunnable(ScheduledWorkload scheduledWorkload) {
