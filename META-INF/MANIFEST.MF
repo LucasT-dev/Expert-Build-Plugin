@@ -1,14 +1,2 @@
 Manifest-Version: 1.0
-Class-Path: vavr-match-0.10.4.jar okio-1.13.0.jar javafx-base-17.0.1-win
- .jar javacord-core-3.5.0.jar spigot-1.18.1.jar MathsExpert2.jar annotat
- ions-20.1.0.jar kotlin-stdlib-jdk8-1.4.10.jar vavr-0.10.4.jar FastAsync
- WorldEdit-Bukkit-2.0.2-SNAPSHOT-87.jar javafx-controls-17.0.1-win.jar n
- v-websocket-client-2.14.jar javafx-graphics-17.0.1-win.jar javacord-api
- -3.5.0.jar jsch-0.1.55.jar javafx-graphics-17.0.1.jar bcprov-jdk15on-1.
- 60.jar logging-interceptor-4.9.3.jar jsch-0.1.55.jar jackson-core-2.12.
- 6.jar annotations-23.0.0.jar kotlin-stdlib-1.4.10.jar spigot-1.18.1.jar
-  javafx-base-17.0.1.jar kotlin-stdlib-jdk7-1.4.10.jar okhttp-3.9.1.jar 
- javacord-api-3.5.0.jar jackson-databind-2.12.6.jar xsalsa20poly1305-0.1
- 1.0.jar kotlin-stdlib-common-1.4.10.jar jackson-annotations-2.12.6.jar 
- log4j-api-2.0-beta9.jar javafx-controls-17.0.1.jar
 
