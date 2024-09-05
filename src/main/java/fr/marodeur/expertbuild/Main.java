@@ -20,6 +20,7 @@ import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptim
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
 import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
+import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
 
 import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
@@ -404,7 +405,7 @@ public class Main extends JavaPlugin {
 
 					latestVersion = scanner.next();
 
-					lateVersion = String.valueOf(Integer.parseInt(latestVersion.substring(latestVersion.length() - 1)) - Integer.parseInt(getVersion().substring(getVersion().length() - 1)));
+					lateVersion = String.valueOf(Integer.parseInt(latestVersion.substring(latestVersion.length() - 2)) - Integer.parseInt(getVersion().substring(getVersion().length() - 1)));
 
 					consumer.accept(latestVersion);
 				}
