@@ -357,8 +357,6 @@ public class BrushCommand extends AbstractCommand {
 
             case "erode", "e" -> {
 
-                System.out.println("E/ERODE");
-
                 if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
                 } else {
@@ -423,8 +421,6 @@ public class BrushCommand extends AbstractCommand {
             }
 
             case "eb", "erodeblend" -> {
-
-                System.out.println("EB/ERODEBLEND");
 
                 if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[2]);
