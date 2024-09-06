@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class FileManager {
 
     private static final MultiFileObject areaTimerFile;
-    private static final FileObject data;
+    //private static final FileObject data;
 
     private static Logger LOG;
 
@@ -20,7 +20,8 @@ public class FileManager {
         LOG = Main.getInstance().getLogger();
 
         areaTimerFile = new MultiFileObject<>("plugins/ExpertBuild/Data/AreaTimer", Extension.JSON);
-        data = new FileObject<>("plugins/ExpertBuild/Data/PluginVersion", "PluginVersion", Extension.JSON, String.class );
+        // Example
+        //data = new FileObject<>("plugins/ExpertBuild/Data/PluginVersion", "PluginVersion", Extension.JSON, String.class );
 
     }
 
@@ -37,15 +38,15 @@ public class FileManager {
 
         if (areaTimerFile.createPathFiles()) LOG.info("FilePath 'data' created with success");
 
-        if (data.createFile()) LOG.info("File 'areaTimerFile' created with success");
+        //if (data.createFile()) LOG.info("File 'data' created with success");
 
     }
 
     private void loadFileOnEnable() {
 
-        if (!data.isEmpty()) {
+        /*if (!data.isEmpty()) {
             LOG.info("data.loadFromFile() = " + data.loadFromFile());
-        }
+        }*/
 
         AreaTimerParameter[] areaTimerParameter = (AreaTimerParameter[]) areaTimerFile.loadFromFile(AreaTimerParameter.class);
         Main.AREA_TIMER_PARAMETERS = Arrays.stream(areaTimerParameter).collect(Collectors.toCollection(ArrayList::new));
