@@ -6,12 +6,15 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.world.block.BlockState;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import com.sk89q.worldedit.world.block.BaseBlock;
+
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.enums.BlocksDataColor;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.AbstractCommand;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorMaterial;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
+
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
@@ -97,7 +100,7 @@ public class CommandPainting extends AbstractCommand {
             }
         }
 
-        List<BlockVec4> bv4 = new ArrayList<>();
+        BlockVectorMaterial bvm = new BlockVectorMaterial();
 
         if (args.length <= 3) {
             getBlockList(block1, block2, x, l);
@@ -137,15 +140,15 @@ public class CommandPainting extends AbstractCommand {
                 if (index == l.size()) index--;
 
                 Material mat = Material.getMaterial(l.get(index).getName().toUpperCase());
-                BlockState b = BukkitAdapter.adapt(mat.createBlockData());
+                BaseBlock b = BukkitAdapter.adapt(mat.createBlockData()).toBaseBlock();
 
-                bv4.add(new BlockVec4(bv3, b.toBaseBlock()));
+                bvm.addPositionMaterial(new BlockVectorTool().toBlockVectorTool(bv3), b);
+
             }
         });
 
-        new UtilsFAWE(p).setBlockList(p, bv4, true);
-
-        bv4.clear();
+        new FaweAPI(p).setBlock(bvm, true);
+        bvm.clear();
     }
 
     @Override
