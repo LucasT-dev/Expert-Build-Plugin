@@ -240,7 +240,7 @@ public class FaweAPI {
     }
 
     @Deprecated
-    public void setCuboidRegion(Region region, Pattern pattern, boolean sendMessage) {
+    public void setRegion(Region region, Pattern pattern, boolean sendMessage) {
 
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(this.bukkitPlayer);
         EditSession editsession = localSession.createEditSession(this.bukkitPlayer);
