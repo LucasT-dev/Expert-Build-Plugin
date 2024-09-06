@@ -9,22 +9,11 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 
 public class FlowerBrush extends AbstractBrush {
 
@@ -32,7 +21,6 @@ public class FlowerBrush extends AbstractBrush {
     public String getBrushName() {
         return "flower";
     }
-
     @Override
     public String getAliases() {
         return "fw";
@@ -47,28 +35,14 @@ public class FlowerBrush extends AbstractBrush {
     public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
-        GlueList<BlockVec4> bv4 = new GlueList<>();
         int radius = brushBuilder.getRadius();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
+        this.setBrushBuilder(brushBuilder);
+        this.setPattern(brushBuilder.getPattern());
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
+        this.addBlock(new BlockVectorTool().toBlockVectorTool(l).getSpherePoint(radius).getBlockVectorList());
 
-                try {
-                    editsession.setFastMode(false);
-
-                    bv4.addAll(new BlockVec4().getPointInSphere(l, radius, Material.STONE));
-
-                    new UtilsFAWE().setBlockListSimple(brushBuilder.getPlayer(), bv4, false);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        return false;
+        return true;
     }
 
     @Override

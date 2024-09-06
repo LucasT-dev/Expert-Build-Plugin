@@ -43,7 +43,8 @@ public class FlowerGUI {
         RyseInventory.builder()
                 .title(new Message.MessageSender("expbuild.message.gui.flower_gui_title", true).getMessage())
                 .rows(6)
-                .period(1, TimeSetting.SECONDS)
+                .period(2, TimeSetting.MILLISECONDS)
+
                 .listener(new EventCreator<>(InventoryCloseEvent.class, event -> {
 
                     if (event.getView().getTitle().equalsIgnoreCase(new Message.MessageSender("expbuild.message.gui.flower_gui_title", true).getMessage())) {
@@ -74,6 +75,7 @@ public class FlowerGUI {
                             return;
                         }
 
+                        // Exit return to main gui
                         contents.set(0, 8, IntelligentItem.of(new ItemBuilder(Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)
                                         .addLore("expbuild.message.gui.back", false)
