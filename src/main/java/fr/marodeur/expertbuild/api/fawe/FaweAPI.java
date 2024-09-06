@@ -24,12 +24,9 @@ import com.sk89q.worldedit.session.ClipboardHolder;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.object.BlockVectorTool;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.Message;
+import fr.marodeur.expertbuild.object.*;
 
 import org.bukkit.Chunk;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -263,27 +260,20 @@ public class FaweAPI {
 
         long startTime = System.currentTimeMillis();
 
-        try {
+        editsession.setFastMode(false);
 
-            editsession.setFastMode(false);
+        blocks.forEach(block -> {
 
-            blocks.forEach(block -> {
+            editsession.setBlock(Vector3.at(
+                    block.getX(),
+                    block.getY(),
+                    block.getZ()).toBlockPoint(),
+                    pattern);
 
-                try {
-                    editsession.setBlock(Vector3.at(
-                            block.getX(),
-                            block.getY(),
-                            block.getZ()).toBlockPoint(),
-                            pattern);
+        });
 
-                } catch (Exception exc) {
-                    exc.printStackTrace();
-                }
-            });
-            localSession.remember(editsession);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        localSession.remember(editsession);
+
 
         long endTime = System.currentTimeMillis();
 
