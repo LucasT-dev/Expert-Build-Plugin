@@ -16,7 +16,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,18 +51,12 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("info")) {
 				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
 
-				TextComponent URL_Discord = new TextComponent("§1Discord §7link : click here");
-				URL_Discord.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-						new ComponentBuilder("§7Open Discord URL").create()));
-				URL_Discord.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://discord.gg/Y5XfQtT6"));
-				sender.spigot().sendMessage(URL_Discord);
-
-				TextComponent URL_Youtube = new TextComponent("§8GitHub §7link : click here");
-				URL_Youtube.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+				TextComponent gitHubURL = new TextComponent("§8GitHub §7link : click here");
+				gitHubURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open GitHub report bug").create()));
-				URL_Youtube.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+				gitHubURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 						"https://github.com/LucasT-dev/Expert-Build-Plugin/issues"));
-				sender.spigot().sendMessage(URL_Youtube);
+				sender.spigot().sendMessage(gitHubURL);
 				return false;
 			}
 
@@ -88,7 +81,6 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("reload")) {
 
 				Main.getInstance().reloadConfig();
-
 				Main.getInstance().reloadMessageConfig();
 
 				new Message.MessageSender("expbuild.message.main.config_load", true).send(sender);
@@ -101,20 +93,17 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 					if (bb.getSelMode().equals(false)) {
 						bb.setSelMode(true)
-								.sendMessage("Shift click executing /sel, enable", true);
-						return false;
-
+								.sendMessage("expbuild.message.commands.enable", true, new String[]{"Shift click executing /sel :"});
 					} else {
 						bb.setSelMode(false)
-								.sendMessage("Shift click executing /sel, disable", true);
-						return false;
+								.sendMessage("expbuild.message.commands.disable", true, new String[]{"Shift click executing /sel :"});
 					}
 
-				} else {
+                } else {
 					new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).send(sender);
-					return false;
-				}
-			}
+                }
+                return false;
+            }
 
 			if (args[0].equalsIgnoreCase("fly_mode")) {
 				if (sender instanceof Player p) {
@@ -123,18 +112,18 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 					if (bb.getFlyMode().equals(false)) {
 						bb.setFlyMode(true)
-								.sendMessage("Click air selection enable", true);
-						return false;
-					} else {
+								.sendMessage("expbuild.message.commands.enable", true, new String[]{"Click air selection :"});
+                    } else {
 						bb.setFlyMode(false)
-								.sendMessage("Click air selection disable", true);
-						return false;
-					}
+								.sendMessage("expbuild.message.commands.disable", true, new String[]{"Click air selection :"});
+                    }
 
-				} else {
+                } else {
 					new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).send(sender);
-					return false;
-				}
+                }
+                return false;
+            } else {
+				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info, version, help, reload, sel_mode, fly_mode>"}).send(sender);
 			}
 		}
 		return false;

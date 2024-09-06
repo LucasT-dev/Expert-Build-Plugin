@@ -95,8 +95,8 @@ expbuild:
       succes_transfert: Transfer fini, Fichier envoya avec succès Imported-'file' sur le serveur 'server'
       transfert_log: Le fichier 'file' exporté avec succes par 'player' sur le serveur 'server'
 
-      enable: "'element' activé"
-      disable: "'element' désactivé"
+      enable: "'element'§c activé"
+      disable: "'element'§2 désactivé"
       all_clipboards_delete: Tous les clipboards ont été supprimés
       clipboard_does_not_exist: Le clipboard 'clipboard' n'existe pas
       clipboard_already_exist: Le clipboard 'clipboard' existe déjà
