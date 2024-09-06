@@ -8,7 +8,7 @@ import com.sk89q.worldedit.registry.state.Property;
 import com.sk89q.worldedit.util.Direction;
 import com.sk89q.worldedit.world.block.BaseBlock;
 
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.FlowerBrush;
 import fr.marodeur.expertbuild.object.*;
@@ -20,7 +20,6 @@ import io.github.rysefoxx.inventory.plugin.enums.TimeSetting;
 import io.github.rysefoxx.inventory.plugin.other.EventCreator;
 import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -714,8 +713,7 @@ public class FlowerGUI {
                     .append("%")
                     .append(0);
 
-            brushBuilder.setPattern(new UtilsFAWE(Bukkit.getPlayer(brushBuilder.getUUID())).getPattern(String.valueOf(stringBuilder)));
-
+            brushBuilder.setPattern(new FaweAPI(brushBuilder.getPlayer()).getPattern(stringBuilder.toString()));
         }
     }
 }

@@ -38,6 +38,20 @@ public class BrushListener implements Listener {
         loc = p.getTargetBlock(null, conf.getMax_brush_distance()).getLocation().clone();
 
 
+        if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
+
+            if (!Main.containsBrushBuilder(p)) {
+                brushBuilder.sendMessage("expbuild.message.brush.player_not_registered", true);
+                return;
+            }
+
+            if (!p.hasPermission("exp.gui.main")) return;
+
+            new MainGUI().openMainInventory(p);
+
+            return;
+        }
+
         if (it.getType() == Material.HONEYCOMB) {
 
             if (!brushBuilder.getEnable()) {
@@ -83,16 +97,6 @@ public class BrushListener implements Listener {
         }
 
 
-        if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
 
-            if (!Main.containsBrushBuilder(p)) {
-                brushBuilder.sendMessage("expbuild.message.brush.player_not_registered", true);
-                return;
-            }
-
-            if (!p.hasPermission("exp.gui.main")) return;
-
-            new MainGUI().openMainInventory(p);
-        }
     }
 }
