@@ -9,20 +9,12 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.BrushBuilder;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -63,8 +55,7 @@ public class BlendBallBrush extends AbstractBrush {
     public static int currentErosionRadius = 5;
     public static int currentMapSize = 10;
 
-
-    private static final GlueList<BlockVec4> bv4 = new GlueList<>();
+    private static final BlockVectorMaterial bvm = new BlockVectorMaterial();
 
 
     public void blend(Location l, boolean excludeAir, int radius) {
@@ -81,7 +72,10 @@ public class BlendBallBrush extends AbstractBrush {
         for (int x = 0; x <= 2 * (radius + 1); x++) {
             for (int y = 0; y <= 2 * (radius + 1); y++) {
                 for (int z = 0; z <= 2 * (radius + 1); z++) {
-                    oldMaterials[x][y][z] = new BlockVec4().getMaterial(l.getWorld(), l.getBlockX() - radius - 1 + x, l.getBlockY() - radius - 1 + y, l.getBlockZ() - radius - 1 + z);
+                    oldMaterials[x][y][z] = new BlockVectorTool(
+                            l.getBlockX() - radius - 1 + x,
+                            l.getBlockY() - radius - 1 + y,
+                            l.getBlockZ() - radius - 1 + z).getMaterial(l.getWorld());
                 }
             }
         }
@@ -159,7 +153,11 @@ public class BlendBallBrush extends AbstractBrush {
 
                         if (!(excludeAir && newMaterials[x][y][z] == Material.AIR) && !(excludeWater && (newMaterials[x][y][z] == Material.WATER))) {
 
-                            bv4.add(new BlockVec4(l.getBlockX() - radius + x, l.getBlockY() - radius + y, l.getBlockZ() - radius + z, newMaterials[x][y][z]));
+                            bvm.addPositionMaterial(new BlockVectorTool(
+                                    l.getBlockX() - radius + x,
+                                    l.getBlockY() - radius + y,
+                                    l.getBlockZ() - radius + z),
+                                    BukkitAdapter.asBlockType(newMaterials[x][y][z]).getDefaultState().toBaseBlock());
 
                         }
                     }
@@ -302,50 +300,32 @@ public class BlendBallBrush extends AbstractBrush {
     @Override
     public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        bv4.clear();
+
         Location l = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        blend(l, false, radius);
+        new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
 
-                    blend(l, false, radius);
+        bvm.clear();
 
-                } finally {
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
-                }
-            }
-        });
         return false;
     }
 
     @Override
     public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        bv4.clear();
+
         Location l = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
 
-        Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
 
-            try (EditSession editsession = localSession.createEditSession(actor)) {
-                try {
-                    editsession.setFastMode(false);
+        blend(l, true, radius);
+        new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
 
-                    blend(l, true, radius);
+        bvm.clear();
 
-                } finally {
-                    new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
-                }
-            }
-        });
         return false;
     }
 
@@ -475,7 +455,11 @@ public class BlendBallBrush extends AbstractBrush {
             System.out.println("(deposit - erosion) = " + (deposit - erosion) * 60);
 
             // Change the sediment on the place this snowball came from
-            bv4.add(new BlockVec4(xp, (int) (deposit - erosion) * 60, yp, Material.RED_WOOL));
+            bvm.addPositionMaterial(new BlockVectorTool(
+                    xp,
+                    (int) (deposit - erosion) * 60,
+                    yp),
+                    BukkitAdapter.asBlockType(Material.RED_WOOL).getDefaultState().toBaseBlock());
             //heightMap.change(xp, yp, deposit - erosion);
             sediment += erosion - deposit;
 
@@ -503,9 +487,6 @@ public class BlendBallBrush extends AbstractBrush {
             //heightMap.blur();
         }
     }
-
-
-
 }
 
 

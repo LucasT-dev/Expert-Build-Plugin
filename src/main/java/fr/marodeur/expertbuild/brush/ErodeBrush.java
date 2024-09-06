@@ -10,18 +10,12 @@
 package fr.marodeur.expertbuild.brush;
 
 import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.bukkit.BukkitPlayer;
-
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
+
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -33,7 +27,7 @@ import java.util.Map;
 
 public class ErodeBrush extends AbstractBrush {
 
-    private static final GlueList<BlockVec4> bv4 = new GlueList<>();
+    private static final BlockVectorMaterial bvm = new BlockVectorMaterial();
 
     private final GlueList<Vector> spherePoint = new GlueList<>();
 
@@ -46,6 +40,8 @@ public class ErodeBrush extends AbstractBrush {
             new Vector(-1, 0, 0)};
 
     private int[] erorionParameter;
+
+    private World world;
 
     /*NONE(new ErosionPreset(0, 1, 0, 1)),
     MELT(new ErosionPreset(2, 1, 5, 1)),
@@ -85,34 +81,27 @@ public class ErodeBrush extends AbstractBrush {
     @Override
     public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        bv4.clear();
         Location l = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
         TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
+        this.world = l.getWorld();
 
-        try (EditSession editsession = localSession.createEditSession(actor)) {
+        erorionParameter = new int[]{terraParameter.getErosionFaces(), terraParameter.getErosionRecursion(), terraParameter.getFillFaces(), terraParameter.getFillRecursion()};
 
-            try {
-                editsession.setFastMode(false);
-
-                erorionParameter = new int[]{terraParameter.getErosionFaces(), terraParameter.getErosionRecursion(), terraParameter.getFillFaces(), terraParameter.getFillRecursion()};
-
-                final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
-                final Vector v = l.toVector();
+        final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
+        final Vector v = l.toVector();
 
 
-                // cylinder
-                for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
-                    for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
-                        if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
-                            for (int y = v.getBlockY()-radius; y <= v.getBlockY() + radius; ++y) {
-                                spherePoint.add(new Vector(x, y, z));
-                            }
-                        }
+        // cylinder
+        for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
+            for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
+                if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
+                    for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
+                        spherePoint.add(new Vector(x, y, z));
                     }
                 }
+            }
+        }
 
                 /*for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
                     for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
@@ -124,54 +113,45 @@ public class ErodeBrush extends AbstractBrush {
                     }
                 }*/
 
-                for (int i = 0; i < erorionParameter[1]; ++i) {
-                    erosionIteration(iterationBlockManager);
-                }
-
-                for (int i = 0; i < erorionParameter[3]; ++i) {
-                    fillIteration(iterationBlockManager);
-                }
-
-                new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
-
-                spherePoint.clear();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        for (int i = 0; i < erorionParameter[1]; ++i) {
+            erosionIteration(iterationBlockManager);
         }
+
+        for (int i = 0; i < erorionParameter[3]; ++i) {
+            fillIteration(iterationBlockManager);
+        }
+
+        new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
+
+        spherePoint.clear();
+        bvm.clear();
+
         return false;
     }
 
     @Override
     public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        bv4.clear();
         Location l = (Location) loc;
-        BukkitPlayer actor = BukkitAdapter.adapt(brushBuilder.getPlayer());
-        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(actor);
         int radius = brushBuilder.getRadius();
         TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
+        this.world = l.getWorld();
 
-        try (EditSession editsession = localSession.createEditSession(actor)) {
-            try {
-                editsession.setFastMode(false);
+        erorionParameter = new int[]{terraParameter.getFillFaces(), terraParameter.getFillRecursion(), terraParameter.getErosionFaces(), terraParameter.getErosionRecursion()};
 
-                erorionParameter = new int[]{terraParameter.getFillFaces(), terraParameter.getFillRecursion(), terraParameter.getErosionFaces(), terraParameter.getErosionRecursion()};
+        final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
+        final Vector v = l.toVector();
 
-                final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
-                final Vector v = l.toVector();
-
-                // cylinder
-                for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
-                    for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
-                        if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
-                            for (int y = v.getBlockY()-radius; y <= v.getBlockY() + radius; ++y) {
-                                spherePoint.add(new Vector(x, y, z));
-                            }
-                        }
+        // cylinder
+        for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
+            for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
+                if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
+                    for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
+                        spherePoint.add(new Vector(x, y, z));
                     }
                 }
+            }
+        }
 
                 /*for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
                     for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
@@ -183,22 +163,19 @@ public class ErodeBrush extends AbstractBrush {
                     }
                 }*/
 
-                for (int i = 0; i < erorionParameter[1]; ++i) {
-                    erosionIteration(blockChangeTracker);
-                }
-
-                for (int i = 0; i < erorionParameter[3]; ++i) {
-                    fillIteration(blockChangeTracker);
-                }
-
-                new UtilsFAWE(brushBuilder.getPlayer()).setBlockAnyPattern(brushBuilder.getPlayer(), bv4, false);
-
-                spherePoint.clear();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        for (int i = 0; i < erorionParameter[1]; ++i) {
+            erosionIteration(blockChangeTracker);
         }
+
+        for (int i = 0; i < erorionParameter[3]; ++i) {
+            fillIteration(blockChangeTracker);
+        }
+
+        new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
+
+        spherePoint.clear();
+        bvm.clear();
+
         return false;
     }
 
@@ -208,25 +185,25 @@ public class ErodeBrush extends AbstractBrush {
 
         spherePoint.forEach(currentPosition -> {
 
-            final BlockVec4 currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
+            final BlockVectorTool currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
 
             int count = 0;
 
             for (final Vector vector : CHECK_FACES) {
 
                 final Vector relativePosition = currentPosition.clone().add(vector);
-                final BlockVec4 relativeBlock = iterationBlockManager.get(relativePosition, currentIteration);
+                final BlockVectorTool relativeBlock = iterationBlockManager.get(relativePosition, currentIteration);
 
-                if (relativeBlock.getBlock().isEmpty() || relativeBlock.getBlock().isLiquid()) {
+                if (relativeBlock.getBlock(this.world).isEmpty() || relativeBlock.getBlock(this.world).isLiquid()) {
                     count++;
                 }
             }
 
             if (count >= erorionParameter[0]) {
 
-                if (!currentPosition.toLocation(iterationBlockManager.world).getBlock().getType().equals(Material.AIR)) {
+                if (!currentPosition.toLocation(this.world).getBlock().getType().equals(Material.AIR)) {
 
-                    iterationBlockManager.put(currentPosition, new BlockVec4(currentBlock.getLoc(), Material.AIR), currentIteration);
+                    iterationBlockManager.put(currentPosition, currentBlock, Material.AIR, currentIteration);
                 }
             }
         });
@@ -238,22 +215,20 @@ public class ErodeBrush extends AbstractBrush {
 
         spherePoint.forEach(currentPosition -> {
 
-            final BlockVec4 currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
-
+            final BlockVectorTool currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
             int count = 0;
-
-            final Map<BlockVec4, Integer> blockCount = new HashMap<>();
+            final Map<Material, Integer> blockCount = new HashMap<>();
 
             for (final Vector vector : CHECK_FACES) {
 
                 final Vector relativePosition = currentPosition.clone().add(vector);
-                final BlockVec4 relativeBlock = iterationBlockManager.get(relativePosition, currentIteration);
+                final BlockVectorTool relativeBlock = iterationBlockManager.get(relativePosition, currentIteration);
 
-                if (!(relativeBlock.getBlock().isEmpty() || relativeBlock.getBlock().isLiquid())) {
+                if (!(relativeBlock.getBlock(this.world).isEmpty() || relativeBlock.getBlock(this.world).isLiquid())) {
 
                     count++;
 
-                    final BlockVec4 typeBlock = new BlockVec4(relativeBlock.getBlock().getType());
+                    final Material typeBlock = relativeBlock.getMaterial(this.world);
 
                     if (blockCount.containsKey(typeBlock)) {
                         blockCount.put(typeBlock, blockCount.get(typeBlock) + 1);
@@ -263,10 +238,10 @@ public class ErodeBrush extends AbstractBrush {
                 }
             }
             //Loc null
-            BlockVec4 currentMaterial = new BlockVec4(Material.AIR);
+            Material currentMaterial = Material.AIR;
             int amount = 0;
 
-            for (final BlockVec4 wrapper : blockCount.keySet()) {
+            for (final Material wrapper : blockCount.keySet()) {
                 final Integer currentCount = blockCount.get(wrapper);
                 if (amount <= currentCount) {
                     currentMaterial = wrapper;
@@ -275,9 +250,9 @@ public class ErodeBrush extends AbstractBrush {
             }
 
             if (count >= erorionParameter[2]) {
-                if (!currentPosition.toLocation(iterationBlockManager.world).getBlock().getType().equals(currentMaterial.getMat())) {
+                if (!currentPosition.toLocation(iterationBlockManager.world).getBlock().getType().equals(currentMaterial)) {
 
-                    iterationBlockManager.put(currentPosition, new BlockVec4(currentBlock.getBlock().getLocation(), currentMaterial.getMat()), currentIteration);
+                    iterationBlockManager.put(currentPosition, currentBlock, currentMaterial,  currentIteration);
 
                 }
             }
@@ -286,7 +261,7 @@ public class ErodeBrush extends AbstractBrush {
 
     private static final class IterationBlockManager {
 
-        private final Map<Integer, Map<Vector, BlockVec4>> blockChanges;
+        private final Map<Integer, Map<Vector, BlockVectorTool>> blockChanges;
         private final World world;
         private int nextIterationId = 0;
 
@@ -295,8 +270,8 @@ public class ErodeBrush extends AbstractBrush {
             this.world = world;
         }
 
-        public BlockVec4 get(final Vector position, final int iteration) {
-            BlockVec4 changedBlock;
+        public BlockVectorTool get(final Vector position, final int iteration) {
+            BlockVectorTool changedBlock;
 
             for (int i = iteration - 1; i >= 0; --i) {
                 if (this.blockChanges.containsKey(i) && this.blockChanges.get(i).containsKey(position)) {
@@ -305,7 +280,7 @@ public class ErodeBrush extends AbstractBrush {
                 }
             }
 
-            return new BlockVec4(position.toLocation(this.world));
+            return new BlockVectorTool().toBlockVectorTool(position.toLocation(this.world));
 
         }
 
@@ -313,14 +288,14 @@ public class ErodeBrush extends AbstractBrush {
             return this.nextIterationId++;
         }
 
-        public void put(final Vector position, final BlockVec4 changedBlock, final int iteration) {
+        public void put(final Vector position, final BlockVectorTool changedBlock, Material materialChangedBlock, final int iteration) {
             if (!this.blockChanges.containsKey(iteration)) {
                 this.blockChanges.put(iteration, new HashMap<>());
             }
 
             this.blockChanges.get(iteration).put(position, changedBlock);
 
-            bv4.add(new BlockVec4(position.toLocation(this.world), changedBlock.getMat()));
+            bvm.addPositionMaterial(new BlockVectorTool().toBlockVectorTool(position), BukkitAdapter.asBlockType(materialChangedBlock).getDefaultState().toBaseBlock());
 
         }
     }
