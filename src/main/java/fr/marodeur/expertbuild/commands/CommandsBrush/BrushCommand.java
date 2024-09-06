@@ -597,7 +597,10 @@ public class BrushCommand extends AbstractCommand {
                 new ArgumentLength(2, "bb", 0, "/flower bb <radius>", 2),
 
                 new ArgumentLength(3, "e", 0, "/flower e <lift-melt-fill-smooth-floatclean> <radius>", 2),
+                new ArgumentLength(3, "erode", 0, "/flower e <lift-melt-fill-smooth-floatclean> <radius>", 2),
+
                 new ArgumentLength(3, "eb", 0, "/flower eb <lift-melt-fill-smooth-floatclean> <radius>", 2),
+                new ArgumentLength(3, "erodeblend", 0, "/flower eb <lift-melt-fill-smooth-floatclean> <radius>", 2),
 
                 new ArgumentLength(6, "custom", 0, "/flower bb <erosion face> <erosion recursion> <fill faces> <fill recursion> <radius>", 2),
 
