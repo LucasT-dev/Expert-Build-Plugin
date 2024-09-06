@@ -290,39 +290,36 @@ public class FaweAPI {
         if (sendMessage) this.sendSetBlockMessage(startTime, endTime, blocks.size(), 0, 0);
     }
 
-    public void setBlock(GlueList<BlockVectorTool> blocks, Material material, boolean sendMessage) {
+    public void setBlock(BlockVectorMaterial blockVectorMaterial, boolean sendMessage) {
 
         LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(this.bukkitPlayer);
         EditSession editsession = localSession.createEditSession(this.bukkitPlayer);
 
         long startTime = System.currentTimeMillis();
+        int size = blockVectorMaterial.baseBlockDeque().size();
 
-        try {
-
-            editsession.setFastMode(false);
-
-            blocks.forEach(block -> {
-
-                try {
-                    editsession.setBlock(Vector3.at(
-                                    block.getX(),
-                                    block.getY(),
-                                    block.getZ()).toBlockPoint(),
-                            BukkitAdapter.asBlockType(material));
-
-                } catch (Exception exc) {
-                    exc.printStackTrace();
-                }
-            });
-            localSession.remember(editsession);
-        } catch (Exception e) {
-            e.printStackTrace();
+        // Méthode pour itérer et récupérer les paires
+        if (blockVectorMaterial.positionDeque().size() != blockVectorMaterial.baseBlockDeque().size()) {
+            bukkitPlayer.getPlayer().sendMessage("Error les listes de position et de pattern ne sont pas synchronisées");
+            throw new IllegalStateException("Les listes de positions et de matériaux ne sont pas synchronisées !");
         }
+
+        while (!blockVectorMaterial.positionDeque().isEmpty()) {
+
+            BlockVectorMaterial.PositionMaterialPair block = blockVectorMaterial.getLastPositionMaterial();
+
+            editsession.setBlock(
+                    block.position().toBlockVector3(),
+                    block.material());
+        }
+
+        localSession.remember(editsession);
 
         long endTime = System.currentTimeMillis();
 
-        if (sendMessage) this.sendSetBlockMessage(startTime, endTime, blocks.size(), 0, 0);
+        if (sendMessage) this.sendSetBlockMessage(startTime, endTime, size, 0, 0);
     }
+
 
     private void sendSetBlockMessage(long startTime, long endTime, int blockModified, int biomeModified, int entityModified) {
 
