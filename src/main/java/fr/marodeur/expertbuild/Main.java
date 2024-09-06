@@ -37,50 +37,38 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
-import java.net.URL;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.logging.Logger;
 
 public class Main extends JavaPlugin {
 
 	private static Main instance;
-	public static int id = 110059;
-	public static String latestVersion;
-	public static String lateVersion;
-
-
+	private static DataPlugin dataPlugin;
 	private static AbstractBrush.RegisterBrush brush;
 	private static Configuration configuration;
 	private static Message fileMessageManager;
-
 	private static DataProfile dataProfile;
-
+	private FileManager fileManager;
+	public static WorldEditPlugin WorldEditPlugin;
+	private final InventoryManager inventoryManager = new InventoryManager(this);
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
-
-
-	public static List<UUID> getCommand = new ArrayList<>();
 
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
 
-	public static List<AreaTimerParameter> AREA_TIMER_PARAMETERS = new ArrayList<>();
 
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
 
-	private static final Logger log = Logger.getLogger("Expert-Build");
 
-	private final InventoryManager inventoryManager = new InventoryManager(this);
-
-
-	public static WorldEditPlugin WorldEditPlugin;
-
-	private FileManager fileManager;
-
+	// Changer d'endroit
+	public static List<UUID> getCommand = new ArrayList<>();
+	public static List<AreaTimerParameter> AREA_TIMER_PARAMETERS = new ArrayList<>();
+	//
 
     @Override
 	public void onEnable() {
 
 		instance = this;
+
+		dataPlugin = new DataPlugin(this);
 
 		saveDefaultConfig();
 
@@ -88,14 +76,13 @@ public class Main extends JavaPlugin {
 
 		reloadMessageConfig();
 
-
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_enable", true).getMessage());
 		getLogger().info(" ____          ___  ");
 		getLogger().info("|      \\  /  |   ) ");
 		getLogger().info("|__     \\/   |___) ");
 		getLogger().info("|       /\\   |     ");
 		getLogger().info("|___   /  \\  |     ");
-		getLogger().info("Version : " + Main.getInstance().getDescription().getVersion()+ " / by Marodeur");
+		getLogger().info("Version : " + dataPlugin.getPluginVersion() + " / by Marodeur");
 		getLogger().info("FAWE server version : " + WorldEdit.getVersion());
 		getLogger().info("This plugin is not affiliated with Mojang Studios");
 
@@ -109,7 +96,7 @@ public class Main extends JavaPlugin {
 		bstatsManager(new Metrics(this, 16755));
 
 		// Check if server is in safe environments
-		if (!isJavaSixteenMin()) onDisable();
+		if (dataPlugin.getJavaVersion() < 16) onDisable();
 
 		try {
 			serverFileBuilder();
@@ -145,11 +132,9 @@ public class Main extends JavaPlugin {
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
 
-		updateChecker(version -> {
-			if (!this.getDescription().getVersion().equals(version)) {
-				getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{Main.lateVersion, Main.getVersion(), Main.latestVersion}).getMessage());
-			}
-		},id);
+
+		//DataBlockRegister.generateBlockData();
+
 	}
 
 	private void registerListeners() {
@@ -205,6 +190,14 @@ public class Main extends JavaPlugin {
 
 	public static Main getInstance() {
 		return instance;
+	}
+
+	/**
+	 * Class for general information of the plugin
+	 * @return DataPlugin
+	 */
+	public static DataPlugin getDataPlugin() {
+		return dataPlugin;
 	}
 
 	/**
@@ -306,20 +299,6 @@ public class Main extends JavaPlugin {
 		scheduledWorkloadRunnable.addWorkload(scheduledWorkload);
 	}
 
-	/**
-	 * get plugin version
-	 *
-	 * @return String
-	 */
-	public static @NotNull String getVersion() {
-		return Main.getInstance().getDescription().getVersion();
-	}
-
-	public static @NotNull String getBukkitVersion() {
-		return Bukkit.getBukkitVersion();
-	}
-
-
 	public static AbstractBrush.RegisterBrush getBrush() {
 		return brush;
 	}
@@ -390,49 +369,6 @@ public class Main extends JavaPlugin {
 			// (This is useless as there is already a player chart by default.)
 			return Bukkit.getOnlinePlayers().size();
 		}));
-	}
-
-	public static void updateChecker(final Consumer<String> consumer, int id) {
-
-		Bukkit.getScheduler().runTaskAsynchronously(getInstance(), () -> {
-
-			try {
-
-				InputStream inputStream = (new URL("https://api.spigotmc.org/legacy/update.php?resource=" + id + "\\~")).openStream();
-				Scanner scanner = new Scanner(inputStream);
-
-				if (scanner.hasNext()) {
-
-					latestVersion = scanner.next();
-
-					lateVersion = String.valueOf(Integer.parseInt(latestVersion.substring(latestVersion.length() - 2)) - Integer.parseInt(getVersion().substring(getVersion().length() - 1)));
-
-					consumer.accept(latestVersion);
-				}
-
-			} catch (IOException e) {
-				Main.getInstance().getLogger().severe(new Message.MessageSender("expbuild.message.main.unable_check_update", true, new String[]{e.getMessage()}).getMessage());
-			}
-		});
-	}
-
-	private boolean isJavaSixteenMin() {
-
-		try {
-			int javaVersion = Integer.parseInt(System.getProperty("java.version").substring(0, 2));
-
-			if (javaVersion < 16 ) {
-				log.severe("Please use Java 16 minimum !");
-				return false;
-
-			} else {
-				log.info("Java version : " + System.getProperty("java.version"));
-				return true;
-			}
-		} catch (NumberFormatException e) {
-			log.severe("Unable to determine java version");
-			return false;
-		}
 	}
 
 	@Override

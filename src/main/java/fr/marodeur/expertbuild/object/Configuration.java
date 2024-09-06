@@ -320,7 +320,7 @@ public class Configuration {
             this.version = "1.18.1.6";
 
         }
-        return !this.version.equals(Main.getVersion());
+        return !this.version.equals(Main.getDataPlugin().getPluginVersion());
     }
 
     private void updateFileConfig(File file) throws IOException {

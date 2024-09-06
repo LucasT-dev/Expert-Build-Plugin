@@ -373,6 +373,6 @@ public enum BlocksDataColor {
     }
 
     public static Stream<BlocksDataColor> getStreamArray() {
-        return Arrays.stream(BlocksDataColor.values()).filter(blocksDataColor -> blocksDataColor.getBlockVersion() <= Double.parseDouble(Main.getBukkitVersion().substring(0, 4)));
+        return Arrays.stream(BlocksDataColor.values()).filter(blocksDataColor -> blocksDataColor.getBlockVersion() <= Double.parseDouble(Main.getDataPlugin().getBukkitVersion().substring(0, 4)));
     }
 }

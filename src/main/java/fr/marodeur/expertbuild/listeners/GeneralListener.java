@@ -49,16 +49,14 @@ public class GeneralListener implements Listener {
 			BrushBuilder.registerPlayer(p, Main.getBrushBuilder(p));
 		}
 
+		//update system
 		if (p.isOp()) {
 
-			//update system
-			Main.updateChecker(version -> {
-				if (Main.getVersion().equals(version)) {
-					p.sendMessage(new Message.MessageSender("expbuild.message.main.not_new_update", true).getMessage());
-				} else {
-					p.sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{Main.lateVersion, Main.getVersion(), Main.latestVersion}).getMessage());
-				}
-			}, Main.id);
+			DataPlugin dataPlugin = Main.getDataPlugin();
+
+			if (!dataPlugin.getPluginVersion().equals(dataPlugin.getLatestVersion())) {
+				p.sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{dataPlugin.getLateVersion(), dataPlugin.getPluginVersion(), dataPlugin.getLatestVersion()}).getMessage());
+			}
 		}
 
 

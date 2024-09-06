@@ -55,7 +55,8 @@ public class FileManager {
 
     public void saveFileOnDisable() {
 
-        data.saveToFile(Main.getVersion());
+        // Exemple
+        //data.saveToFile(Main.getVersion());
 
         areaTimerFile.saveToFile(Main.AREA_TIMER_PARAMETERS);
     }

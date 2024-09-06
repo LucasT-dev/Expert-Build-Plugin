@@ -35,7 +35,6 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String msg, String[] args) {
 
@@ -69,7 +68,9 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			}
 
 			if (args[0].equalsIgnoreCase("version")) {
-				sender.sendMessage(Main.prefix + "Version : " + Main.getInstance().getDescription().getVersion());
+				sender.sendMessage(Main.prefix + "Plugin version : " + Main.getDataPlugin().getPluginVersion() + "\n" +
+						"Fawe version : " + Main.getDataPlugin().getFaweVersion());
+
 				return false;
 			}
 
