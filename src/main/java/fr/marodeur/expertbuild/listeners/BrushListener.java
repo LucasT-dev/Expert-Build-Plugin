@@ -50,7 +50,6 @@ public class BrushListener implements Listener {
         if (it.getType() == conf.getTerraforming_tool_1()) {
 
             if (action.equals(Action.RIGHT_CLICK_AIR)) {
-                System.out.println("1");
                 brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_1(), loc, p.getLocation());
 
             } else {
