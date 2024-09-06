@@ -60,7 +60,7 @@ public class BrushListener implements Listener {
                 String blockMaskString = loc.getBlock().getType().toString();
 
                 faweAPI.setMask(faweAPI.getMask(blockMaskString));
-                p.sendMessage(Main.prefix + "Mask set: " + blockMaskString);
+                brushBuilder.sendMessage("expbuild.message.brush.set_mask", true,new String[]{blockMaskString});
             }
         }
 
@@ -78,7 +78,7 @@ public class BrushListener implements Listener {
                 String blockMaskString = loc.getBlock().getType().toString();
 
                 faweAPI.setMask(faweAPI.getMask(blockMaskString));
-                p.sendMessage(Main.prefix + "Mask set: " + blockMaskString);
+                brushBuilder.sendMessage("expbuild.message.brush.set_mask", true,new String[]{blockMaskString});
             }
         }
 
