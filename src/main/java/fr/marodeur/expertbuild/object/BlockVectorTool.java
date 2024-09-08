@@ -135,12 +135,20 @@ public class BlockVectorTool implements Cloneable {
 
     // Mathematics operation
 
+    public BlockVectorTool add(BlockVectorTool blockVectorTool) {
+        return this.add(blockVectorTool.x, blockVectorTool.y, blockVectorTool.z);
+    }
+
     public BlockVectorTool add(double x, double y, double z) {
         this.x += x;
         this.y += y;
         this.z += z;
 
         return this;
+    }
+
+    public BlockVectorTool subtract(BlockVectorTool blockVectorTool) {
+        return this.subtract(blockVectorTool.x, blockVectorTool.y, blockVectorTool.z);
     }
 
     public BlockVectorTool subtract(double x, double y, double z) {
@@ -202,56 +210,30 @@ public class BlockVectorTool implements Cloneable {
 
     // rotate around X axis
 
-    public BlockVectorTool rotateAroundX(BlockVectorTool bvt, double degreeAngle) {
-        return rotateAroundZ(bvt.getBlockY(), bvt.getBlockZ(), degreeAngle, bvt.getBlockX());
+
+    //
+    // Rotation autour d'une position sur l'axe X
+    public BlockVectorTool rotateAroundPositionX(BlockVectorTool point, BlockVectorTool center, double angle) {
+        double radians = Math.toRadians(angle);
+        double y = (point.getY() - center.getY()) * Math.cos(radians) - (point.getZ() - center.getZ()) * Math.sin(radians) + center.getY();
+        double z = (point.getY() - center.getY()) * Math.sin(radians) + (point.getZ() - center.getZ()) * Math.cos(radians) + center.getZ();
+        return new BlockVectorTool(point.getX(), y, z);
     }
 
-    public BlockVectorTool rotateAroundX(int Ypoint, int Zpoint, double degreeAngle, int x) {
-
-        // this = center
-
-        double angle = Math.toRadians(degreeAngle);
-
-        double newY = this.y + (Ypoint - this.y) * Math.cos(angle) - (Zpoint - this.z) * Math.sin(angle);
-        double newZ = this.z + (Ypoint - this.y) * Math.sin(angle) + (Zpoint - this.z) * Math.cos(angle);
-
-        return new BlockVectorTool(x, (int) newY, (int) newZ);
+    // Rotation autour d'une position sur l'axe Y
+    public BlockVectorTool rotateAroundPositionY(BlockVectorTool point, BlockVectorTool center, double angle) {
+        double radians = Math.toRadians(angle);
+        double x = (point.getX() - center.getX()) * Math.cos(radians) + (point.getZ() - center.getZ()) * Math.sin(radians) + center.getX();
+        double z = -(point.getX() - center.getX()) * Math.sin(radians) + (point.getZ() - center.getZ()) * Math.cos(radians) + center.getZ();
+        return new BlockVectorTool(x, point.getY(), z);
     }
 
-    // rotate around Y axis
-
-    public BlockVectorTool rotateAroundY(BlockVectorTool bvt, double degreeAngle) {
-        return rotateAroundZ(bvt.getBlockX(), bvt.getBlockZ(), degreeAngle, bvt.getBlockY());
-    }
-
-    public BlockVectorTool rotateAroundY(int Xpoint, int Zpoint, double degreeAngle, int y) {
-
-        // this = center
-
-        double angle = Math.toRadians(degreeAngle);
-
-        double newX = this.x + (Xpoint - this.x) * Math.cos(angle) - (Zpoint - this.z) * Math.sin(angle);
-        double newZ = this.z + (Xpoint - this.x) * Math.sin(angle) + (Zpoint - this.z) * Math.cos(angle);
-
-        return new BlockVectorTool((int) newX, y, (int) newZ);
-    }
-
-    // rotate around Z axis
-
-    public BlockVectorTool rotateAroundZ(BlockVectorTool bvt, double degreeAngle) {
-        return rotateAroundZ(bvt.getBlockX(), bvt.getBlockY(), degreeAngle, bvt.getBlockZ());
-    }
-
-    public BlockVectorTool rotateAroundZ(int Xpoint, int Ypoint, double degreeAngle, int z) {
-
-        // this = center
-
-        double angle = Math.toRadians(degreeAngle);
-
-        double newX = this.x + (Xpoint - this.x) * Math.cos(angle) - (Ypoint - this.y) * Math.sin(angle);
-        double newY = this.y + (Xpoint - this.x) * Math.sin(angle) + (Ypoint - this.y) * Math.cos(angle);
-
-        return new BlockVectorTool((int) newX, (int) newY, z);
+    // Rotation autour d'une position sur l'axe Z
+    public BlockVectorTool rotateAroundPositionZ(BlockVectorTool point, BlockVectorTool center, double angle) {
+        double radians = Math.toRadians(angle);
+        double x = (point.getX() - center.getX()) * Math.cos(radians) - (point.getY() - center.getY()) * Math.sin(radians) + center.getX();
+        double y = (point.getX() - center.getX()) * Math.sin(radians) + (point.getY() - center.getY()) * Math.cos(radians) + center.getY();
+        return new BlockVectorTool(x, y, point.getZ());
     }
 
 
