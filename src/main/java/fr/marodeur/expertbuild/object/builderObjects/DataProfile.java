@@ -5,6 +5,7 @@ import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.Configuration;
 
+import fr.marodeur.expertbuild.object.Flag;
 import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
@@ -114,24 +115,9 @@ public class DataProfile {
     }
 
     public GohaParameter getGohaParameterProfile(UUID uuid) {
-
-        GohaParameter test = this.gohaParameterHashMap.get(uuid);
-
-        if (test.getParticleID() == null) {
-
-            System.out.println("Main.getDataProfile().gohaParameterHashMap().size() = " + Main.getDataProfile().gohaParameterHashMap().size());
-            System.out.println("Main.getDataProfile().gohaParameterHashMap().get(0) = " + Main.getDataProfile().gohaParameterHashMap().get(0).toString());
-
-
-            test.setParticleID();
-            System.out.println("set random particle ID");
-        }
-
-        //System.out.println("test.getParticleID().toString() = " + test.getParticleID().toString());
-
-        return test;
+        return this.gohaParameterHashMap.get(uuid);
     }
-    public GlueList<GohaParameter> gohaParameterHashMap() {
+    public GlueList<GohaParameter> getGohaParameterHashMap() {
         GlueList<GohaParameter> g = new GlueList<>();
         g.addAll(gohaParameterHashMap.values());
         return g;
