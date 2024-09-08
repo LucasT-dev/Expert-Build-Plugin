@@ -116,6 +116,10 @@ private static final Logger LOG;
         return Main.getDataProfile().getGohaParameterProfile(this.uuid);
     }
 
+    public Clipboard3DParameter getClipboard3dParameter() {
+        return Main.getDataProfile().getClipboard3dProfile(this.uuid);
+    }
+
 
 
     // GETTER

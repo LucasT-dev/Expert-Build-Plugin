@@ -9,11 +9,11 @@
 
 package fr.marodeur.expertbuild.brush;
 
-import fr.marodeur.expertbuild.api.GlueList;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
-import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
-import fr.marodeur.expertbuild.object.BrushBuilder;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.object.*;
+import fr.marodeur.expertbuild.object.builderObjects.Clipboard3DParameter;
 
 import org.bukkit.Location;
 
@@ -33,43 +33,35 @@ public class Clipboard3DBrush extends AbstractBrush {
     public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
-
-        assert brushBuilder != null;
-
-        GlueList<BlockVec4> bv4 = new GlueList<>();
-        GlueList<BlockVec4> tempbv4 = new GlueList<>();
-
-        float pitch = brushBuilder.getPlayer().getLocation().getPitch();
-        float yaw = brushBuilder.getPlayer().getLocation().getYaw();
+        Clipboard3DParameter cb3d = brushBuilder.getClipboard3dParameter();
+        BlockVectorTool center = new BlockVectorTool().toBlockVectorTool(l);
+        BlockVectorTool origin = new BlockVectorTool().toBlockVectorTool(cb3d.getClipboardHolder().getClipboard().getOrigin());
+        BlockVectorMaterial bvm = new BlockVectorMaterial();
 
         // Y rotation -> Yaw
         // X rotation -> Pitch
+        float pitch = brushBuilder.getPlayer().getLocation().getPitch();
+        float yaw = brushBuilder.getPlayer().getLocation().getYaw();
 
-        brushBuilder.getClipboardBrush().getClipboardsBrush().iterator()
-                .forEachRemaining(bv3 ->
-                        tempbv4.add(
-                                bv3.rotateAroundX(
-                                        l.getBlockY(),
-                                        l.getBlockZ(),
-                                        l.getBlockY() + bv3.getY(),
-                                        l.getBlockZ() + bv3.getZ(),
-                                        pitch + 90,
-                                        bv3.getBaseblock(),
-                                        l.getBlockX() + bv3.getX())));
 
-        tempbv4.forEach(blv4 ->
-                bv4.add(
-                        blv4.rotateAroundY(
-                                l.getBlockX(),
-                                l.getBlockZ(),
-                                blv4.getX(),
-                                blv4.getZ(),
-                                yaw,
-                                blv4.getBaseblock(),
-                                blv4.getY() + 1)
-                ));
+        cb3d.getClipboardHolder().getClipboard().iterator().forEachRemaining(blockVector3 -> {
 
-        new UtilsFAWE(brushBuilder.getPlayer()).setBlockList(brushBuilder.getPlayer(), bv4, false);
+            BlockVectorTool origineBlock = new BlockVectorTool().toBlockVectorTool(blockVector3);
+            BlockVectorTool difference = origineBlock.clone();
+            difference.subtract(origin);
+
+            BlockVectorTool rotatedBlock = center.clone();
+            rotatedBlock.add(difference);
+
+            rotatedBlock = rotatedBlock.rotateAroundPositionX(rotatedBlock, center, pitch + 90);
+            rotatedBlock = rotatedBlock.rotateAroundPositionY(rotatedBlock, center, -yaw);
+
+            bvm.addPositionMaterial(rotatedBlock, blockVector3.getFullBlock(BukkitAdapter.adapt(brushBuilder.getPlayer()).getExtent()));
+
+        });
+
+        new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
+
         return false;
     }
 

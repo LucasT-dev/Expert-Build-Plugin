@@ -27,12 +27,15 @@ public class DataProfile {
 
     private final HashMap<UUID, GohaParameter> gohaParameterHashMap;
 
+    private final HashMap<UUID, Clipboard3DParameter> clipboard3DParameterHashMap;
+
     public DataProfile() {
         this.timelapseHashMap = new HashMap<>();
         this.terraParameterHashMap = new HashMap<>();
         this.clipboardParameterHashMap = new HashMap<>();
         this.leatherParameterHashMap = new HashMap<>();
         this.gohaParameterHashMap = new HashMap<>();
+        this.clipboard3DParameterHashMap = new HashMap<>();
     }
 
     public void registerPlayer(UUID uuid) {
@@ -67,6 +70,10 @@ public class DataProfile {
                     true, (short)70, (short)180,
                     true, (short)60, (short)0,
                     true, (short)60, (short)0));
+        }
+
+        if (! clipboard3DParameterHashMap.containsKey(uuid)) {
+            clipboard3DParameterHashMap.put(uuid, new Clipboard3DParameter(uuid, null, new Flag("abce")));
         }
     }
 
@@ -127,6 +134,15 @@ public class DataProfile {
     public GlueList<GohaParameter> gohaParameterHashMap() {
         GlueList<GohaParameter> g = new GlueList<>();
         g.addAll(gohaParameterHashMap.values());
+        return g;
+    }
+
+    public Clipboard3DParameter getClipboard3dProfile(UUID uuid) {
+        return this.clipboard3DParameterHashMap.get(uuid);
+    }
+    public GlueList<Clipboard3DParameter> getClipboard3DParametersHashMap() {
+        GlueList<Clipboard3DParameter> g = new GlueList<>();
+        g.addAll(clipboard3DParameterHashMap.values());
         return g;
     }
 }
