@@ -4,6 +4,7 @@ import com.sk89q.worldedit.world.block.BaseBlock;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.stream.Stream;
 
 public class BlockVectorMaterial {
 
@@ -35,6 +36,17 @@ public class BlockVectorMaterial {
             return null;  // Si les deux Deque sont vides, retourner null
         }
     }
+
+    // Utilisation d'un Stream pour itérer sur les paires synchronisées
+    public Stream<PositionMaterialPair> streamPairs() {
+        return Stream.iterate(0, i -> i + 1)
+                .limit(Math.min(positionDeque.size(), baseBlockDeque.size()))
+                .map(i -> new PositionMaterialPair(
+                        positionDeque.toArray(new BlockVectorTool[0])[i],
+                        baseBlockDeque.toArray(new BaseBlock[0])[i]
+                ));
+    }
+
 
     // Getter
     public Deque<BlockVectorTool> positionDeque() {
