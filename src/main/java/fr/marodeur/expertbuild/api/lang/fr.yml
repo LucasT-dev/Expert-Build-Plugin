@@ -37,7 +37,7 @@ expbuild:
       player_already_registered: Vous êtes déjà enregistré
       point_add: Point ajouté à ('point')
       point_not_save: Taille limite, point non sauvegardé
-      set_mask: "Mask set: 'mask'"
+      set_mask: "Mask ajouté: 'mask'"
 
     permission:
       dont_perm: Vous n'avez pas la permission

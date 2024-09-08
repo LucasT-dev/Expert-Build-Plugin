@@ -39,7 +39,7 @@ expbuild:
       player_not_registered: "You are not registered, execute: /fw register"
       point_add: Point add at ('point')
       point_not_save: Limit size, point not save
-      set_mask: "Mask ajouté: 'mask'"
+      set_mask: "Mask set: 'mask'"
 
     permission:
       dont_perm: You don't have the permission
