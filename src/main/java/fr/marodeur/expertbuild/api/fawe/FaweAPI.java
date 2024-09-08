@@ -27,6 +27,7 @@ import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.*;
 
 import org.bukkit.Chunk;
+import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -159,18 +160,24 @@ public class FaweAPI {
         return new ClipboardHolder(clipboard);
     }
 
+    @Warning
     public ClipboardHolder rotateClipboard(ClipboardHolder clipboard, double rotateX, double rotateY, double rotateZ) {
 
         ClipboardHolder holder = clipboard;
         AffineTransform transform = new AffineTransform();
 
-        transform = transform.rotateY(-rotateY);
         transform = transform.rotateX(-rotateX);
+        transform = transform.rotateY(-rotateY);
         transform = transform.rotateZ(-rotateZ);
+
+        // Créer une nouvelle instance de ClipboardHolder avec la transformation
+        ClipboardHolder transformedClipboardHolder = new ClipboardHolder(holder.getClipboard());
+        transformedClipboardHolder.setTransform(transform);
+
 
         holder.setTransform(transform.combine(holder.getTransform()));
 
-        return holder;
+        return transformedClipboardHolder;
 
     }
 
