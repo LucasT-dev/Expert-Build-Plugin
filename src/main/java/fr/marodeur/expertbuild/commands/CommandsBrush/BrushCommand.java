@@ -1,18 +1,15 @@
 package fr.marodeur.expertbuild.commands.CommandsBrush;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.function.pattern.Pattern;
-import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.Region;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.*;
+import fr.marodeur.expertbuild.object.builderObjects.Clipboard3DParameter;
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 
 import org.bukkit.Bukkit;
@@ -327,32 +324,13 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                Clipboard clip = new UtilsFAWE(p).CopySelection(false);
-                GlueList<BlockVec4> list = new GlueList<>();
+                Clipboard3DParameter cb3d = brushBuilder.getClipboard3dParameter();
 
-                clip.iterator().forEachRemaining(blockVector3 -> {
-
-                    BlockVector3 blockVector31 = clip.getOrigin().add(blockVector3);
-
-                    int blockX = blockVector31.x() - clip.getOrigin().x();
-                    int blockY = blockVector31.y() - clip.getOrigin().y();
-                    int blockZ = blockVector31.z() - clip.getOrigin().z();
-
-                    int deltaX = blockX - clip.getOrigin().x();
-                    int deltaY = blockY - clip.getOrigin().y();
-                    int deltaZ = blockZ - clip.getOrigin().z();
-
-                    list.add(new BlockVec4(
-                            deltaX,
-                            deltaY,
-                            deltaZ,
-                            clip.getFullBlock(blockX, blockY, blockZ)));
-                });
+                cb3d.setClipboardHolder(new FaweAPI(p).copySelection(false, false, false, true));
 
                 brushBuilder.setBrush(new Clipboard3DBrush())
                         .setEnable(true)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"3DClipboard"})
-                        .getClipboardBrush().setClipboardsBrush(list);
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"3DClipboard"});
             }
 
             case "erode", "e" -> {
