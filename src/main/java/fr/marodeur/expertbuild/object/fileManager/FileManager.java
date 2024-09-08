@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class FileManager {
 
-    private static final MultiFileObject areaTimerFile;
+    public static final MultiFileObject areaTimerFile;
     //private static final FileObject data;
 
     private static Logger LOG;

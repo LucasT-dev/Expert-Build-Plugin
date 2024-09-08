@@ -2,8 +2,7 @@ package fr.marodeur.expertbuild.object.builderObjects;
 
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class AreaTimerParameter {
@@ -50,6 +49,18 @@ public class AreaTimerParameter {
 
     public boolean isRunning() {
         return isRunning;
+    }
+
+
+    public void setRunning(boolean running) {
+        isRunning = running;
+    }
+
+    // Appelé pour virer tous les joueurs de l'area pour un running = false
+
+    public Set<UUID> getUuidPlayerEnteredInArea() {
+        // Utilisation de keySet() pour obtenir un Set des clés, puis conversion en List
+        return entryTimeMap.keySet();
     }
 
     // Appelé lorsqu'un joueur entre dans la zone

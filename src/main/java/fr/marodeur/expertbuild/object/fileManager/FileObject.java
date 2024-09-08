@@ -71,6 +71,11 @@ public class FileObject<T> {
         }
     }
 
+    // Methode de suppression du fichier
+    public boolean deleteFile() {
+        return new File(getFilePath()).delete();
+    }
+
 
     // Méthode pour sérialiser en JSON
     public String toJson(Object object) {

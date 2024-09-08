@@ -194,19 +194,22 @@ public class GeneralListener implements Listener {
 
 		for (AreaTimerParameter areaTimerParameter : Main.AREA_TIMER_PARAMETERS) {
 
-			// Verifie si le joueur est entré dans la zone
-			if (areaTimerParameter.isInArea(to, e.getTo().getWorld().getName())) {
+			if (areaTimerParameter.isRunning()) {
 
-				// Verifie si le joueur est pas déja enregistre dans la zone pour pouvoir l'enregister
-				if (!areaTimerParameter.playerIsAlreadyRegisterInArea(playerUUID)) {
-					areaTimerParameter.playerEnteredZone(playerUUID);
-				}
+				// Verifie si le joueur est entré dans la zone
+				if (areaTimerParameter.isInArea(to, e.getTo().getWorld().getName())) {
 
-			} else {
+					// Verifie si le joueur est pas déja enregistre dans la zone pour pouvoir l'enregister
+					if (!areaTimerParameter.playerIsAlreadyRegisterInArea(playerUUID)) {
+						areaTimerParameter.playerEnteredZone(playerUUID);
+					}
 
-				// Verifie si le joueur est pas déja enregistre dans la zone
-				if (areaTimerParameter.playerIsAlreadyRegisterInArea(playerUUID)) {
-					areaTimerParameter.playerExitedZone(playerUUID);
+				} else {
+
+					// Verifie si le joueur est pas déja enregistre dans la zone
+					if (areaTimerParameter.playerIsAlreadyRegisterInArea(playerUUID)) {
+						areaTimerParameter.playerExitedZone(playerUUID);
+					}
 				}
 			}
 		}

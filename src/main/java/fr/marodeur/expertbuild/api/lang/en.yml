@@ -113,6 +113,14 @@ expbuild:
       timelapse_no_in_progress: You don't have a timelapse in progress
       too_many_timelapses: You already have too many timelapses launched on the server
 
+      areatimer_create: "AreaTimer 'areatimer' created successfully"
+      areatimer_already_exist: "AreaTimer 'areatimer' already exists"
+      areatimer_delete: "'areatimer' deleted successfully"
+      areatimer_pause: "AreaTimer 'areatimer' paused"
+      areatimer_already_pause: "AreaTimer 'areatimer' already paused"
+      areatimer_resume: "AreaTimer 'areatimer' has resumed"
+      areatimer_already_resume: "AreaTimer 'areatimer' has already resumed"
+
     gui:
       back: Back
       exit: Exit

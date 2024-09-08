@@ -6,6 +6,7 @@ import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 import fr.marodeur.expertbuild.object.AbstractCommand;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
+import fr.marodeur.expertbuild.object.Message;
 import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
 
 import org.bukkit.command.Command;
@@ -77,13 +78,12 @@ public class AreaTimerCommand extends AbstractCommand {
                         true
                 ));
 
-                p.sendMessage(Main.prefix + "Area : " + areaName + " create ");
+                new Message.MessageSender("expbuild.message.commands.areatimer_create", true, new String[]{areaName}).send(p);
                 return;
             }
 
-            p.sendMessage(Main.prefix + "Area : " + areaName + " already exist, define an other name");
+            new Message.MessageSender("expbuild.message.commands.areatimer_already_exist", true, new String[]{areaName}).send(p);
             return;
-
         }
 
         if (Main.AREA_TIMER_PARAMETERS == null) return;
@@ -101,7 +101,10 @@ public class AreaTimerCommand extends AbstractCommand {
 
            boolean b = Main.AREA_TIMER_PARAMETERS.remove(areaTimerParameter);
 
-           if (b) p.sendMessage(Main.prefix + areaName + " deleted with succes");
+           Main.getInstance().getFileManager().areaTimerFile.deleteFile(areaName);
+
+           if (b) new Message.MessageSender("expbuild.message.commands.areatimer_delete", true, new String[]{areaName}).send(p);
+
            else p.sendMessage(Main.prefix + "Error during the deleting");
 
         }
@@ -118,10 +121,29 @@ public class AreaTimerCommand extends AbstractCommand {
             return;
         }
 
-
         if (args[0].equalsIgnoreCase("stop")) {
 
+            if (areaTimerParameter.isRunning()) {
 
+                areaTimerParameter.setRunning(false);
+
+                // Retire les joueurs présent dans la areatimer
+                areaTimerParameter.getUuidPlayerEnteredInArea().forEach(areaTimerParameter::playerExitedZone);
+
+                new Message.MessageSender("expbuild.message.commands.areatimer_pause", true, new String[]{areaName}).send(p);
+            } else {
+                new Message.MessageSender("expbuild.message.commands.areatimer_already_pause", true, new String[]{areaName}).send(p);
+            }
+        }
+
+        if (args[0].equalsIgnoreCase("resume")) {
+
+            if (!areaTimerParameter.isRunning()) {
+                areaTimerParameter.setRunning(true);
+                new Message.MessageSender("expbuild.message.commands.areatimer_resume", true, new String[]{areaName}).send(p);
+            } else {
+                new Message.MessageSender("expbuild.message.commands.areatimer_already_resume", true, new String[]{areaName}).send(p);
+            }
         }
     }
 
@@ -157,12 +179,14 @@ public class AreaTimerCommand extends AbstractCommand {
                 subCommandSender.addSubCommand(new SubCommandSelector().getList(1, areaTimerName).toSubCommand("None", new ConditionArgumentBefore("delete", 0)));
                 subCommandSender.addSubCommand(new SubCommandSelector().getList(1, areaTimerName).toSubCommand("None", new ConditionArgumentBefore("info", 0)));
                 subCommandSender.addSubCommand(new SubCommandSelector().getList(1, areaTimerName).toSubCommand("None", new ConditionArgumentBefore("stop", 0)));
+                subCommandSender.addSubCommand(new SubCommandSelector().getList(1, areaTimerName).toSubCommand("None", new ConditionArgumentBefore("resume", 0)));
             }
 
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "create").toSubCommand("None"));
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "delete").toSubCommand("None"));
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "info").toSubCommand("None"));
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "stop").toSubCommand("None"));
+            subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "resume").toSubCommand("None"));
 
         }
 

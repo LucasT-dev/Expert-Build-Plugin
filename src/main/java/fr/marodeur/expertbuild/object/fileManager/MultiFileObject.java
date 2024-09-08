@@ -113,5 +113,10 @@ public class MultiFileObject<T> {
         }
         return false;
     }
+
+    public void deleteFile(String areaName) {
+
+        new FileObject<>(this.path, areaName, this.extension, null).deleteFile();
+    }
 }
 
