@@ -1,11 +1,9 @@
 package fr.marodeur.expertbuild.object;
 
 import com.sk89q.worldedit.function.pattern.Pattern;
-import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockTypes;
 
-import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.NoneBrush;
@@ -15,13 +13,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public class BrushBuilder {
@@ -42,50 +38,36 @@ private static final Logger LOG;
     private Boolean isEnable;
     private Boolean selMode;
     private Boolean flyMode;
-    private Material material;
     private List<BaseBlock> flowerMaterial;
     private List<Integer> flowerMaterialRate;
     private Biome biome;
     private int airBrush;
     private Integer radius;
     private int tickRT; // tick repeater
-    private Region region; //autoFlip
-    private BlockFace blockFace;
-    private List<BlockVec4> bv4; //using autoflip
     private Pattern pattern;
 
     private UUID particleID;
 
-    private ClipboardBrush clipboardBrush;
-
     /**
      * Create objet BrushBuilder
      */
-    public BrushBuilder(UUID uuid, AbstractBrush abstractBrush, Boolean isEnable, Boolean selMode, Boolean flyMode, Material material,
+    public BrushBuilder(UUID uuid, AbstractBrush abstractBrush, Boolean isEnable, Boolean selMode, Boolean flyMode,
                         List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
-                        Integer rayon, int tickRT, Region region,
-                        BlockFace blockFace, List<BlockVec4> bv4, Pattern pattern, UUID particleID,
-                        ClipboardBrush clipboardBrush) {
+                        Integer rayon, int tickRT, Pattern pattern, UUID particleID) {
 
         this.uuid = uuid;
         this.abstractBrush = abstractBrush;
         this.isEnable = isEnable;
         this.selMode = selMode;
         this.flyMode = flyMode;
-        this.material = material;
         this.flowerMaterial = flowerMaterial;
         this.flowerMaterialRate = flowerMaterialTaux;
         this.biome = biome;
         this.airBrush = airBrush;
         this.radius = rayon;
         this.tickRT = tickRT;
-        this.region = region;
-        this.blockFace = blockFace;
-        this.bv4 = bv4;
         this.pattern = pattern;
         this.particleID = particleID;
-
-        this.clipboardBrush = clipboardBrush;
 
     }
 
@@ -148,10 +130,6 @@ private static final Logger LOG;
         return flyMode;
     }
 
-    public Material getMaterial() {
-        return material;
-    }
-
     public List<BaseBlock> getFlowerMaterial() {
         return flowerMaterial;
     }
@@ -176,18 +154,6 @@ private static final Logger LOG;
         return tickRT;
     }
 
-    public Region getRegion() {
-        return region;
-    }
-
-    public BlockFace getBlockFace() {
-        return blockFace;
-    }
-
-    public List<BlockVec4> getBlockVec4List() {
-        return bv4;
-    }
-
     public Pattern getPattern() {
         return pattern;
     }
@@ -198,9 +164,6 @@ private static final Logger LOG;
 
 
 
-    public ClipboardBrush getClipboardBrush() {
-        return clipboardBrush;
-    }
 
 
     public boolean hasPermission(String permission) {
@@ -210,6 +173,8 @@ private static final Logger LOG;
     public Player getPlayer() {
         return Bukkit.getPlayer(this.uuid);
     }
+
+
     // SETTER
 
     public BrushBuilder setBrush(AbstractBrush abstractBrush) {
@@ -229,11 +194,6 @@ private static final Logger LOG;
 
     public BrushBuilder setFlyMode(Boolean flyMode) {
         this.flyMode = flyMode;
-        return this;
-    }
-
-    public BrushBuilder setMaterial(Material material) {
-        this.material = material;
         return this;
     }
 
@@ -370,21 +330,6 @@ private static final Logger LOG;
         return this;
     }
 
-    public BrushBuilder setRegion(Region region) {
-        this.region = region;
-        return this;
-    }
-
-    public BrushBuilder setBlockFace(BlockFace blockFace) {
-        this.blockFace = blockFace;
-        return this;
-    }
-
-    public BrushBuilder setBlockVec4(List<BlockVec4> bv4) {
-        this.bv4 = bv4;
-        return this;
-    }
-
     public BrushBuilder setPattern(Pattern pattern) {
         this.pattern = pattern;
         return this;
@@ -394,9 +339,6 @@ private static final Logger LOG;
         this.particleID = UUID.randomUUID();
     }
 
-    public ClipboardBrush clipboardBrush() {
-        return clipboardBrush;
-    }
 
     @Override
     public String toString() {
@@ -406,16 +348,12 @@ private static final Logger LOG;
                 ", isEnable=" + isEnable +
                 ", selMode=" + selMode +
                 ", flyMode=" + flyMode +
-                ", material=" + material +
                 ", flowerMaterial=" + flowerMaterial +
                 ", flowerMaterialRate=" + flowerMaterialRate +
                 ", biome=" + biome +
                 ", airBrush=" + airBrush +
                 ", radius=" + radius +
                 ", tickRT=" + tickRT +
-                ", region=" + region +
-                ", blockFace=" + blockFace +
-                ", bv4=" + bv4 +
                 ", pattern=" + pattern.toString() +
                 '}';
     }
@@ -482,18 +420,13 @@ private static final Logger LOG;
                 false,
                 true,
                 true,
-                CONFIG.getDefault_material_brush(),
                 it, flowerMaterialTaux,
                 CONFIG.getDefault_biome_brush(),
                 CONFIG.getDefault_air_brush(),
                 CONFIG.getDefaultBrushRayon(),
                 4,
-                null,
-                null,
-                new ArrayList<>(),
                 new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),
-                UUID.randomUUID(),
-                new ClipboardBrush(new GlueList<>())));
+                UUID.randomUUID()));
     }
 
         /**
@@ -534,36 +467,5 @@ private static final Logger LOG;
 
     public boolean isEmpty(BrushBuilder bb) {
         return (bb == null);
-    }
-
-
-    public static class ClipboardBrush {
-
-        private GlueList<BlockVec4> clipboardsBrush;
-
-        public ClipboardBrush(GlueList<BlockVec4> clipboardsBrush) {
-            this.clipboardsBrush = clipboardsBrush;
-        }
-
-        public GlueList<BlockVec4>getClipboardsBrush() {
-            return clipboardsBrush;
-        }
-
-        public void setClipboardsBrush(GlueList<BlockVec4> clipboardsBrush) {
-            this.clipboardsBrush = clipboardsBrush;
-        }
-
-        @Override
-        public String toString() {
-
-            AtomicReference<String> s = new AtomicReference<>("");
-            clipboardsBrush.iterator().forEachRemaining(blockVec4 -> s.set(s + blockVec4.toString() + "\n"));
-
-            return "ClipboardBrush{" +
-                    "clipboardsBrush=" + clipboardsBrush + "\n" +
-                    "size=" + clipboardsBrush.size() + "\n" +
-                    "blockVec4 Iteration=" + s +
-                    '}';
-        }
     }
 }
