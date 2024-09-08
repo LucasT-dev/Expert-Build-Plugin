@@ -14,7 +14,6 @@ import com.sk89q.worldedit.regions.selector.Polygonal2DRegionSelector;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 
 import fr.marodeur.expertbuild.object.AbstractBrush;
-import fr.marodeur.expertbuild.object.BlockVec4;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 
@@ -47,7 +46,7 @@ public class Rot2DCubeBrush extends AbstractBrush {
 
         int radiusCube = (int) Math.sqrt(radius * radius + radius * radius);
 
-        Location ldir = new BlockVec4(l).getPointAngle(0, pl.getYaw(), radiusCube, l.getWorld());
+        Location ldir = new BlockVectorTool().toBlockVectorTool(l).getBlockVectorAngle(0, pl.getYaw(), radiusCube).toLocation(l.getWorld());
 
         int dx1 = ldir.getBlockX() - l.getBlockX();
         int dz1 = ldir.getBlockZ() - l.getBlockZ();
@@ -72,7 +71,7 @@ public class Rot2DCubeBrush extends AbstractBrush {
 
         Polygonal2DRegionSelector polygonal2DRegionSelector = new Polygonal2DRegionSelector(BukkitAdapter.adapt(l.getWorld()), point, l.getBlockY(), l.getBlockY() + radiusCube);
 
-        polygonal2DRegionSelector.getRegion().stream().forEach(bv3 ->  this.addBlock(new BlockVectorTool(bv3.x(), bv3.y(), bv3.z())));
+        polygonal2DRegionSelector.getRegion().forEach(bv3 ->  this.addBlock(new BlockVectorTool(bv3.x(), bv3.y(), bv3.z())));
 
         return true;
     }
