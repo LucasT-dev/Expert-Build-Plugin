@@ -12,9 +12,10 @@ package fr.marodeur.expertbuild.brush;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 public class OverlayBrush extends AbstractBrush {
 
@@ -53,7 +54,7 @@ public class OverlayBrush extends AbstractBrush {
 
                         Location floc = new Location(l.getWorld(), x, y, z);
 
-                        if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
+                        if (!this.ignoredBlock(floc.getBlock())) {
                             this.addBlock(new BlockVectorTool().toBlockVectorTool(floc));
                         }
                     }
@@ -82,7 +83,7 @@ public class OverlayBrush extends AbstractBrush {
 
                         Location floc = new Location(l.getWorld(), x, y, z);
 
-                        if (!new UtilsFAWE(brushBuilder.getPlayer()).ignoredBlock(floc.getBlock())) {
+                        if (!this.ignoredBlock(floc.getBlock())) {
                             this.addBlock(new BlockVectorTool().toBlockVectorTool(floc).add(0, 1, 0));
                         }
                     }
@@ -90,5 +91,9 @@ public class OverlayBrush extends AbstractBrush {
             }
         }
         return true;
+    }
+
+    private boolean ignoredBlock(@NotNull Block b) {
+        return b.isLiquid() || b.isPassable() || b.getType().isAir() || b.toString().contains("leaves");
     }
 }
