@@ -71,6 +71,28 @@ public class FileObject<T> {
         }
     }
 
+    // Methode crée le fichier
+    public boolean createFileWithDefaultData(Object object) {
+
+        File file = new File(getFilePath());
+
+        if (file.exists()) return false;
+
+        file.getParentFile().mkdirs();
+
+        try {
+
+            boolean b = file.createNewFile();
+
+            saveToFile(object);
+
+            return b;
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     // Methode de suppression du fichier
     public boolean deleteFile() {
         return new File(getFilePath()).delete();
