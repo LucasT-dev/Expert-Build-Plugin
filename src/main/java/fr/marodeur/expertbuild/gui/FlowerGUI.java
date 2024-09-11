@@ -13,6 +13,7 @@ import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.brush.FlowerBrush;
 import fr.marodeur.expertbuild.object.*;
 
+import fr.marodeur.expertbuild.object.builderObjects.FlowerBrushParameter;
 import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
 import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
 import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
@@ -68,6 +69,8 @@ public class FlowerGUI {
                     public void init(Player player, InventoryContents contents) {
 
                         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+
+                        FlowerBrushParameter fbp = brushBuilder.getFlowerBrushParameter();
 
                         if (brushBuilder == null) {
                             p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());
@@ -126,19 +129,19 @@ public class FlowerGUI {
                         //SET AIR BRUSH
                         contents.set(5, IntelligentItem.of(
                                 new ItemBuilder("expbuild.message.gui.air_text", false, Material.POTION, 1)
-                                        .addLore("expbuild.message.gui.air_value", false, new String[]{String.valueOf(brushBuilder.getAirBrush())})
-                                        .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
-                                        .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
+                                        .addLore("expbuild.message.gui.air_value", false, new String[]{String.valueOf(fbp.airBrush())})
+                                        .addLore("expbuild.message.gui.total", false, new String[]{(fbp.flowerMaterialRate().stream().mapToInt(j -> j).sum() + fbp.airBrush()) + " %"})
+                                        .build(), event -> fbp.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
                         //SET MATERIAL PROPORTION
                         for (int i = 9; i < 18; i++) {
                             int finalI = i;
                             contents.set(i, IntelligentItem.of(
                                     new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, 1)
-                                            .addLore("expbuild.message.gui.right_arrow", false, new String[]{brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)})
-                                            .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
+                                            .addLore("expbuild.message.gui.right_arrow", false, new String[]{fbp.flowerMaterialRate().get(i - 9) + " % of " + fbp.flowerMaterial().get(i - 9)})
+                                            .addLore("expbuild.message.gui.total", false, new String[]{(fbp.flowerMaterialRate().stream().mapToInt(j -> j).sum() + fbp.airBrush()) + " %"})
                                             .addLore("expbuild.message.gui.click_for_change", false)
-                                            .build(), event -> brushBuilder.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick())));
+                                            .build(), event -> fbp.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick())));
                         }
 
                         //SET MATERIAL
@@ -147,11 +150,11 @@ public class FlowerGUI {
                             int finalI = i;
 
                             contents.set(i, IntelligentItem.of(
-                                    new ItemBuilder(BukkitAdapter.adapt(brushBuilder.getFlowerMaterial().get(i - 45).getBlockType()))
+                                    new ItemBuilder(BukkitAdapter.adapt(fbp.flowerMaterial().get(i - 45).getBlockType()))
                                             .build(), event -> {
                                     }));
 
-                            BaseBlock baseBlock = brushBuilder.getFlowerMaterial().get(i - 45);
+                            BaseBlock baseBlock = fbp.flowerMaterial().get(i - 45);
 
                             //ITERATION PROPERTY-KEY BLOCK
                             int iter = 0;
@@ -163,7 +166,7 @@ public class FlowerGUI {
                                         .addLore("expbuild.message.gui.property_key", false, new String[]{set.getKey().getName()})
                                         .addLore("expbuild.message.gui.value_propertykey", false, new String[]{set.getValue().toString().toUpperCase()})
                                         .addLore("expbuild.message.gui.click_for_change_property", false)
-                                        .build(), event -> itemBrushManager(finalI-45, event, event, brushBuilder, set, contents, baseBlock)));
+                                        .build(), event -> itemBrushManager(finalI-45, event, event, fbp, set, contents, baseBlock)));
 
                                 if (iter == 3) break;
                             }
@@ -174,6 +177,7 @@ public class FlowerGUI {
                     public void update(Player player, InventoryContents contents) {
 
                         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+                        FlowerBrushParameter fbp = brushBuilder.getFlowerBrushParameter();
 
                         if (brushBuilder == null) {
                             p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", false, new String[]{"exp.register"}).getMessage());
@@ -185,12 +189,11 @@ public class FlowerGUI {
                             int finalI = i;
                             contents.updateOrSet(i, IntelligentItem.of(
                                     new ItemBuilder(Material.BLACK_STAINED_GLASS_PANE, 1)
-                                            .addLore("expbuild.message.gui.right_arrow", false, new String[]{brushBuilder.getFlowerMaterialRate().get(i - 9) + " % of " + brushBuilder.getFlowerMaterial().get(i - 9)})
-                                            .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
+                                            .addLore("expbuild.message.gui.right_arrow", false, new String[]{fbp.flowerMaterialRate().get(i - 9) + " % of " + fbp.flowerMaterial().get(i - 9)})
+                                            .addLore("expbuild.message.gui.total", false, new String[]{(fbp.flowerMaterialRate().stream().mapToInt(j -> j).sum() + fbp.airBrush()) + " %"})
                                             .addLore("expbuild.message.gui.click_for_change", false)
-                                            .build(), event -> {
-                                        brushBuilder.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick());
-                                    }));
+                                            .build(), event ->
+                                            fbp.addFlowerMaterialRate(finalI - 9, event.isShiftClick(), event.isRightClick())));
                         }
 
                         //SET BRUSH FALSE
@@ -227,9 +230,9 @@ public class FlowerGUI {
                         //SET AIR BRUSH
                         contents.updateOrSet(5, IntelligentItem.of(
                                 new ItemBuilder("expbuild.message.gui.air_text", false, Material.POTION, 1)
-                                        .addLore("expbuild.message.gui.air_value", false, new String[]{String.valueOf(brushBuilder.getAirBrush())})
-                                        .addLore("expbuild.message.gui.total", false, new String[]{(brushBuilder.getFlowerMaterialRate().stream().mapToInt(j -> j).sum() + brushBuilder.getAirBrush()) + " %"})
-                                        .build(), event -> brushBuilder.setAirBrush(event.isShiftClick(), event.isRightClick())));
+                                        .addLore("expbuild.message.gui.air_value", false, new String[]{String.valueOf(fbp.airBrush())})
+                                        .addLore("expbuild.message.gui.total", false, new String[]{(fbp.flowerMaterialRate().stream().mapToInt(j -> j).sum() + fbp.airBrush()) + " %"})
+                                        .build(), event -> fbp.setAirBrush(event.isShiftClick(), event.isRightClick())));
 
 
                         //UPDATE MATERIAL
@@ -237,17 +240,17 @@ public class FlowerGUI {
 
                             int finalI = i;
                             contents.updateOrSet(i, IntelligentItem.of(
-                                    new ItemBuilder(BukkitAdapter.adapt(brushBuilder.getFlowerMaterial().get(i - 45).getBlockType()))
+                                    new ItemBuilder(BukkitAdapter.adapt(fbp.flowerMaterial().get(i - 45).getBlockType()))
                                             .build(),
                                     event -> {
 
                                         if (event.getCursor().getType().isAir()) {
 
-                                            brushBuilder.addFlowerMaterial(
+                                            fbp.addFlowerMaterial(
                                                             new BaseBlock(BukkitAdapter.asBlockState(
                                                                     new ItemBuilder(Material.BARRIER)
-                                                                            .build())), event.getSlot() - 45)
-                                                    .addFlowerMaterialRate(0, event.getSlot() - 45);
+                                                                            .build())), event.getSlot() - 45);
+                                            fbp.addFlowerMaterialRate(0, event.getSlot() - 45);
 
                                             //Remove property material
                                             for (int j = 0; j < 4; j++) {
@@ -269,11 +272,11 @@ public class FlowerGUI {
                                                 return;
                                             }
 
-                                            if (brushBuilder.getFlowerMaterialRate().get(finalI - 45).equals(0)) {
-                                                brushBuilder.getFlowerMaterialRate().set(finalI - 45, 1);
+                                            if (fbp.flowerMaterialRate().get(finalI - 45).equals(0)) {
+                                                fbp.flowerMaterialRate().set(finalI - 45, 1);
                                             }
 
-                                            brushBuilder.addFlowerMaterial(baseBlock, finalI - 45);
+                                            fbp.addFlowerMaterial(baseBlock, finalI - 45);
 
                                             //Iteration Property block
                                             int iter = 0;
@@ -287,7 +290,7 @@ public class FlowerGUI {
                                                         .addLore("expbuild.message.gui.click_for_change_property", false)
                                                         .build(), event1 -> {
 
-                                                    itemBrushManager(event.getSlot()-45, event, event1, brushBuilder, set, contents, baseBlock);
+                                                    itemBrushManager(event.getSlot()-45, event, event1, fbp, set, contents, baseBlock);
 
                                                 }));
 
@@ -303,14 +306,14 @@ public class FlowerGUI {
                 .open(p);
     }
 
-    private static void itemBrushManager(int index, InventoryClickEvent event, InventoryClickEvent event1, BrushBuilder brushBuilder, Map.Entry<Property<?>, Object> set, InventoryContents contents, BaseBlock baseBlock) {
+    private static void itemBrushManager(int index, InventoryClickEvent event, InventoryClickEvent event1, FlowerBrushParameter fbp, Map.Entry<Property<?>, Object> set, InventoryContents contents, BaseBlock baseBlock) {
 
         int slotItem = event.getSlot();
         int slotClicked = event1.getSlot();
         //int index = slotItem - 45;
 
         //Index error
-        BaseBlock baseBlockProperty = brushBuilder.getFlowerMaterial().get(index);
+        BaseBlock baseBlockProperty = fbp.flowerMaterial().get(index);
 
 
         //Modify propertyKey TYPE
@@ -324,7 +327,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.TYPE, "top");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.TYPE).toString().toUpperCase());
         }
 
@@ -337,7 +340,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.HALF, "upper");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.HALF).toString().toUpperCase());
         }
 
@@ -350,7 +353,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.WATERLOGGED, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.WATERLOGGED).toString().toUpperCase());
         }
 
@@ -366,7 +369,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.AGE, age + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.AGE).toString().toUpperCase());
 
         }
@@ -383,7 +386,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.PICKLES, age + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.PICKLES).toString().toUpperCase());
 
         }
@@ -397,7 +400,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.PERSISTENT, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.PERSISTENT).toString().toUpperCase());
         }
 
@@ -414,7 +417,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.TILT, "full");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.TILT).toString().toUpperCase());
         }
 
@@ -434,7 +437,7 @@ public class FlowerGUI {
             }
 
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : " + baseBlockProperty.getState(PropertyKey.FACING).toString().toUpperCase());
         }
 
@@ -451,7 +454,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.CANDLES, candle + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.CANDLES).toString().toUpperCase());
 
         }
@@ -465,7 +468,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.LIT, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.LIT).toString().toUpperCase());
         }
 
@@ -481,7 +484,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.LAYERS, layer + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.LAYERS).toString().toUpperCase());
         }
 
@@ -496,7 +499,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.AXIS, "x");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.AXIS).toString().toUpperCase());
         }
 
@@ -511,7 +514,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.LEAVES, "small");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.LEAVES).toString().toUpperCase());
         }
 
@@ -524,7 +527,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.POWERED, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.POWERED).toString().toUpperCase());
         }
 
@@ -540,7 +543,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.POWER, layer + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.POWER).toString().toUpperCase());
         }
 
@@ -553,7 +556,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.HANGING, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.HANGING).toString().toUpperCase());
         }
 
@@ -566,7 +569,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.OCCUPIED, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.OCCUPIED).toString().toUpperCase());
         }
 
@@ -579,7 +582,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.PART, "foot");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.PART).toString().toUpperCase());
         }
 
@@ -595,7 +598,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.MOISTURE, layer + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.MOISTURE).toString().toUpperCase());
         }
 
@@ -608,7 +611,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.SNOWY, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.SNOWY).toString().toUpperCase());
         }
 
@@ -624,7 +627,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.HONEY_LEVEL, layer + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.HONEY_LEVEL).toString().toUpperCase());
         }
 
@@ -640,7 +643,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.STAGE, layer + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.STAGE).toString().toUpperCase());
         }
 
@@ -653,7 +656,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.OPEN, true);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.OPEN).toString().toUpperCase());
         }
 
@@ -671,7 +674,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlock.with(PropertyKey.ATTACHMENT, "ceiling");
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.ATTACHMENT).toString().toUpperCase());
         }
 
@@ -687,7 +690,7 @@ public class FlowerGUI {
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.LEVEL, layer + 1);
             }
 
-            brushBuilder.addFlowerMaterial(baseBlockProperty, index);
+            fbp.addFlowerMaterial(baseBlockProperty, index);
             contents.updateLore(slotClicked, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.LEVEL).toString().toUpperCase());
         }
     }
@@ -697,19 +700,22 @@ public class FlowerGUI {
         if (brushBuilder.getEnable()) {
             brushBuilder.setBrush(new FlowerBrush());
 
+            FlowerBrushParameter fbp = brushBuilder.getFlowerBrushParameter();
+
+
             StringBuilder stringBuilder = new StringBuilder();
 
-            for (int i = 0; i < brushBuilder.getFlowerMaterial().size(); i++) {
+            for (int i = 0; i < fbp.flowerMaterial().size(); i++) {
 
-                if (!brushBuilder.getFlowerMaterial().get(i).toBaseBlock().getBlockType().equals(BukkitAdapter.asBlockType(Material.BARRIER))) {
+                if (!fbp.flowerMaterial().get(i).toBaseBlock().getBlockType().equals(BukkitAdapter.asBlockType(Material.BARRIER))) {
 
-                    stringBuilder.append(brushBuilder.getFlowerMaterialRate().get(i))
+                    stringBuilder.append(fbp.flowerMaterialRate().get(i))
                             .append("%")
-                            .append(brushBuilder.getFlowerMaterial().get(i))
+                            .append(fbp.flowerMaterial().get(i))
                             .append(',');
                 }
             }
-            stringBuilder.append(brushBuilder.getAirBrush())
+            stringBuilder.append(fbp.airBrush())
                     .append("%")
                     .append(0);
 

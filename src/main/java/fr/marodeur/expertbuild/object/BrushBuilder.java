@@ -1,8 +1,6 @@
 package fr.marodeur.expertbuild.object;
 
 import com.sk89q.worldedit.function.pattern.Pattern;
-import com.sk89q.worldedit.world.block.BaseBlock;
-import com.sk89q.worldedit.world.block.BlockTypes;
 
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.Main;
@@ -14,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,10 +37,7 @@ private static final Logger LOG;
     private Boolean isEnable;
     private Boolean selMode;
     private Boolean flyMode;
-    private List<BaseBlock> flowerMaterial;
-    private List<Integer> flowerMaterialRate;
     private Biome biome;
-    private int airBrush;
     private Integer radius;
     private int tickRT; // tick repeater
     private Pattern pattern;
@@ -52,18 +48,14 @@ private static final Logger LOG;
      * Create objet BrushBuilder
      */
     public BrushBuilder(UUID uuid, AbstractBrush abstractBrush, Boolean isEnable, Boolean selMode, Boolean flyMode,
-                        List<BaseBlock> flowerMaterial, List<Integer> flowerMaterialTaux, Biome biome, int airBrush,
-                        Integer rayon, int tickRT, Pattern pattern, UUID particleID) {
+                        Biome biome, Integer rayon, int tickRT, Pattern pattern, UUID particleID) {
 
         this.uuid = uuid;
         this.abstractBrush = abstractBrush;
         this.isEnable = isEnable;
         this.selMode = selMode;
         this.flyMode = flyMode;
-        this.flowerMaterial = flowerMaterial;
-        this.flowerMaterialRate = flowerMaterialTaux;
         this.biome = biome;
-        this.airBrush = airBrush;
         this.radius = rayon;
         this.tickRT = tickRT;
         this.pattern = pattern;
@@ -82,24 +74,34 @@ private static final Logger LOG;
         return Main.getDataProfile().getTimelapseProfile(this.uuid);
     }
 
+    // TERRA B EB brush
     public TerraParameter getTerraParameterProfile() {
         return Main.getDataProfile().getTerraParameterProfile(this.uuid);
     }
 
+    // CLIPBOARD Brush
     public ClipboardParameter getClipboardParameter() {
         return Main.getDataProfile().getClipboardParameterProfile(this.uuid);
     }
 
+    // LEATHER
     public LeatherParameter getLeatherParameter() {
         return Main.getDataProfile().getLeatherParameterProfile(this.uuid);
     }
 
+    // GOHA
     public GohaParameter getGohaParameter() {
         return Main.getDataProfile().getGohaParameterProfile(this.uuid);
     }
 
+    // CLIBBOARD 3D Brush
     public Clipboard3DParameter getClipboard3dParameter() {
         return Main.getDataProfile().getClipboard3dProfile(this.uuid);
+    }
+
+    // FLOWER Brush
+    public FlowerBrushParameter getFlowerBrushParameter() {
+        return Main.getDataProfile().getFlowerBrushProfile(this.uuid);
     }
 
 
@@ -130,21 +132,10 @@ private static final Logger LOG;
         return flyMode;
     }
 
-    public List<BaseBlock> getFlowerMaterial() {
-        return flowerMaterial;
-    }
-
-    public List<Integer> getFlowerMaterialRate() {
-        return flowerMaterialRate;
-    }
-
     public Biome getBiome() {
         return biome;
     }
 
-    public int getAirBrush() {
-        return airBrush;
-    }
 
     public Integer getRadius() {
         return radius;
@@ -197,95 +188,8 @@ private static final Logger LOG;
         return this;
     }
 
-    public BrushBuilder setFlowerMaterial(List<BaseBlock> flowerMaterial) {
-        this.flowerMaterial = flowerMaterial;
-        return this;
-    }
-
-    public BrushBuilder addFlowerMaterial(BaseBlock flowerMaterial, int index) {
-        this.flowerMaterial.set(index, flowerMaterial);
-        return this;
-    }
-
-    public BrushBuilder setFlowerMaterialRate(List<Integer> flowerMaterialRate) {
-        this.flowerMaterialRate = flowerMaterialRate;
-        return this;
-    }
-
-    public BrushBuilder addFlowerMaterialRate(Integer flowerMaterialRate, int index) {
-        this.flowerMaterialRate.set(index, flowerMaterialRate);
-        return this;
-    }
-
-    public BrushBuilder addFlowerMaterialRate(int index, boolean isShiftClick, boolean isRightClick) {
-
-        int maxRadius = 100;
-        int minRadius = 1;
-        int n =  this.flowerMaterialRate.get(index);
-        int num;
-
-        if (isShiftClick) {
-            if (isRightClick) {
-                num = -10;
-            } else {
-                num = 10;
-            }
-        } else {
-            if (isRightClick) {
-                num = -1;
-            } else {
-                num = 1;
-            }
-        }
-
-        if (n + num > maxRadius) {
-            this.flowerMaterialRate.set(index, maxRadius);
-        } else if (n + num < minRadius) {
-            this.flowerMaterialRate.set(index, minRadius);
-        } else {
-            this.flowerMaterialRate.set(index, n + num);
-        }
-        return this;
-    }
-
     public BrushBuilder setBiome(Biome biome) {
         this.biome = biome;
-        return this;
-    }
-
-    public BrushBuilder setAirBrush(int airBrush) {
-        this.airBrush = airBrush;
-        return this;
-    }
-
-    public BrushBuilder setAirBrush(boolean isShiftClick, boolean isRightClick) {
-
-        int maxRotation = 100;
-        int minRotation = 0;
-        int n = this.airBrush;
-        int num;
-
-        if (isShiftClick) {
-            if (isRightClick) {
-                num = -10;
-            } else {
-                num = 10;
-            }
-        } else {
-            if (isRightClick) {
-                num = -1;
-            } else {
-                num = 1;
-            }
-        }
-
-        if (n + num > maxRotation) {
-            this.airBrush = maxRotation;
-        } else if (n + num < minRotation) {
-            this.airBrush = minRotation;
-        } else {
-            this.airBrush = n + num;
-        }
         return this;
     }
 
@@ -348,10 +252,7 @@ private static final Logger LOG;
                 ", isEnable=" + isEnable +
                 ", selMode=" + selMode +
                 ", flyMode=" + flyMode +
-                ", flowerMaterial=" + flowerMaterial +
-                ", flowerMaterialRate=" + flowerMaterialRate +
                 ", biome=" + biome +
-                ", airBrush=" + airBrush +
                 ", radius=" + radius +
                 ", tickRT=" + tickRT +
                 ", pattern=" + pattern.toString() +
@@ -408,10 +309,6 @@ private static final Logger LOG;
             return getBrushBuilderPlayer(p, sendError);
         }
 
-        BaseBlock ib = Objects.requireNonNull(BlockTypes.BARRIER).getDefaultState().toBaseBlock();
-        List<BaseBlock> it = new ArrayList<>(Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib));
-        List<Integer> flowerMaterialTaux = Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0);
-
         Main.getDataProfile().registerPlayer(p.getUniqueId());
 
 
@@ -420,9 +317,7 @@ private static final Logger LOG;
                 false,
                 true,
                 true,
-                it, flowerMaterialTaux,
                 CONFIG.getDefault_biome_brush(),
-                CONFIG.getDefault_air_brush(),
                 CONFIG.getDefaultBrushRayon(),
                 4,
                 new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),

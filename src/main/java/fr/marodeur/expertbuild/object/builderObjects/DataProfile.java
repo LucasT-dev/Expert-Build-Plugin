@@ -1,5 +1,7 @@
 package fr.marodeur.expertbuild.object.builderObjects;
 
+import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
@@ -8,9 +10,7 @@ import fr.marodeur.expertbuild.object.Configuration;
 import fr.marodeur.expertbuild.object.Flag;
 import org.bukkit.Bukkit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 public class DataProfile {
@@ -30,13 +30,18 @@ public class DataProfile {
 
     private final HashMap<UUID, Clipboard3DParameter> clipboard3DParameterHashMap;
 
+    private final HashMap<UUID, FlowerBrushParameter> flowerBrushParameterHashMap;
+
+
     public DataProfile() {
+
         this.timelapseHashMap = new HashMap<>();
         this.terraParameterHashMap = new HashMap<>();
         this.clipboardParameterHashMap = new HashMap<>();
         this.leatherParameterHashMap = new HashMap<>();
         this.gohaParameterHashMap = new HashMap<>();
         this.clipboard3DParameterHashMap = new HashMap<>();
+        this.flowerBrushParameterHashMap = new HashMap<>();
     }
 
     public void registerPlayer(UUID uuid) {
@@ -76,6 +81,12 @@ public class DataProfile {
         if (! clipboard3DParameterHashMap.containsKey(uuid)) {
             clipboard3DParameterHashMap.put(uuid, new Clipboard3DParameter(uuid, null, new Flag("abce")));
         }
+
+        BaseBlock ib = BlockTypes.BARRIER.getDefaultState().toBaseBlock();
+
+        if (! flowerBrushParameterHashMap.containsKey(uuid)) {
+            flowerBrushParameterHashMap.put(uuid, new FlowerBrushParameter(uuid, Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib), Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0), CONF.getDefault_air_brush()) );
+        }
     }
 
     public TimelapseBuilderParameter getTimelapseProfile(UUID uuid) {
@@ -83,7 +94,7 @@ public class DataProfile {
     }
     public GlueList<TimelapseBuilderParameter> getTimelapseHashMap() {
         GlueList<TimelapseBuilderParameter> g = new GlueList<>();
-        g.addAll(timelapseHashMap.values());
+        g.addAll(this.timelapseHashMap.values());
         return g;
     }
 
@@ -92,7 +103,7 @@ public class DataProfile {
     }
     public GlueList<TerraParameter> getTerraParameterHashMap() {
         GlueList<TerraParameter> g = new GlueList<>();
-        g.addAll(terraParameterHashMap.values());
+        g.addAll(this.terraParameterHashMap.values());
         return g;
     }
 
@@ -101,7 +112,7 @@ public class DataProfile {
     }
     public GlueList<ClipboardParameter> getClipboardParameterHashMap() {
         GlueList<ClipboardParameter> g = new GlueList<>();
-        g.addAll(clipboardParameterHashMap.values());
+        g.addAll(this.clipboardParameterHashMap.values());
         return g;
     }
 
@@ -110,7 +121,7 @@ public class DataProfile {
     }
     public GlueList<LeatherParameter> getLeatherParameterHashMap() {
         GlueList<LeatherParameter> g = new GlueList<>();
-        g.addAll(leatherParameterHashMap.values());
+        g.addAll(this.leatherParameterHashMap.values());
         return g;
     }
 
@@ -119,7 +130,7 @@ public class DataProfile {
     }
     public GlueList<GohaParameter> getGohaParameterHashMap() {
         GlueList<GohaParameter> g = new GlueList<>();
-        g.addAll(gohaParameterHashMap.values());
+        g.addAll(this.gohaParameterHashMap.values());
         return g;
     }
 
@@ -128,7 +139,17 @@ public class DataProfile {
     }
     public GlueList<Clipboard3DParameter> getClipboard3DParametersHashMap() {
         GlueList<Clipboard3DParameter> g = new GlueList<>();
-        g.addAll(clipboard3DParameterHashMap.values());
+        g.addAll(this.clipboard3DParameterHashMap.values());
+        return g;
+    }
+
+
+    public FlowerBrushParameter getFlowerBrushProfile(UUID uuid) {
+        return this.flowerBrushParameterHashMap.get(uuid);
+    }
+    public GlueList<FlowerBrushParameter> getFlowerBrushParametersHashMap() {
+        GlueList<FlowerBrushParameter> g = new GlueList<>();
+        g.addAll(this.flowerBrushParameterHashMap.values());
         return g;
     }
 }
