@@ -91,7 +91,7 @@ public class ErodeBrush extends AbstractBrush {
         final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
         final Vector v = l.toVector();
 
-        // Sphere
+
         for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
             for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
                 for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
@@ -134,23 +134,13 @@ public class ErodeBrush extends AbstractBrush {
         // cylinder
         for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
             for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
-                if (new Vector(x, v.getBlockY(), z).distanceSquared(v) <= radius * radius) {
-                    for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
+                for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
+                    if (new Vector(x, y, z).isInSphere(v, radius)) {
                         spherePoint.add(new Vector(x, y, z));
                     }
                 }
             }
         }
-
-                /*for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
-                    for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
-                        for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
-                            if (new Vector(x, y, z).isInSphere(v, radius)) {
-                                spherePoint.add(new Vector(x, y, z));
-                            }
-                        }
-                    }
-                }*/
 
         for (int i = 0; i < erorionParameter[1]; ++i) {
             erosionIteration(blockChangeTracker);
