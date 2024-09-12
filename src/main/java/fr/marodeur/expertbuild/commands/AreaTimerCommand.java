@@ -28,7 +28,7 @@ public class AreaTimerCommand extends AbstractCommand {
 
     @Override
     public String getSyntax() {
-        return "/areatimer <create/delete/info> <area_name>";
+        return "/areatimer <create/delete/info/stop/resume> <area_name>";
     }
 
     @Override

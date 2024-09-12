@@ -1,16 +1,16 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.20
+* Latest plugin version : 1.18.1.21
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
-* [Supported Minecraft version : 1.18, 1.19, 1.20 +](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
+* [Supported Minecraft version : 1.18, 1.19, 1.20, 1.21 ](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
 
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)  
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.19-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.21-purple)
 
 ------------------
 <p align="center">
@@ -20,7 +20,9 @@ Minecraft build plugin, Expert-Build Documentation
 ------------------
 # News
 
--> * [New Brush Clipboard3D, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+-> * [New command /areatimer, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
+
+-> * [New brush Clipboard3D, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
 -> * [New command /painting, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Commands)
 
@@ -40,6 +42,7 @@ Minecraft build plugin, Expert-Build Documentation
 | 1.18.x     | :white_check_mark: |
 | 1.19.x     | :white_check_mark: |
 | 1.20.x     | :white_check_mark: |
+| 1.21.x     | :white_check_mark: |
 
 ------------------
 # Summary
@@ -227,6 +230,24 @@ Example : ```/timelapse start 5```, ```/timelapse stop```
 <img src="https://i.imgur.com/62yXy0d.gif" title="Image_1" alt="deco">
 
 ------------------
+`/areatimer` :
+
+This command allows you to define a zone using a WE selection.
+Then the plugin will count the time you spend in this zone.
+
+This can be very practical when you want to estimate the time spent on a project,
+Or charge a commission for the time spent on it !
+
+Command : /areatimer <create/delete/info/stop/resume> [ area-name ]
+
+Example : ```/areatimer create my_new_project```, ```/areatimer info my_new_project```
+
+*permission : exp.command.areatimer*
+
+<img src="https://imgur.com/e3KSKvK.png" title="Image_1" alt="deco">
+
+------------------
+
 `/perlin` :
 
 deactivate to be reworked
