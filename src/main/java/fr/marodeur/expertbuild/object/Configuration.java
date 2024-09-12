@@ -485,7 +485,7 @@ public class Configuration {
             //Update config file from 1.18.1.19 to 1.18.1.20
 
             yml.set("build.version", "1.18.1.20");
-            this.version = "1.18.1.21";
+            this.version = "1.18.1.20";
 
             yml.save(file);
 
@@ -494,11 +494,26 @@ public class Configuration {
         if (this.version.equals("1.18.1.20")) {
             //Update config file from 1.18.1.20 to 1.18.1.21
 
-            //for next update
+            yml.set("build.version", "1.18.1.21");
+            this.version = "1.18.1.21";
+
+            yml.save(file);
         }
 
         if (this.version.equals("1.18.1.21")) {
             //Update config file from 1.18.1.21 to 1.18.1.22
+
+            //for next update
+        }
+
+        if (this.version.equals("1.18.1.22")) {
+            //Update config file from 1.18.1.22 to 1.18.1.23
+
+            //for next update
+        }
+
+        if (this.version.equals("1.18.1.23")) {
+            //Update config file from 1.18.1.23 to 1.18.1.24
 
             //for next update
         }
