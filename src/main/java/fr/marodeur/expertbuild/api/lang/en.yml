@@ -98,13 +98,13 @@ expbuild:
       succes_transfert: Transfer finish, successful upload file Imported-'file' on server 'server'
       transfert_log: The file 'file' Exported with succes by 'player' on 'server'
 
-      enable: "'element'§c enable"
-      disable: "'element'§2 disable"
-      all_clipboards_delete: All clipboards have been deleted
-      clipboard_does_not_exist: clipboard 'clipboard' does not exist
-      clipboard_already_exist: clipboard 'clipboard' already exists
-      clipboard_add_and_enable: clipboard 'clipboard' add and brush enable
-      clipboard_remove: The clipboard 'clipboard' has been deleted
+      enable: "'element'§2 enable"
+      disable: "'element'§c disable"
+      all_clipboards_delete: "All clipboards have been deleted"
+      clipboard_does_not_exist: "clipboard §8§l'clipboard'§r§7 does not exist"
+      clipboard_already_exist: "clipboard §8§l'clipboard'§r§7 already exists"
+      clipboard_add_and_enable: "clipboard §8§l'clipboard'§r§7 add and brush enable"
+      clipboard_remove: "The clipboard §8§l'clipboard'§r§7 has been deleted"
 
       timelapse_already_running: You already have a timelapse running
       timelapse_finish_recap: Timelapse finish in 'time' 'unit'; 'quantity' blocks destroyed
@@ -163,8 +163,8 @@ expbuild:
       radius_text: Radius
       radius_value: Radius :§7 'value'
       air_text: Air
-      air_value: Air :§7 'value'
-      total: Total :§7 'value'
+      air_value: "Air :§7 'value' %"
+      total: "Total :§7 'value' %"
       right_arrow: ">§7 'value'"
       click_for_change: Click for change percentage
       property_key: "PropertyKey : §7'value'"

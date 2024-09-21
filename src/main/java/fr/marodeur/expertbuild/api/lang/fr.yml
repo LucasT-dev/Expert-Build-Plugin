@@ -95,20 +95,20 @@ expbuild:
       succes_transfert: Transfer fini, Fichier envoya avec succès Imported-'file' sur le serveur 'server'
       transfert_log: Le fichier 'file' exporté avec succes par 'player' sur le serveur 'server'
 
-      enable: "'element'§c activé"
-      disable: "'element'§2 désactivé"
-      all_clipboards_delete: Tous les clipboards ont été supprimés
-      clipboard_does_not_exist: Le clipboard 'clipboard' n'existe pas
-      clipboard_already_exist: Le clipboard 'clipboard' existe déjà
-      clipboard_add_and_enable: Le clipboard 'clipboard' ajouté et le brush est activé
-      clipboard_remove: Le clipboard 'clipboard' a été supprimé
+      enable: "'element'§2 activé"
+      disable: "'element'§c désactivé"
+      all_clipboards_delete: "Tous les clipboards ont été supprimés"
+      clipboard_does_not_exist: "Le clipboard §8§l'clipboard'§r§7 n'existe pas"
+      clipboard_already_exist: "Le clipboard §8§l'clipboard'§r§7 existe déjà"
+      clipboard_add_and_enable: "Le clipboard §8§l'clipboard'§r§7 ajouté et le brush est activé"
+      clipboard_remove: "Le clipboard §8§l'clipboard'§r§7 a été supprimé"
 
       timelapse_already_running: Vous avez déjà un timelapse en cours d'exécution
       timelapse_finish_recap: Timelapse fini en 'time' 'unit'; 'quantity' blocks detruits
       timelapse_estimate_time: "Estimation : 'quantity' blocks detruit en 'time' 'unit'"
       timelapse_stopped: Timelapse stoppé avec succes
       timelapse_no_in_progress: Vous n'avez pas de timelapse en cours
-      too_many_timelapses: Vous avez déja trop de timelapse lancé sur le serveur
+      too_many_timelapses: Vous avez déja des timelapse lancé sur le serveur
 
       areatimer_create: "AreaTimer 'areatimer' crée avec succès"
       areatimer_already_exist: "AreaTimer 'areatimer' existe déjà"
@@ -160,8 +160,8 @@ expbuild:
       radius_text: Rayon
       radius_value: Rayon :§7 'value'
       air_text: Air
-      air_value: Air :§7 'value'
-      total: Total :§7 'value'
+      air_value: "Air :§7 'value' %"
+      total: "Total :§7 'value' %"
       right_arrow: ">§7 'value'"
       click_for_change: Clic pour changer le pourcentage
       property_key: PropertyKey :§7 'value'

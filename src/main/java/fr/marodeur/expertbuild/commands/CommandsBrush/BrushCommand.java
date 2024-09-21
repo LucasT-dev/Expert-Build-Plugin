@@ -596,7 +596,7 @@ public class BrushCommand extends AbstractCommand {
                 .asList("lift", "melt", "fill", "smooth", "floatclean");
 
         final List<String> clipboardBrush = Arrays
-                .asList("add", "removeAll", "remove", "autoRotation");
+                .asList("add", "removeAll", "remove", "autoRotate");
 
         SubCommandSender subCommandSender = new SubCommandSender();
 
@@ -703,17 +703,17 @@ public class BrushCommand extends AbstractCommand {
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
         ClipboardParameter clipboardParameter = BrushBuilder.getBrushBuilderPlayer(p, false).getClipboardParameter();
 
-        if (args[1].equalsIgnoreCase("autoRotation")) {
+        if (args[1].equalsIgnoreCase("autoRotate")) {
 
             if (clipboardParameter.isRandomRotation()) {
                 clipboardParameter
                         .setRandomRotation(false)
-                        .sendMessage("expbuild.message.commands.disable", true, new String[]{"Auto-rotation"});
+                        .sendMessage("expbuild.message.commands.disable", true, new String[]{"Auto-rotate"});
 
             } else {
                 clipboardParameter
                         .setRandomRotation(true)
-                        .sendMessage("expbuild.message.commands.enable", true, new String[]{"Auto-rotation"});
+                        .sendMessage("expbuild.message.commands.enable", true, new String[]{"Auto-rotate"});
             }
         }
 
