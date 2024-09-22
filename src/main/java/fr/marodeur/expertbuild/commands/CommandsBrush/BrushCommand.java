@@ -315,6 +315,22 @@ public class BrushCommand extends AbstractCommand {
 
             }
 
+            case "hydrology" -> {
+
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                    break;
+                }
+
+                brushBuilder.setBrush(new HydrologyBrush())
+                        .setEnable(true)
+                        .setRadius(radius)
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"hydrology"});
+
+            }
+
             case "degrade" -> {
 
                 if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
@@ -584,6 +600,7 @@ public class BrushCommand extends AbstractCommand {
                 new ArgumentLength(2, "updatechunk", 0, "/flower updatechunk <radius>", 2),
                 new ArgumentLength(2, "degrade", 0, "/flower degrade <radius>", 2),
 
+                new ArgumentLength(2, "hydrology", 0, "/flower hydrology <radius>", 2),
                 new ArgumentLength(2, "drain", 0, "/flower drain  <radius>", 2),
                 new ArgumentLength(2, "eraser", 0, "/flower eraser <radius>", 2),
                 new ArgumentLength(2, "bb", 0, "/flower bb <radius>", 2),
