@@ -74,7 +74,6 @@ public class OverlayBrush extends AbstractBrush {
         this.setPattern(brushBuilder.getPattern());
 
         for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
-
             for (int z = l.getBlockZ() + brushSize; z >= l.getBlockZ() - brushSize; z--) {
 
                 if (l.distance(new Location(l.getWorld(), x, l.getY(), z)) <= brushSize) {

@@ -1,6 +1,8 @@
 package fr.marodeur.expertbuild.object;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.world.block.BaseBlock;
+import org.bukkit.Material;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -11,6 +13,12 @@ public class BlockVectorMaterial {
     // Deux Deque pour les positions et les matériaux
     private final Deque<BlockVectorTool> positionDeque = new ArrayDeque<>();
     private final Deque<BaseBlock> baseBlockDeque = new ArrayDeque<>();
+
+    // Ajouter une position et un matériau
+    public void addPositionMaterial(BlockVectorTool position, Material material) {
+        positionDeque.add(position);   // Ajouter à la queue
+        baseBlockDeque.add(BukkitAdapter.asBlockType(material).getDefaultState().toBaseBlock());   // Ajouter à la queue
+    }
 
     // Ajouter une position et un matériau
     public void addPositionMaterial(BlockVectorTool position, BaseBlock material) {

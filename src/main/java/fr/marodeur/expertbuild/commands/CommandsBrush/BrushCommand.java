@@ -315,6 +315,22 @@ public class BrushCommand extends AbstractCommand {
 
             }
 
+            case "degrade" -> {
+
+                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                    break;
+                }
+
+                brushBuilder.setBrush(new DegradeBrush())
+                        .setEnable(true)
+                        .setRadius(radius)
+                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Degrade"});
+
+            }
+
             case "clipboard3d" -> {
 
                 if (this.getValidArgument().hasSelection(p)) {
@@ -566,6 +582,8 @@ public class BrushCommand extends AbstractCommand {
                 new ArgumentLength(3, "sphere", 0, "/flower sphere <pattern> <radius>", 2),
 
                 new ArgumentLength(2, "updatechunk", 0, "/flower updatechunk <radius>", 2),
+                new ArgumentLength(2, "degrade", 0, "/flower degrade <radius>", 2),
+
                 new ArgumentLength(2, "drain", 0, "/flower drain  <radius>", 2),
                 new ArgumentLength(2, "eraser", 0, "/flower eraser <radius>", 2),
                 new ArgumentLength(2, "bb", 0, "/flower bb <radius>", 2),
@@ -650,6 +668,8 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.blendball", new ConditionArgumentBefore("blendball", 0)));
 
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.drain", new ConditionArgumentBefore("drain", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.degrade", new ConditionArgumentBefore("degrade", 0)));
+
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.updatechunk", new ConditionArgumentBefore("update_chunk", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.eraser", new ConditionArgumentBefore("eraser", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("none", new ConditionArgumentBefore("radius", 0)));

@@ -44,17 +44,17 @@ public class LineBrush extends AbstractBrush {
 
         Location l = (Location) loc;
 
+        ArrayList<BlockVectorTool> pointList;
         if (!point.containsKey(brushBuilder.getUUID())) {
 
-            ArrayList<BlockVectorTool> pointList = new ArrayList<>();
+            pointList = new ArrayList<>();
             pointList.add(new BlockVectorTool().toBlockVectorTool(l));
 
             point.put(brushBuilder.getUUID(), pointList);
-            brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
 
         } else {
 
-            ArrayList<BlockVectorTool> pointList = new ArrayList<>(point.get(brushBuilder.getUUID()));
+            pointList = new ArrayList<>(point.get(brushBuilder.getUUID()));
 
             //en config
             if (pointList.size() >= conf.getMax_point_saved()) {
@@ -66,9 +66,9 @@ public class LineBrush extends AbstractBrush {
 
             pointList.add(new BlockVectorTool().toBlockVectorTool(l));
             point.replace(brushBuilder.getUUID(), pointList);
-            brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
 
         }
+        brushBuilder.sendMessage("expbuild.message.brush.point_add", true, new String[]{l.getBlockX() + ", " + l.getBlockY() + ", " + l.getBlockZ() });
         return false;
     }
 
