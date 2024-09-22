@@ -82,11 +82,9 @@ public class ItemBuilder {
 	}
 
 	@Override
-	public ItemBuilder clone()
-	{
-		return new ItemBuilder(itemStack);
+	protected Object clone() throws CloneNotSupportedException {
+		return super.clone();
 	}
-
 
 	public ItemBuilder setName(String name)
 	{

@@ -14,10 +14,12 @@ public class DataPlugin {
     private final String pluginVersion;
     public String latestVersion;
     public String lateVersion;
-    private int javaVersion;
-    private String bukkitVersion;
-    private String FaweVersion;
-    private int MetricsId = 110059;
+    private final int javaVersion;
+    private final String bukkitVersion;
+    private final String FaweVersion;
+    private final int MetricsId = 110059;
+
+    private final boolean hasPlotSquared;
 
 
 
@@ -28,13 +30,13 @@ public class DataPlugin {
         this.FaweVersion = main.getServer().getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
         this.javaVersion = Integer.parseInt(System.getProperty("java.version").substring(0, 2));
         this.bukkitVersion = Bukkit.getBukkitVersion();
+        this.hasPlotSquared = Bukkit.getPluginManager().getPlugin("PlotSquared") != null;
 
         updateChecker(version -> {
             if (!getPluginVersion().equals(version)) {
                 main.getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{this.getLateVersion(), this.getPluginVersion(), this.getLatestVersion()}).getMessage());
             }
         },getMetricsId());
-
     }
 
 
@@ -66,6 +68,10 @@ public class DataPlugin {
         return MetricsId;
     }
 
+    public boolean hasPlotSquared() {
+        return hasPlotSquared;
+    }
+
     private void updateChecker(final Consumer<String> consumer, int id) {
 
         Bukkit.getScheduler().runTaskAsynchronously(Main.getInstance(), () -> {
@@ -79,7 +85,7 @@ public class DataPlugin {
 
                     this.latestVersion = scanner.next();
 
-                    this.lateVersion = String.valueOf(Integer.parseInt(latestVersion.substring(latestVersion.length() - 2)) - Integer.parseInt(getPluginVersion().substring(getPluginVersion().length() - 1)));
+                    this.lateVersion = String.valueOf(Integer.parseInt(latestVersion.substring(latestVersion.length() - 2)) - Integer.parseInt(getPluginVersion().substring(getPluginVersion().length() - 2)));
 
                     consumer.accept(latestVersion);
                 }

@@ -1,9 +1,6 @@
 package fr.marodeur.expertbuild.api.fawe;
 
-import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.extension.input.ParserContext;
@@ -138,18 +135,23 @@ public class FaweAPI {
 
         Region region = this.bukkitPlayer.getSelection();
         LocalSession session = this.bukkitPlayer.getSession();
-        EditSession editSession = session.createEditSession(this.bukkitPlayer);
 
-        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
-        clipboard.setOrigin(origin.toBlockVector3());
+        BlockArrayClipboard clipboard;
+        ForwardExtentCopy copy;
 
-        ForwardExtentCopy copy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
+        try (EditSession editSession = session.createEditSession(this.bukkitPlayer)) {
 
-        copy.setCopyingBiomes(copingBiomes);
-        copy.setCopyingEntities(copingEntities);
+            clipboard = new BlockArrayClipboard(region);
+            clipboard.setOrigin(origin.toBlockVector3());
+
+            copy = new ForwardExtentCopy(editSession, region, clipboard, region.getMinimumPoint());
+
+            copy.setCopyingBiomes(copingBiomes);
+            copy.setCopyingEntities(copingEntities);
 
 
-        Operations.complete(copy);
+            Operations.complete(copy);
+        }
 
         if (saveInClipboard) {
             session.setClipboard(new ClipboardHolder(clipboard));
@@ -182,7 +184,10 @@ public class FaweAPI {
     }
 
     public void pasteClipboard(boolean ignoreAirBlock, BlockVectorTool to , boolean sendMessage) {
-        pasteClipboard(this.bukkitPlayer.getSession().getClipboard(), ignoreAirBlock, false, false , to, sendMessage, 0, 0, 0);
+
+        try {
+            pasteClipboard(this.bukkitPlayer.getSession().getClipboard(), ignoreAirBlock, false, false, to, sendMessage, 0, 0, 0);
+        } catch (EmptyClipboardException ignored) {}
     }
 
     public void pasteClipboard(ClipboardHolder clipboardHolder, boolean ignoreAirBlock, boolean copingEntities, boolean copingBiomes, BlockVectorTool to , boolean sendMessage, double rotateX, double rotateY, double rotateZ) {

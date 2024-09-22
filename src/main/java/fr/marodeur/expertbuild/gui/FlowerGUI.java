@@ -63,11 +63,6 @@ public class FlowerGUI {
 
                         FlowerBrushParameter fbp = brushBuilder.getFlowerBrushParameter();
 
-                        if (brushBuilder == null) {
-                            p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());
-                            return;
-                        }
-
                         // Exit return to main gui
                         contents.set(new ItemData(0, 8, new ItemBuilder(Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)

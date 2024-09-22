@@ -24,7 +24,6 @@ public class Flag {
         }
     }
 
-
     public void add(char flag) {
 
         if (getFlagAlreadyRegister(flag)) {
@@ -79,7 +78,11 @@ public class Flag {
 
         flags.forEach(individualFlag -> {
 
-            sb.append("flag : " + individualFlag.getFlag() + " -> :" + individualFlag.getElement().toString() + "\n");
+            sb.append("flag : ")
+                    .append(individualFlag.getFlag())
+                    .append(" -> :")
+                    .append(individualFlag.getElement().toString())
+                    .append("\n");
 
         });
 
@@ -88,7 +91,7 @@ public class Flag {
 
     private static class IndividualFlag<T> {
 
-        private char flag;
+        private final char flag;
         private T element;
 
          public IndividualFlag(char flag, T element) {

@@ -16,10 +16,7 @@ package fr.marodeur.expertbuild.api;
  * limitations under the License.
  */
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 import static java.lang.Math.*;
@@ -681,8 +678,8 @@ public class GlueList<T> extends AbstractList<T> implements List<T>, Cloneable, 
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T[] toArray(T[] a) {
-        return (T[]) Arrays.copyOf(toArray(), size, a.getClass());
+    public <t> t[] toArray(t[] a) {
+        return (t[]) Arrays.copyOf(toArray(), size, a.getClass());
     }
 
     public boolean isEmpty() {
@@ -935,9 +932,13 @@ public class GlueList<T> extends AbstractList<T> implements List<T>, Cloneable, 
 
             for (Node<T> node = first; node != null; node = node.next) {
 
-                for (int i = 0; i < node.elementDataPointer; i++) {
-                    clone.add(node.elementData[i]);
-                }
+                /* change for copy list automatically
+                *for (int i = 0; i < node.elementDataPointer; i++) {
+                *    clone.add(node.elementData[i]);
+                *}
+                 */
+
+                clone.addAll(Arrays.asList(node.elementData).subList(0, node.elementDataPointer));
             }
 
             return clone;
@@ -946,6 +947,7 @@ public class GlueList<T> extends AbstractList<T> implements List<T>, Cloneable, 
         }
     }
 
+    @Serial
     private void writeObject(ObjectOutputStream s) throws IOException {
 
         int expectedModCount = modCount;
@@ -966,6 +968,7 @@ public class GlueList<T> extends AbstractList<T> implements List<T>, Cloneable, 
     }
 
 
+    @Serial
     @SuppressWarnings("unchecked")
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
 

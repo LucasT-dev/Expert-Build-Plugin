@@ -64,7 +64,7 @@ public class BrushCommand extends AbstractCommand {
         Player p = (Player) executor;
 
         Pattern pattern;
-        Integer radius = 0;
+        Integer radius;
         Biome biome;
 
         switch (args[0].toLowerCase()) {
@@ -690,6 +690,7 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.updatechunk", new ConditionArgumentBefore("update_chunk", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.eraser", new ConditionArgumentBefore("eraser", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("none", new ConditionArgumentBefore("radius", 0)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 1).toSubCommand("exp.brush.hydrology", new ConditionArgumentBefore("hydrology", 0)));
 
 
             // Erode / ErodeBlend
@@ -785,13 +786,12 @@ public class BrushCommand extends AbstractCommand {
 
         if (args[1].equalsIgnoreCase("add")) {
 
-            if (validArgument.hasSelection(p)) {
-            } else {
+            if (!validArgument.hasSelection(p)) {
                 validArgument.sendMessageInvalidSelection(p);
                 return;
             }
 
-            String clipboardName = "";
+            String clipboardName;
             Flag flag = new Flag("abce");
 
             if (args.length == 3) {

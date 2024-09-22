@@ -13,7 +13,6 @@ import com.sk89q.worldedit.bukkit.BukkitAdapter;
 
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.*;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -80,12 +79,24 @@ public class BlendBallBrush extends AbstractBrush {
             }
         }
 
+        /**
+         *
+         *  // Log current materials into newmats
+         *  for (int x = 0; x <= brushSizeDoubled; x++) {
+         *      for (int y = 0; y <= brushSizeDoubled; y++) {
+         *          for (int z = 0; z <= brushSizeDoubled; z++) {
+         *              newMaterials[x][y][z] = oldMaterials[x + 1][y + 1][z + 1];
+         *          }
+         *      }
+         *  }
+         *
+         */
+
+
         // Log current materials into newmats
         for (int x = 0; x <= brushSizeDoubled; x++) {
             for (int y = 0; y <= brushSizeDoubled; y++) {
-                for (int z = 0; z <= brushSizeDoubled; z++) {
-                    newMaterials[x][y][z] = oldMaterials[x + 1][y + 1][z + 1];
-                }
+                System.arraycopy(oldMaterials[x + 1][y + 1], 1, newMaterials[x][y], 0, brushSizeDoubled + 1);
             }
         }
 
@@ -440,8 +451,8 @@ public class BlendBallBrush extends AbstractBrush {
         for (int i = 0; i < maxIterations; ++i) {
 
             // Get the surface normal of the terrain at the current location
-            int surfaceNormal = new UtilsFAWE(p).getHeight(x + ox, y + oy, l);
-            System.out.println("surfaceNormal = " + surfaceNormal);
+            int surfaceNormal = getHeight(x + ox, y + oy, l.getBlockY(), l.getWorld(), radius);
+            //int surfaceNormal = new UtilsFAWE(p).getHeight(x + ox, y + oy, l);
 
             // If the terrain is flat, stop simulating, the snowball cannot roll any further
             if (surfaceNormal == 999) break;
@@ -450,10 +461,6 @@ public class BlendBallBrush extends AbstractBrush {
             double deposit = sediment * depositionRate * surfaceNormal;
             double erosion = erosionRate * (1 - surfaceNormal) * Math.min(1, i * iterationScale);
 
-            System.out.println("deposit = " + deposit);
-            System.out.println("erosion = " + erosion);
-            System.out.println("(deposit - erosion) = " + (deposit - erosion) * 60);
-
             // Change the sediment on the place this snowball came from
             bvm.addPositionMaterial(new BlockVectorTool(
                     xp,
@@ -461,15 +468,15 @@ public class BlendBallBrush extends AbstractBrush {
                     yp),
                     BukkitAdapter.asBlockType(Material.RED_WOOL).getDefaultState().toBaseBlock());
             //heightMap.change(xp, yp, deposit - erosion);
-            sediment += erosion - deposit;
+            sediment += (int) (erosion - deposit);
 
             vx = friction * vx + x * speed * resolution;
             vy = friction * vy + y * speed * resolution;
 
             xp = x;
             yp = y;
-            x += vx;
-            y += vy;
+            x += (int) vx;
+            y += (int) vy;
         }
     }
 
@@ -487,6 +494,21 @@ public class BlendBallBrush extends AbstractBrush {
             //heightMap.blur();
         }
     }
+
+    public static int getHeight(int x, int z, int y, World world, int radius) {
+
+        for (int i = y+radius; i >= 0; i--) {
+            //System.out.println(i);
+            if (!new Location(world, x, i, z).getBlock().getType().isAir()) {
+                return i;
+            }
+        }
+        return 0;
+        //return y-b.getRayon();
+    }
 }
+
+
+
 
 

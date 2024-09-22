@@ -3,9 +3,6 @@ package fr.marodeur.expertbuild.object.builderObjects;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
 import fr.marodeur.expertbuild.object.Flag;
-import fr.marodeur.expertbuild.object.Message;
-
-import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.UUID;

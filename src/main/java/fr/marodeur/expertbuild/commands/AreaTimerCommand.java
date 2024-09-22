@@ -52,7 +52,7 @@ public class AreaTimerCommand extends AbstractCommand {
         Player p = (Player) executor;
 
         AreaTimerParameter areaTimerParameter;
-        Region selection = null;
+        Region selection;
 
 
         if (args[0].equalsIgnoreCase("create")) {

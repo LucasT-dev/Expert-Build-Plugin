@@ -89,10 +89,6 @@ public class Main extends JavaPlugin {
 
 		WorldEditPlugin = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
 
-		if (Bukkit.getPluginManager().getPlugin("PlotSquared") != null) {
-			// Do something
-		}
-
 		//bstat
 		bstatsManager(new Metrics(this, 16755));
 

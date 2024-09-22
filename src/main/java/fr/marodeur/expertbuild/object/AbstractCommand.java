@@ -155,15 +155,15 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             for (int i = 0; i < args.length; i++) {
 
                 if (getSubCommandAtPosition(i, sender, command, label, args).stream()
-                        .map(SubCommand::getArgs)
+                        .map(SubCommandSender.SubCommand::getArgs)
                         .map(String::toLowerCase)
                         .distinct()
                         .toList().contains(args[i].toLowerCase())) {
 
                     int finalI = i;
-                    SubCommand subCommand = getSubCommandAtPosition(i, sender, command, label, args).stream()
+                    SubCommandSender.SubCommand subCommand = getSubCommandAtPosition(i, sender, command, label, args).stream()
                             .filter(Sb -> Sb.getArgs().equalsIgnoreCase(args[finalI]))
-                            .max(Comparator.comparing(SubCommand::getPosition))
+                            .max(Comparator.comparing(SubCommandSender.SubCommand::getPosition))
                             .get();
 
                     if (!p.hasPermission(subCommand.getPermission()) && !subCommand.getPermission().equalsIgnoreCase("none")) {
@@ -248,7 +248,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         return new ValidArgument();
     }
 
-    List<SubCommand> getSubCommandAtPosition(Integer position, CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    List<SubCommandSender.SubCommand> getSubCommandAtPosition(Integer position, CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return this.getSubCommand(sender, command, label, args).getSubCommandList().stream().filter(subCommand -> subCommand.position.equals(position)).toList();
     }
 
@@ -259,17 +259,17 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
      * @param sender CommandSender
      * @return List<String>
      */
-    List<String> getListFirstArgs(List<SubCommand> subCommandsList, CommandSender sender) {
+    List<String> getListFirstArgs(List<SubCommandSender.SubCommand> subCommandsList, CommandSender sender) {
 
         if (sender instanceof Player p) {
 
             return subCommandsList.stream()
                     .filter(subCommand -> p.hasPermission(subCommand.getPermission()) || subCommand.getPermission().equalsIgnoreCase("none"))
-                    .map(SubCommand::getArgs)
+                    .map(SubCommandSender.SubCommand::getArgs)
                     .toList();
         } else {
             return subCommandsList.stream()
-                    .map(SubCommand::getArgs)
+                    .map(SubCommandSender.SubCommand::getArgs)
                     .toList();
         }
     }
@@ -282,20 +282,20 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
      * @param args String[]
      * @return List<String>
      */
-    List<String> getListArgs(List<SubCommand> subCommandsList, CommandSender sender, String[] args) {
+    List<String> getListArgs(List<SubCommandSender.SubCommand> subCommandsList, CommandSender sender, String[] args) {
 
         if (sender instanceof Player p) {
             return subCommandsList.stream()
                     .filter(subCommand -> p.hasPermission(subCommand.getPermission()) || subCommand.getPermission().equalsIgnoreCase("none"))
                     .filter(subCommand -> subCommand.getConditionArgumentsBefore().getArgCondition().equalsIgnoreCase(String.valueOf(args[subCommand.conditionArgumentsBefore.getArgPosition()])) ||
                             subCommand.getConditionArgument().getArgCondition())
-                     .map(SubCommand::getArgs)
+                     .map(SubCommandSender.SubCommand::getArgs)
                     .toList();
         } else {
             return subCommandsList.stream()
                     .filter(subCommand -> subCommand.conditionArgumentsBefore.getArgCondition().equalsIgnoreCase(String.valueOf(args[subCommand.conditionArgumentsBefore.getArgPosition()])) ||
                             subCommand.getConditionArgument().getArgCondition())
-                    .map(SubCommand::getArgs)
+                    .map(SubCommandSender.SubCommand::getArgs)
                     .toList();
         }
     }
@@ -303,7 +303,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
     int getMaxArgs(CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         return getSubCommand(sender, command, label, args).getSubCommandList().stream()
-                .map(SubCommand::getPosition)
+                .map(SubCommandSender.SubCommand::getPosition)
                 .toList()
                 .stream()
                 .mapToInt(value -> value)
@@ -314,14 +314,14 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         private final List<SubCommand> subCommandList = new ArrayList<>();
 
-        public SubCommandSender(List<SubCommand> subCommandList) {
+        public SubCommandSender(List<SubCommandSender.SubCommand> subCommandList) {
             this.subCommandList.addAll(subCommandList);
         }
 
         public SubCommandSender() {
         }
 
-        public SubCommandSender addSubCommand(SubCommand subCommand) {
+        public SubCommandSender addSubCommand(SubCommandSender.SubCommand subCommand) {
             this.subCommandList.add(subCommand);
             return this;
         }
@@ -334,70 +334,73 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         public List<SubCommand> getSubCommandList() {
             return subCommandList;
         }
-    }
 
-    static class SubCommand {
 
-        private final String args;
-        private final String permission;
-        private final Integer position;
 
-        private final ConditionArgumentBefore conditionArgumentsBefore;
-        private final ConditionArgument conditionArgument;
+        private static class SubCommand {
 
-        // None = no permission
-        public SubCommand(String args, String permission, Integer position, ConditionArgumentBefore conditionArgumentsBefore, ConditionArgument conditionArgument) {
+            private final String args;
+            private final String permission;
+            private final Integer position;
 
-            this.args = args;
-            this.permission = permission;
-            this.position = position;
+            private final ConditionArgumentBefore conditionArgumentsBefore;
+            private final ConditionArgument conditionArgument;
 
-            this.conditionArgumentsBefore = conditionArgumentsBefore;
-            this.conditionArgument = conditionArgument;
+            // None = no permission
+            public SubCommand(String args, String permission, Integer position, ConditionArgumentBefore conditionArgumentsBefore, ConditionArgument conditionArgument) {
+
+                this.args = args;
+                this.permission = permission;
+                this.position = position;
+
+                this.conditionArgumentsBefore = conditionArgumentsBefore;
+                this.conditionArgument = conditionArgument;
+            }
+
+            public SubCommand(String args, String permission, Integer position, ConditionArgumentBefore conditionArgumentsBefore) {
+                this(args, permission, position, new ConditionArgumentBefore(conditionArgumentsBefore), new ConditionArgument(false));
+            }
+
+            public SubCommand(String args, String permission, Integer position, ConditionArgument conditionArgument) {
+                this(args, permission, position, new ConditionArgumentBefore("null", 0), new ConditionArgument(conditionArgument));
+            }
+
+            public SubCommand(String args, String permission, Integer position) {
+                this(args, permission, position, new ConditionArgumentBefore("null", 0), new ConditionArgument(true));
+            }
+
+            public String getArgs() {
+                return args;
+            }
+
+            public String getPermission() {
+                return permission;
+            }
+
+            public Integer getPosition() {
+                return position;
+            }
+
+            public ConditionArgumentBefore getConditionArgumentsBefore() {
+                return conditionArgumentsBefore;
+            }
+
+            public ConditionArgument getConditionArgument() {
+                return conditionArgument;
+            }
+
+            @Override
+            public String toString() {
+                return "SubCommand{" +
+                        "args='" + args + '\'' +
+                        ", permission='" + permission + '\'' +
+                        ", position=" + position +
+                        ", conditionArgumentsBefore=" + conditionArgumentsBefore +
+                        ", conditionArgument=" + conditionArgument +
+                        '}';
+            }
         }
 
-        public SubCommand(String args, String permission, Integer position, ConditionArgumentBefore conditionArgumentsBefore) {
-            this(args, permission, position, new ConditionArgumentBefore(conditionArgumentsBefore), new ConditionArgument(false));
-        }
-
-        public SubCommand(String args, String permission, Integer position, ConditionArgument conditionArgument) {
-            this(args, permission, position, new ConditionArgumentBefore("null", 0), new ConditionArgument(conditionArgument));
-        }
-
-        public SubCommand(String args, String permission, Integer position) {
-            this(args, permission, position, new ConditionArgumentBefore("null", 0), new ConditionArgument(true));
-        }
-
-        public String getArgs() {
-            return args;
-        }
-
-        public String getPermission() {
-            return permission;
-        }
-
-        public Integer getPosition() {
-            return position;
-        }
-
-        public ConditionArgumentBefore getConditionArgumentsBefore() {
-            return conditionArgumentsBefore;
-        }
-
-        public ConditionArgument getConditionArgument() {
-            return conditionArgument;
-        }
-
-        @Override
-        public String toString() {
-            return "SubCommand{" +
-                    "args='" + args + '\'' +
-                    ", permission='" + permission + '\'' +
-                    ", position=" + position +
-                    ", conditionArgumentsBefore=" + conditionArgumentsBefore +
-                    ", conditionArgument=" + conditionArgument +
-                    '}';
-        }
     }
 
     public static class ConditionArgumentBefore {
@@ -693,24 +696,24 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
 
-        public List<SubCommand> toSubCommand(String permission) {
-            List<SubCommand> subCommandsList = new ArrayList<>();
+        public List<SubCommandSender.SubCommand> toSubCommand(String permission) {
+            List<SubCommandSender.SubCommand> subCommandsList = new ArrayList<>();
 
-            this.subCommand.forEach(s -> subCommandsList.add(new SubCommand(s, permission, this.argsIndex)));
+            this.subCommand.forEach(s -> subCommandsList.add(new SubCommandSender.SubCommand(s, permission, this.argsIndex)));
             return subCommandsList;
         }
 
-        public List<SubCommand> toSubCommand(String permission, ConditionArgument conditionArgument) {
-            List<SubCommand> subCommandsList = new ArrayList<>();
+        public List<SubCommandSender.SubCommand> toSubCommand(String permission, ConditionArgument conditionArgument) {
+            List<SubCommandSender.SubCommand> subCommandsList = new ArrayList<>();
 
-            this.subCommand.forEach(s -> subCommandsList.add(new SubCommand(s, permission, this.argsIndex, conditionArgument)));
+            this.subCommand.forEach(s -> subCommandsList.add(new SubCommandSender.SubCommand(s, permission, this.argsIndex, conditionArgument)));
             return subCommandsList;
         }
 
-        public List<SubCommand> toSubCommand(String permission, ConditionArgumentBefore conditionArgumentBefore) {
-            List<SubCommand> subCommandsList = new ArrayList<>();
+        public List<SubCommandSender.SubCommand> toSubCommand(String permission, ConditionArgumentBefore conditionArgumentBefore) {
+            List<SubCommandSender.SubCommand> subCommandsList = new ArrayList<>();
 
-            this.subCommand.forEach(s -> subCommandsList.add(new SubCommand(s, permission, this.argsIndex, conditionArgumentBefore)));
+            this.subCommand.forEach(s -> subCommandsList.add(new SubCommandSender.SubCommand(s, permission, this.argsIndex, conditionArgumentBefore)));
             return subCommandsList;
         }
     }

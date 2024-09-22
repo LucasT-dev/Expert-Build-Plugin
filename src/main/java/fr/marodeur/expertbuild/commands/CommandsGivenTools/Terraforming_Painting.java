@@ -2,8 +2,8 @@ package fr.marodeur.expertbuild.commands.CommandsGivenTools;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.api.fawe.UtilsFAWE;
 import fr.marodeur.expertbuild.object.ItemBuilder;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -187,15 +187,24 @@ public class Terraforming_Painting implements CommandExecutor {
 			}
 
 			case "c" -> {
-				if (p.hasPermission("worldedit.clipboard.copy")) new UtilsFAWE(p).CopySelection(true);
+				if (p.hasPermission("worldedit.clipboard.copy")) {
+
+					new FaweAPI(p).copySelection(false, false, true, true);
+
+				}
 			}
 
 			case "p" -> {
-				if (p.hasPermission("worldedit.clipboard.paste")) new UtilsFAWE(p).pasteClipboard();
+				if (p.hasPermission("worldedit.clipboard.paste")) {
+					new FaweAPI(p).pasteClipboard(false, new BlockVectorTool().toBlockVectorTool(p.getLocation()), true);
+				}
 			}
 
 			case "pa" -> {
-				if (p.hasPermission("worldedit.clipboard.paste")) new UtilsFAWE(p).pasteClipboardIgnoreAir();
+				if (p.hasPermission("worldedit.clipboard.paste")) {
+					new FaweAPI(p).pasteClipboard(true, new BlockVectorTool().toBlockVectorTool(p.getLocation()), true);
+					//new UtilsFAWE(p).pasteClipboardIgnoreAir();
+				}
 			}
 
 			case "cube" -> {
