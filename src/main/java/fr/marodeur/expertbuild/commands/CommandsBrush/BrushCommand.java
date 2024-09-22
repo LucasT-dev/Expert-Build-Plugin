@@ -768,6 +768,8 @@ public class BrushCommand extends AbstractCommand {
                         return;
                     }
 
+                    clipboardName = "clipboards_" + clipboardParameter.getClipboardHolders().size();
+
                 } else if (clipboardParameter.getClipboardsNameExist(args[2])) {
 
                     brushBuilder.sendMessage("expbuild.message.commands.clipboard_already_exist", true, new String[]{args[2]});
