@@ -143,8 +143,8 @@ expbuild:
       yaw_angle_conf: Yaw angle configuration
       click_change_angle: Clic pour changer l'angle 'type'
       click_enable_disable: Clic pour Activer / Désactiver un membre
-      click_pregen: Clic pour pre-generer l'organic
-      click_generate: Clic pour generer l'organic
+      click_pregen: Clic pour pre-generer l'organique
+      click_generate: Clic pour generer l'organique
       click_clear_particle: Clic pour supprimer les particules
       member_conf: configuration des membres
       height: Hauteur

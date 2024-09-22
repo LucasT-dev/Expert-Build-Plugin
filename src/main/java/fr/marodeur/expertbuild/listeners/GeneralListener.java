@@ -73,7 +73,6 @@ public class GeneralListener implements Listener {
 						p.getInventory().setHeldItemSlot(i);
 						p.getInventory().remove(Material.WOODEN_AXE);
 						Bukkit.dispatchCommand(p, "/wand");
-						return;
 					}
 				}
 			}

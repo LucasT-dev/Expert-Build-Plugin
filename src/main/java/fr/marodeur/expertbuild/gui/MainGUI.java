@@ -1,14 +1,13 @@
 package fr.marodeur.expertbuild.gui;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.ItemBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import fr.marodeur.expertbuild.object.guibuilder.Inventory;
+import fr.marodeur.expertbuild.object.guibuilder.InventoryContents;
+import fr.marodeur.expertbuild.object.guibuilder.InventoryProvider;
+import fr.marodeur.expertbuild.object.guibuilder.ItemData;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,11 +16,17 @@ public class MainGUI {
 
     public void openMainInventory(Player p) {
 
-        RyseInventory.builder()
-                .title(new Message.MessageSender("expbuild.message.gui.main_gui_title", false).getMessage())
+        Inventory.build()
+                .setTitle(new Message.MessageSender("expbuild.message.gui.main_gui_title", false).getMessage())
                 .rows(3)
-                .disableUpdateTask()
+                .updateTask(false)
                 .provider(new InventoryProvider() {
+
+                    @Override
+                    public void update(Player player, InventoryContents contents) {}
+
+                    @Override
+                    public void close(Player player, Inventory inventory) {}
 
                     @Override
                     public void init(Player player, InventoryContents contents) {
@@ -33,7 +38,7 @@ public class MainGUI {
                             return;
                         }
 
-                        contents.set(7, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.organic_gui_title", false, Material.BONE, 1)
+                        contents.set(new ItemData(7, new ItemBuilder("expbuild.message.gui.organic_gui_title", false, Material.BONE, 1)
                                         .addLore("expbuild.message.gui.organic_item", false)
                                         .build(),
                                 event -> {
@@ -45,20 +50,20 @@ public class MainGUI {
                             }
                         }));
 
-                        contents.set(13, IntelligentItem.empty(new ItemBuilder("EXP_Build Main", Material.HONEYCOMB, 1)
+                        contents.set(new ItemData(13, new ItemBuilder("EXP_Build Main", Material.HONEYCOMB, 1)
                                 .addLore("expbuild.message.gui.main_item_1", false)
                                 .addLore("expbuild.message.gui.main_item_2", false)
                                 .addLore("expbuild.message.gui.main_item_3", false)
                                 .build()));
 
-                        contents.set(19, IntelligentItem.of(new ItemBuilder("EXP_Build Gmask", Material.SPONGE, 1)
+                        contents.set(new ItemData(19, new ItemBuilder("EXP_Build Gmask", Material.SPONGE, 1)
                                 .addLore("Easily configure my gmask")
                                 .build(),
                                 event -> {
 
                         }));
 
-                        contents.set(25, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.SUNFLOWER, 1)
+                        contents.set(new ItemData(25, new ItemBuilder("expbuild.message.gui.flower_gui_title", false, Material.SUNFLOWER, 1)
                                         .addLore("expbuild.message.gui.flower_item", false)
                                         .build(),
                                 event -> {
@@ -69,7 +74,7 @@ public class MainGUI {
                                     }
                                 }));
 
-                        contents.set(1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_gui_title", false, Material.LEATHER_CHESTPLATE, 1)
+                        contents.set(new ItemData(1, new ItemBuilder("expbuild.message.gui.leather_gui_title", false, Material.LEATHER_CHESTPLATE, 1)
                                         .addLore("expbuild.message.gui.leather_item", false)
                                         .build(),
                                 event -> {
@@ -81,7 +86,7 @@ public class MainGUI {
                                 }));
                     }
                 })
-                .build(Main.getInstance())
+                .build()
                 .open(p);
     }
 }

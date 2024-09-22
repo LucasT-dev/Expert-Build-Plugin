@@ -63,26 +63,8 @@ public class BrushListener implements Listener {
 
         if (it.getType() == conf.getTerraforming_tool_1()) {
 
-            if (action.equals(Action.RIGHT_CLICK_AIR)) {
+            if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
                 brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_1(), loc, p.getLocation());
-
-            } else {
-
-                // défini un mask
-
-                FaweAPI faweAPI = new FaweAPI(p);
-                String blockMaskString = loc.getBlock().getType().toString();
-
-                faweAPI.setMask(faweAPI.getMask(blockMaskString));
-                brushBuilder.sendMessage("expbuild.message.brush.set_mask", true,new String[]{blockMaskString});
-            }
-        }
-
-
-        if (it.getType() == conf.getTerraforming_tool_2()) {
-
-            if (action.equals(Action.RIGHT_CLICK_AIR)) {
-                brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_2(), loc, p.getLocation());
 
             } else if (action.equals(Action.LEFT_CLICK_AIR)) {
 
@@ -97,6 +79,21 @@ public class BrushListener implements Listener {
         }
 
 
+        if (it.getType() == conf.getTerraforming_tool_2()) {
 
+            if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
+                brushBuilder.executeBrush(brushBuilder, conf.getTerraforming_tool_2(), loc, p.getLocation());
+
+            } else if (action.equals(Action.LEFT_CLICK_AIR)) {
+
+                // défini un mask
+
+                FaweAPI faweAPI = new FaweAPI(p);
+                String blockMaskString = loc.getBlock().getType().toString();
+
+                faweAPI.setMask(faweAPI.getMask(blockMaskString));
+                brushBuilder.sendMessage("expbuild.message.brush.set_mask", true,new String[]{blockMaskString});
+            }
+        }
     }
 }
