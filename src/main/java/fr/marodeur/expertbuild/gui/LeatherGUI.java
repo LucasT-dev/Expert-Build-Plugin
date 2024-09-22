@@ -1,17 +1,15 @@
 package fr.marodeur.expertbuild.gui;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.ItemBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
 import fr.marodeur.expertbuild.object.builderObjects.LeatherParameter;
-import io.github.rysefoxx.inventory.plugin.content.IntelligentItem;
-import io.github.rysefoxx.inventory.plugin.content.InventoryContents;
-import io.github.rysefoxx.inventory.plugin.content.InventoryProvider;
-import io.github.rysefoxx.inventory.plugin.enums.TimeSetting;
-import io.github.rysefoxx.inventory.plugin.pagination.RyseInventory;
+import fr.marodeur.expertbuild.object.guibuilder.Inventory;
 
+import fr.marodeur.expertbuild.object.guibuilder.InventoryContents;
+import fr.marodeur.expertbuild.object.guibuilder.InventoryProvider;
+import fr.marodeur.expertbuild.object.guibuilder.ItemData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -22,10 +20,10 @@ public class LeatherGUI {
 
     public void openLeatherGUI(Player p) {
 
-        RyseInventory.builder()
-                .title(new Message.MessageSender("expbuild.message.gui.leather_gui_title", true).getMessage())
+        Inventory.build()
+                .setTitle(new Message.MessageSender("expbuild.message.gui.leather_gui_title", true).getMessage())
                 .rows(6)
-                .period(1, TimeSetting.MILLISECONDS)
+                .updateTask(false)
                 .provider(new InventoryProvider() {
 
                     @Override
@@ -33,97 +31,87 @@ public class LeatherGUI {
 
                         LeatherParameter leatherParameter = BrushBuilder.getBrushBuilderPlayer(p,false).getLeatherParameter();
 
-                        contents.set(0,8, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.back", false, Material.PLAYER_HEAD, 1)
+                        contents.set(new ItemData(0, 8, new ItemBuilder("expbuild.message.gui.back", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)
                                         .addLore("expbuild.message.gui.back", false)
                                         .build(),
                                 event -> new MainGUI().openMainInventory(p)));
 
 
-                        contents.set(1,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_helmet", false, Material.LEATHER_HELMET, 1)
+                        contents.set(new ItemData(1,1, new ItemBuilder("expbuild.message.gui.leather_helmet", false, Material.LEATHER_HELMET, 1)
                                         .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
                                         .build(),
                                 event -> p.getInventory().setItem(5, event.getCurrentItem())));
 
-                        contents.set(2,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_chestplate", false, Material.LEATHER_CHESTPLATE, 1)
+                        contents.set(new ItemData(2,1, new ItemBuilder("expbuild.message.gui.leather_chestplate", false, Material.LEATHER_CHESTPLATE, 1)
                                         .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
                                         .build(),
                                 event -> p.getInventory().setItem(6, event.getCurrentItem())));
 
-                        contents.set(3,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_leggings", false, Material.LEATHER_LEGGINGS, 1)
+                        contents.set(new ItemData(3,1, new ItemBuilder("expbuild.message.gui.leather_leggings", false, Material.LEATHER_LEGGINGS, 1)
                                         .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
                                         .build(),
                                 event -> p.getInventory().setItem(7, event.getCurrentItem())));
 
-                        contents.set(4,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_boots", false, Material.LEATHER_BOOTS, 1)
+                        contents.set(new ItemData(4,1, new ItemBuilder("expbuild.message.gui.leather_boots", false, Material.LEATHER_BOOTS, 1)
                                         .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
                                         .build(),
                                 event -> p.getInventory().setItem(8, event.getCurrentItem())));
 
 
-                        contents.set(4,4, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.red_color", false, Material.RED_DYE, leatherParameter.getRed() == 0 ? 1: leatherParameter.getRed())
+                        // COLOR
+                        contents.set(new ItemData(4,4, new ItemBuilder("expbuild.message.gui.red_color", false, Material.RED_DYE, leatherParameter.getRed() == 0 ? 1: leatherParameter.getRed())
                                         .addLore("expbuild.message.gui.red", false, new String[]{String.valueOf(leatherParameter.getRed())})
                                         .build(),
-                                event -> leatherParameter.setRed(calculateNewColorLevel(leatherParameter.getRed(), event.isShiftClick(), event.isRightClick()))));
+                                event -> {
+                            leatherParameter.setRed(calculateNewColorLevel(leatherParameter.getRed(), event.isShiftClick(), event.isRightClick()));
+                            contents.updateLore(4, 4, 0, "expbuild.message.gui.red", false, new String[]{String.valueOf(leatherParameter.getRed())});
+                            contents.updateAmount(4, 4, leatherParameter.getRed() == 0 ? 1: leatherParameter.getRed());
+                                    updateLeather(contents, leatherParameter);
+                                }));
 
-                        contents.set(4,5, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.green_color", false, Material.GREEN_DYE, leatherParameter.getGreen() == 0 ? 1: leatherParameter.getGreen())
+                        contents.set(new ItemData(4,5, new ItemBuilder("expbuild.message.gui.green_color", false, Material.GREEN_DYE, leatherParameter.getGreen() == 0 ? 1: leatherParameter.getGreen())
                                         .addLore("expbuild.message.gui.green", false, new String[]{String.valueOf(leatherParameter.getGreen())})
                                         .build(),
-                                event -> leatherParameter.setGreen(calculateNewColorLevel(leatherParameter.getGreen(), event.isShiftClick(), event.isRightClick()))));
+                                event -> {
+                            leatherParameter.setGreen(calculateNewColorLevel(leatherParameter.getGreen(), event.isShiftClick(), event.isRightClick()));
+                            contents.updateLore(4,5, 0, "expbuild.message.gui.green", false, new String[]{String.valueOf(leatherParameter.getGreen())});
+                            contents.updateAmount(4, 5, leatherParameter.getGreen() == 0 ? 1: leatherParameter.getGreen());
+                                    updateLeather(contents, leatherParameter);
+                                }));
 
-
-
-                        contents.set(4,6, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.blue_color", false, Material.BLUE_DYE, leatherParameter.getBlue() == 0 ? 1: leatherParameter.getBlue())
+                        contents.set(new ItemData(4,6, new ItemBuilder("expbuild.message.gui.blue_color", false, Material.BLUE_DYE, leatherParameter.getBlue() == 0 ? 1: leatherParameter.getBlue())
                                         .addLore("expbuild.message.gui.blue", false, new String[]{String.valueOf(leatherParameter.getBlue())})
                                         .build(),
-                                event -> leatherParameter.setBlue(calculateNewColorLevel(leatherParameter.getBlue(), event.isShiftClick(), event.isRightClick()))));
+                                event -> {
+                            leatherParameter.setBlue(calculateNewColorLevel(leatherParameter.getBlue(), event.isShiftClick(), event.isRightClick()));
+                            contents.updateLore(4,6, 0, "expbuild.message.gui.blue", false, new String[]{String.valueOf(leatherParameter.getBlue())});
+                            contents.updateAmount(4, 6, leatherParameter.getBlue() == 0 ? 1: leatherParameter.getBlue());
+                                    updateLeather(contents, leatherParameter);
+                                }));
                     }
 
                     @Override
-                    public void update(Player player, InventoryContents contents) {
+                    public void update(Player player, InventoryContents contents) {}
 
-                        LeatherParameter leatherParameter = BrushBuilder.getBrushBuilderPlayer(p,false).getLeatherParameter();
+                    @Override
+                    public void close(Player player, Inventory inventory) {}
 
-                        contents.update(1,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_helmet", false, Material.LEATHER_HELMET, 1)
-                                        .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
-                                        .build(),
-                                event -> p.getInventory().setItem(5, event.getCurrentItem())));
-
-                        contents.update(2,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_chestplate", false, Material.LEATHER_CHESTPLATE, 1)
-                                        .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
-                                        .build(),
-                                event -> p.getInventory().setItem(6, event.getCurrentItem())));
-
-                        contents.update(3,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_leggings", false, Material.LEATHER_LEGGINGS, 1)
-                                        .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
-                                        .build(),
-                                event -> p.getInventory().setItem(7, event.getCurrentItem())));
-
-                        contents.update(4,1, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.leather_boots", false, Material.LEATHER_BOOTS, 1)
-                                        .setLeatherColor(leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue())
-                                        .build(),
-                                event -> p.getInventory().setItem(8, event.getCurrentItem())));
-
-
-
-                        contents.update(4,4, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.red_color", false, Material.RED_DYE, leatherParameter.getRed() == 0 ? 1: leatherParameter.getRed())
-                                        .addLore("expbuild.message.gui.red", false, new String[]{String.valueOf(leatherParameter.getRed())})
-                                        .build(),
-                                event -> leatherParameter.setRed(calculateNewColorLevel(leatherParameter.getRed(), event.isShiftClick(), event.isRightClick()))));
-
-                        contents.update(4,5, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.green_color", false, Material.GREEN_DYE, leatherParameter.getGreen() == 0 ? 1: leatherParameter.getGreen())
-                                        .addLore("expbuild.message.gui.green", false, new String[]{String.valueOf(leatherParameter.getGreen())})
-                                        .build(),
-                                event -> leatherParameter.setGreen(calculateNewColorLevel(leatherParameter.getGreen(), event.isShiftClick(), event.isRightClick()))));
-
-                        contents.update(4,6, IntelligentItem.of(new ItemBuilder("expbuild.message.gui.blue_color", false, Material.BLUE_DYE, leatherParameter.getBlue() == 0 ? 1: leatherParameter.getBlue())
-                                        .addLore("expbuild.message.gui.blue", false, new String[]{String.valueOf(leatherParameter.getBlue())})
-                                        .build(),
-                                event -> leatherParameter.setBlue(calculateNewColorLevel(leatherParameter.getBlue(), event.isShiftClick(), event.isRightClick()))));
-                    }
                 })
-                .build(Main.getInstance())
+                .build()
                 .open(p);
+    }
+
+    private void updateLeather(InventoryContents contents, LeatherParameter leatherParameter) {
+
+        contents.updateLeatherColor(1, 1, leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue());
+
+        contents.updateLeatherColor(2, 1, leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue());
+
+        contents.updateLeatherColor(3, 1, leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue());
+
+        contents.updateLeatherColor(4, 1, leatherParameter.getRed(), leatherParameter.getGreen(), leatherParameter.getBlue());
+
     }
 
     private short calculateNewColorLevel(short num, boolean hasShiftClick, boolean hasRightClick ) {
