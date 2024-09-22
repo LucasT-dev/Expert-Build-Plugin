@@ -23,8 +23,6 @@ import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
 
-import io.github.rysefoxx.inventory.plugin.pagination.InventoryManager;
-
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
@@ -49,7 +47,10 @@ public class Main extends JavaPlugin {
 	private static DataProfile dataProfile;
 	private FileManager fileManager;
 	public static WorldEditPlugin WorldEditPlugin;
-	private final InventoryManager inventoryManager = new InventoryManager(this);
+
+
+	public static fr.marodeur.expertbuild.object.guibuilder.InventoryManager inv =
+			new fr.marodeur.expertbuild.object.guibuilder.InventoryManager();
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
 
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
@@ -118,7 +119,9 @@ public class Main extends JavaPlugin {
 
 		fileManager = new FileManager();
 
-		inventoryManager.invoke();
+		// gui api
+		inv.invoke();
+
 
 		registerPlayerBuilder();
 
