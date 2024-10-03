@@ -1,17 +1,18 @@
 package fr.marodeur.expertbuild;
 
+import fr.marodeur.expertbuild.api.fawe.factory.parser.SquarePatternParser;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
+import fr.marodeur.expertbuild.commands.CommandAutoCb;
+import fr.marodeur.expertbuild.commands.CommandConvertSlab.CommandConvertSlab;
+import fr.marodeur.expertbuild.commands.CommandsBrush.BrushCommand;
+import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
+import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
 import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
 import fr.marodeur.expertbuild.api.metrics.Metrics;
 import fr.marodeur.expertbuild.brush.*;
-import fr.marodeur.expertbuild.commands.CommandAutoCb;
-import fr.marodeur.expertbuild.commands.CommandConvertSlab.CommandConvertSlab;
-import fr.marodeur.expertbuild.commands.CommandsBrush.BrushCommand;
-import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
-import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
 import fr.marodeur.expertbuild.listeners.BrushListener;
 import fr.marodeur.expertbuild.listeners.FAWEListener;
 import fr.marodeur.expertbuild.listeners.GeneralListener;
@@ -247,6 +248,10 @@ public class Main extends JavaPlugin {
 
 	private void loadCustomMask() {
 		WorldEditPlugin.getWorldEdit().getMaskFactory().register(new OngroundMask(getWorldEditPlugin().getWorldEdit()));
+		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new SquarePatternParser(getWorldEditPlugin().getWorldEdit()));
+		//WorldEditPlugin.getWorldEdit().getPatternFactory().register(new TrianglePatternParser(getWorldEditPlugin().getWorldEdit()));
+		//WorldEditPlugin.getWorldEdit().getPatternFactory().register(new ColorPatternParser(getWorldEditPlugin().getWorldEdit()));
+
 	}
 
 	// BrushBuilder
@@ -327,7 +332,7 @@ public class Main extends JavaPlugin {
 		brush.createBrush(new Rot2DCubeBrush());
 		brush.createBrush(new SphereBrush());
 		brush.createBrush(new SpikeBrush());
-		brush.createBrush(new UpdateChunkBrush());
+		//brush.createBrush(new HydrologyBrush());
 
 		getLogger().info(new Message.MessageSender("expbuild.message.main.brush_load", false).getMessage());
 	}

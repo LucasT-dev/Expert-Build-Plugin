@@ -503,6 +503,11 @@ public class Configuration {
         if (this.version.equals("1.18.1.21")) {
             //Update config file from 1.18.1.21 to 1.18.1.22
 
+            yml.set("build.version", "1.18.1.22");
+            this.version = "1.18.1.22";
+
+            yml.save(file);
+
             //for next update
         }
 

@@ -1,16 +1,17 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.21
+* Latest plugin version : 1.18.1.22
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
+* Compatibility : PlotSquared
 * [Supported Minecraft version : 1.18, 1.19, 1.20, 1.21 ](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Supported_Versions)
 
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)  
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.21-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.22-purple)
 
 ------------------
 <p align="center">
@@ -20,6 +21,8 @@ Minecraft build plugin, Expert-Build Documentation
 ------------------
 # News
 
+-> * [New Patter, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Pattern)
+
 -> * [New command /areatimer, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
 
 -> * [New brush Clipboard3D, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
@@ -27,9 +30,6 @@ Minecraft build plugin, Expert-Build Documentation
 -> * [New command /painting, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Commands)
 
 -> * [Update the clipboard brush, with new functionality, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Brush)
-
--> * [New Mask, click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Mask)
-
 
 -> * [New inventory, open with left click using honeycomb ! click here](https://github.com/LucasT-dev/Expert-Build-Plugin/tree/master#Inventory)
 
@@ -95,7 +95,7 @@ Command : /painting <block> <block> [length] [ block ]
 Example : ```/painting white_concrete stone```
 
 
-<img src="https://imgur.com/gywYZSS.png" width="auto" />
+<img src="https://imgur.com/gywYZSS.png" width="auto"  alt="deco"/>
 
 The first 2 server arguments define the start and finish block of the gradient. The 3rd argument (optional) indicates the number of blocks to place in the gradient (between 0 and 15; by default 15).
 The 4th argument (optional) will force the gradient to pass through the block defined in the middle
@@ -115,7 +115,7 @@ Execute //pos2
 
 *permission : exp.command.tool* and *permission : worldedit.selection.pos*
 
-<img src="https://imgur.com/RV9tyb8.gif" width="auto" />
+<img src="https://imgur.com/RV9tyb8.gif" width="auto"  alt="deco"/>
 
 ------------------
 `shift click` :
@@ -320,7 +320,7 @@ General brush command,
 <img src="https://imgur.com/olGd83K.png" title="Image_1" alt="deco">
 
 
-<img src="https://imgur.com/1NEZOjY.gif" width="auto" />
+<img src="https://imgur.com/1NEZOjY.gif" width="auto"  alt="deco"/>
 
 
 - cube : cube brush
@@ -454,6 +454,16 @@ And press a second time on the honeycomb to deactivate the brush
 
 <img src="https://imgur.com/i350PM5.png" title="Image_1" alt="deco">
 
+
+# Pattern
+
+A new Pattern has appeared,
+```#brick[block,block][length][width][border thickness][offset], ```
+This pattern was designed to facilitate the creation of brick grace with different parameters allowing a personalized result.
+
+Example : ```//set #square[10][3][1][5]```
+
+<img src="https://imgur.com/O0HV8vP.gif" title="Image_1" alt="deco">
 
 # Mask
 
