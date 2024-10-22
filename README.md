@@ -106,7 +106,7 @@ The 4th argument (optional) will force the gradient to pass through the block de
 
 Execute //pos1
 
-*permission : exp.command.tool*
+*permission : exp.selection.airpos*
 
 ------------------
 `/2` or `left click using wand` :
