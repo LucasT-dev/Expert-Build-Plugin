@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.commands.CommandsGivenTools;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
-import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.ItemBuilder;
 
@@ -191,19 +190,6 @@ public class Terraforming_Painting implements CommandExecutor {
 
 					new FaweAPI(p).copySelection(false, false, true, true);
 
-				}
-			}
-
-			case "p" -> {
-				if (p.hasPermission("worldedit.clipboard.paste")) {
-					new FaweAPI(p).pasteClipboard(false, new BlockVectorTool().toBlockVectorTool(p.getLocation()), true);
-				}
-			}
-
-			case "pa" -> {
-				if (p.hasPermission("worldedit.clipboard.paste")) {
-					new FaweAPI(p).pasteClipboard(true, new BlockVectorTool().toBlockVectorTool(p.getLocation()), true);
-					//new UtilsFAWE(p).pasteClipboardIgnoreAir();
 				}
 			}
 

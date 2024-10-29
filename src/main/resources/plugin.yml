@@ -48,14 +48,6 @@ commands:
     description: copy WE
     permission: exp.command.tool
 
-  p:
-    description: paste WE
-    permission: exp.command.p
-
-  pa:
-    description: paste -a WE
-    permission: exp.command.pa
-
   poly:
     description: sel poly WE
     permission: exp.command.tool
@@ -124,9 +116,9 @@ commands:
     description: advanced painting tool
     permission: exp.command.painting
 
-  explsystem:
-    description: L system generation
-    permission: exp.command.explsystem
+  #explsystem:
+    #description: L system generation
+    #permission: exp.command.explsystem
 
   areatimer:
     description: areatimer for timing

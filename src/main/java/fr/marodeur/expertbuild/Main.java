@@ -164,8 +164,6 @@ public class Main extends JavaPlugin {
 		getCommand("1").setExecutor(new Terraforming_Painting());
 		getCommand("2").setExecutor(new Terraforming_Painting());
 		getCommand("c").setExecutor(new Terraforming_Painting());
-		getCommand("p").setExecutor(new Terraforming_Painting());
-		getCommand("pa").setExecutor(new Terraforming_Painting());
 		getCommand("cube").setExecutor(new Terraforming_Painting());
 		getCommand("poly").setExecutor(new Terraforming_Painting());
 		getCommand("convex").setExecutor(new Terraforming_Painting());
