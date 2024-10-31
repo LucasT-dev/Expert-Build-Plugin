@@ -22,7 +22,7 @@ import java.util.List;
 
 public class CommandsInfo implements CommandExecutor, TabCompleter {
 
-	private final List<String> list = Arrays.asList("info", "version", "help", "reload", "sel_mode", "fly_mode");
+	private final List<String> list = Arrays.asList("info", "reload", "sel_mode", "fly_mode");
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -51,24 +51,10 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("info")) {
 				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
 
-				TextComponent gitHubURL = new TextComponent("§8GitHub §7link : click here");
-				gitHubURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-						new ComponentBuilder("§7Open GitHub report bug").create()));
-				gitHubURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-						"https://github.com/LucasT-dev/Expert-Build-Plugin/issues"));
-				sender.spigot().sendMessage(gitHubURL);
-				return false;
-			}
-
-			if (args[0].equalsIgnoreCase("version")) {
 				sender.sendMessage(Main.prefix + "Plugin version : " + Main.getDataPlugin().getPluginVersion() + "\n" +
 						"Fawe version : " + Main.getDataPlugin().getFaweVersion());
 
-				return false;
-			}
-
-			if (args[0].equalsIgnoreCase("help")) {
-
+				//Github Documentation
 				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
 				TextComponent github_doc = new TextComponent("§5EXP-Build §7Doc : click here");
 				github_doc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -76,8 +62,17 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				github_doc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
 						"https://github.com/LucasT-dev/Expert-Build-Plugin/blob/master/README.md"));
 				sender.spigot().sendMessage(github_doc);
+
+
+				TextComponent gitHubURL = new TextComponent("§8Discord §7link : click here");
+				gitHubURL.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+						new ComponentBuilder("§7Join official discord").create()));
+				gitHubURL.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
+						"https://discord.gg/R2q8HuzSmM"));
+				sender.spigot().sendMessage(gitHubURL);
 				return false;
 			}
+
 			if (args[0].equalsIgnoreCase("reload")) {
 
 				Main.getInstance().reloadConfig();
