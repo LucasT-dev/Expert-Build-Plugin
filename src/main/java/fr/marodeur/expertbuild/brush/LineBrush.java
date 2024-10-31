@@ -90,7 +90,11 @@ public class LineBrush extends AbstractBrush {
                 this.addBlock(start.getBlockBetweenTwoPoint(end));
 
             }
+
             point.remove(brushBuilder.getUUID());
+
+
+
             return true;
         } else {
 
