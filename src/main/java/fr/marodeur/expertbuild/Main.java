@@ -27,6 +27,8 @@ import fr.marodeur.expertbuild.object.fileManager.FileManager;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
+import fr.marodeur.expertbuild.object.shape.CylinderShape;
+import fr.marodeur.expertbuild.object.shape.SphereShape;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -43,6 +45,7 @@ public class Main extends JavaPlugin {
 	private static Main instance;
 	private static DataPlugin dataPlugin;
 	private static AbstractBrush.RegisterBrush brush;
+	private static AbstractShape.RegisterShape shape;
 	private static Configuration configuration;
 	private static Message fileMessageManager;
 	private static DataProfile dataProfile;
@@ -106,6 +109,7 @@ public class Main extends JavaPlugin {
 		fileMessageManager = new Message().loadFileConfig();
 
 		loadBrush();
+		loadShape();
 
 		registerListeners();
 
@@ -305,6 +309,10 @@ public class Main extends JavaPlugin {
 		return brush;
 	}
 
+	public static AbstractShape.RegisterShape getShape() {
+		return shape;
+	}
+
 	public FileManager getFileManager() {
 		return fileManager;
 	}
@@ -333,6 +341,13 @@ public class Main extends JavaPlugin {
 		//brush.createBrush(new HydrologyBrush());
 
 		getLogger().info(new Message.MessageSender("expbuild.message.main.brush_load", false).getMessage());
+	}
+
+	private void loadShape() {
+
+		shape = new AbstractShape.RegisterShape();
+
+
 	}
 
 	private void serverFileBuilder() throws IOException {

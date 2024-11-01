@@ -55,7 +55,6 @@ public class BlockVectorTool implements Cloneable {
     }
 
 
-
     // Set double value
 
     public BlockVectorTool setX(double x) {
@@ -205,6 +204,13 @@ public class BlockVectorTool implements Cloneable {
 
     public double distanceSquared(BlockVectorTool blockVectorTool) {
         return NumberConversions.square(x - blockVectorTool.x) + NumberConversions.square(y - blockVectorTool.y) + NumberConversions.square(z - blockVectorTool.z);
+    }
+
+    // distance squared XZ
+    public double distanceXZ(BlockVectorTool other) {
+        int dx = this.getBlockX() - other.getBlockX();
+        int dz = this.getBlockZ() - other.getBlockZ();
+        return Math.sqrt(dx * dx + dz * dz);
     }
 
 
@@ -539,62 +545,9 @@ public class BlockVectorTool implements Cloneable {
     public BlockVectorTool toBlockVectorTool(Location location) {
         return new BlockVectorTool(location.getX(), location.getY(), location.getZ());
     }
+
     public BlockVectorTool toBlockVectorTool(Vector vector) {
         return new BlockVectorTool(vector.getX(), vector.getY(), vector.getZ());
-    }
-
-
-    // Shape
-
-    public ShapeTool getSpherePoint(int radius) {
-
-        ShapeTool shapeTool = new ShapeTool((2 * radius) * (2 * radius));
-
-        for (int x = this.getBlockX() - radius; x <= this.getBlockX() + radius; x++) {
-            for (int y = this.getBlockY() - radius; y <= this.getBlockY() + radius; y++) {
-                for (int z = this.getBlockZ() - radius; z <= this.getBlockZ() + radius; z++) {
-
-                    if (new BlockVectorTool(x, y, z).distance(this) < radius) {
-
-                        shapeTool.add(new BlockVectorTool(x, y, z));
-
-                    }
-                }
-            }
-        }
-        return shapeTool;
-    }
-
-    public ShapeTool getCylinderPoint(int radius, int height) {
-
-        ShapeTool shapeTool = new ShapeTool((2 * radius) * (2 * radius) * height);
-
-        for (int x = this.getBlockX() - radius; x <= this.getBlockX() + radius; x++) {
-            for (int z = this.getBlockZ() - radius; z <= this.getBlockZ() + radius; z++) {
-                if (new BlockVectorTool(x, this.getBlockY(), z).distance(this) < radius) {
-                    for (int y = this.getBlockY(); y <= this.getBlockY() + height; y++) {
-                        shapeTool.add(new BlockVectorTool(x, y, z));
-                    }
-                }
-            }
-        }
-        return shapeTool;
-    }
-
-    public ShapeTool getCubePoint(int radius) {
-
-        ShapeTool shapeTool = new ShapeTool((2 * radius) * (2 * radius));
-
-        for (int x = this.getBlockX() - radius; x <= this.getBlockX() + radius; x++) {
-            for (int y = this.getBlockY() - radius; y <= this.getBlockY() + radius; y++) {
-                for (int z = this.getBlockZ() - radius; z <= this.getBlockZ() + radius; z++) {
-
-                    shapeTool.add(new BlockVectorTool(x, y, z));
-
-                }
-            }
-        }
-        return shapeTool;
     }
 }
 

@@ -95,6 +95,21 @@ public class BrushCommand extends AbstractCommand {
                         .sendMessage("expbuild.message.brush.radius_set", true);
             }
 
+            case "shape" -> {
+
+                AbstractShape shape;
+
+                if (this.getValidArgument().isShape(args[1])) {
+                    shape = this.getValidArgument().getShape(args[1]);
+                } else {
+                    this.getValidArgument().sendMessageInvalidShape(executor, args[1]);
+                    break;
+                }
+
+                brushBuilder.getBrushParameter().setShape(shape)
+                        .sendMessage("expbuild.message.brush.radius_set", true);
+            }
+
             case "biome" -> {
 
                 if (this.getValidArgument().isBiome(args[1])) {
@@ -315,7 +330,7 @@ public class BrushCommand extends AbstractCommand {
 
             }
 
-            case "hydrology" -> {
+            /*case "hydrology" -> {
 
                 if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
@@ -329,7 +344,7 @@ public class BrushCommand extends AbstractCommand {
                         .setRadius(radius)
                         .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"hydrology"});
 
-            }
+            }*/
 
             case "degrade" -> {
 
@@ -584,6 +599,7 @@ public class BrushCommand extends AbstractCommand {
 
                 new ArgumentLength(2, "material", 0, "/flower material <pattern>", 2),
                 new ArgumentLength(2, "radius", 0, "/flower radius <integer>", 2),
+                new ArgumentLength(2, "shape", 0, "/flower shape <shape>", 2),
 
                 //register
 
@@ -650,6 +666,9 @@ public class BrushCommand extends AbstractCommand {
 
             // Material
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "material").toSubCommand("None"));
+            // Shape
+            subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "shape").toSubCommand("None"));
+            subCommandSender.addSubCommand(new SubCommandSelector().getShapeList(args, 1).toSubCommand("None", new ConditionArgumentBefore("shape", 0)));
             // Radius
             subCommandSender.addSubCommand(new SubCommandSelector().getArgs(0, "radius").toSubCommand("None"));
             // Register

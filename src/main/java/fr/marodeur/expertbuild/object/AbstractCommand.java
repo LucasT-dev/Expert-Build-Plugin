@@ -597,6 +597,22 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         /**
+         * Get shape list
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getShapeList(@NotNull String @NotNull [] args, int argsIndex) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex  + 1 ) {
+                this.subCommand.addAll(Main.getShape().getBrushes().stream().map(AbstractShape::getShapeName).toList());
+            }
+            return this;
+        }
+
+        /**
          * Get player list on server
          *
          * @param args String[]
@@ -964,6 +980,26 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         public void sendMessageInvalidBiome(@NotNull CommandSender sender, String arg) {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "biome"}).send(sender);
+
+            //sender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, "biome"));
+        }
+
+        // Shape
+        public boolean isShape(String arg) {
+            return Main.getShape().getBrushes().stream().map(AbstractShape::getShapeName).toList().contains(arg.toUpperCase().toLowerCase());
+        }
+
+        public AbstractShape getShape(String arg) {
+
+            return Main.getShape().getBrushes()
+                    .stream()
+                    .filter(abstractShape -> abstractShape.getShapeName().equalsIgnoreCase(arg))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("Unknown shape : " + arg));
+        }
+
+        public void sendMessageInvalidShape(@NotNull CommandSender sender, String arg) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "shape"}).send(sender);
 
             //sender.sendMessage(Main.prefix + msg.getInvalidArgument(arg, "biome"));
         }

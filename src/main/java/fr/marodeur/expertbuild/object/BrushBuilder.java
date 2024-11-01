@@ -104,6 +104,11 @@ private static final Logger LOG;
         return Main.getDataProfile().getFlowerBrushProfile(this.uuid);
     }
 
+    // BRUSH Brush
+    public BrushParameter getBrushParameter() {
+        return Main.getDataProfile().getBrushProfile(this.uuid);
+    }
+
 
 
     // GETTER
