@@ -139,6 +139,11 @@ build:
   # Use integer value > 0
   max_timelapse_in_same_time: 2
 
+  # Send "Builder registered" message when a player connects to the server
+  # Default : true
+  # Use boolean value (true / false)
+  send_message_builder_register: true
+
   GOHA:
     #Arm length correction factor
     arm_correction_factor: 1.5

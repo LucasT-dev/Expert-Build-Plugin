@@ -44,7 +44,11 @@ public class GeneralListener implements Listener {
 
 		if (!Main.containsBrushBuilder(p)) {
 			BrushBuilder bb = BrushBuilder.registerPlayer(p, false);
-			bb.sendMessage("expbuild.message.brush.builder_profile_registered", true);
+
+			if (conf.getSendMessageBuilderRegister()) {
+				bb.sendMessage("expbuild.message.brush.builder_profile_registered", true);
+			}
+
 		} else {
 			BrushBuilder.registerPlayer(p, Main.getBrushBuilder(p));
 		}

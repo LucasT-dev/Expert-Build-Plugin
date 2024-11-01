@@ -54,6 +54,8 @@ public class Configuration {
     private int timelapse_max_block_per_tick;
     private int max_timelapse_in_same_time;
 
+    private boolean send_message_builder_register;
+
     private Double arm_correction_factor;
     private String default_material;
     private int default_orga_height;
@@ -110,6 +112,8 @@ public class Configuration {
 
             this.timelapse_max_block_per_tick = yml.getInt("build.timelapse_max_block_per_tick");
             this.max_timelapse_in_same_time = yml.getInt("build.max_timelapse_in_same_time");
+
+            this.send_message_builder_register = yml.getBoolean("build.send_message_builder_register");
 
             this.arm_correction_factor = yml.getDouble("build.GOHA.arm_correction_factor");
             this.default_material = yml.getString("build.GOHA.default_material");
@@ -222,8 +226,12 @@ public class Configuration {
     public int getTimelapse_max_block_per_tick() {
         return timelapse_max_block_per_tick;
     }
-    public int max_timelapse_in_same_time() {
+    public int getMaxTimelapseInSameTime() {
         return max_timelapse_in_same_time;
+    }
+
+    public boolean getSendMessageBuilderRegister() {
+        return send_message_builder_register;
     }
 
     public Double getArm_correction_factor() {
@@ -507,12 +515,18 @@ public class Configuration {
             this.version = "1.18.1.22";
 
             yml.save(file);
-
-            //for next update
         }
 
         if (this.version.equals("1.18.1.22")) {
             //Update config file from 1.18.1.22 to 1.18.1.23
+
+            // Send message builder registered
+            yml.set("build.send_message_builder_register", true);
+
+            yml.set("build.version", "1.18.1.23");
+            this.version = "1.18.1.23";
+
+            yml.save(file);
 
             //for next update
         }
