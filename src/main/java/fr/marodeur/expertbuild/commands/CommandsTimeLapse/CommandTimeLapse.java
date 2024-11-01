@@ -98,7 +98,7 @@ public class CommandTimelapse extends AbstractCommand {
                 }
 
                 // Max timelapse on server
-                if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilderParameter::hasTimelapseRunning).count() > conf.getTimelapse_max_block_per_tick()) {
+                if (Main.getDataProfile().getTimelapseHashMap().stream().filter(TimelapseBuilderParameter::hasTimelapseRunning).count() > conf.getMaxTimelapseInSameTime()) {
                     timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses", true);
                     return;
                 }
