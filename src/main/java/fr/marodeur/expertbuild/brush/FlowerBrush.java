@@ -12,6 +12,7 @@ package fr.marodeur.expertbuild.brush;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
+import fr.marodeur.expertbuild.object.builderObjects.BrushParameter;
 
 import org.bukkit.Location;
 
@@ -35,12 +36,16 @@ public class FlowerBrush extends AbstractBrush {
     public boolean honeycombToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         Location l = (Location) loc;
-        int radius = brushBuilder.getRadius();
 
         this.setBrushBuilder(brushBuilder);
         this.setPattern(brushBuilder.getPattern());
 
-        this.addBlock(new BlockVectorTool().toBlockVectorTool(l).getSpherePoint(radius).getBlockVectorList());
+        BrushParameter brushParameter = brushBuilder.getBrushParameter();
+        brushParameter.getShape().generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l));
+
+        this.addBlock(brushParameter.getShape().getBlockVectorList());
+
+        brushParameter.getShape().clearBlockVector();
 
         return true;
     }

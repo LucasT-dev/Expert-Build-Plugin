@@ -8,6 +8,7 @@ import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.Configuration;
 
 import fr.marodeur.expertbuild.object.Flag;
+import fr.marodeur.expertbuild.object.shape.SphereShape;
 import org.bukkit.Bukkit;
 
 import java.util.*;
@@ -32,6 +33,8 @@ public class DataProfile {
 
     private final HashMap<UUID, FlowerBrushParameter> flowerBrushParameterHashMap;
 
+    private final HashMap<UUID, BrushParameter> brushParameterHashMap;
+
 
     public DataProfile() {
 
@@ -42,6 +45,7 @@ public class DataProfile {
         this.gohaParameterHashMap = new HashMap<>();
         this.clipboard3DParameterHashMap = new HashMap<>();
         this.flowerBrushParameterHashMap = new HashMap<>();
+        this.brushParameterHashMap = new HashMap<>();
     }
 
     public void registerPlayer(UUID uuid) {
@@ -86,6 +90,10 @@ public class DataProfile {
 
         if (! flowerBrushParameterHashMap.containsKey(uuid)) {
             flowerBrushParameterHashMap.put(uuid, new FlowerBrushParameter(uuid, Arrays.asList(ib, ib, ib, ib, ib, ib, ib, ib, ib), Arrays.asList(0, 0, 0, 0, 0, 0, 0, 0, 0), CONF.getDefault_air_brush()) );
+        }
+
+        if (! brushParameterHashMap.containsKey(uuid)) {
+            brushParameterHashMap.put(uuid, new BrushParameter(uuid, new SphereShape()));
         }
     }
 
@@ -150,6 +158,16 @@ public class DataProfile {
     public GlueList<FlowerBrushParameter> getFlowerBrushParametersHashMap() {
         GlueList<FlowerBrushParameter> g = new GlueList<>();
         g.addAll(this.flowerBrushParameterHashMap.values());
+        return g;
+    }
+
+
+    public BrushParameter getBrushProfile(UUID uuid) {
+        return this.brushParameterHashMap.get(uuid);
+    }
+    public GlueList<BrushParameter> getBrushParametersHashMap() {
+        GlueList<BrushParameter> g = new GlueList<>();
+        g.addAll(this.brushParameterHashMap.values());
         return g;
     }
 }

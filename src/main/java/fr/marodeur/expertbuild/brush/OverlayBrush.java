@@ -12,6 +12,7 @@ package fr.marodeur.expertbuild.brush;
 import fr.marodeur.expertbuild.object.AbstractBrush;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
+import fr.marodeur.expertbuild.object.builderObjects.BrushParameter;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -38,57 +39,50 @@ public class OverlayBrush extends AbstractBrush {
     @Override
     public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        int brushSize = brushBuilder.getRadius();
         Location l = (Location) loc;
 
         this.setBrushBuilder(brushBuilder);
         this.setPattern(brushBuilder.getPattern());
 
+       BrushParameter brushParameter = brushBuilder.getBrushParameter();
+       brushParameter.getShape().generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l));
 
-        for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
-            for (int z = l.getBlockZ() + brushSize; z >= l.getBlockZ() - brushSize; z--) {
+       brushParameter.getShape().getBlockVectorList().forEach(bvt -> {
 
-                if (l.distance(new Location(l.getWorld(), x, l.getY(), z)) <= brushSize) {
+           Location floc = new Location(l.getWorld(), bvt.getBlockX(), bvt.getBlockY(), bvt.getBlockZ());
 
-                    for (int y = l.getBlockY() + brushSize; l.getBlockY() + brushSize >= l.getBlockY() - brushSize; y--) {
+           if (!this.ignoredBlock(floc.getBlock()) && floc.clone().add(0,1,0).getBlock().getType().isAir()) {
+               this.addBlock(new BlockVectorTool().toBlockVectorTool(floc));
+           }
+       });
 
-                        Location floc = new Location(l.getWorld(), x, y, z);
-
-                        if (!this.ignoredBlock(floc.getBlock())) {
-                            this.addBlock(new BlockVectorTool().toBlockVectorTool(floc));
-                        }
-                    }
-                }
-            }
-        }
-        return true;
+       brushParameter.getShape().clearBlockVector();
+       return true;
     }
 
     @Override
     public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
-        int brushSize = brushBuilder.getRadius();
         Location l = (Location) loc;
 
         this.setBrushBuilder(brushBuilder);
         this.setPattern(brushBuilder.getPattern());
 
-        for (int x = l.getBlockX() + brushSize; x >= l.getBlockX() - brushSize; x--) {
-            for (int z = l.getBlockZ() + brushSize; z >= l.getBlockZ() - brushSize; z--) {
+        BrushParameter brushParameter = brushBuilder.getBrushParameter();
+        brushParameter.getShape().generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l));
 
-                if (l.distance(new Location(l.getWorld(), x, l.getY(), z)) <= brushSize) {
+        brushParameter.getShape().getBlockVectorList().forEach(bvt -> {
 
-                    for (int y = l.getBlockY() + brushSize; l.getBlockY() + brushSize >= l.getBlockY() - brushSize; y--) {
+            Location floc = new Location(l.getWorld(), bvt.getBlockX(), bvt.getBlockY(), bvt.getBlockZ());
 
-                        Location floc = new Location(l.getWorld(), x, y, z);
-
-                        if (!this.ignoredBlock(floc.getBlock())) {
-                            this.addBlock(new BlockVectorTool().toBlockVectorTool(floc).add(0, 1, 0));
-                        }
-                    }
-                }
+            if (!this.ignoredBlock(floc.getBlock()) && floc.clone().add(0,1,0).getBlock().getType().isAir()) {
+                this.addBlock(new BlockVectorTool().toBlockVectorTool(floc).add(0, 1, 0));
             }
-        }
+
+        });
+
+        brushParameter.getShape().clearBlockVector();
+
         return true;
     }
 

@@ -4,9 +4,12 @@ import com.sk89q.worldedit.function.pattern.Pattern;
 
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.object.AbstractShape;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
+import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.LISON.AdvancedParticleOperation;
 
+import fr.marodeur.expertbuild.object.shape.SphereShape;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
@@ -907,7 +910,12 @@ public class GohaParameter extends IDataProfile{
 
             bv4.addAll(new BlockVectorTool().getBlockBetweenTwoPoint(l, Jcerveau));
 
-            bv4.addAll(Jcerveau.getSpherePoint((int) (seven / 1.5)).getBlockVectorList());
+            AbstractShape abstractShape = new SphereShape();
+            abstractShape.addParameter("radius", seven / 1.5);
+            abstractShape.generateShape(BrushBuilder.getBrushBuilderPlayer(getPlayer(), false), Jcerveau);
+
+            bv4.addAll(abstractShape.getBlockVectorList());
+
         }
 
         return this;
