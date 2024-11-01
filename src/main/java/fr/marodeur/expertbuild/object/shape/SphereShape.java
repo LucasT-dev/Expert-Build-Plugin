@@ -7,9 +7,15 @@ import fr.marodeur.expertbuild.object.BrushBuilder;
 public class SphereShape extends AbstractShape {
 
     @Override
+    public String getShapeName() {
+        return "sphere";
+    }
+
+    @Override
     public void generateShape(BrushBuilder brushBuilder, BlockVectorTool center) {
 
-        int radius = brushBuilder.getRadius();
+        // Récupère le rayon depuis la carte des paramètres, sinon utilise celui de brushBuilder par défaut
+        double radius = containsParameter("radius") ? getParameter("radius", Double.class) : brushBuilder.getRadius();
 
         BlockVectorTool loc1 = center.clone()
                 .add(-radius, -radius, -radius);

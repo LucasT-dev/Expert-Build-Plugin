@@ -347,6 +347,8 @@ public class Main extends JavaPlugin {
 
 		shape = new AbstractShape.RegisterShape();
 
+		shape.registerShape(new SphereShape());
+		shape.registerShape(new CylinderShape());
 
 	}
 
