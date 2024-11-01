@@ -1,7 +1,7 @@
 # Expert-Build
 Minecraft build plugin, Expert-Build Documentation
 
-* Latest plugin version : 1.18.1.22
+* Latest plugin version : 1.18.1.23
 * Author : Marodeur
 * Contributor : Lison, Cancri
 * Depend : FAWE
@@ -11,7 +11,7 @@ Minecraft build plugin, Expert-Build Documentation
 
 ![LatestVersion](https://img.shields.io/badge/Discord_:-marodeur-purple)  
 [![Spigot](https://img.shields.io/badge/Download-Expert_Build-purple)](https://www.spigotmc.org/resources/expert-build.110059/)
-![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.22-purple)
+![LatestVersion](https://img.shields.io/badge/Latest_Version-1.18.1.23-purple)
 
 ------------------
 <p align="center">
@@ -475,6 +475,7 @@ Example : ```//gmask onground[grass_block][air]```
 
 <img src="https://imgur.com/6NRQElK.png" title="Image_1" alt="deco">
 
+------------------
 
 # Configuration
 
@@ -482,157 +483,8 @@ execute /expbuild reload ; to reload the config file.
 
 default file config :
 
-````yaml
-# EXP-Build
 
-# EXP-Build
-
-build:
-
-  # Version of your configuration file, normally equivalent to the plugin version.
-  # For reasons of safety and proper operation, do not modify this value !!!
-  version: 1.18.1.19
-
-  # Open or close the schematic transfer
-  # Value : Boolean (true or false)
-  server_1:
-    statserver: false
-    name: server_1
-  server_2:
-    statserver: false
-    name: server_2
-  server_3:
-    statserver: false
-    name: server_3
-  server_4:
-    statserver: false
-    name: server_4
-
-  #Max file size to transfer (ko)
-  #Default : 500
-  #-1 for by-pass
-  max_file_size: 500
-
-  #Maximum size brush
-  #Default : 50
-  #Use integer value
-  max_brush_rayon: 50
-
-  #default brush radius
-  #Default : 10
-  #Use integer value
-  default_brush_rayon: 10
-
-  #Default material brush
-  #Default : STONE
-  #Use block name
-  default_material_brush: STONE
-
-  #Default pattern brush
-  #Default : 1
-  #Id of block
-  default_pattern_brush: 1
-
-  #Default biomes brush
-  #Default : PLAINS
-  #Use Biome name
-  default_biome_brush: PLAINS
-
-  #Percentage of air in the flower brush
-  #Default : 10
-  #Use integer value
-  default_air_brush: 10
-
-  #Max distance to apply brush
-  #Default : 100
-  max_brush_distance: 100
-
-
-  #Display bezier line on convex selection
-  #Default : true
-  #Use boolean value (true / false)
-  display_bezier_curve: true
-
-  #Type of particle to display
-  #Default : FLAME
-  #Use particle value (FLAME / SOUL / CLOUD ...)
-  particle_bezier_curve_type: FLAME
-
-  #Coefficient divide by the distance of the convex selection
-  #Default : 3
-  # Use integer value > 0
-  coefficient_particle_number: 3
-
-
-  #Display line on convex selection
-  #Default : true
-  #Use boolean value (true / false)
-  display_convex_line: true
-
-  #Type of particle to display
-  #Default : FLAME
-  #Use particle value (FLAME / SOUL / CLOUD ...)
-  particle_convex_type_line: FLAME
-
-  #Particle spacing
-  #Default : 1
-  # Use integer value > 0
-  spacing_between_particles: 1
-
-
-  #Repetition period of the asynchronous particle spawn loop 
-  #Default : 10
-  #Use integer value > 0
-  period_particle: 10
-
-
-  #Player can wand click in air
-  #Default : true
-  #Use boolean value (true / false)
-  wand_click_in_air: true
-
-  #Player can clear selection using shift click with wand
-  #Default : false
-  #Use boolean value (true / false)
-  sihft_click_with_wand: false
-
-  #Log shortcut action
-  #Default : true
-  #Use boolean value (true / false)
-  logShortcut: true
-
-  #Max point number save for Brush line
-  #Default : 20
-  #use integer value
-  max_point_saved: 20
-
-  #Terraforming Tool 1
-  #Default : ARROW
-  #Use item name
-  terraforming_tool_1: SPECTRAL_ARROW
-
-  #Terraforming Tool 2
-  #Default : GUNPOWDER
-  #Use item name
-  terraforming_tool_2: CLAY_BALL
-
-
-  GOHA:
-    #Arm length correction factor
-    arm_correction_factor: 1.5
-
-    #Material defined by default, modifiable with the command /goha material <block>
-    default_material: STONE
-
-    #Default organic height
-    default_orga_height: 50
-
-  #lang
-  #Default : en (english)
-  #possibilité (fr / en )
-
-  lang: en
-````
+* [Configuration](https://github.com/LucasT-dev/Expert-Build-Plugin/blob/master/src/main/resources/config.yml)
 
 ------------------
 
