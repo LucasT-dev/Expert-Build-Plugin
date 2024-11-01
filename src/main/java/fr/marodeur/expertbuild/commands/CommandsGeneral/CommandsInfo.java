@@ -45,7 +45,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 		if (cmd.getName().equalsIgnoreCase("expbuild")) {
 
 			if (args.length == 0) {
-				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info/version/help/reload>"}).send(sender);
+				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info/reload/sel_mode/fly_mode>"}).send(sender);
 				return false;
 			}
 			if (args[0].equalsIgnoreCase("info")) {
@@ -79,6 +79,8 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				Main.getInstance().reloadMessageConfig();
 
 				new Message.MessageSender("expbuild.message.main.config_load", true).send(sender);
+
+				return false;
 			}
 
 			if (args[0].equalsIgnoreCase("sel_mode")) {
@@ -118,7 +120,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
                 }
                 return false;
             } else {
-				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info, version, help, reload, sel_mode, fly_mode>"}).send(sender);
+				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info, reload, sel_mode, fly_mode>"}).send(sender);
 			}
 		}
 		return false;
