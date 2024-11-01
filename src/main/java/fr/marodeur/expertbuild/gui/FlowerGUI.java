@@ -47,6 +47,7 @@ public class FlowerGUI {
 
                         event.setCursor(it);
                     }
+
                 }))
 
                 .provider(new InventoryProvider() {
@@ -214,8 +215,10 @@ public class FlowerGUI {
                                     }
 
                                     if (fbp.flowerMaterialRate().get(finalI - 45).equals(0)) {
-                                        fbp.flowerMaterialRate().set(finalI - 45, 0);
+                                        fbp.flowerMaterialRate().set(finalI - 45, 1);
                                     }
+
+                                    contents.updateLore(finalI - 36, 0, "expbuild.message.gui.right_arrow", false, new String[]{fbp.flowerMaterialRate().get(finalI - 45) + " % of " + fbp.flowerMaterial().get(finalI - 45)});
 
                                     fbp.addFlowerMaterial(baseBlock, finalI - 45);
                                     contents.updateMaterial(finalI, BukkitAdapter.adapt(baseBlock.getBlockType()));
@@ -675,7 +678,6 @@ public class FlowerGUI {
 
             FlowerBrushParameter fbp = brushBuilder.getFlowerBrushParameter();
 
-
             StringBuilder stringBuilder = new StringBuilder();
 
             for (int i = 0; i < fbp.flowerMaterial().size(); i++) {
@@ -689,11 +691,11 @@ public class FlowerGUI {
                             .append("%")
                             .append(result)
                             .append(',');
+
                 }
             }
             stringBuilder.append(fbp.airBrush())
-                    .append("%")
-                    .append(0);
+                    .append("%0");
 
             brushBuilder.setPattern(new FaweAPI(brushBuilder.getPlayer()).getPattern(stringBuilder.toString()));
         }
