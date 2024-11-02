@@ -41,11 +41,9 @@ public class FlowerBrush extends AbstractBrush {
         this.setPattern(brushBuilder.getPattern());
 
         BrushParameter brushParameter = brushBuilder.getBrushParameter();
-        brushParameter.getShape().generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l));
-
-        this.addBlock(brushParameter.getShape().getBlockVectorList());
-
-        brushParameter.getShape().clearBlockVector();
+        brushParameter.getShape()
+                .generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l))
+                .forEach(this::addBlock);
 
         return true;
     }

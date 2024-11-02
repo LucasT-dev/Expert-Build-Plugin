@@ -44,10 +44,11 @@ public class OverlayBrush extends AbstractBrush {
         this.setBrushBuilder(brushBuilder);
         this.setPattern(brushBuilder.getPattern());
 
-       BrushParameter brushParameter = brushBuilder.getBrushParameter();
-       brushParameter.getShape().generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l));
+        BrushParameter brushParameter = brushBuilder.getBrushParameter();
 
-       brushParameter.getShape().getBlockVectorList().forEach(bvt -> {
+        brushParameter.getShape()
+                .generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l))
+                .forEach(bvt -> {
 
            Location floc = new Location(l.getWorld(), bvt.getBlockX(), bvt.getBlockY(), bvt.getBlockZ());
 
@@ -56,7 +57,6 @@ public class OverlayBrush extends AbstractBrush {
            }
        });
 
-       brushParameter.getShape().clearBlockVector();
        return true;
     }
 
@@ -69,9 +69,10 @@ public class OverlayBrush extends AbstractBrush {
         this.setPattern(brushBuilder.getPattern());
 
         BrushParameter brushParameter = brushBuilder.getBrushParameter();
-        brushParameter.getShape().generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l));
 
-        brushParameter.getShape().getBlockVectorList().forEach(bvt -> {
+        brushParameter.getShape()
+                .generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(l))
+                .forEach(bvt -> {
 
             Location floc = new Location(l.getWorld(), bvt.getBlockX(), bvt.getBlockY(), bvt.getBlockZ());
 
@@ -80,8 +81,6 @@ public class OverlayBrush extends AbstractBrush {
             }
 
         });
-
-        brushParameter.getShape().clearBlockVector();
 
         return true;
     }

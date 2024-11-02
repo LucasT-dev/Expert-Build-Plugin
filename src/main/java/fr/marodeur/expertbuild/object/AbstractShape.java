@@ -9,31 +9,10 @@ import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 public abstract class AbstractShape {
-
-    private final GlueList<BlockVectorTool> toolGlueList;
     private final Map<String, Object> parameters;
 
-    public AbstractShape(GlueList<BlockVectorTool> toolGlueList) {
-        this.toolGlueList = toolGlueList;
-        this.parameters = new HashMap<>();
-    }
-
-    public AbstractShape(int capacity) {
-        toolGlueList = new GlueList<>(capacity);
-        this.parameters = new HashMap<>();
-    }
-
     public AbstractShape() {
-        toolGlueList = new GlueList<>();
         this.parameters = new HashMap<>();
-    }
-
-    public void add(BlockVectorTool blockVectorTool) {
-        toolGlueList.add(blockVectorTool);
-    }
-
-    public int size() {
-        return toolGlueList.size();
     }
 
     //Start Parameter
@@ -56,32 +35,9 @@ public abstract class AbstractShape {
 
     //End Parameter
 
-
-    public GlueList<BlockVectorTool> getBlockVectorList() {
-        return toolGlueList;
-    }
-
-    public BlockVectorTool getRandomPoint() {
-
-        if (this.toolGlueList.isEmpty()) {
-            return BlockVectorTool.ZERO;
-        }
-
-        return this.toolGlueList.get(new Random().nextInt(this.toolGlueList.size()));
-    }
-
-    // Method to return a stream of BlockVectorTool
-    public Stream<BlockVectorTool> streamToolGlueList() {
-        return toolGlueList.stream();
-    }
-
-    public void clearBlockVector() {
-        this.toolGlueList.clear();
-    }
-
     public abstract String getShapeName();
 
-    public abstract void generateShape(BrushBuilder brushBuilder, BlockVectorTool center);
+    public abstract Stream<BlockVectorTool> generateShape(BrushBuilder brushBuilder, BlockVectorTool center);
 
 
     public static class RegisterShape {
