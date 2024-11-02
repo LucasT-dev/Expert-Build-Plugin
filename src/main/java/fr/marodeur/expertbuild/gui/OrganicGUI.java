@@ -10,6 +10,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
+import java.util.List;
+
 public class OrganicGUI {
 
     //private final String X = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzM4YWIxNDU3NDdiNGJkMDljZTAzNTQzNTQ5NDhjZTY5ZmY2ZjQxZDllMDk4YzY4NDhiODBlMTg3ZTkxOSJ9fX0=";
@@ -25,6 +27,7 @@ public class OrganicGUI {
         Inventory.build()
                 .setTitle(new Message.MessageSender("expbuild.message.gui.organic_gui_title", true).getMessage())
                 .rows(6)
+                .ignoreSlot(List.of(0,1,3,4,6,7,9,13,19,21,27,28,30,31,33,34,35,36,38,40,45,47,49,51,52,53))
                 .updateTask(false)
                 .listener(new EventBuilder<>(InventoryClickEvent.class, event -> {
 
@@ -431,8 +434,8 @@ public class OrganicGUI {
                                         .build(),
                                 event -> {
 
-                                    if (goha_builder.getCommutateur() != 2) {
-                                        goha_builder.setCommutateur((short) 2);
+                                    if (goha_builder.getCommutateur() != 1) {
+                                        goha_builder.setCommutateur((short) 1);
 
                                         contents.updateMaterial(15, Material.GREEN_STAINED_GLASS_PANE);
                                         contents.updateMaterial(16, Material.RED_STAINED_GLASS_PANE);
@@ -447,8 +450,8 @@ public class OrganicGUI {
                                         .build(),
                                 event -> {
 
-                                    if (goha_builder.getCommutateur() != 3) {
-                                        goha_builder.setCommutateur((short) 3);
+                                    if (goha_builder.getCommutateur() != 2) {
+                                        goha_builder.setCommutateur((short) 2);
 
                                         contents.updateMaterial(15, Material.RED_STAINED_GLASS_PANE);
                                         contents.updateMaterial(16, Material.GREEN_STAINED_GLASS_PANE);
