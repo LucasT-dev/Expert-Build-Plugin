@@ -911,10 +911,9 @@ public class GohaParameter extends IDataProfile{
             bv4.addAll(new BlockVectorTool().getBlockBetweenTwoPoint(l, Jcerveau));
 
             AbstractShape abstractShape = new SphereShape();
-            abstractShape.addParameter("radius", seven / 1.5);
-            abstractShape.generateShape(BrushBuilder.getBrushBuilderPlayer(getPlayer(), false), Jcerveau);
+            abstractShape.addParameter("radius", (int) (seven / 1.5));
 
-            bv4.addAll(abstractShape.getBlockVectorList());
+            bv4.addAll( abstractShape.generateShape(BrushBuilder.getBrushBuilderPlayer(getPlayer(), false), Jcerveau).toList());
 
         }
 
