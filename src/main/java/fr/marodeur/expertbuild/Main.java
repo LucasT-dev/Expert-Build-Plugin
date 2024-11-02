@@ -382,7 +382,7 @@ public class Main extends JavaPlugin {
 	 */
 	private void bstatsManager(@NotNull Metrics metrics) {
 
-		metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
+		//metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
 
 		metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> {
 			// (This is useless as there is already a player chart by default.)
