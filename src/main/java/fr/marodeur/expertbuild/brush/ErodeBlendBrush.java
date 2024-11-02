@@ -12,6 +12,7 @@ package fr.marodeur.expertbuild.brush;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.*;
+import fr.marodeur.expertbuild.object.builderObjects.BrushParameter;
 import fr.marodeur.expertbuild.object.builderObjects.TerraParameter;
 
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
@@ -20,7 +21,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,7 @@ import java.util.Map;
 public class ErodeBlendBrush extends AbstractBrush {
     private static final BlockVectorMaterial bvm = new BlockVectorMaterial();
 
-    private final GlueList<Vector> spherePoint = new GlueList<>();
+    private final GlueList<Vector> shapePoints = new GlueList<>();
 
     private final Vector[] CHECK_FACES = {
             new Vector(0, 0, 1),
@@ -66,25 +66,18 @@ public class ErodeBlendBrush extends AbstractBrush {
     public boolean spectralToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         bvm.clear();
-        Location l = (Location) loc;
-        this.world = l.getWorld();
-        int radius = brushBuilder.getRadius();
-        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
+        Location center = (Location) loc;
+        this.world = center.getWorld();
+
+        TerraParameter terraParameter = brushBuilder.getTerraParameterProfile();
+        BrushParameter brushParameter = brushBuilder.getBrushParameter();
+        IterationBlockManager iterationBlockManager = new IterationBlockManager(center.getWorld());
 
         erorionParameter = new int[]{terraParameter.getErosionFaces(), terraParameter.getErosionRecursion(), terraParameter.getFillFaces(), terraParameter.getFillRecursion()};
-        final IterationBlockManager iterationBlockManager = new IterationBlockManager(l.getWorld());
-        final Vector v = l.toVector();
 
-        //sphere
-        for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
-            for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
-                for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
-                    if (new Vector(x, y, z).isInSphere(v, radius)) {
-                        spherePoint.add(new Vector(x, y, z));
-                    }
-                }
-            }
-        }
+        brushParameter.getShape()
+                .generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(center))
+                .forEach(bvt -> shapePoints.add(bvt.toVector()) );
 
 
         for (int i = 0; i < erorionParameter[1]; ++i) {
@@ -96,11 +89,13 @@ public class ErodeBlendBrush extends AbstractBrush {
         }
 
         new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
-        spherePoint.clear();
+
+        shapePoints.clear();
         bvm.clear();
 
-        blend(l, false, false, radius);
+        blend(center, false, false, brushBuilder.getRadius());
         new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
+
         bvm.clear();
 
         return false;
@@ -110,25 +105,19 @@ public class ErodeBlendBrush extends AbstractBrush {
     public boolean clayballToolBrush(BrushBuilder brushBuilder, Object loc, Object ploc) {
 
         bvm.clear();
-        Location l = (Location) loc;
-        this.world = l.getWorld();
-        int radius = brushBuilder.getRadius();
-        TerraParameter terraParameter = BrushBuilder.getBrushBuilderPlayer(brushBuilder.getPlayer(), false).getTerraParameterProfile();
+        Location center = (Location) loc;
+        this.world = center.getWorld();
 
+        TerraParameter terraParameter = brushBuilder.getTerraParameterProfile();
+        BrushParameter brushParameter = brushBuilder.getBrushParameter();
+        IterationBlockManager blockChangeTracker = new IterationBlockManager(center.getWorld());
 
         erorionParameter = new int[]{terraParameter.getFillFaces(), terraParameter.getFillRecursion(), terraParameter.getErosionFaces(), terraParameter.getErosionRecursion()};
-        final IterationBlockManager blockChangeTracker = new IterationBlockManager(l.getWorld());
-        final Vector v = l.toVector();
 
-        for (int x = v.getBlockX() - radius; x <= v.getBlockX() + radius; ++x) {
-            for (int z = v.getBlockZ() - radius; z <= v.getBlockZ() + radius; ++z) {
-                for (int y = v.getBlockY() - radius; y <= v.getBlockY() + radius; ++y) {
-                    if (new Vector(x, y, z).isInSphere(v, radius)) {
-                        spherePoint.add(new Vector(x, y, z));
-                    }
-                }
-            }
-        }
+        brushParameter.getShape()
+                .generateShape(brushBuilder, new BlockVectorTool().toBlockVectorTool(center))
+                .forEach(bvt -> shapePoints.add(bvt.toVector()));
+
 
         for (int i = 0; i < erorionParameter[1]; ++i) {
             erosionIteration(blockChangeTracker);
@@ -139,21 +128,23 @@ public class ErodeBlendBrush extends AbstractBrush {
         }
 
         new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
-        spherePoint.clear();
+
+        shapePoints.clear();
         bvm.clear();
 
-        blend(l, false, false, radius);
+        blend(center, false, false, brushBuilder.getRadius());
         new FaweAPI(brushBuilder.getPlayer()).setBlock(bvm, false);
+
         bvm.clear();
 
         return false;
     }
 
-    private void erosionIteration(final @NotNull ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
+    private void erosionIteration(ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
 
         final int currentIteration = iterationBlockManager.nextIteration();
 
-        spherePoint.forEach(currentPosition -> {
+        shapePoints.forEach(currentPosition -> {
 
             final BlockVectorTool currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
 
@@ -179,11 +170,11 @@ public class ErodeBlendBrush extends AbstractBrush {
         });
     }
 
-    private void fillIteration(final @NotNull ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
+    private void fillIteration(ErodeBlendBrush.IterationBlockManager iterationBlockManager) {
 
         final int currentIteration = iterationBlockManager.nextIteration();
 
-        spherePoint.forEach(currentPosition -> {
+        shapePoints.forEach(currentPosition -> {
 
             final BlockVectorTool currentBlock = iterationBlockManager.get(currentPosition, currentIteration);
             int count = 0;
@@ -300,7 +291,7 @@ public class ErodeBlendBrush extends AbstractBrush {
             }
         }
 
-        /**
+        /*
          *
          *  // Log current materials into newmats
          *  for (int x = 0; x <= brushSizeDoubled; x++) {
