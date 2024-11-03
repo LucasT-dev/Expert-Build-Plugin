@@ -382,17 +382,20 @@ public class BrushCommand extends AbstractCommand {
 
             case "erode", "e" -> {
 
-                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
-                    radius = this.getValidArgument().getInteger(args[2]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
-                    break;
+                if (args.length >= 3) {
+
+                    if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
+                        radius = this.getValidArgument().getInteger(args[2]);
+                        brushBuilder.setRadius(radius);
+                    } else {
+                        this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
+                        break;
+                    }
                 }
 
                 switch (args[1]) {
 
                     case "lift" -> brushBuilder.setBrush(new ErodeBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
 
@@ -404,7 +407,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 2)
@@ -414,7 +416,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 5)
@@ -424,7 +425,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 3)
@@ -434,7 +434,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"erode smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 6)
@@ -445,19 +444,23 @@ public class BrushCommand extends AbstractCommand {
                 }
             }
 
+            //fw eb melt 5
             case "eb", "erodeblend" -> {
 
-                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
-                    radius = this.getValidArgument().getInteger(args[2]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
-                    break;
+                if (args.length >= 3) {
+
+                    if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
+                        radius = this.getValidArgument().getInteger(args[2]);
+                        brushBuilder.setRadius(radius);
+                    } else {
+                        this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
+                        break;
+                    }
                 }
 
                 switch (args[1]) {
 
                     case "lift" -> brushBuilder.setBrush(new ErodeBlendBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 6)
@@ -467,7 +470,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend lift"});
 
                     case "melt" -> brushBuilder.setBrush(new ErodeBlendBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 2)
@@ -477,7 +479,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend melt"});
 
                     case "fill" -> brushBuilder.setBrush(new ErodeBlendBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 5)
@@ -487,7 +488,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend fill"});
 
                     case "smooth" -> brushBuilder.setBrush(new ErodeBlendBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 3)
@@ -497,7 +497,6 @@ public class BrushCommand extends AbstractCommand {
                             .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"ErodeBlend smooth"});
 
                     case "floatclean" -> brushBuilder.setBrush(new ErodeBlendBrush())
-                            .setRadius(radius)
                             .setEnable(true)
                             .getTerraParameterProfile()
                             .setErosionFaces((byte) 6)
@@ -621,11 +620,11 @@ public class BrushCommand extends AbstractCommand {
                 new ArgumentLength(2, "eraser", 0, "/flower eraser <radius>", 2),
                 new ArgumentLength(2, "bb", 0, "/flower bb <radius>", 2),
 
-                new ArgumentLength(3, "e", 0, "/flower e <lift-melt-fill-smooth-floatclean> <radius>", 2),
-                new ArgumentLength(3, "erode", 0, "/flower e <lift-melt-fill-smooth-floatclean> <radius>", 2),
+                new ArgumentLength(2, "e", 0, "/flower e <lift-melt-fill-smooth-floatclean> [radius]", 2),
+                new ArgumentLength(2, "erode", 0, "/flower e <lift-melt-fill-smooth-floatclean> [radius]", 2),
 
-                new ArgumentLength(3, "eb", 0, "/flower eb <lift-melt-fill-smooth-floatclean> <radius>", 2),
-                new ArgumentLength(3, "erodeblend", 0, "/flower eb <lift-melt-fill-smooth-floatclean> <radius>", 2),
+                new ArgumentLength(2, "eb", 0, "/flower eb <lift-melt-fill-smooth-floatclean> [radius]", 2),
+                new ArgumentLength(2, "erodeblend", 0, "/flower eb <lift-melt-fill-smooth-floatclean> [radius]", 2),
 
                 new ArgumentLength(6, "custom", 0, "/flower bb <erosion face> <erosion recursion> <fill faces> <fill recursion> <radius>", 2),
 
