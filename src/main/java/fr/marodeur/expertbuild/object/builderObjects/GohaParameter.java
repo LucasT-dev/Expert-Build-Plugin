@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class GohaParameter extends IDataProfile{
 
-    private int Height;
+    private int height;
     private Pattern pattern;
     private short Commutateur;
     private BlockVectorTool startLoc;
@@ -112,7 +112,7 @@ public class GohaParameter extends IDataProfile{
                          Boolean tibiaG, short tibiaGXAngle, short tibiaGYAngle) {
         super(profileID);
 
-        this.Height = height;
+        this.height = height;
         this.seven = height / 7;
         this.pattern = pattern;
         this.Commutateur = commutateur;
@@ -152,7 +152,8 @@ public class GohaParameter extends IDataProfile{
     }
 
     public GohaParameter setHeight(int height) {
-        this.Height = height;
+
+        this.height = height;
         this.seven = height / 7;
         return this;
     }
@@ -161,7 +162,7 @@ public class GohaParameter extends IDataProfile{
 
         int maxRotation = 350;
         int minRotation = 1;
-        int n = this.Height;
+        int n = this.height;
         int num;
 
         if (isShiftClick) {
@@ -179,14 +180,14 @@ public class GohaParameter extends IDataProfile{
         }
 
         if (n + num > maxRotation) {
-            this.Height = maxRotation;
+            this.height = maxRotation;
         } else if (n + num < minRotation) {
-            this.Height = minRotation;
+            this.height = minRotation;
         } else {
-            this.Height = n + num;
+            this.height = n + num;
         }
 
-        this.seven = this.Height / 7;
+        this.seven = this.height / 7;
 
         return this;
     }
@@ -471,7 +472,7 @@ public class GohaParameter extends IDataProfile{
 
 
     public int getHeight() {
-        return Height;
+        return height;
     }
 
 
@@ -634,8 +635,8 @@ public class GohaParameter extends IDataProfile{
         JepaulD = new BlockVectorTool((l.getX() + seven), l.getY(), l.getZ());
         JepaulG = new BlockVectorTool((l.getX() - seven), l.getY(), l.getZ());
 
-        JbassinD = new BlockVectorTool((startLoc.getX() + seven), startLoc.getY(), startLoc.getZ());
-        JbassinG = new BlockVectorTool((startLoc.getX() - seven), startLoc.getY(), startLoc.getZ());
+        JbassinD = new BlockVectorTool((startLoc.getX() + (seven * 0.5)), startLoc.getY(), startLoc.getZ());
+        JbassinG = new BlockVectorTool((startLoc.getX() - (seven * 0.5)), startLoc.getY(), startLoc.getZ());
 
         return this;
     }
@@ -1074,7 +1075,7 @@ public class GohaParameter extends IDataProfile{
 
     @Override
     public String toString() {
-        return "GOHA : " + Height + pattern + Commutateur + startLoc + particleID +
+        return "GOHA : " + height + pattern + Commutateur + startLoc + particleID +
 
                 " ArmD > " + ArmD + " Pitch : " + ArmDXAngle + " Yaw : " + ArmDYAngle +
                 " ArmG > " + ArmG + " Pitch : " + ArmGXAngle + " Y : " + ArmGYAngle +
