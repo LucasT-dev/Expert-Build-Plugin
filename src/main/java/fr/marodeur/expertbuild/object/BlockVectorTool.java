@@ -502,6 +502,14 @@ public class BlockVectorTool implements Cloneable {
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
+    public Deque<BlockVectorTool> XZRandom(GlueList<BlockVectorTool> blockVectorTools) {
+
+        // Trier la Deque en utilisant l'API Stream
+        Collections.shuffle(blockVectorTools);
+
+        return new ArrayDeque<>(blockVectorTools);
+    }
+
     public <T> Deque<T> reverseDeque(Deque<T> originalDeque) {
         Deque<T> reversedDeque = new ArrayDeque<>();
 
