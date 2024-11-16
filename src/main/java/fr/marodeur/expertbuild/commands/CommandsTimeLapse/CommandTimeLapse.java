@@ -80,7 +80,7 @@ public class CommandTimelapse extends AbstractCommand {
                 final int[] loopNumber = new int[1];
                 Mask mask;
 
-                if (args.length == 2) {
+                if (args.length >= 2) {
 
                     if (this.getValidArgument().isInteger(args[1], 1, conf.getTimelapse_max_block_per_tick())) {
                         loopNumber[0] = this.getValidArgument().getInteger(args[1]);
@@ -313,7 +313,7 @@ public class CommandTimelapse extends AbstractCommand {
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // START int trier
-        subCommandSender.addSubCommand(new SubCommandSelector().getList(2, Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral"))
+        subCommandSender.addSubCommand(new SubCommandSelector().getList(2, Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral", "random"))
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // /timelapse start 1 shape mask
@@ -423,6 +423,11 @@ class Timelapse {
                 if (args[2].contains("spiral")) {
 
                     layer = new BlockVectorTool().XZSpiral(sortList);
+                }
+
+                if (args[2].contains("random")) {
+
+                    layer = new BlockVectorTool().XZRandom(sortList);
                 }
 
                 // Inverse la Queue de block a retirer
