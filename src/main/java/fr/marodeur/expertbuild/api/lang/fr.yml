@@ -109,6 +109,7 @@ expbuild:
       timelapse_stopped: Timelapse stoppé avec succes
       timelapse_no_in_progress: Vous n'avez pas de timelapse en cours
       too_many_timelapses: Vous avez déja des timelapse lancé sur le serveur
+      timelapse_region_height_too_low: "La hauteur de la région est trop faible (ymin == ymax)"
 
       areatimer_create: "AreaTimer 'areatimer' crée avec succès"
       areatimer_already_exist: "AreaTimer 'areatimer' existe déjà"
