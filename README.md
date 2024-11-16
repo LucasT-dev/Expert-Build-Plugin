@@ -221,7 +221,7 @@ This allows timelapses to automatically deconstruct a selection layer by layer a
 
 WARNING, this command is not compatible with //undo and //redo. Your selection is copied to your clipboard ! 
 
-Command : /timelapse <start-stop> [ block per tick ] [ shape destroy block ]
+Command : /timelapse <start-stop> [ block per tick = 1 ] [ shape destroy block = fawe saving ] [!air]
 
 Example : ```/timelapse start 5```, ```/timelapse stop```
 
@@ -299,6 +299,11 @@ General brush command,
 
 - melt, fill, fill, smooth, floatclean, erodeblend : voxel brush,
   *permission : exp.brush.erode and exp.brush.erodeblend*
+
+Change the radius : /fw radius <radius>
+
+Change the shape : /fw shape <shape (sphere, cylinder)>
+
 
 
 - clipboard3D : Place a clipboard depending on the direction of the head
