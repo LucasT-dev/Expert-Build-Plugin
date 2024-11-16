@@ -10,6 +10,7 @@ import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.pattern.Pattern;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.biome.BiomeType;
+import com.sk89q.worldedit.world.block.BaseBlock;
 import com.sk89q.worldedit.world.block.BlockType;
 
 import fr.marodeur.expertbuild.Main;
@@ -164,7 +165,8 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
                     SubCommandSender.SubCommand subCommand = getSubCommandAtPosition(i, sender, command, label, args).stream()
                             .filter(Sb -> Sb.getArgs().equalsIgnoreCase(args[finalI]))
                             .max(Comparator.comparing(SubCommandSender.SubCommand::getPosition))
-                            .get();
+                            .orElseThrow();
+
 
                     if (!p.hasPermission(subCommand.getPermission()) && !subCommand.getPermission().equalsIgnoreCase("none")) {
 
@@ -548,6 +550,23 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         /**
+         * Get Block list of FAWE
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getBlockFactoryList(String[] args, int argsIndex) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex + 1 ) {
+                this.subCommand.addAll(WorldEdit.getInstance().getBlockFactory().getSuggestions(args[argsIndex]));
+            }
+            return this;
+        }
+
+
+        /**
          * Get positive integer list of FAWE
          *
          * @param args String[]
@@ -928,6 +947,25 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         public void sendMessageInvalidMask(@NotNull CommandSender sender, String arg) {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "mask"}).send(sender);
+        }
+
+        // Block
+        public boolean isBlock(Player p, String arg) {
+
+            try {
+                BaseBlock block = new FaweAPI(p).getBlock(arg);
+                return true;
+            } catch (NullPointerException | SuggestInputParseException ignored) {
+                return false;
+            }
+        }
+
+        public BaseBlock getBlock(Player p, String arg) {
+            return new FaweAPI(p).getBlock(arg);
+        }
+
+        public void sendMessageInvalidBlock(@NotNull CommandSender sender, String arg) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "block"}).send(sender);
         }
 
         // Integer

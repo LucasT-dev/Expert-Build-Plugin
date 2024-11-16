@@ -19,6 +19,7 @@ import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
+import com.sk89q.worldedit.world.block.BaseBlock;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.*;
@@ -125,6 +126,18 @@ public class FaweAPI {
 
     }
 
+    public BaseBlock getBlock(String s) {
+
+        LocalSession localSession = WorldEdit.getInstance().getSessionManager().get(bukkitPlayer);
+        ParserContext context = new ParserContext();
+
+        context.setActor(bukkitPlayer);
+        context.setWorld(bukkitPlayer.getWorld());
+        context.setExtent(bukkitPlayer.getExtent());
+        context.setSession(localSession);
+
+        return WorldEdit.getInstance().getBlockFactory().parseFromInput(s, context);
+    }
 
 
     public ClipboardHolder copySelection(boolean copingBiomes, boolean copingEntities, boolean saveInClipboard, boolean sendMessage) {
