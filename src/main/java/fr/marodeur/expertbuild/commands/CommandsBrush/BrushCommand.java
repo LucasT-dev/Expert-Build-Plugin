@@ -646,7 +646,7 @@ public class BrushCommand extends AbstractCommand {
                 .asList("lift", "melt", "fill", "smooth", "floatclean");
 
         final List<String> clipboardBrush = Arrays
-                .asList("add", "removeAll", "remove", "autoRotate");
+                .asList("add", "clear", "remove", "autoRotate");
 
         SubCommandSender subCommandSender = new SubCommandSender();
 
@@ -773,7 +773,7 @@ public class BrushCommand extends AbstractCommand {
             }
         }
 
-        if (args[1].equalsIgnoreCase("removeAll")) {
+        if (args[1].equalsIgnoreCase("clear")) {
 
             brushBuilder.setBrush(new NoneBrush())
                     .setEnable(false)
