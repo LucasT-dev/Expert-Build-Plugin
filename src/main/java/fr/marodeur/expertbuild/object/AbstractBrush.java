@@ -141,9 +141,7 @@ public abstract class AbstractBrush {
         }
 
         public void createBrush(AbstractBrush aClass) {
-
             this.save(aClass);
-            logger.info(new Message.MessageSender("expbuild.message.brush.brush_registered", false, new String[]{aClass.getClass().getSimpleName()} ).getMessage());
         }
 
         private void save(AbstractBrush aClass) {
