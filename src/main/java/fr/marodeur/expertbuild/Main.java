@@ -23,14 +23,13 @@ import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
 import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
+import fr.marodeur.expertbuild.object.shape.CylinderShape;
+import fr.marodeur.expertbuild.object.shape.SphereShape;
 
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
-import fr.marodeur.expertbuild.object.shape.CylinderShape;
-import fr.marodeur.expertbuild.object.shape.SphereShape;
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -99,12 +98,6 @@ public class Main extends JavaPlugin {
 		// Check if server is in safe environments
 		if (dataPlugin.getJavaVersion() < 16) onDisable();
 
-		try {
-			serverFileBuilder();
-		} catch (IOException e) {
-			getLogger().severe(new Message.MessageSender("expbuild.message.error.file_configuration_error", true).getMessage());
-		}
-
 		// LOAD MESSAGE
 		fileMessageManager = new Message().loadFileConfig();
 
@@ -135,9 +128,6 @@ public class Main extends JavaPlugin {
 
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
-
-
-		//DataBlockRegister.generateBlockData();
 
 	}
 
@@ -182,7 +172,6 @@ public class Main extends JavaPlugin {
 		getCommand("convertslab").setExecutor(new CommandConvertSlab());
 		getCommand("painting").setExecutor(new CommandPainting());
 		getCommand("areatimer").setExecutor(new AreaTimerCommand());
-
 
 		//getCommand("explsystem").setExecutor(new CommandsLSystem());
 
@@ -350,28 +339,6 @@ public class Main extends JavaPlugin {
 		shape.registerShape(new SphereShape());
 		shape.registerShape(new CylinderShape());
 
-	}
-
-	private void serverFileBuilder() throws IOException {
-
-		for (int i = 1; i < 5; i++) {
-
-			File SFTP;
-			YamlConfiguration c = new YamlConfiguration();
-
-			SFTP = new File("plugins/ExpertBuild/Server" + i + ".yml");
-			if (!SFTP.exists()) {
-
-				c.set("Server", null);
-				c.set("Server.user", "User");
-				c.set("Server.ServerAddress", "host");
-				c.set("Server.mdp", "mdp");
-				c.set("Server.port", 1234);
-				c.save(new File("plugins/ExpertBuild", "Server" + i + ".yml"));
-
-				getLogger().info(new Message.MessageSender("expbuild.message.main.schematic_transfert_file", false).getMessage());
-			}
-		}
 	}
 
 	/**
