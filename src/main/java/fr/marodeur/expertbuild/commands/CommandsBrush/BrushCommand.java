@@ -67,6 +67,19 @@ public class BrushCommand extends AbstractCommand {
         Integer radius;
         Biome biome;
 
+        if (args.length == 1) {
+
+            if (this.getValidArgument().isInteger(args[0], 0, CONFIG.getMaxRayonBrush())) {
+                int rad = this.getValidArgument().getInteger(args[0]);
+                brushBuilder.setRadius(rad)
+                        .sendMessage("expbuild.message.brush.radius_set", true);
+
+            } else {
+                this.getValidArgument().sendMessageInvalidInteger(executor, args[0], 1, CONFIG.getMaxRayonBrush());
+                return;
+            }
+        }
+
         switch (args[0].toLowerCase()) {
 
             case "material" -> {
