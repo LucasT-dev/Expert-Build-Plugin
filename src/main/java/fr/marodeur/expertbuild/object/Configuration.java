@@ -1,7 +1,5 @@
 package fr.marodeur.expertbuild.object;
 
-import fr.marodeur.expertbuild.Main;
-
 import com.sk89q.worldedit.WorldEdit;
 
 import org.bukkit.Material;
@@ -19,6 +17,8 @@ public class Configuration {
 
     File file = new File("plugins/ExpertBuild/config.yml");
     FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
+
+    private final static String latestVersion = "23";
 
     private final Logger log = Logger.getLogger("Expert-Build");
 
@@ -323,12 +323,15 @@ public class Configuration {
 
             this.version = this.yml.getString("build.version");
 
+            return !this.version.equals(latestVersion);
+
         } catch (NullPointerException ignorred) {
             yml.set("build.version", "1.18.1.6");
             this.version = "1.18.1.6";
 
+            return true;
+
         }
-        return !this.version.equals(Main.getDataPlugin().getPluginVersion());
     }
 
     private void updateFileConfig(File file) throws IOException {
@@ -523,16 +526,16 @@ public class Configuration {
             // Send message builder registered
             yml.set("build.send_message_builder_register", true);
 
-            yml.set("build.version", "1.18.1.23");
-            this.version = "1.18.1.23";
+            yml.set("build.version", "23");
+            this.version = "23";
 
             yml.save(file);
 
             //for next update
         }
 
-        if (this.version.equals("1.18.1.23")) {
-            //Update config file from 1.18.1.23 to 1.18.1.24
+        if (this.version.equals("23")) {
+            //Update config file from 23 to 24
 
             //for next update
         }
