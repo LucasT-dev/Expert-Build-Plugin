@@ -643,11 +643,11 @@ public class BrushCommand extends AbstractCommand {
 
 
                 new ArgumentLength(3, "remove", 1, "/flower clipboard remove <clipboard name>", 2),
-                new ArgumentLength(2, "removeAll", 1, "/flower clipboard removeAll", 1),
-                new ArgumentLength(2, "autorotation", 1, "/flower clipboard autorotation", 1),
-                new ArgumentLength(2, "add", 1, "/flower clipboard add [clipboard name]", 1),
+                new ArgumentLength(2, "removeAll", 1, "/flower clipboard clear", 1),
+                new ArgumentLength(2, "autorotation", 1, "/flower clipboard autorotate", 1),
+                new ArgumentLength(2, "add", 1, "/flower clipboard add [clipboard name] [flag]", 1),
 
-                new ArgumentLength(2, "clipboard", 0, "/flower clipboard <add-remove-removeAll-autorotation>", 2)
+                new ArgumentLength(2, "clipboard", 0, "/flower clipboard <add-remove-clear-autorotation>", 2)
 
         ));
     }
