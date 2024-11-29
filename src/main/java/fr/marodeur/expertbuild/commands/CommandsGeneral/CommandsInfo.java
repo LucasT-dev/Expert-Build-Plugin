@@ -60,7 +60,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				github_doc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open documentation URL").create()));
 				github_doc.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL,
-						"https://github.com/LucasT-dev/Expert-Build-Plugin/blob/master/README.md"));
+						"https://github.com/LucasT-dev/Expert-Build-Plugin/wiki"));
 				sender.spigot().sendMessage(github_doc);
 
 
