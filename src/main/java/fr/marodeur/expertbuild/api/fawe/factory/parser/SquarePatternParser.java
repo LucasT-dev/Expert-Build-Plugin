@@ -48,7 +48,7 @@ public class SquarePatternParser extends RichParser<Pattern> {
             return new SquarePattern(context.getSession().createEditSession(context.getActor()), arguments);
 
         } catch (InputParseException inputParseException) {
-            throw new InputParseException("#brick[block,block][length][width][offset], Example : #square[10][3][1][5]");
+            throw new InputParseException("#brick[block1,block2][length][width][border thickness][offset], Example : #brick[blue_wool,white_wool][10][3][1][5]");
         }
     }
 }
