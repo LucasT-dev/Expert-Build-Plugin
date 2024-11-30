@@ -1,6 +1,8 @@
 package fr.marodeur.expertbuild;
 
+import com.sk89q.worldedit.world.block.BlockCategory;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.SquarePatternParser;
+import fr.marodeur.expertbuild.api.fawe.function.blockMask.StrippedCategoryMask;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.commands.CommandConvertSlab.CommandConvertSlab;
@@ -23,6 +25,7 @@ import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
 import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
+import fr.marodeur.expertbuild.object.guibuilder.InventoryManager;
 import fr.marodeur.expertbuild.object.shape.CylinderShape;
 import fr.marodeur.expertbuild.object.shape.SphereShape;
 
@@ -52,8 +55,8 @@ public class Main extends JavaPlugin {
 	public static WorldEditPlugin WorldEditPlugin;
 
 
-	public static fr.marodeur.expertbuild.object.guibuilder.InventoryManager inv =
-			new fr.marodeur.expertbuild.object.guibuilder.InventoryManager();
+	public static InventoryManager inv = new InventoryManager();
+
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
 
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
@@ -123,7 +126,7 @@ public class Main extends JavaPlugin {
 		new LightweightInteractiveSystemforOptimizedParticleNavigation().loadSchedule();
 
 		// LOAD MASK
-		loadCustomMask();
+		registerMaskAndPattern();
 
 
 		// UPDATE CHECKER
@@ -237,13 +240,20 @@ public class Main extends JavaPlugin {
 		return WorldEditPlugin;
 	}
 
-	private void loadCustomMask() {
+	private void registerMaskAndPattern() {
+
+		// Mask
 		WorldEditPlugin.getWorldEdit().getMaskFactory().register(new OngroundMask(getWorldEditPlugin().getWorldEdit()));
+
+		// Pattern
 		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new SquarePatternParser(getWorldEditPlugin().getWorldEdit()));
-		//WorldEditPlugin.getWorldEdit().getPatternFactory().register(new TrianglePatternParser(getWorldEditPlugin().getWorldEdit()));
-		//WorldEditPlugin.getWorldEdit().getPatternFactory().register(new ColorPatternParser(getWorldEditPlugin().getWorldEdit()));
+
+		// BlockCategory mask
+		BlockCategory.REGISTRY.register("minecraft:stripped", new StrippedCategoryMask("stripped") );
+
 
 	}
+
 
 	// BrushBuilder
 	public static Configuration getConfiguration() {

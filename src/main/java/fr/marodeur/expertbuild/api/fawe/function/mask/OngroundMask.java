@@ -13,7 +13,9 @@ import java.util.stream.Stream;
 
 public class OngroundMask extends RichParser<Mask> {
 
-    public OngroundMask(WorldEdit paramWorldEdit) { super(paramWorldEdit, "#onground"); }
+    public OngroundMask(WorldEdit paramWorldEdit) {
+        super(paramWorldEdit, "#onground");
+    }
 
     @Override
     protected Stream<String> getSuggestions(String paramString, int paramInt) {
