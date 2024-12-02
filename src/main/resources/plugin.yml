@@ -73,22 +73,13 @@ commands:
     decription: brush
     permission: exp.command.flower
 
-  slab:
-    aliases: bs
-    description: casse la dalle
-    permission: exp.command.slab
-
   timelapse:
     description: launch automatic timelapse
     permission: exp.command.timelapse
 
-  schemtrans:
-    description: transfert schem on other serveur
-    permission: exp.command.schemtrans
-
-  maze:
-    description: Generate maze
-    permission: exp.command.maze
+  #schemtrans:
+    #description: transfert schem on other serveur
+    #permission: exp.command.schemtrans
 
   repeater:
     aliases: rt
@@ -110,10 +101,6 @@ commands:
   convertslab:
     description: Convert double slab to block
     permission: exp.command.convertslab
-
-  dungeons:
-    description: procedural dungeons
-    permission: exp.command.dungeons
 
   painting:
     description: advanced painting tool
