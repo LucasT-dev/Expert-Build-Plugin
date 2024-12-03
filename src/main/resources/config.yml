@@ -58,7 +58,7 @@ build:
 
   # Max distance to apply brush
   # Default : 100
-  max_brush_distance: 100
+  max_brush_distance: 200
 
 
   # Display bezier line on convex selection
