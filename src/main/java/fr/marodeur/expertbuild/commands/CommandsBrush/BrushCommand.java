@@ -67,9 +67,9 @@ public class BrushCommand extends AbstractCommand {
         Integer radius;
         Biome biome;
 
-        if (args.length == 1) {
+        if (args.length == 1 && !args[0].equalsIgnoreCase("bb") && !args[0].equalsIgnoreCase("blendball")) {
 
-            if (this.getValidArgument().isInteger(args[0], 0, CONFIG.getMaxRayonBrush())) {
+            if (this.getValidArgument().isInteger(args[0], 1, CONFIG.getMaxRayonBrush())) {
                 int rad = this.getValidArgument().getInteger(args[0]);
                 brushBuilder.setRadius(rad)
                         .sendMessage("expbuild.message.brush.radius_set", true);
@@ -281,26 +281,31 @@ public class BrushCommand extends AbstractCommand {
             // TYPE : Brush integer
             case "blendball", "bb" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
-                    radius = this.getValidArgument().getInteger(args[1]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
-                    break;
+                System.out.println("args.length = " + args.length);
+
+                if (args.length >= 2) {
+
+                    if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
+                        radius = this.getValidArgument().getInteger(args[1]);
+                        brushBuilder.setRadius(radius);
+                    } else {
+                        System.out.println(" invalid int ");
+                        this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                        break;
+                    }
                 }
 
                 brushBuilder.setBrush(new BlendBallBrush())
                         .setEnable(true)
-                        .setRadius(radius)
                         .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"blendBall"});
-
             }
 
             case "drain" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 1, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 1, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -316,7 +321,7 @@ public class BrushCommand extends AbstractCommand {
                 if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 1, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -332,7 +337,7 @@ public class BrushCommand extends AbstractCommand {
                 if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 1, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -361,10 +366,10 @@ public class BrushCommand extends AbstractCommand {
 
             case "degrade" -> {
 
-                if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
+                if (this.getValidArgument().isInteger(args[1], 1, CONFIG.getMaxRayonBrush())) {
                     radius = this.getValidArgument().getInteger(args[1]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 1, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -397,11 +402,11 @@ public class BrushCommand extends AbstractCommand {
 
                 if (args.length >= 3) {
 
-                    if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
+                    if (this.getValidArgument().isInteger(args[2], 1, CONFIG.getMaxRayonBrush())) {
                         radius = this.getValidArgument().getInteger(args[2]);
                         brushBuilder.setRadius(radius);
                     } else {
-                        this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
+                        this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 1, CONFIG.getMaxRayonBrush());
                         break;
                     }
                 }
@@ -462,11 +467,11 @@ public class BrushCommand extends AbstractCommand {
 
                 if (args.length >= 3) {
 
-                    if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
+                    if (this.getValidArgument().isInteger(args[2], 1, CONFIG.getMaxRayonBrush())) {
                         radius = this.getValidArgument().getInteger(args[2]);
                         brushBuilder.setRadius(radius);
                     } else {
-                        this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
+                        this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 1, CONFIG.getMaxRayonBrush());
                         break;
                     }
                 }
@@ -556,10 +561,10 @@ public class BrushCommand extends AbstractCommand {
                     break;
                 }
 
-                if (this.getValidArgument().isInteger(args[4], 0, CONFIG.getMaxRayonBrush())) {
-                    radius = this.getValidArgument().getInteger(args[4]);
+                if (this.getValidArgument().isInteger(args[5], 1, CONFIG.getMaxRayonBrush())) {
+                    radius = this.getValidArgument().getInteger(args[5]);
                 } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[4], 0, 6);
+                    this.getValidArgument().sendMessageInvalidInteger(executor, args[5], 1, CONFIG.getMaxRayonBrush());
                     break;
                 }
 
@@ -631,7 +636,9 @@ public class BrushCommand extends AbstractCommand {
                 new ArgumentLength(2, "hydrology", 0, "/flower hydrology <radius>", 2),
                 new ArgumentLength(2, "drain", 0, "/flower drain  <radius>", 2),
                 new ArgumentLength(2, "eraser", 0, "/flower eraser <radius>", 2),
-                new ArgumentLength(2, "bb", 0, "/flower bb <radius>", 2),
+                new ArgumentLength(1, "blendball", 0, "/flower bb [radius]", 2),
+                new ArgumentLength(1, "bb", 0, "/flower bb [radius]", 2),
+
 
                 new ArgumentLength(2, "e", 0, "/flower e <lift-melt-fill-smooth-floatclean> [radius]", 2),
                 new ArgumentLength(2, "erode", 0, "/flower e <lift-melt-fill-smooth-floatclean> [radius]", 2),
