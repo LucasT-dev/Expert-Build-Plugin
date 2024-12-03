@@ -70,7 +70,14 @@ public class Main extends JavaPlugin {
 	public static List<AreaTimerParameter> AREA_TIMER_PARAMETERS = new ArrayList<>();
 	//
 
-    @Override
+
+	@Override
+	public void onLoad() {
+		super.onLoad();
+
+	}
+
+	@Override
 	public void onEnable() {
 
 		instance = this;
@@ -248,10 +255,12 @@ public class Main extends JavaPlugin {
 		// Pattern
 		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new SquarePatternParser(getWorldEditPlugin().getWorldEdit()));
 
-		// BlockCategory mask
-		BlockCategory.REGISTRY.register("minecraft:stripped", new StrippedCategoryMask("stripped") );
+		try {
+			// BlockCategory mask
+			BlockCategory.REGISTRY.register("minecraft:stripped", new StrippedCategoryMask("stripped") );
+		} catch (IllegalStateException ignored) {
 
-
+		}
 	}
 
 
