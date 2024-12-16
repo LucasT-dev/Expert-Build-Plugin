@@ -1,7 +1,9 @@
 package fr.marodeur.expertbuild;
 
 import com.sk89q.worldedit.world.block.BlockCategory;
+
 import fr.marodeur.expertbuild.api.fawe.factory.parser.SquarePatternParser;
+import fr.marodeur.expertbuild.api.fawe.factory.parser.TypeChangeParser;
 import fr.marodeur.expertbuild.api.fawe.function.blockMask.StrippedCategoryMask;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
@@ -11,6 +13,7 @@ import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
 import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
 import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
+import fr.marodeur.expertbuild.enums.BlockCategoryEnum;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
 import fr.marodeur.expertbuild.api.metrics.Metrics;
@@ -22,6 +25,7 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
+import fr.marodeur.expertbuild.object.block.BlockRegistry;
 import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
@@ -33,6 +37,7 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -60,6 +65,8 @@ public class Main extends JavaPlugin {
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
 
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
+
+	private static BlockRegistry blockData;
 
 
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
@@ -135,9 +142,22 @@ public class Main extends JavaPlugin {
 		// LOAD MASK
 		registerMaskAndPattern();
 
+		blockData = new BlockRegistry(this.getServer().getBukkitVersion().substring(2, 6).toString());
+
 
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
+
+
+		System.out.println("get stone rgb ? = " + blockData.getDataBlock(Material.STONE).colorBlockObject().getRed());
+		System.out.println("get stone_slab categories ? = " + blockData.getDataBlock(Material.STONE_SLAB).categoryBlockObject());
+
+		System.out.println("Material Birch exist ? false ? = " + blockData.materialExist(EnumSet.of(BlockCategoryEnum.BIRCH)));
+		System.out.println("Material Andesite exist ? true ? = " + blockData.materialExist(EnumSet.of(BlockCategoryEnum.ANDESITE)));
+
+
+		System.out.println("Get equivalent stone en type andesite = " + blockData.getDataBlock(Material.STONE_SLAB).categoryBlockObject().getEquivalent(BlockCategoryEnum.ANDESITE));
+
 
 	}
 
@@ -254,6 +274,8 @@ public class Main extends JavaPlugin {
 
 		// Pattern
 		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new SquarePatternParser(getWorldEditPlugin().getWorldEdit()));
+		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new TypeChangeParser(getWorldEditPlugin().getWorldEdit()));
+
 
 		try {
 			// BlockCategory mask
@@ -279,6 +301,10 @@ public class Main extends JavaPlugin {
 
 	public static HashMap<UUID, BrushBuilder> getHashMapBrushBuilder() {
 		return BrushBuilder;
+	}
+
+	public static BlockRegistry getBlockData() {
+		return blockData;
 	}
 
 	/**
@@ -347,6 +373,7 @@ public class Main extends JavaPlugin {
 		brush.createBrush(new SphereBrush());
 		brush.createBrush(new SpikeBrush());
 		//brush.createBrush(new HydrologyBrush());
+		brush.createBrush(new TypeChangeBrush());
 
 		getLogger().info(new Message.MessageSender("expbuild.message.main.brush_load", false).getMessage());
 	}
