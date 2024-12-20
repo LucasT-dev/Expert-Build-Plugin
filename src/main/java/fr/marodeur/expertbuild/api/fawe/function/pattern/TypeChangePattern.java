@@ -13,13 +13,17 @@ import org.bukkit.Material;
 
 public class TypeChangePattern extends AbstractExtentPattern {
 
-    private BlockCategoryEnum blockCat;
+    private final int argsLength;
+    private BlockCategoryEnum blockCategoryArgs_1;
+    private BlockCategoryEnum blockCategoryArgs_2;
 
     public TypeChangePattern(Extent extent, String[] args) {
         super(extent);
 
-        if (args.length >= 1 ) this.blockCat = BlockCategoryEnum.valueOf(args[0].toUpperCase());
+        this.argsLength = args.length;
 
+        if (args.length >= 1 ) this.blockCategoryArgs_1 = BlockCategoryEnum.valueOf(args[0].toUpperCase());
+        if (args.length >= 2 ) this.blockCategoryArgs_2 = BlockCategoryEnum.valueOf(args[1].toUpperCase());
 
     }
 
@@ -30,20 +34,45 @@ public class TypeChangePattern extends AbstractExtentPattern {
         Material oldMat = BukkitAdapter.adapt(position.getBlock(getExtent()).getBlockType());
         Material newMat;
 
-        if (Main.getBlockData().containsBlock(oldMat)) {
+        if (this.argsLength == 1) {
 
-            if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCat)) {
+            if (Main.getBlockData().containsBlock(oldMat)) {
 
-                newMat = Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCat).getMaterial();
+                if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_1)) {
 
-                final BaseBlock[] baseblock = {BukkitAdapter.asBlockType(newMat).getItemType().getBlockType().getDefaultState().toBaseBlock()};
-                position.getBlock(getExtent()).toBaseBlock().getStates().forEach((property, object) -> {
+                    newMat = Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_1).getMaterial();
 
-                    baseblock[0] = baseblock[0].with(property.getKey(), object);
+                    final BaseBlock[] baseblock = {BukkitAdapter.asBlockType(newMat).getItemType().getBlockType().getDefaultState().toBaseBlock()};
 
-                });
+                    position.getBlock(getExtent())
+                            .toBaseBlock()
+                            .getStates()
+                            .forEach((property, object) -> baseblock[0] = baseblock[0].with(property.getKey(), object));
 
-                return baseblock[0];
+                    return baseblock[0];
+                }
+            }
+        } else {
+
+            if (Main.getBlockData().containsBlock(oldMat)) {
+
+                if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().containsCategory(blockCategoryArgs_1)) {
+
+
+                    if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_2)) {
+
+                        newMat = Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_2).getMaterial();
+
+                        final BaseBlock[] baseblock = {BukkitAdapter.asBlockType(newMat).getItemType().getBlockType().getDefaultState().toBaseBlock()};
+
+                        position.getBlock(getExtent())
+                                .toBaseBlock()
+                                .getStates()
+                                .forEach((property, object) -> baseblock[0] = baseblock[0].with(property.getKey(), object));
+
+                        return baseblock[0];
+                    }
+                }
             }
         }
 

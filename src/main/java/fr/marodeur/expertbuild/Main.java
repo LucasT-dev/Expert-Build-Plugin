@@ -13,7 +13,6 @@ import fr.marodeur.expertbuild.commands.CommandsGeneral.CommandsInfo;
 import fr.marodeur.expertbuild.commands.CommandsGivenTools.Terraforming_Painting;
 import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
-import fr.marodeur.expertbuild.enums.BlockCategoryEnum;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
 import fr.marodeur.expertbuild.api.metrics.Metrics;
@@ -37,7 +36,6 @@ import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -142,22 +140,11 @@ public class Main extends JavaPlugin {
 		// LOAD MASK
 		registerMaskAndPattern();
 
-		blockData = new BlockRegistry(this.getServer().getBukkitVersion().substring(2, 6).toString());
+		blockData = new BlockRegistry();
 
 
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
-
-
-		System.out.println("get stone rgb ? = " + blockData.getDataBlock(Material.STONE).colorBlockObject().getRed());
-		System.out.println("get stone_slab categories ? = " + blockData.getDataBlock(Material.STONE_SLAB).categoryBlockObject());
-
-		System.out.println("Material Birch exist ? false ? = " + blockData.materialExist(EnumSet.of(BlockCategoryEnum.BIRCH)));
-		System.out.println("Material Andesite exist ? true ? = " + blockData.materialExist(EnumSet.of(BlockCategoryEnum.ANDESITE)));
-
-
-		System.out.println("Get equivalent stone en type andesite = " + blockData.getDataBlock(Material.STONE_SLAB).categoryBlockObject().getEquivalent(BlockCategoryEnum.ANDESITE));
-
 
 	}
 
@@ -373,7 +360,6 @@ public class Main extends JavaPlugin {
 		brush.createBrush(new SphereBrush());
 		brush.createBrush(new SpikeBrush());
 		//brush.createBrush(new HydrologyBrush());
-		brush.createBrush(new TypeChangeBrush());
 
 		getLogger().info(new Message.MessageSender("expbuild.message.main.brush_load", false).getMessage());
 	}
