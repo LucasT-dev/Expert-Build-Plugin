@@ -341,7 +341,6 @@ public class Main extends JavaPlugin {
 
 		brush = new AbstractBrush.RegisterBrush();
 
-		brush.createBrush(new BiomeBrush());
 		brush.createBrush(new BlendBallBrush());
 		brush.createBrush(new Clipboard3DBrush());
 		brush.createBrush(new ClipboardsBrush());
@@ -356,7 +355,6 @@ public class Main extends JavaPlugin {
 		brush.createBrush(new NoneBrush());
 		brush.createBrush(new OverlayBrush());
 		brush.createBrush(new Rot2DCubeBrush());
-		brush.createBrush(new SphereBrush());
 		brush.createBrush(new SpikeBrush());
 		//brush.createBrush(new HydrologyBrush());
 

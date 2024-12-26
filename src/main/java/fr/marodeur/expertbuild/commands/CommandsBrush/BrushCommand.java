@@ -13,7 +13,6 @@ import fr.marodeur.expertbuild.object.builderObjects.Clipboard3DParameter;
 import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 
 import org.bukkit.Bukkit;
-import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -65,7 +64,6 @@ public class BrushCommand extends AbstractCommand {
 
         Pattern pattern;
         Integer radius;
-        Biome biome;
 
         if (args.length == 1 && !args[0].equalsIgnoreCase("bb") && !args[0].equalsIgnoreCase("blendball")) {
 
@@ -121,29 +119,6 @@ public class BrushCommand extends AbstractCommand {
 
                 brushBuilder.getBrushParameter().setShape(shape)
                         .sendMessage("expbuild.message.brush.radius_set", true);
-            }
-
-            case "biome" -> {
-
-                if (this.getValidArgument().isBiome(args[1])) {
-                    biome = this.getValidArgument().getBiome(args[1]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidBiome(executor, args[1]);
-                    break;
-                }
-
-                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
-                    radius = this.getValidArgument().getInteger(args[2]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
-                    break;
-                }
-
-                brushBuilder.setBrush(new BiomeBrush())
-                        .setEnable(true)
-                        .setBiome(biome)
-                        .setRadius(radius)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Biome"});
             }
 
             // TYPE : Brush Pattern Radius
@@ -214,29 +189,6 @@ public class BrushCommand extends AbstractCommand {
                         .setPattern(pattern)
                         .setRadius(radius)
                         .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Cube"});
-            }
-
-            case "sphere", "s" -> {
-
-                if (this.getValidArgument().isPattern(p, args[1])) {
-                    pattern = this.getValidArgument().getPattern(p, args[1]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidPattern(executor, args[1]);
-                    break;
-                }
-
-                if (this.getValidArgument().isInteger(args[2], 0, CONFIG.getMaxRayonBrush())) {
-                    radius = this.getValidArgument().getInteger(args[2]);
-                } else {
-                    this.getValidArgument().sendMessageInvalidInteger(executor, args[2], 0, CONFIG.getMaxRayonBrush());
-                    break;
-                }
-
-                brushBuilder.setBrush(new SphereBrush())
-                        .setEnable(true)
-                        .setPattern(pattern)
-                        .setRadius(radius)
-                        .sendMessage("expbuild.message.brush.brush_enable", true, new String[]{"Sphere"});
             }
 
             case "2dcube" -> {
@@ -620,15 +572,12 @@ public class BrushCommand extends AbstractCommand {
 
                 //register
 
-                new ArgumentLength(3, "biome", 0, "/flower biome <biome> <radius>", 2),
-
                 new ArgumentLength(2, "line", 0, "/flower line <pattern>", 2),
 
                 new ArgumentLength(3, "overlay", 0, "/flower overlay <pattern> <radius>", 2),
                 new ArgumentLength(3, "spike", 0, "/flower spike <pattern> <radius>", 2),
                 new ArgumentLength(3, "cube", 0, "/flower cube <pattern> <height>", 2),
                 new ArgumentLength(3, "2dcube", 0, "/flower 2Dcube <pattern> <height>", 2),
-                new ArgumentLength(3, "sphere", 0, "/flower sphere <pattern> <radius>", 2),
 
                 new ArgumentLength(2, "updatechunk", 0, "/flower updatechunk <radius>", 2),
                 new ArgumentLength(2, "degrade", 0, "/flower degrade <radius>", 2),
@@ -700,17 +649,12 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPlayerList(args, 1).toSubCommand("None", new ConditionArgumentBefore("register", 0)));
 
 
-            // Biome
-            subCommandSender.addSubCommand(new SubCommandSelector().getBiomeList(args, 1).toSubCommand("exp.brush.biome", new ConditionArgumentBefore("biome", 0)));
-
             // Brush with pattern <pattern>
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("none", new ConditionArgumentBefore("material", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.overlay", new ConditionArgumentBefore("overlay", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.spike", new ConditionArgumentBefore("spike", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.cube", new ConditionArgumentBefore("cube", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.line", new ConditionArgumentBefore("line", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("s", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPatternFactoryList(args, 1).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("2Dcube", 0)));
 
             // Brush with pattern/biome and integer <integer>
@@ -718,9 +662,6 @@ public class BrushCommand extends AbstractCommand {
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.spike", new ConditionArgumentBefore("spike", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.cube", new ConditionArgumentBefore("cube", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.2dcube", new ConditionArgumentBefore("rot2Dcube", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("sphere", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.sphere", new ConditionArgumentBefore("s", 0)));
-            subCommandSender.addSubCommand(new SubCommandSelector().getPositiveIntegerList(args, 2).toSubCommand("exp.brush.biome", new ConditionArgumentBefore("biome", 0)));
 
 
             // Brush with <integer>
