@@ -1,8 +1,6 @@
 package fr.marodeur.expertbuild.object.builderObjects;
 
 import com.sk89q.worldedit.math.BlockVector3;
-import fr.marodeur.expertbuild.object.Message;
-import org.bukkit.Bukkit;
 
 import java.util.UUID;
 

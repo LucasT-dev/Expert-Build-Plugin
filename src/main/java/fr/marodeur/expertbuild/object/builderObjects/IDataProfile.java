@@ -39,4 +39,8 @@ public abstract class IDataProfile {
             new Message.MessageSender(path, prefix, var[0]).send(Bukkit.getPlayer(getProfileID()));
         }
     }
+
+    public void sendMessage(String path, String[]... var) {
+        sendMessage(path, true, var);
+    }
 }
