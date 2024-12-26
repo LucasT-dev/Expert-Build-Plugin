@@ -292,6 +292,11 @@ private static final Logger LOG;
 
     }
 
+    public BrushBuilder sendMessage(String path, String[]... var) {
+
+        return sendMessage(path, true, var);
+    }
+
     /*public BrushBuilder sendMessage(String msg) {
 
         Bukkit.getPlayer(this.uuid).sendMessage(getMainPrefix() + msg);

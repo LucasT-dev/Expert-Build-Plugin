@@ -54,7 +54,7 @@ public class Main extends JavaPlugin {
 	private static Configuration configuration;
 	private static Message fileMessageManager;
 	private static DataProfile dataProfile;
-	private FileManager fileManager;
+	private static FileManager fileManager;
 	public static WorldEditPlugin WorldEditPlugin;
 
 
@@ -333,7 +333,7 @@ public class Main extends JavaPlugin {
 		return shape;
 	}
 
-	public FileManager getFileManager() {
+	public static FileManager getFileManager() {
 		return fileManager;
 	}
 

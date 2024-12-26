@@ -12,12 +12,10 @@ import fr.marodeur.expertbuild.object.shape.SphereShape;
 import org.bukkit.Bukkit;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class DataProfile {
 
     private static final Configuration CONF = Main.getConfiguration();
-    private static final Logger LOG = Main.getInstance().getLogger();
 
     private final HashMap<UUID, TimelapseBuilderParameter> timelapseHashMap;
 
@@ -34,6 +32,8 @@ public class DataProfile {
     private final HashMap<UUID, FlowerBrushParameter> flowerBrushParameterHashMap;
 
     private final HashMap<UUID, BrushParameter> brushParameterHashMap;
+
+    private final List<AreaTimerParameter> areaTimerParameterList = new ArrayList<>();
 
 
     public DataProfile() {
@@ -169,6 +169,10 @@ public class DataProfile {
         GlueList<BrushParameter> g = new GlueList<>();
         g.addAll(this.brushParameterHashMap.values());
         return g;
+    }
+
+    public List<AreaTimerParameter> getAreaTimerParameterList() {
+        return areaTimerParameterList;
     }
 }
 

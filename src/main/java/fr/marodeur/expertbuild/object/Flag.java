@@ -1,6 +1,15 @@
 package fr.marodeur.expertbuild.object;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import fr.marodeur.expertbuild.api.GlueList;
+
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Flag {
 
@@ -71,6 +80,80 @@ public class Flag {
         }
     }
 
+
+    // Method to convert flags to JSON using JsonObject
+    private JsonArray flagsToJson() {
+        JsonArray jsonArray = new JsonArray();
+
+        for (IndividualFlag<?> flag : flags) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("flag", String.valueOf(flag.getFlag()));
+
+            // Dynamically add the element based on its type
+            if (flag.getElement() instanceof String) {
+                jsonObject.addProperty("element", (String) flag.getElement());
+            } else if (flag.getElement() instanceof Number) {
+                jsonObject.addProperty("element", (Number) flag.getElement());
+            } else if (flag.getElement() instanceof Boolean) {
+                jsonObject.addProperty("element", (Boolean) flag.getElement());
+            } else {
+                jsonObject.addProperty("element", String.valueOf(flag.getElement()));
+            }
+            jsonArray.add(jsonObject);
+        }
+
+        return jsonArray;
+    }
+
+    // Method to save JSON to a file
+    public void saveJsonToFile(File filePath) {
+        JsonArray jsonArray = flagsToJson();
+
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+
+            fileWriter.write(jsonArray.toString());
+            fileWriter.flush();
+        } catch (IOException e) {
+        }
+    }
+
+    // Method to load JSON from a file and convert it to flags
+    public static Flag loadJsonFromFile(String filePath) {
+
+        Flag newFlag = new Flag("abcem");
+
+        try (FileReader fileReader = new FileReader(filePath)) {
+
+            JsonArray jsonArray = JsonParser.parseReader(fileReader).getAsJsonArray();
+
+            for (JsonElement element : jsonArray) {
+                JsonObject jsonObject = element.getAsJsonObject();
+
+                char flag = jsonObject.get("flag").getAsCharacter();
+                JsonElement elementValue = jsonObject.get("element");
+
+                if (elementValue.isJsonPrimitive()) {
+
+                    if (elementValue.getAsJsonPrimitive().isNumber()) {
+                        newFlag.add(flag);
+                    } else if (elementValue.getAsJsonPrimitive().isBoolean()) {
+                        newFlag.add(flag);
+                    } else {
+                        newFlag.add(flag);
+                    }
+                } else {
+                    newFlag.add(flag);
+                }
+            }
+
+        } catch (IOException e) {
+            System.err.println("Failed to load JSON from file: " + e.getMessage());
+        }
+        return newFlag;
+    }
+
+
+
     @Override
     public String toString() {
 
@@ -110,5 +193,6 @@ public class Flag {
          public void setElement(T element) {
              this.element = element;
          }
-     }
+    }
+
 }

@@ -653,6 +653,11 @@ public class BrushCommand extends AbstractCommand {
                 new ArgumentLength(2, "removeAll", 1, "/flower clipboard clear", 1),
                 new ArgumentLength(2, "autorotation", 1, "/flower clipboard autorotate", 1),
                 new ArgumentLength(2, "add", 1, "/flower clipboard add [clipboard name] [flag]", 1),
+                new ArgumentLength(3, "save", 1, "/flower clipboard save [clipboard folder name]", 1),
+                new ArgumentLength(3, "load", 1, "/flower clipboard load [clipboard folder name]", 1),
+                new ArgumentLength(3, "delete", 1, "/flower clipboard delete [clipboard folder name]", 1),
+
+
 
                 new ArgumentLength(2, "clipboard", 0, "/flower clipboard <add-remove-clear-autorotation>", 2)
 
@@ -666,7 +671,7 @@ public class BrushCommand extends AbstractCommand {
                 .asList("lift", "melt", "fill", "smooth", "floatclean");
 
         final List<String> clipboardBrush = Arrays
-                .asList("add", "clear", "remove", "autoRotate");
+                .asList("add", "clear", "remove", "autoRotate", "save", "load", "delete");
 
         SubCommandSender subCommandSender = new SubCommandSender();
 
@@ -764,6 +769,10 @@ public class BrushCommand extends AbstractCommand {
             // Clipboard
             subCommandSender.addSubCommand(new SubCommandSelector().getList(1, clipboardBrush).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("clipboard", 0)));
             subCommandSender.addSubCommand(new SubCommandSelector().getList(2, this.getBrushBuilder(p).getClipboardParameter().getClipboardsName().stream().toList()).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("remove", 1)));
+
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, ClipboardParameter.getClipboardsSaveInFile()).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("load", 1)));
+            subCommandSender.addSubCommand(new SubCommandSelector().getList(2, ClipboardParameter.getClipboardsSaveInFile()).toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("delete", 1)));
+
 
             // Clipboard add flag
             subCommandSender.addSubCommand(new SubCommandSelector().getFlag(args, 2, "abce").toSubCommand("exp.brush.clipboard", new ConditionArgumentBefore("add", 1)));
@@ -897,6 +906,51 @@ public class BrushCommand extends AbstractCommand {
                                     flag.get('c') ? new BlockVectorTool().toBlockVectorTool(BukkitAdapter.adapt(p).getSession().getSelection().getCenter().toBlockPoint()) : new BlockVectorTool().toBlockVectorTool(p.getLocation())
                             ), clipboardName, flag);
 
+        }
+
+        if (args[1].equalsIgnoreCase("save")) {
+
+            if (clipboardParameter.hasClipboardLoad()) {
+
+                if (ClipboardParameter.folderExist(args[2])) {
+                    brushBuilder.sendMessage("expbuild.message.commands.clipboard_folder_already_exist",new String[]{args[2]});
+                    return;
+                }
+
+                clipboardParameter.saveToFolder(args[2]);
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_folder_save",new String[]{args[2]});
+
+            } else {
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_not_loaded",new String[]{});
+                return;
+            }
+        }
+
+        if (args[1].equalsIgnoreCase("load")) {
+
+            if (ClipboardParameter.folderExist(args[2])) {
+                clipboardParameter.loadSinceFolder(args[2]);
+
+                brushBuilder.setBrush(new ClipboardsBrush())
+                        .setEnable(true)
+                        .sendMessage("expbuild.message.commands.clipboard_add_and_enable", true, new String[]{args[2]});
+
+            } else {
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_folder_does_not_exist",new String[]{args[2]});
+            }
+        }
+
+        if (args[1].equalsIgnoreCase("delete")) {
+
+            if (ClipboardParameter.folderExist(args[2])) {
+
+                ClipboardParameter.deleteFolder(args[2]);
+
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_folder_delete",new String[]{args[2]});
+
+            } else {
+                brushBuilder.sendMessage("expbuild.message.commands.clipboard_folder_does_not_exist",new String[]{args[2]});
+            }
         }
     }
 }
