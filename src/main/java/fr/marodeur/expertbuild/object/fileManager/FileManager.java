@@ -2,6 +2,7 @@ package fr.marodeur.expertbuild.object.fileManager;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
+import fr.marodeur.expertbuild.object.builderObjects.ClipboardParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class FileManager {
 
     public static final MultiFileObject areaTimerFile;
+    public static final MultiFileObject clipboardFile;
     //private static final FileObject data;
 
     private static Logger LOG;
@@ -20,6 +22,7 @@ public class FileManager {
         LOG = Main.getInstance().getLogger();
 
         areaTimerFile = new MultiFileObject<>("plugins/ExpertBuild/Data/AreaTimer", Extension.JSON);
+        clipboardFile = new MultiFileObject("plugins/ExpertBuild/Data/Clipboard", Extension.SCHEM);
         // Example
         //data = new FileObject<>("plugins/ExpertBuild/Data/PluginVersion", "PluginVersion", Extension.JSON, String.class );
 
@@ -36,7 +39,9 @@ public class FileManager {
 
     private void createFileOnEnable() {
 
-        if (areaTimerFile.createPathFiles()) LOG.info("FilePath 'data' created with success");
+        if (areaTimerFile.createPathFiles()) LOG.info("FilePath 'AreaTimer' created with success");
+
+        if (clipboardFile.createPathFiles()) LOG.info("FilePath 'Clipboard' created with success");
 
         //if (data.createFile()) LOG.info("File 'data' created with success");
 
@@ -49,7 +54,11 @@ public class FileManager {
         }*/
 
         AreaTimerParameter[] areaTimerParameter = (AreaTimerParameter[]) areaTimerFile.loadFromFile(AreaTimerParameter.class);
-        Main.AREA_TIMER_PARAMETERS = Arrays.stream(areaTimerParameter).collect(Collectors.toCollection(ArrayList::new));
+        Main.getDataProfile().getAreaTimerParameterList().addAll(Arrays.stream(areaTimerParameter).collect(Collectors.toCollection(ArrayList::new)));
+
+        ClipboardParameter.addClipboardsFolder(clipboardFile.getSubdirectories());
+
+
 
 
     }
@@ -59,6 +68,6 @@ public class FileManager {
         // Exemple
         //data.saveToFile(Main.getVersion());
 
-        areaTimerFile.saveToFile(Main.AREA_TIMER_PARAMETERS);
+        areaTimerFile.saveToFile(Main.getDataProfile().getAreaTimerParameterList());
     }
 }

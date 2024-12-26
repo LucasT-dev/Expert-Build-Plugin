@@ -118,5 +118,25 @@ public class MultiFileObject<T> {
 
         new FileObject<>(this.path, areaName, this.extension, null).deleteFile();
     }
+
+
+    public List<String> getSubdirectories() {
+        List<String> directories = new ArrayList<>();
+        File directory = new File(this.path);
+
+        // Vérifie si le chemin est valide et s'il s'agit bien d'un répertoire
+        if (directory.exists() && directory.isDirectory()) {
+            File[] files = directory.listFiles();
+
+            if (files != null) {
+                for (File file : files) {
+                    if (file.isDirectory()) {
+                        directories.add(file.getName());
+                    }
+                }
+            }
+        }
+        return directories;
+    }
 }
 
