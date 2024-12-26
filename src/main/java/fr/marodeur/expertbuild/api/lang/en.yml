@@ -100,11 +100,17 @@ expbuild:
 
       enable: "'element'§2 enable"
       disable: "'element'§c disable"
-      all_clipboards_delete: "All clipboards have been deleted"
-      clipboard_does_not_exist: "clipboard §8§l'clipboard'§r§7 does not exist"
-      clipboard_already_exist: "clipboard §8§l'clipboard'§r§7 already exists"
-      clipboard_add_and_enable: "clipboard §8§l'clipboard'§r§7 add and brush enable"
+      all_clipboards_delete: "All Clipboards have been deleted"
+      clipboard_does_not_exist: "Clipboard §8§l'clipboard'§r§7 does not exist"
+      clipboard_already_exist: "Clipboard §8§l'clipboard'§r§7 already exists"
+      clipboard_add_and_enable: "Clipboard §8§l'clipboard'§r§7 add and brush enable"
       clipboard_remove: "The clipboard §8§l'clipboard'§r§7 has been deleted"
+      clipboard_folder_already_exist: "The §8§l'folder'§r§7 folder already exists"
+      clipboard_folder_save: "The §8§l'folder'§r§7 folder is saved"
+      clipboard_not_loaded: "You don't have a clipboard to save"
+      clipboard_folder_does_not_exist: "The §8§l'folder'§r§7 folder does not exist"
+      clipboard_folder_delete: "The §8§l'folder'§r§7 folder has been deleted"
+
 
       timelapse_already_running: You already have a timelapse running
       timelapse_finish_recap: Timelapse finish in 'time' 'unit'; 'quantity' blocks destroyed

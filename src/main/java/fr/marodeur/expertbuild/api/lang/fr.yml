@@ -102,6 +102,12 @@ expbuild:
       clipboard_already_exist: "Le clipboard §8§l'clipboard'§r§7 existe déjà"
       clipboard_add_and_enable: "Le clipboard §8§l'clipboard'§r§7 ajouté et le brush est activé"
       clipboard_remove: "Le clipboard §8§l'clipboard'§r§7 a été supprimé"
+      clipboard_folder_already_exist: "Le dossier §8§l'folder'§r§7 existe déjà"
+      clipboard_folder_save: "Le dossier §8§l'folder'§r§7 est sauvegardé"
+      clipboard_not_loaded: "Tu n'as pas de clipboard à enregistrer"
+      clipboard_folder_does_not_exist: "Le dossier §8§l'folder'§r§7 n'existe pas"
+      clipboard_folder_delete: "Le dossier §8§l'folder'§r§7 a été supprimé"
+
 
       timelapse_already_running: Vous avez déjà un timelapse en cours d'exécution
       timelapse_finish_recap: Timelapse fini en 'time' 'unit'; 'quantity' blocks detruits
