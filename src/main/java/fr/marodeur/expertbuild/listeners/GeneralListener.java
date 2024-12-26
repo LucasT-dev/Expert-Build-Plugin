@@ -195,7 +195,7 @@ public class GeneralListener implements Listener {
 
 		//AreaTimer command
 
-		for (AreaTimerParameter areaTimerParameter : Main.AREA_TIMER_PARAMETERS) {
+		for (AreaTimerParameter areaTimerParameter : Main.getDataProfile().getAreaTimerParameterList()) {
 
 			if (areaTimerParameter.isRunning()) {
 
