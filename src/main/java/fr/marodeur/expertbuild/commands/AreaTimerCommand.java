@@ -14,7 +14,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -68,9 +67,7 @@ public class AreaTimerCommand extends AbstractCommand {
 
             if (!AreaTimerExist(areaName)) {
 
-                if (Main.AREA_TIMER_PARAMETERS == null) Main.AREA_TIMER_PARAMETERS = new ArrayList<>();
-
-                Main.AREA_TIMER_PARAMETERS.add(new AreaTimerParameter(
+                Main.getDataProfile().getAreaTimerParameterList().add(new AreaTimerParameter(
                         new BlockVectorTool().toBlockVectorTool(selection.getMinimumPoint()),
                         new BlockVectorTool().toBlockVectorTool(selection.getMaximumPoint()),
                         p.getWorld().getName(),
@@ -86,7 +83,7 @@ public class AreaTimerCommand extends AbstractCommand {
             return;
         }
 
-        if (Main.AREA_TIMER_PARAMETERS == null) return;
+        if (Main.getDataProfile().getAreaTimerParameterList() == null) return;
 
         String areaName = args[1].replace(" ", "_");
         if (AreaTimerExist(areaName)) {
@@ -99,7 +96,7 @@ public class AreaTimerCommand extends AbstractCommand {
 
         if (args[0].equalsIgnoreCase("delete")) {
 
-           boolean b = Main.AREA_TIMER_PARAMETERS.remove(areaTimerParameter);
+           boolean b = Main.getDataProfile().getAreaTimerParameterList().remove(areaTimerParameter);
 
            Main.getInstance().getFileManager().areaTimerFile.deleteFile(areaName);
 
@@ -171,9 +168,12 @@ public class AreaTimerCommand extends AbstractCommand {
 
         if (sender instanceof Player) {
 
-            if (!(Main.AREA_TIMER_PARAMETERS == null)) {
+            if (!(Main.getDataProfile().getAreaTimerParameterList() == null)) {
 
-                List<String> areaTimerName = Main.AREA_TIMER_PARAMETERS.stream().map(AreaTimerParameter::getName).toList();
+                List<String> areaTimerName = Main.getDataProfile().getAreaTimerParameterList()
+                        .stream()
+                        .map(AreaTimerParameter::getName)
+                        .toList();
 
                 subCommandSender.addSubCommand(new SubCommandSelector().getList(1, areaTimerName).toSubCommand("None", new ConditionArgumentBefore("create", 0)));
                 subCommandSender.addSubCommand(new SubCommandSelector().getList(1, areaTimerName).toSubCommand("None", new ConditionArgumentBefore("delete", 0)));
@@ -195,9 +195,9 @@ public class AreaTimerCommand extends AbstractCommand {
 
     private boolean AreaTimerExist(String worldNameTest) {
 
-        if (Main.AREA_TIMER_PARAMETERS != null) {
+        if (Main.getDataProfile().getAreaTimerParameterList() != null) {
 
-            for (AreaTimerParameter areaTimerParameter : Main.AREA_TIMER_PARAMETERS) {
+            for (AreaTimerParameter areaTimerParameter : Main.getDataProfile().getAreaTimerParameterList()) {
                 if (areaTimerParameter.getName().equalsIgnoreCase(worldNameTest)) {
                     return true;
                 }
@@ -209,7 +209,7 @@ public class AreaTimerCommand extends AbstractCommand {
 
     private AreaTimerParameter getAreaTimerUsingName(String worldNameTest) {
 
-        for (AreaTimerParameter areaTimerParameter : Main.AREA_TIMER_PARAMETERS) {
+        for (AreaTimerParameter areaTimerParameter : Main.getDataProfile().getAreaTimerParameterList()) {
             if (areaTimerParameter.getName().equalsIgnoreCase(worldNameTest)) {
                 return areaTimerParameter;
             }

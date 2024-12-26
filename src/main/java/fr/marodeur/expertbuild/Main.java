@@ -72,7 +72,6 @@ public class Main extends JavaPlugin {
 
 	// Changer d'endroit
 	public static List<UUID> getCommand = new ArrayList<>();
-	public static List<AreaTimerParameter> AREA_TIMER_PARAMETERS = new ArrayList<>();
 	//
 
 
