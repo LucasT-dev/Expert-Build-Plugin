@@ -6,6 +6,8 @@ import com.sk89q.worldedit.bukkit.BukkitPlayer;
 import com.sk89q.worldedit.extension.input.ParserContext;
 import com.sk89q.worldedit.extension.platform.permission.ActorSelectorLimits;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.*;
 import com.sk89q.worldedit.function.mask.Mask;
 import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
 import com.sk89q.worldedit.function.operation.Operation;
@@ -29,7 +31,19 @@ import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class FaweAPI {
+
+    /**
+     * https://worldedit.enginehub.org/en/latest/api/examples/clipboard/#schematic-examples
+     *
+     * https://madelinemiller.dev/blog/how-to-load-and-save-schematics-with-the-worldedit-api/#loading
+     *
+     */
 
     private final BukkitPlayer bukkitPlayer;
 
@@ -347,6 +361,30 @@ public class FaweAPI {
             bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified_with_time", true, new String[]{String.valueOf(blockModified), String.valueOf(d)}).getMessage());
         } else {
             bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.block_modified", true, new String[]{String.valueOf(blockModified)}).getMessage());
+        }
+    }
+
+
+
+    public void saveClipboardToFile(File file, Clipboard clipboard) {
+
+        try (ClipboardWriter writer = BuiltInClipboardFormat.FAST.getWriter(new FileOutputStream(file))) {
+            writer.write(clipboard);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Clipboard loadClipboardToFile(File file) {
+
+        Clipboard clipboard;
+
+        ClipboardFormat format = ClipboardFormats.findByFile(file);
+        try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
+            return reader.read();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
