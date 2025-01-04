@@ -338,92 +338,99 @@ class Timelapse {
     public Timelapse() {
     }
 
-    void registerBlock(int Ymin, int Ymax, EditSession editsession, World world, Region r, Player p, Mask mask, String[] args) {
-
-        Deque<BlockVectorTool> layer = new ArrayDeque<>();
+    void registerBlock(EditSession editsession, World world, Region r, Player p, Mask mask, String[] args) {
 
         HashMap<Integer, Deque<BlockVectorTool>> hashMap = new HashMap<>();
-        long volumeBlock = 0;
 
-        for (int y = Ymax; y >= Ymin; y--) {
+        r.forEach(blockVector3 -> {
 
-            int finalY = y;
-            Deque<BlockVectorTool> finalLayer = new ArrayDeque<>();
+            if (!editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
 
-            r.forEach(blockVector3 -> {
+                BlockVectorTool b = new BlockVectorTool(blockVector3.x(), blockVector3.y(), blockVector3.z());
 
-                if (blockVector3.y() == finalY && !editsession.getFullBlock(blockVector3).getMaterial().isAir()) {
-                    BlockVectorTool b = new BlockVectorTool(blockVector3.x(), blockVector3.y(), blockVector3.z());
+                // PlotSquared condition
+                if (world.getGenerator() != null) {
 
-                    // PlotSquared condition
-                    if (world.getGenerator() != null) {
+                    // Map de plot !!
+                    if (world.getGenerator().toString().equals("PlotSquared")) {
 
-                        // Map de plot !!
-                        if (world.getGenerator().toString().equals("PlotSquared")) {
+                        // Object location custom de plotsquared
+                        Location l = Location.at(world.getName(), b.toBlockVector3());
 
-                            // Object location custom de plotsquared
-                            Location l = Location.at(world.getName(), b.toBlockVector3());
+                        if (l.isPlotArea()) { // N'est pas un chemin
+                            if (!l.isUnownedPlotArea()) { // Est un plot atribué a un joueur
+                                if (l.getOwnedPlot().getOwner().equals(p.getUniqueId())) { // Le owner du plot est celui qui execute la commande
 
-                            if (l.isPlotArea()) { // N'est pas un chemin
-                                if (!l.isUnownedPlotArea()) { // Est un plot atribué a un joueur
-                                    if (l.getOwnedPlot().getOwner().equals(p.getUniqueId())) { // Le owner du plot est celui qui execute la commande
-
-                                        // Test le mask
-                                        if (mask.test(blockVector3)) {
-                                            finalLayer.add(b);
-                                        }
+                                    // Test le mask
+                                    if (mask.test(blockVector3)) {
+                                        hashMap.putIfAbsent(b.getBlockY(), new ArrayDeque<>());
+                                        hashMap.get(b.getBlockY()).add(b);
+                                        //finalLayer.add(b);
                                     }
                                 }
                             }
                         }
-
-                        // Map genrerer par une autre pl que plotsquared !
-                        else {
-
-                            // Test du mask
-                            if (mask.test(blockVector3)) {
-                                finalLayer.add(b);
-                            }
-                        }
-
                     }
 
-                    // Map classique sans plot !
+                    // Map genrerer par une autre pl que plotsquared !
                     else {
 
                         // Test du mask
                         if (mask.test(blockVector3)) {
-                            finalLayer.add(b);
+
+                            hashMap.putIfAbsent(b.getBlockY(), new ArrayDeque<>());
+                            hashMap.get(b.getBlockY()).add(b);
+                            //finalLayer.add(b);
                         }
                     }
+
                 }
-            });
+
+                // Map classique sans plot !
+                else {
+
+                    //System.out.println(blockVector3);
+
+                    // Test du mask
+                    if (mask.test(blockVector3)) {
+
+                        hashMap.putIfAbsent(b.getBlockY(), new ArrayDeque<>());
+                        hashMap.get(b.getBlockY()).add(b);
+                        //finalLayer.add(b);
+                    }
+                }
+            }
+        });
+
+
+        hashMap.forEach((integer, blockVectorTools) -> {
 
             // Trier la Queue de bloc a retirer
             if (args.length >= 3) {
 
                 GlueList<BlockVectorTool> sortList = new GlueList<>();
-                sortList.addAll(finalLayer.stream().toList());
+                sortList.addAll(blockVectorTools.stream().toList());
 
                 if (args[2].contains("creasing")) {
 
-                    layer = new BlockVectorTool().XZcreasing(sortList);
+                    blockVectorTools = new BlockVectorTool().XZcreasing(sortList);
                 }
                 if (args[2].contains("diagonal")) {
 
-                    layer = new BlockVectorTool().XZDiagonal(sortList);
+                    blockVectorTools = new BlockVectorTool().XZDiagonal(sortList);
                 }
                 if (args[2].contains("random_diagonal")) {
 
-                    layer = new BlockVectorTool().XZRandomDiagonal(sortList);
+                    blockVectorTools = new BlockVectorTool().XZRandomDiagonal(sortList);
                 }
                 if (args[2].contains("cylinder")) {
 
-                    layer = new BlockVectorTool().XZCylinder(sortList);
+                    blockVectorTools = new BlockVectorTool().XZCylinder(sortList);
                 }
                 if (args[2].contains("spiral")) {
 
-                    layer = new BlockVectorTool().XZSpiral(sortList);
+                    blockVectorTools = new BlockVectorTool().XZSpiral(sortList);
+                }
                 if (args[2].contains("circle")) {
 
                     blockVectorTools = new BlockVectorTool().XZCircleSweep(sortList);
@@ -431,21 +438,23 @@ class Timelapse {
 
                 if (args[2].contains("random")) {
 
-                    layer = new BlockVectorTool().XZRandom(sortList);
+                    blockVectorTools = new BlockVectorTool().XZRandom(sortList);
                 }
 
                 // Inverse la Queue de block a retirer
                 if (args[2].startsWith("inverse_")) {
-                    layer = new BlockVectorTool().reverseDeque(layer);
+                    blockVectorTools = new BlockVectorTool().reverseDeque(blockVectorTools);
                 }
             }
 
-            hashMap.put(y, layer);
-            volumeBlock += layer.size();
-        }
+            hashMap.replace(integer, blockVectorTools);
+
+        });
 
         this.hashMap = hashMap;
-        this.volumeBlock = volumeBlock;
+        this.volumeBlock = hashMap.values().stream()
+                .mapToInt(Deque::size) // Obtenir la taille de chaque Deque
+                .sum();;
     }
 
     public HashMap<Integer, Deque<BlockVectorTool>> hashMap() {
