@@ -433,8 +433,6 @@ public class BlockVectorTool implements Cloneable {
         Random random = new Random();
         int corner = random.nextInt(4);
 
-        System.out.println("corner = " + corner);
-
         // Ajuster le tri en fonction du coin sélectionné
         Comparator<BlockVectorTool> comparator;
         switch (corner) {
@@ -508,6 +506,22 @@ public class BlockVectorTool implements Cloneable {
         Collections.shuffle(blockVectorTools);
 
         return new ArrayDeque<>(blockVectorTools);
+    }
+
+    public Deque<BlockVectorTool> XZCircleSweep(GlueList<BlockVectorTool> blockVectorTools) {
+
+        // Calcul du centre
+        double centerX = blockVectorTools.stream().mapToInt(BlockVectorTool::getBlockX).average().orElse(0);
+        double centerZ = blockVectorTools.stream().mapToInt(BlockVectorTool::getBlockZ).average().orElse(0);
+
+        // Trier la liste par angle autour du centre
+        return blockVectorTools.stream()
+                .sorted(Comparator.comparingDouble(bv -> {
+                    double deltaX = bv.getX() - centerX;
+                    double deltaZ = bv.getZ() - centerZ;
+                    return Math.atan2(deltaZ, deltaX); // Calcul de l'angle en radians
+                }))
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     public <T> Deque<T> reverseDeque(Deque<T> originalDeque) {

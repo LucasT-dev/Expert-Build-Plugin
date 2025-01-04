@@ -73,7 +73,7 @@ public class CommandTimelapse extends AbstractCommand {
                 int Ymin = actor.getSelection().getMinimumPoint().y();
                 int Ymax = actor.getSelection().getMaximumPoint().y();
 
-                long volumeBlock = 0;
+                long volumeBlock;
 
                 long startTime = System.currentTimeMillis();
 
@@ -133,14 +133,14 @@ public class CommandTimelapse extends AbstractCommand {
                     return;
                 }
 
-
                 new FaweAPI(p).copySelection(true, true, true, true);
 
-                timelapseBuilder.setHasTimelapseRunning(true).setSelection(r.getMinimumPoint(), r.getMaximumPoint());
-
+                timelapseBuilder
+                        .setHasTimelapseRunning(true)
+                        .setSelection(r.getMinimumPoint(), r.getMaximumPoint());
 
                 Timelapse timelapse = new Timelapse();
-                timelapse.registerBlock(Ymin, Ymax, editsession, world, r, p, mask, args);
+                timelapse.registerBlock(editsession, world, r, p, mask, args);
 
 
                 hashMap = timelapse.hashMap();
@@ -151,6 +151,7 @@ public class CommandTimelapse extends AbstractCommand {
                 long finalVolumeBlock = volumeBlock;
 
                 HashMap<Integer, Deque<BlockVectorTool>> finalHashMap = hashMap;
+
                 new BukkitRunnable() {
 
                     @Override
@@ -313,7 +314,7 @@ public class CommandTimelapse extends AbstractCommand {
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // START int trier
-        subCommandSender.addSubCommand(new SubCommandSelector().getList(2, Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral", "random"))
+        subCommandSender.addSubCommand(new SubCommandSelector().getList(2, Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral", "random", "circle", "inverse_circle"))
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // /timelapse start 1 shape mask
@@ -423,6 +424,9 @@ class Timelapse {
                 if (args[2].contains("spiral")) {
 
                     layer = new BlockVectorTool().XZSpiral(sortList);
+                if (args[2].contains("circle")) {
+
+                    blockVectorTools = new BlockVectorTool().XZCircleSweep(sortList);
                 }
 
                 if (args[2].contains("random")) {
