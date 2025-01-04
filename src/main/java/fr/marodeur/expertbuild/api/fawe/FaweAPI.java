@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Iterator;
 
 public class FaweAPI {
 
@@ -187,6 +188,22 @@ public class FaweAPI {
         if (sendMessage) bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.copy_block", true, new String[]{String.valueOf(region.getArea())}).getMessage());
 
         return new ClipboardHolder(clipboard);
+    }
+
+    public Iterator<BlockVector3> clipboardIterator() {
+
+        Region region = this.bukkitPlayer.getSelection();
+        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+        return clipboard.iterator();
+    }
+
+    public BlockArrayClipboard getBlockArrayClipboard() {
+
+        Region region = this.bukkitPlayer.getSelection();
+        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+        return clipboard;
     }
 
     @Warning

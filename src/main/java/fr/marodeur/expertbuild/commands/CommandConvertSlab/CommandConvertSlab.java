@@ -4,7 +4,6 @@ import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
-import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.block.BlockState;
 
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
@@ -81,9 +80,9 @@ public class CommandConvertSlab extends AbstractCommand {
         BukkitPlayer actor = BukkitAdapter.adapt(p);
         LocalSession session = actor.getSession();
         EditSession editSession = session.createEditSession(actor);
-        Region r = actor.getSelection();
 
-        r.spliterator().forEachRemaining(bv3 -> editSession.getFullBlock(bv3).getStates().values().forEach(o -> {
+
+        new FaweAPI(p).clipboardIterator().forEachRemaining(bv3 -> editSession.getFullBlock(bv3).getStates().values().forEach(o -> {
 
             if (o.equals("double")) {
 
