@@ -40,9 +40,10 @@ import java.util.Iterator;
 public class FaweAPI {
 
     /**
-     * https://worldedit.enginehub.org/en/latest/api/examples/clipboard/#schematic-examples
      *
-     * https://madelinemiller.dev/blog/how-to-load-and-save-schematics-with-the-worldedit-api/#loading
+     * <a href="https://worldedit.enginehub.org/en/latest/api/examples/clipboard/#schematic-examples">...</a>
+     * <p>
+     * <a href="https://madelinemiller.dev/blog/how-to-load-and-save-schematics-with-the-worldedit-api/#loading">...</a>
      *
      */
 
@@ -193,17 +194,15 @@ public class FaweAPI {
     public Iterator<BlockVector3> clipboardIterator() {
 
         Region region = this.bukkitPlayer.getSelection();
-        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
-        return clipboard.iterator();
+        return new BlockArrayClipboard(region).iterator();
     }
 
     public BlockArrayClipboard getBlockArrayClipboard() {
 
         Region region = this.bukkitPlayer.getSelection();
-        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
 
-        return clipboard;
+        return new BlockArrayClipboard(region);
     }
 
     @Warning
