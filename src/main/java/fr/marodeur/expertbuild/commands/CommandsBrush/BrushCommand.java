@@ -118,7 +118,7 @@ public class BrushCommand extends AbstractCommand {
                 }
 
                 brushBuilder.getBrushParameter().setShape(shape)
-                        .sendMessage("expbuild.message.brush.radius_set", true);
+                        .sendMessage("expbuild.message.brush.shape_set", true);
             }
 
             // TYPE : Brush Pattern Radius

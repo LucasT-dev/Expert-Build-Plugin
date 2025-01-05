@@ -32,6 +32,7 @@ expbuild:
       brush_registered: Brush 'brush' enregistré
       material_set: Material défini
       radius_set: Radius défini
+      shape_set: Forme défini
       player_registered: Joueur 'player' enregistré
       builder_profile_registered: Profile Builder enregistré
       player_already_registered: Vous êtes déjà enregistré
