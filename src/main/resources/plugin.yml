@@ -119,8 +119,6 @@ permissions:
   exp.register:
     default: op
 
-  exp.brush.biome:
-    default: op
   exp.brush.blendball:
     default: op
   exp.brush.clipboard3d:
@@ -150,8 +148,6 @@ permissions:
   exp.brush.overlay:
     default: op
   exp.brush.2dcube:
-    default: op
-  exp.brush.sphere:
     default: op
   exp.brush.spike:
     default: op
