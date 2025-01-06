@@ -14,19 +14,15 @@ import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 public class BrushBuilder {
 
-private static final Logger LOG;
     private static final Configuration CONFIG;
 
     static {
 
-        LOG = Logger.getLogger("Expert-Build");
         CONFIG = Main.getConfiguration();
 
     }
@@ -69,6 +65,8 @@ private static final Logger LOG;
     public BrushBuilder(UUID uuid) {
         this.uuid = uuid;
     }
+
+
 
     public TimelapseBuilderParameter getTimeLapseProfile() {
         return Main.getDataProfile().getTimelapseProfile(this.uuid);
@@ -356,21 +354,28 @@ private static final Logger LOG;
      * @param p Player
      * @param sendError Boolean
      */
-    public static @Nullable BrushBuilder getBrushBuilderPlayer(@NotNull Player p, Boolean sendError) {
+    public static BrushBuilder getBrushBuilderPlayer(@NotNull Player p, Boolean sendError) {
 
-        if (Main.containsBrushBuilder(p)) {
-            return Main.getBrushBuilder(p);
+        //if (Main.containsBrushBuilder(p)) {
 
-        } else {
+            BrushBuilder bb = Main.getBrushBuilder(p);
 
-            if (sendError) {
-                LOG.severe(new Message.MessageSender("expbuild.message.error.error_brushbuilder", true, new String[]{p.getName()}).getMessage());
+            if (isEmpty(bb)) {
+                throw new NullPointerException(p.getClientBrandName() + " has not been registered as a builder, for this he must be an operator or have the `exp.register` permission");
             }
-            return null;
-        }
+
+            return bb;
+
+        //} else {
+
+//            if (sendError) {
+//                LOG.severe(new Message.MessageSender("expbuild.message.error.error_brushbuilder", true, new String[]{p.getName()}).getMessage());
+//            }
+
+        //}
     }
 
-    public boolean isEmpty(BrushBuilder bb) {
+    private static boolean isEmpty(BrushBuilder bb) {
         return (bb == null);
     }
 }
