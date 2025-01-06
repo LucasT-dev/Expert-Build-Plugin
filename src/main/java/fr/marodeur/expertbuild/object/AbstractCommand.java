@@ -15,9 +15,12 @@ import com.sk89q.worldedit.world.block.BlockType;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.enums.BlockCategoryEnum;
 import fr.marodeur.expertbuild.enums.BlocksDataColor;
 import fr.marodeur.expertbuild.enums.ExecutorType;
 
+import fr.marodeur.expertbuild.object.block.category.ShapeCategory;
+import fr.marodeur.expertbuild.object.block.category.TypeCategory;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.block.CommandBlock;
@@ -548,6 +551,45 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             }
             return this;
         }
+
+        /**
+         * Get Block list is type category
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getTypeCategoryList(String[] args, int argsIndex) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex + 1 ) {
+                this.subCommand.addAll(Arrays.stream(BlockCategoryEnum.values())
+                        .filter(blockCategoryEnum -> blockCategoryEnum.getCategoryType() instanceof TypeCategory)
+                        .map(BlockCategoryEnum::toString)
+                        .toList());
+            }
+            return this;
+        }
+
+        /**
+         * Get Block list is shape category
+         *
+         * @param args String[]
+         * @param argsIndex int
+         * @return SubCommandSelector
+         */
+        public SubCommandSelector getShapeCategoryList(String[] args, int argsIndex) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex + 1 ) {
+                this.subCommand.addAll(Arrays.stream(BlockCategoryEnum.values())
+                        .filter(blockCategoryEnum -> blockCategoryEnum.getCategoryType() instanceof ShapeCategory)
+                        .map(BlockCategoryEnum::toString)
+                        .toList());
+            }
+            return this;
+        }
+
 
         /**
          * Get Block list of FAWE
@@ -1091,6 +1133,36 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         public void sendMessageInvalidIFlag(Player p, String arg) {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "flag"}).send(p);
+        }
+
+
+        // TypeCategory
+        public boolean isTypeCategory(String arg) {
+            return BlockCategoryEnum.getStreamArray()
+                    .filter(blockCategoryEnum -> blockCategoryEnum.getCategoryType() instanceof TypeCategory)
+                    .toList().contains(arg);
+        }
+        public BlockCategoryEnum getTypeCategory(String arg) {
+            return BlockCategoryEnum.valueOf(arg.toUpperCase());
+        }
+
+        public void sendMessageInvalidTypeCategory(@NotNull CommandSender sender, String arg) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "TypeCategory"}).send(sender);
+        }
+
+
+        // ShapeCategory
+        public boolean isShapeCategory(String arg) {
+            return BlockCategoryEnum.getStreamArray()
+                    .filter(blockCategoryEnum -> blockCategoryEnum.getCategoryType() instanceof ShapeCategory)
+                    .toList().contains(arg);
+        }
+        public BlockCategoryEnum getShapeCategory(String arg) {
+            return BlockCategoryEnum.valueOf(arg.toUpperCase());
+        }
+
+        public void sendMessageInvalidShapeCategory(@NotNull CommandSender sender, String arg) {
+            new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "ShapeCategory"}).send(sender);
         }
 
 
