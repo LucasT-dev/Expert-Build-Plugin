@@ -133,7 +133,7 @@ public class CommandTimelapse extends AbstractCommand {
                     return;
                 }
 
-                new FaweAPI(p).copySelection(true, true, true, true);
+                new FaweAPI(p).copySelection(false, true, true, true);
 
                 timelapseBuilder
                         .setHasTimelapseRunning(true)
