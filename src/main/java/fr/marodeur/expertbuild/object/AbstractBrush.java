@@ -16,6 +16,7 @@ import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 import java.util.logging.Logger;
 
@@ -77,17 +78,17 @@ public abstract class AbstractBrush {
 
 
         if (tool.equals(Material.HONEYCOMB)) {
-            if (this.honeycombToolBrush(brushBuilder, loc, ploc)) setBlock();
+            if (this.honeycombToolBrush(brushBuilder, loc, ploc)) setBlock(brushBuilder.getPlayer());
             return;
         }
 
         if (tool.equals(conf.getTerraforming_tool_1())) {
-            if (this.spectralToolBrush(brushBuilder, loc, ploc)) setBlock();
+            if (this.spectralToolBrush(brushBuilder, loc, ploc)) setBlock(brushBuilder.getPlayer());
             return;
         }
 
         if (tool.equals(conf.getTerraforming_tool_2())) {
-            if (this.clayballToolBrush(brushBuilder, loc, ploc)) setBlock();
+            if (this.clayballToolBrush(brushBuilder, loc, ploc)) setBlock(brushBuilder.getPlayer());
             return;
         }
     }
@@ -99,11 +100,11 @@ public abstract class AbstractBrush {
     }*/
 
 
-    private void setBlock() {
+    private void setBlock(Player p) {
 
         if (!this.blockVectorToolGlueList.isEmpty()) {
 
-            new FaweAPI(this.brushBuilder.getPlayer()).setBlock(blockVectorToolGlueList, this.pattern, false);
+            new FaweAPI(p).setBlock(blockVectorToolGlueList, this.pattern, false);
 
             this.clearBlockList();
         }
