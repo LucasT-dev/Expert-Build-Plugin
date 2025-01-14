@@ -2,13 +2,16 @@ package fr.marodeur.expertbuild.object.block;
 
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.enums.BlockCategoryEnum;
+
+import fr.marodeur.expertbuild.object.block.blockObjects.CategoryBlockObject;
+import fr.marodeur.expertbuild.object.block.blockObjects.ColorBlockObject;
 import org.bukkit.Material;
 
 import java.util.*;
 
-public class BlockRegistry {
+public class BlockData {
 
-    private final Map<Material, DataBlockObject> dataBlockHashMap = new HashMap<>();
+    private static final Map<Material, DataBlockManager> dataBlockHashMap = new HashMap<>();
 
     private final int majorVersion = Integer.parseInt(Main.getDataPlugin().getBukkitVersion().substring(2, 4));
     private final int minorVersion = Integer.parseInt(Main.getDataPlugin().getBukkitVersion().substring(5, 6));
@@ -102,7 +105,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.OAK_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.SIGN)));
-        this.registerBlock("OAK_HANGING_SIGN", "18.1")
+        this.registerBlock("OAK_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.OAK_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -129,7 +132,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.SPRUCE_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.SIGN)));
-        this.registerBlock("SPRUCE_HANGING_SIGN", "18.1")
+        this.registerBlock("SPRUCE_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.SPRUCE_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -156,7 +159,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.BIRCH_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.SIGN)));
-        this.registerBlock("BIRCH_HANGING_SIGN", "18.1")
+        this.registerBlock("BIRCH_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.BIRCH_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -183,7 +186,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.JUNGLE_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.SIGN)));
-        this.registerBlock("JUNGLE_HANGING_SIGN", "18.1")
+        this.registerBlock("JUNGLE_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.JUNGLE_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -210,7 +213,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.ACACIA_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.SIGN)));
-        this.registerBlock("ACACIA_HANGING_SIGN", "18.1")
+        this.registerBlock("ACACIA_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.ACACIA_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -237,7 +240,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.DARK_OAK_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.SIGN)));
-        this.registerBlock("DARK_OAK_HANGING_SIGN", "18.1")
+        this.registerBlock("DARK_OAK_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.DARK_OAK_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -250,81 +253,81 @@ public class BlockRegistry {
 
 
         // MANGROVE
-        this.registerBlock("MANGROVE_SLAB", "18.1")
+        this.registerBlock("MANGROVE_SLAB", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.SLAB)));
-        this.registerBlock("MANGROVE_STAIRS", "18.1")
+        this.registerBlock("MANGROVE_STAIRS", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.STAIRS)));
-        this.registerBlock("MANGROVE_FENCE", "18.1")
+        this.registerBlock("MANGROVE_FENCE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.FENCE)));
-        this.registerBlock("MANGROVE_FENCE_GATE", "18.1")
+        this.registerBlock("MANGROVE_FENCE_GATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.FENCE_GATE)));
-        this.registerBlock("MANGROVE_DOOR", "18.1")
+        this.registerBlock("MANGROVE_DOOR", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.DOOR)));
-        this.registerBlock("MANGROVE_TRAPDOOR", "18.1")
+        this.registerBlock("MANGROVE_TRAPDOOR", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.TRAPDOOR)));
-        this.registerBlock("MANGROVE_SIGN", "18.1")
+        this.registerBlock("MANGROVE_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.SIGN)));
-        this.registerBlock("MANGROVE_HANGING_SIGN", "18.1")
+        this.registerBlock("MANGROVE_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.HANGING_SIGN)));
-        this.registerBlock("MANGROVE_PRESSURE_PLATE", "18.1")
+        this.registerBlock("MANGROVE_PRESSURE_PLATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.PRESSURE_PLATE)));
-        this.registerBlock("MANGROVE_BUTTON", "18.1")
+        this.registerBlock("MANGROVE_BUTTON", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.BUTTON)));
-        this.registerBlock("MANGROVE_LEAVES", "18.1")
+        this.registerBlock("MANGROVE_LEAVES", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.LEAVES)));
-        this.registerBlock("MANGROVE_PROPAGULE", "18.1")
+        this.registerBlock("MANGROVE_PROPAGULE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.SAPLING)));
 
 
         // CHERRY
-        this.registerBlock("CHERRY_SLAB", "18.1")
+        this.registerBlock("CHERRY_SLAB", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.SLAB)));
-        this.registerBlock("CHERRY_STAIRS", "18.1")
+        this.registerBlock("CHERRY_STAIRS", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.STAIRS)));
-        this.registerBlock("CHERRY_FENCE", "18.1")
+        this.registerBlock("CHERRY_FENCE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.FENCE)));
-        this.registerBlock("CHERRY_FENCE_GATE", "18.1")
+        this.registerBlock("CHERRY_FENCE_GATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.FENCE_GATE)));
-        this.registerBlock("CHERRY_DOOR", "18.1")
+        this.registerBlock("CHERRY_DOOR", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.DOOR)));
-        this.registerBlock("CHERRY_TRAPDOOR", "18.1")
+        this.registerBlock("CHERRY_TRAPDOOR", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.TRAPDOOR)));
-        this.registerBlock("CHERRY_SIGN", "18.1")
+        this.registerBlock("CHERRY_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.SIGN)));
-        this.registerBlock("CHERRY_HANGING_SIGN", "18.1")
+        this.registerBlock("CHERRY_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.HANGING_SIGN)));
-        this.registerBlock("CHERRY_PRESSURE_PLATE", "18.1")
+        this.registerBlock("CHERRY_PRESSURE_PLATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.PRESSURE_PLATE)));
-        this.registerBlock("CHERRY_BUTTON", "18.1")
+        this.registerBlock("CHERRY_BUTTON", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.BUTTON)));
-        this.registerBlock("CHERRY_LEAVES", "18.1")
+        this.registerBlock("CHERRY_LEAVES", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.LEAVES)));
-        this.registerBlock("CHERRY_SAPLING", "18.1")
+        this.registerBlock("CHERRY_SAPLING", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.SAPLING)));
 
 
         // BAMBOO
-        this.registerBlock("BAMBOO_SLAB", "18.1")
+        this.registerBlock("BAMBOO_SLAB", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.SLAB)));
-        this.registerBlock("BAMBOO_STAIRS", "18.1")
+        this.registerBlock("BAMBOO_STAIRS", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.STAIRS)));
-        this.registerBlock("BAMBOO_FENCE", "18.1")
+        this.registerBlock("BAMBOO_FENCE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.FENCE)));
-        this.registerBlock("BAMBOO_FENCE_GATE", "18.1")
+        this.registerBlock("BAMBOO_FENCE_GATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.FENCE_GATE)));
-        this.registerBlock("BAMBOO_DOOR", "18.1")
+        this.registerBlock("BAMBOO_DOOR", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.DOOR)));
-        this.registerBlock("BAMBOO_TRAPDOOR", "18.1")
+        this.registerBlock("BAMBOO_TRAPDOOR", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.TRAPDOOR)));
-        this.registerBlock("BAMBOO_SIGN", "18.1")
+        this.registerBlock("BAMBOO_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.SIGN)));
-        this.registerBlock("BAMBOO_HANGING_SIGN", "18.1")
+        this.registerBlock("BAMBOO_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.HANGING_SIGN)));
-        this.registerBlock("BAMBOO_PRESSURE_PLATE", "18.1")
+        this.registerBlock("BAMBOO_PRESSURE_PLATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.PRESSURE_PLATE)));
-        this.registerBlock("BAMBOO_BUTTON", "18.1")
+        this.registerBlock("BAMBOO_BUTTON", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.BUTTON)));
-        this.registerBlock("BAMBOO_SAPLING", "18.1")
+        this.registerBlock("BAMBOO_SAPLING", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.SAPLING)));
 
 
@@ -343,7 +346,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.CRIMSON_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.SIGN)));
-        this.registerBlock("CRIMSON_HANGING_SIGN", "18.1")
+        this.registerBlock("CRIMSON_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.CRIMSON_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -366,7 +369,7 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.TRAPDOOR)));
         this.registerBlock(Material.WARPED_SIGN)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.SIGN)));
-        this.registerBlock("WARPED_HANGING_SIGN", "18.1")
+        this.registerBlock("WARPED_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.HANGING_SIGN)));
         this.registerBlock(Material.WARPED_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.PRESSURE_PLATE)));
@@ -374,60 +377,260 @@ public class BlockRegistry {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.BUTTON)));
 
 
+        // COBBLED_DEEPSLATE
+        this.registerBlock(Material.COBBLED_DEEPSLATE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.COBBLED_DEEPSLATE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.COBBLED_DEEPSLATE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.COBBLED_DEEPSLATE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.COBBLED_DEEPSLATE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.COBBLED_DEEPSLATE, BlockCategoryEnum.WALL)));
+
+
+        // POLISHED_DEEPSLATE
+        this.registerBlock(Material.POLISHED_DEEPSLATE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_DEEPSLATE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.POLISHED_DEEPSLATE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_DEEPSLATE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.POLISHED_DEEPSLATE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_DEEPSLATE, BlockCategoryEnum.WALL)));
+
+
+        // DEEPSLATE_BRICK
+        this.registerBlock(Material.DEEPSLATE_BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DEEPSLATE_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.DEEPSLATE_BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DEEPSLATE_BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.DEEPSLATE_BRICK_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DEEPSLATE_BRICK, BlockCategoryEnum.WALL)));
+
+
+        // DEEPSLATE_BRICK
+        this.registerBlock(Material.DEEPSLATE_TILE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DEEPSLATE_TILE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.DEEPSLATE_TILE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DEEPSLATE_TILE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.DEEPSLATE_TILE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DEEPSLATE_TILE, BlockCategoryEnum.WALL)));
+
+
+        // TUFF
+        this.registerBlock("TUFF_SLAB", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.TUFF, BlockCategoryEnum.SLAB)));
+        this.registerBlock("TUFF_STAIRS", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.TUFF, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("TUFF_WALL", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.TUFF, BlockCategoryEnum.WALL)));
+
+
+        // POLISHED_TUFF
+        this.registerBlock("POLISHED_TUFF_SLAB", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_TUFF, BlockCategoryEnum.SLAB)));
+        this.registerBlock("POLISHED_TUFF_STAIRS", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_TUFF, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("POLISHED_TUFF_WALL", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_TUFF, BlockCategoryEnum.WALL)));
+
+
+        // POLISHED_TUFF
+        this.registerBlock("TUFF_BRICK_SLAB", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.TUFF_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock("TUFF_BRICK_STAIRS", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.TUFF_BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("TUFF_BRICK_WALL", "1.20.1")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.TUFF_BRICK, BlockCategoryEnum.WALL)));
+
+
+        // POLISHED_TUFF
+        this.registerBlock(Material.BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.BRICK_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BRICK, BlockCategoryEnum.WALL)));
+
+
+        // MUD
+        this.registerBlock("MUD_BRICK_SLAB", "1.20.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MUD, BlockCategoryEnum.SLAB)));
+        this.registerBlock("MUD_BRICK_STAIRS", "1.20.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MUD, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("MUD_BRICK_WALL", "1.20.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MUD, BlockCategoryEnum.WALL)));
+
+
+        // SANDSTONE
+        this.registerBlock(Material.SANDSTONE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SANDSTONE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.SANDSTONE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SANDSTONE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.SANDSTONE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SANDSTONE, BlockCategoryEnum.WALL)));
+
+
+        // SMOOTH_SANDSTONE
+        this.registerBlock(Material.SMOOTH_SANDSTONE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_SANDSTONE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.SMOOTH_SANDSTONE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_SANDSTONE, BlockCategoryEnum.STAIRS)));
+
+
+        // RED_SANDSTONE
+        this.registerBlock(Material.RED_SANDSTONE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RED_SANDSTONE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.RED_SANDSTONE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RED_SANDSTONE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.RED_SANDSTONE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RED_SANDSTONE, BlockCategoryEnum.WALL)));
+
+
+        // SMOOTH_SANDSTONE
+        this.registerBlock(Material.SMOOTH_RED_SANDSTONE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_RED_SANDSTONE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.SMOOTH_RED_SANDSTONE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_RED_SANDSTONE, BlockCategoryEnum.STAIRS)));
+
+
+        // PRISMARINE
+        this.registerBlock(Material.PRISMARINE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PRISMARINE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.PRISMARINE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PRISMARINE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.PRISMARINE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PRISMARINE, BlockCategoryEnum.WALL)));
+
+
+        // PRISMARINE_BRICK
+        this.registerBlock(Material.PRISMARINE_BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PRISMARINE_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.PRISMARINE_BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PRISMARINE_BRICK, BlockCategoryEnum.STAIRS)));
+
+        // SANDSTONE
+        this.registerBlock(Material.DARK_PRISMARINE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_PRISMARINE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.DARK_PRISMARINE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_PRISMARINE, BlockCategoryEnum.STAIRS)));
+
+
+        // NETHER_BRICK
+        this.registerBlock(Material.NETHER_BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.NETHER_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.NETHER_BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.NETHER_BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.NETHER_BRICK_FENCE)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.NETHER_BRICK, BlockCategoryEnum.FENCE)));
+        this.registerBlock(Material.NETHER_BRICK_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.NETHER_BRICK, BlockCategoryEnum.WALL)));
+
+
+        // RED_NETHER_BRICK
+        this.registerBlock(Material.RED_NETHER_BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RED_NETHER_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.RED_NETHER_BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RED_NETHER_BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.RED_NETHER_BRICK_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RED_NETHER_BRICK, BlockCategoryEnum.WALL)));
+
+
+        // BLACKSTONE
+        this.registerBlock(Material.BLACKSTONE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BLACKSTONE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.BLACKSTONE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BLACKSTONE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.BLACKSTONE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BLACKSTONE, BlockCategoryEnum.WALL)));
+
+
+        // POLISHED BLACKSTONE
+        this.registerBlock(Material.POLISHED_BLACKSTONE_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_BLACKSTONE, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.POLISHED_BLACKSTONE_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_BLACKSTONE, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.POLISHED_BLACKSTONE_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_BLACKSTONE, BlockCategoryEnum.WALL)));
+
+
+        // POLISHED BLACKSTONE BRICK
+        this.registerBlock(Material.POLISHED_BLACKSTONE_BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_BLACKSTONE_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.POLISHED_BLACKSTONE_BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_BLACKSTONE_BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.POLISHED_BLACKSTONE_BRICK_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.POLISHED_BLACKSTONE_BRICK, BlockCategoryEnum.WALL)));
+
+
+        // END STONE
+        this.registerBlock(Material.END_STONE_BRICK_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.END_STONE_BRICK, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.END_STONE_BRICK_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.END_STONE_BRICK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock(Material.END_STONE_BRICK_WALL)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.END_STONE_BRICK, BlockCategoryEnum.WALL)));
+
+
+        // PURPUR
+        this.registerBlock(Material.PURPUR_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PUPUR, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.PURPUR_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PUPUR, BlockCategoryEnum.STAIRS)));
+
+
+        // PURPUR
+        this.registerBlock(Material.QUARTZ_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.QUARTZ, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.QUARTZ_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.QUARTZ, BlockCategoryEnum.STAIRS)));
+
+
+        // PURPUR
+        this.registerBlock(Material.SMOOTH_QUARTZ_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_QUARTZ, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.SMOOTH_QUARTZ_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_QUARTZ, BlockCategoryEnum.STAIRS)));
+
     }
 
-    public BlockRegistry(String serverVersion) {
-        System.out.println("BLOCK REGISTRY");
-        String[] version = serverVersion.split("\\.");
-//        System.out.println("version[0] = " + version[0]);
-//        System.out.println("version[1] = " + version[1]);
-//        this.majorVersion = Integer.parseInt(version[0]);
-//        this.minorVersion = Integer.parseInt(version[1]);
+    public BlockData() {
+
     }
 
 
-
-    public DataBlockObject registerBlock(String stringMaterial, String version) {
+    private DataBlockManager registerBlock(String stringMaterial, String version) {
 
         String[] v = version.split("\\.");
 
-        if (Integer.parseInt(v[0]) <= this.majorVersion && Integer.parseInt(v[1]) <= this.minorVersion) {
+        if (Integer.parseInt(v[1]) <= this.majorVersion && Integer.parseInt(v[2]) <= this.minorVersion) {
 
-            System.out.println(" register : " + stringMaterial);
             return registerBlock(Material.getMaterial(stringMaterial));
 
         } else {
 
-            System.out.println(" invalid : " + stringMaterial + ", return air");
             return registerBlock(Material.AIR);
 
         }
     }
 
-    public DataBlockObject registerBlock(Material material) {
+    private DataBlockManager registerBlock(Material material) {
 
         if (material == null) {
-            System.out.println("Material null !! ");
             return getDataBlock(Material.AIR);
         }
 
-        System.out.println(" register : " + material.name());
-
-        dataBlockHashMap.putIfAbsent(material, new DataBlockObject(material));
+        dataBlockHashMap.putIfAbsent(material, new DataBlockManager(material));
         return getDataBlock(material);
     }
 
-    public boolean containsBlock(Material material) {
+    public static boolean containsBlock(Material material) {
         return dataBlockHashMap.containsKey(material);
     }
 
-    public boolean materialExist(EnumSet<BlockCategoryEnum> enumSet) {
-
-        return dataBlockHashMap.values().stream().anyMatch(dataBlockObject -> dataBlockObject.categoryBlockObject().categories().equals(enumSet));
-
+    public static boolean containsBlock(EnumSet<BlockCategoryEnum> enumSet) {
+        return dataBlockHashMap.values()
+                .stream()
+                .anyMatch(dataBlockObject -> dataBlockObject.categoryBlockObject().categories().equals(enumSet));
     }
 
-    public DataBlockObject getDataBlock(EnumSet<BlockCategoryEnum> targetCategories) {
+    public static DataBlockManager getDataBlock(EnumSet<BlockCategoryEnum> targetCategories) {
 
         return dataBlockHashMap.values().stream()
                 // Filter DataBlockObjects whose categories match the given EnumSet
@@ -438,9 +641,11 @@ public class BlockRegistry {
     }
 
 
-    public DataBlockObject getDataBlock(Material material) {
+    public static DataBlockManager getDataBlock(Material material) {
 
-        if (containsBlock(material)) return dataBlockHashMap.get(material);
+        if (containsBlock(material))
+
+            return dataBlockHashMap.get(material);
 
         else {
             System.out.println(" material does not exist " + material);

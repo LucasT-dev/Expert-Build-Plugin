@@ -1,6 +1,6 @@
 package fr.marodeur.expertbuild.enums;
 
-import fr.marodeur.expertbuild.object.block.BlockCategoryType;
+import fr.marodeur.expertbuild.object.block.category.BlockCategoryType;
 import fr.marodeur.expertbuild.object.block.category.ColorCategory;
 import fr.marodeur.expertbuild.object.block.category.ShapeCategory;
 import fr.marodeur.expertbuild.object.block.category.TypeCategory;

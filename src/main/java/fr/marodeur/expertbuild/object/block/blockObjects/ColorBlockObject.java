@@ -1,4 +1,4 @@
-package fr.marodeur.expertbuild.object.block;
+package fr.marodeur.expertbuild.object.block.blockObjects;
 
 public class ColorBlockObject {
 
