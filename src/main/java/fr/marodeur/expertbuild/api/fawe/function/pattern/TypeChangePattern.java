@@ -6,8 +6,8 @@ import com.sk89q.worldedit.function.pattern.AbstractExtentPattern;
 import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.world.block.BaseBlock;
 
-import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.enums.BlockCategoryEnum;
+import fr.marodeur.expertbuild.object.block.BlockData;
 
 import org.bukkit.Material;
 
@@ -36,11 +36,11 @@ public class TypeChangePattern extends AbstractExtentPattern {
 
         if (this.argsLength == 1) {
 
-            if (Main.getBlockData().containsBlock(oldMat)) {
+            if (BlockData.containsBlock(oldMat)) {
 
-                if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_1)) {
+                if (BlockData.getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_1)) {
 
-                    newMat = Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_1).getMaterial();
+                    newMat = BlockData.getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_1).getMaterial();
 
                     final BaseBlock[] baseblock = {BukkitAdapter.asBlockType(newMat).getItemType().getBlockType().getDefaultState().toBaseBlock()};
 
@@ -54,14 +54,14 @@ public class TypeChangePattern extends AbstractExtentPattern {
             }
         } else {
 
-            if (Main.getBlockData().containsBlock(oldMat)) {
+            if (BlockData.containsBlock(oldMat)) {
 
-                if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().containsCategory(blockCategoryArgs_1)) {
+                if (BlockData.getDataBlock(oldMat).categoryBlockObject().containsCategory(blockCategoryArgs_1)) {
 
 
-                    if (Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_2)) {
+                    if (BlockData.getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_2)) {
 
-                        newMat = Main.getBlockData().getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_2).getMaterial();
+                        newMat = BlockData.getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_2).getMaterial();
 
                         final BaseBlock[] baseblock = {BukkitAdapter.asBlockType(newMat).getItemType().getBlockType().getDefaultState().toBaseBlock()};
 
