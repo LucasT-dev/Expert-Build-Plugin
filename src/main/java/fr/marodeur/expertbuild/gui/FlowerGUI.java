@@ -239,7 +239,7 @@ public class FlowerGUI {
 
                                             if (contents.getItemData((finalI - (finalIter * 9))).itemBuilder().getType().equals(Material.YELLOW_BANNER)) {
 
-                                                itemBrushManager(event.getSlot() - 45, (finalI - (finalIter * 9)), event, fbp, set, contents, baseBlock);
+                                              itemBrushManager(event.getSlot() - 45, (finalI - (finalIter * 9)), event1, fbp, set, contents, baseBlock);
                                             }
                                         }));
 
