@@ -411,9 +411,6 @@ public class FlowerGUI {
             }
 
             fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
-
-            System.out.println("contents.getItemData(modifySlot).itemBuilder() = " + contents.getItemData(modifySlot).itemBuilder());
-
             contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.FACING).toString().toUpperCase());
         }
 
@@ -668,6 +665,34 @@ public class FlowerGUI {
 
             fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
             contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.LEVEL).toString().toUpperCase());
+        }
+
+//        baseBlockProperty.getStates().forEach((property, object) -> {
+//
+//            System.out.println("KEY : " + property.getKey().getName());
+//            System.out.println("VALUES : " + object.toString());
+//
+//            System.out.println("NAME : " + property.getName().toString());
+//            property.getValues().forEach(System.out::println);
+//
+//        });
+
+        //final PropertyKey FLOWER_AMOUNT = getOrCreate("FLOWER_AMOUNT");
+
+        //Modify Property FLOWER_AMOUNT
+        if (set.getKey().getName().equalsIgnoreCase("flower_amount")) {
+
+            if (event1.isRightClick()) {
+                int layer = Integer.parseInt(baseBlockProperty.getState(PropertyKey.getByName("flower_amount")).toString());
+                baseBlockProperty = baseBlockProperty.with(PropertyKey.getByName("flower_amount"), layer - 1);
+            }
+            if (event1.isLeftClick()) {
+                int layer = Integer.parseInt(baseBlockProperty.getState(PropertyKey.getByName("flower_amount")).toString());
+                baseBlockProperty = baseBlockProperty.with(PropertyKey.getByName("flower_amount"), layer + 1);
+            }
+
+            fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
+            contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.getByName("flower_amount")).toString().toUpperCase());
         }
     }
 
