@@ -610,6 +610,90 @@ public class BlockData {
         this.registerBlock(Material.SMOOTH_QUARTZ_STAIRS)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SMOOTH_QUARTZ, BlockCategoryEnum.STAIRS)));
 
+        // CUT COPPER
+        this.registerBlock(Material.CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+
+        // EXPOSED CUT COPPER
+        this.registerBlock(Material.EXPOSED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.EXPOSED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.EXPOSED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.EXPOSED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("EXPOSED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.EXPOSED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("EXPOSED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.EXPOSED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+        // WEATHERED CUT COPPER
+        this.registerBlock(Material.WEATHERED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WEATHERED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.WEATHERED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WEATHERED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("WEATHERED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WEATHERED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("WEATHERED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WEATHERED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+        // OXIDIZED CUT COPPER
+        this.registerBlock(Material.OXIDIZED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OXIDIZED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.OXIDIZED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OXIDIZED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("OXIDIZED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OXIDIZED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("OXIDIZED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OXIDIZED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+
+
+        // WAXED CUT COPPER
+        this.registerBlock(Material.WAXED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.WAXED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("WAXED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("WAXED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+
+        // EXPOSED CUT COPPER
+        this.registerBlock(Material.WAXED_EXPOSED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_EXPOSED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.WAXED_EXPOSED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_EXPOSED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("WAXED_EXPOSED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_EXPOSED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("WAXED_EXPOSED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_EXPOSED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+        // WEATHERED CUT COPPER
+        this.registerBlock(Material.WAXED_WEATHERED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_WEATHERED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.WAXED_WEATHERED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_WEATHERED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("WAXED_WEATHERED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_WEATHERED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("WAXED_WEATHERED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_WEATHERED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
+        // OXIDIZED CUT COPPER
+        this.registerBlock(Material.WAXED_OXIDIZED_CUT_COPPER_SLAB)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_OXIDIZED_CUT_COPPER, BlockCategoryEnum.SLAB)));
+        this.registerBlock(Material.WAXED_OXIDIZED_CUT_COPPER_STAIRS)
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_OXIDIZED_CUT_COPPER, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("WAXED_OXIDIZED_COPPER_DOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_OXIDIZED_CUT_COPPER, BlockCategoryEnum.DOOR)));
+        this.registerBlock("WAXED_OXIDIZED_COPPER_TRAPDOOR", "1.21.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WAXED_OXIDIZED_CUT_COPPER, BlockCategoryEnum.TRAPDOOR)));
+
     }
 
     public BlockData() {
