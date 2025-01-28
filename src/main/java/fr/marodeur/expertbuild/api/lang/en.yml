@@ -52,10 +52,10 @@ expbuild:
 
 
     selection:
-      set_pos_1: Pos 1 set to ('pos')
-      set_pos_1_with_area: Pos 1 set to ('pos') ('area')
-      set_pos_2: Pos 2 set to ('pos')
-      set_pos_2_with_area: Pos 2 set to ('pos') ('area')
+      set_pos_1: First pos set to ('pos')
+      set_pos_1_with_area: First pos set to ('pos') ('area')
+      set_pos_2: Second pos set to ('pos')
+      set_pos_2_with_area: Second pos set to ('pos') ('area')
       add_vertex_pos: Vertex add ('pos')
       selection_clear: Selection clear
       set_selection: Selection 'selection' set
