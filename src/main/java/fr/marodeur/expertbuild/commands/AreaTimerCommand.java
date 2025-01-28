@@ -102,19 +102,22 @@ public class AreaTimerCommand extends AbstractCommand {
 
            if (b) new Message.MessageSender("expbuild.message.commands.areatimer_delete", true, new String[]{areaName}).send(p);
 
-           else p.sendMessage(Main.prefix + "Error during the deleting");
+           else new Message.MessageSender("expbuild.message.commands.areatimer_error_delete", true, new String[]{areaName}).send(p);
 
         }
 
         if (args[0].equalsIgnoreCase("info")) {
 
-            p.sendMessage(Main.prefix + "Name : " + areaTimerParameter.getName() + " : \n" +
-                            "World: " + areaTimerParameter.getWorldName() + "\n" +
-                            "pos 1: " + areaTimerParameter.getPos1() + "\n" +
-                            "pos 2: " + areaTimerParameter.getPos2() + "\n" +
-                            "Total Player : " + areaTimerParameter.getTotalTimeInZone(p.getUniqueId()) + "\n" +
-                            "Total: " + areaTimerParameter.getTotalTimeInZone()
-                    );
+            new Message.MessageSender("expbuild.message.commands.areatimer_info", true,
+                    new String[]{
+                            areaTimerParameter.getName(),
+                            areaTimerParameter.getWorldName(),
+                            String.valueOf(areaTimerParameter.getPos1()),
+                            String.valueOf(areaTimerParameter.getPos2()),
+                            areaTimerParameter.getTotalTimeInZone(p.getUniqueId()),
+                            areaTimerParameter.getTotalTimeInZone()
+                    }).send(p);
+
             return;
         }
 

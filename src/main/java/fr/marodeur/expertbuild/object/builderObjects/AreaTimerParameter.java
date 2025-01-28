@@ -83,7 +83,15 @@ public class AreaTimerParameter {
 
     // Obtenir le temps total passé dans la zone pour un joueur
     public String getTotalTimeInZone(UUID playerUUID) {
-        return this.formatTime(totalTimeMap.getOrDefault(playerUUID, 0L));
+
+        long playerTime = totalTimeMap.getOrDefault(playerUUID, 0L);
+        long totalTime = totalTimeMap.values().stream().mapToLong(Long::longValue).sum();
+
+        // Calcul du pourcentage du temps total
+        double percentage = totalTime > 0 ? (double) playerTime / totalTime * 100 : 0;
+
+        // Formatage du temps individuel et ajout du pourcentage
+        return String.format("%s (%.2f%%)", this.formatTime(playerTime), percentage);
     }
 
     // Méthode pour obtenir le temps total cumulé de tous les joueurs dans la zone
