@@ -36,11 +36,19 @@ public class TypeChangePattern extends AbstractExtentPattern {
 
         if (this.argsLength == 1) {
 
+            System.out.println("oldMat = " + oldMat);
+
             if (BlockData.containsBlock(oldMat)) {
+
+                System.out.println("oldMat = " + oldMat);
 
                 if (BlockData.getDataBlock(oldMat).categoryBlockObject().hasEquivalent(blockCategoryArgs_1)) {
 
+                    System.out.println("has equivalent true");
+
                     newMat = BlockData.getDataBlock(oldMat).categoryBlockObject().getEquivalent(blockCategoryArgs_1).getMaterial();
+
+                    System.out.println("newMat = " + newMat);
 
                     final BaseBlock[] baseblock = {BukkitAdapter.asBlockType(newMat).getItemType().getBlockType().getDefaultState().toBaseBlock()};
 
@@ -52,6 +60,9 @@ public class TypeChangePattern extends AbstractExtentPattern {
                     return baseblock[0];
                 }
             }
+
+            System.out.println("----------------------------------------");
+
         } else {
 
             if (BlockData.containsBlock(oldMat)) {
