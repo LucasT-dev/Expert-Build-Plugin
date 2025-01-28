@@ -24,8 +24,7 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
-import fr.marodeur.expertbuild.object.block.BlockRegistry;
-import fr.marodeur.expertbuild.object.builderObjects.AreaTimerParameter;
+import fr.marodeur.expertbuild.object.block.BlockData;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
 import fr.marodeur.expertbuild.object.guibuilder.InventoryManager;
@@ -63,8 +62,6 @@ public class Main extends JavaPlugin {
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
 
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
-
-	private static BlockRegistry blockData;
 
 
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
@@ -140,7 +137,7 @@ public class Main extends JavaPlugin {
 		// LOAD MASK
 		registerMaskAndPattern();
 
-		blockData = new BlockRegistry();
+		BlockData blockData = new BlockData();
 
 
 		// UPDATE CHECKER
@@ -288,10 +285,6 @@ public class Main extends JavaPlugin {
 
 	public static HashMap<UUID, BrushBuilder> getHashMapBrushBuilder() {
 		return BrushBuilder;
-	}
-
-	public static BlockRegistry getBlockData() {
-		return blockData;
 	}
 
 	/**

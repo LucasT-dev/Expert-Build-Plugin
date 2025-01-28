@@ -107,6 +107,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.SIGN)));
         this.registerBlock("OAK_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("OAK_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.OAK_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.OAK, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.OAK_BUTTON)
@@ -134,6 +136,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.SIGN)));
         this.registerBlock("SPRUCE_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("SPRUCE_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.SPRUCE_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.SPRUCE, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.SPRUCE_BUTTON)
@@ -161,6 +165,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.SIGN)));
         this.registerBlock("BIRCH_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("BIRCH_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.BIRCH_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BIRCH, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.BIRCH_BUTTON)
@@ -188,6 +194,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.SIGN)));
         this.registerBlock("JUNGLE_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("JUNGLE_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.JUNGLE_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.JUNGLE, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.JUNGLE_BUTTON)
@@ -215,6 +223,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.SIGN)));
         this.registerBlock("ACACIA_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("ACACIA_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.ACACIA_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.ACACIA, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.ACACIA_BUTTON)
@@ -242,6 +252,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.SIGN)));
         this.registerBlock("DARK_OAK_HANGING_SIGN", "1.20.0")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("DARK_OAK_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.DARK_OAK_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.DARK_OAK, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.DARK_OAK_BUTTON)
@@ -269,6 +281,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.SIGN)));
         this.registerBlock("MANGROVE_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("MANGROVE_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock("MANGROVE_PRESSURE_PLATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MANGROVE, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock("MANGROVE_BUTTON", "1.18.1")
@@ -296,6 +310,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.SIGN)));
         this.registerBlock("CHERRY_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("CHERRY_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock("CHERRY_PRESSURE_PLATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock("CHERRY_BUTTON", "1.18.1")
@@ -323,6 +339,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.SIGN)));
         this.registerBlock("BAMBOO_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("BAMBOO_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock("BAMBOO_PRESSURE_PLATE", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock("BAMBOO_BUTTON", "1.18.1")
@@ -348,6 +366,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.SIGN)));
         this.registerBlock("CRIMSON_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("CRIMSON_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.CRIMSON_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CRIMSON, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.CRIMSON_BUTTON)
@@ -371,6 +391,8 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.SIGN)));
         this.registerBlock("WARPED_HANGING_SIGN", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("WARPED_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.WALL_HANGING_SIGN)));
         this.registerBlock(Material.WARPED_PRESSURE_PLATE)
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.WARPED, BlockCategoryEnum.PRESSURE_PLATE)));
         this.registerBlock(Material.WARPED_BUTTON)

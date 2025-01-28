@@ -18,6 +18,7 @@ public enum BlockCategoryEnum {
     FENCE(new ShapeCategory()),
     FENCE_GATE(new ShapeCategory()),
     HANGING_SIGN(new ShapeCategory()),
+    WALL_HANGING_SIGN(new ShapeCategory()),
     PRESSURE_PLATE(new ShapeCategory()),
     SIGN(new ShapeCategory()),
     SLAB(new ShapeCategory()),
