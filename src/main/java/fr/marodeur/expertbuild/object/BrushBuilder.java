@@ -251,7 +251,7 @@ public class BrushBuilder {
     public String toString() {
         return "BrushBuilder{" +
                 "uuid=" + uuid +
-                ", abstractBrush=" + abstractBrush +
+                ", abstractBrush=" + abstractBrush.getBrushName() +
                 ", isEnable=" + isEnable +
                 ", selMode=" + selMode +
                 ", flyMode=" + flyMode +
@@ -271,16 +271,6 @@ public class BrushBuilder {
                 .filter(registerBrush -> registerBrush.getBrushName().equalsIgnoreCase(brushBuilder.getBrushType().getBrushName()))
                 .forEach(registerBrush -> registerBrush.execute(brushBuilder, tool, loc, ploc));
     }
-
-    //MESSAGE:
-
-    public final String getMainPrefix() {
-        return Main.prefix;
-    }
-
-    /*public final String getFawePrefix() {
-        return Main.FawePrefix;
-    }*/
 
     public BrushBuilder sendMessage(String path, boolean prefix, String[]... var) {
 

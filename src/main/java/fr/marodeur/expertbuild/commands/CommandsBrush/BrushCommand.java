@@ -547,7 +547,7 @@ public class BrushCommand extends AbstractCommand {
                     Bukkit.getOnlinePlayers().stream()
                             .filter(player -> player.getName().equals(args[1]))
                             .forEach(player ->
-                                    p.sendMessage(Main.prefix + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
+                                    p.sendMessage("debug" + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
                 }
             }
 
