@@ -17,6 +17,8 @@ expbuild:
       not_new_update: Il n'y a pas de nouvelle mise à jour disponible actuellement
       new_update_available: Une nouvelle mise a jour est disponible. Vous avez 'v' version(s) de retard, vous utilisez la version 'v1' , version 'v2' disponible !
       unable_check_update: Inpossible de check les versions disponible 'error'
+      plugin_info: "Plugin version : 'v0' ; Fawe version : 'v1'"
+      null: " "
 
       day: jour
       hour: heure
@@ -38,6 +40,7 @@ expbuild:
       player_already_registered: Vous êtes déjà enregistré
       point_add: Point ajouté à ('point')
       point_not_save: Taille limite, point non sauvegardé
+      use_item_add_point: "Utilise l'item 'item' pour ajouter un nouveau point"
       set_mask: "Gmask ajouté: 'mask'"
 
     permission:
@@ -58,6 +61,10 @@ expbuild:
       player_log_command: "'player' a executé 'cmd'"
       copy_block: "'num' block(s) copié"
       no_selection_save: You have no selection to save
+      ClipboardHolder_null: "ClipboardHolder ou Clipboard est nul."
+      failed_paste_clipboard: "Impossible de coller le presse-papiers : 'msg'"
+      clipboard_paste_at: "Le presse-papiers a été collé à 'co'"
+
 
     error:
       error_region: Erreur région n° 'num' ! 'error'
@@ -125,6 +132,8 @@ expbuild:
       areatimer_already_pause: "AreaTimer 'areatimer' est déjà mis en pause"
       areatimer_resume: "AreaTimer 'areatimer' a repris"
       areatimer_already_resume: "AreaTimer 'areatimer' a déjà repris"
+      areatimer_error_delete: "Error during the deleting"
+      areatimer_info: "Name : 'name' : \n World:  'world' \n pos 1: 'pos1' \n pos 2: 'pos2' \n Total Player : 'totalPlayer' \n Total: 'total'"
 
     gui:
       back: Retour

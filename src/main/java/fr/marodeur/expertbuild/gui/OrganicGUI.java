@@ -599,9 +599,10 @@ public class OrganicGUI {
 
                                 }));
 
+
                         //tete
                         contents.set(new ItemData(2,
-                                new ItemBuilder(Main.prefix, Material.PLAYER_HEAD, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.PLAYER_HEAD, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Head", String.valueOf(goha_builder.getHead())})
@@ -623,7 +624,7 @@ public class OrganicGUI {
 
                         //bras
                         contents.set(new ItemData(10,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right arm", String.valueOf(goha_builder.getArmD())})
@@ -643,10 +644,10 @@ public class OrganicGUI {
                                     }
                                 }));
 
-                        contents.set(new ItemData(11, new ItemBuilder(Main.prefix, Material.BONE, 1)));
+                        contents.set(new ItemData(11, new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)));
 
                         contents.set(new ItemData(12,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Arm", String.valueOf(goha_builder.getArmG())})
@@ -668,7 +669,7 @@ public class OrganicGUI {
 
                         // Avant bras
                         contents.set(new ItemData(18,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true,Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Fore Arm", String.valueOf(goha_builder.getForeArmD())})
@@ -689,7 +690,7 @@ public class OrganicGUI {
                                 }));
 
                         contents.set(new ItemData(22,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Fore Arm", String.valueOf(goha_builder.getForeArmG())})
@@ -712,7 +713,7 @@ public class OrganicGUI {
 
                         // torse
                         contents.set(new ItemData(20,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Torso", String.valueOf(goha_builder.getTorso())})
@@ -733,11 +734,11 @@ public class OrganicGUI {
                                 }));
 
 
-                        contents.set(new ItemData(29, new ItemBuilder(Main.prefix, Material.BONE, 1)));
+                        contents.set(new ItemData(29, new ItemBuilder("expbuild.message.main.null", true,  Material.BONE, 1)));
 
                         // cuisse
                         contents.set(new ItemData(37,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Leg", String.valueOf(goha_builder.getLegD())})
@@ -759,7 +760,7 @@ public class OrganicGUI {
 
 
                         contents.set(new ItemData(39,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Leg", String.valueOf(goha_builder.getLegG())})
@@ -781,7 +782,7 @@ public class OrganicGUI {
 
                         // tibia
                         contents.set(new ItemData(46,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Right Tibia", String.valueOf(goha_builder.getTibiaD())})
@@ -803,7 +804,7 @@ public class OrganicGUI {
 
 
                         contents.set(new ItemData(48,
-                                new ItemBuilder(Main.prefix, Material.BONE, 1)
+                                new ItemBuilder("expbuild.message.main.null", true, Material.BONE, 1)
                                         .addEnchant(Enchantment.LUCK, 1)
                                         .addLore("expbuild.message.gui.interact_member", false)
                                         .addLore("expbuild.message.gui.switch_member", false, new String[]{"Left Tibia", String.valueOf(goha_builder.getTibiaG())})

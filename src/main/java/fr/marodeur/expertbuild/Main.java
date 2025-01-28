@@ -94,6 +94,9 @@ public class Main extends JavaPlugin {
 
 		reloadMessageConfig();
 
+		// LOAD MESSAGE
+		fileMessageManager = new Message().loadFileConfig();
+
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.plugin_enable", true).getMessage());
 		getLogger().info(" ____          ___  ");
 		getLogger().info("|      \\  /  |   ) ");
@@ -112,8 +115,6 @@ public class Main extends JavaPlugin {
 		// Check if server is in safe environments
 		if (dataPlugin.getJavaVersion() < 16) onDisable();
 
-		// LOAD MESSAGE
-		fileMessageManager = new Message().loadFileConfig();
 
 		loadBrush();
 		loadShape();

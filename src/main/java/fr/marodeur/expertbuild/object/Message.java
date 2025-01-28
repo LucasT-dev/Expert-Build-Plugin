@@ -104,20 +104,24 @@ public class Message {
                     String brutVariable = brutMessage.substring(first, second);
 
                     brutMessage = brutMessage.replace(brutVariable, var[0][i1]);
-
                 }
             }
 
             this.message = brutMessage;
 
             if (prefix) addPrefix();
+
+        }
+
+        public MessageSender(String path, String[]... var) {
+            this(path, true, var);
         }
 
         private void addPrefix() {
 
             StringBuilder sb = new StringBuilder(this.message);
 
-            sb.insert(0, Main.prefix);
+            sb.insert(0, Main.getConfiguration().prefix());
 
             this.message = sb.toString();
 

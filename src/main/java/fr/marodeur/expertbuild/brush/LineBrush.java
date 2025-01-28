@@ -97,9 +97,7 @@ public class LineBrush extends AbstractBrush {
 
             return true;
         } else {
-
-            //Todo Mettre en config et recup spectral arrow en config
-            brushBuilder.getPlayer().sendMessage(Main.prefix + " Use the spectral arrow for add new point");
+            brushBuilder.sendMessage("expbuild.message.brush.use_item_add_point", new String[]{ Main.getConfiguration().getTerraforming_tool_1().name()});
         }
         return false;
     }

@@ -240,7 +240,7 @@ public class FaweAPI {
 
         // Vérification de l'initialisation de clipboardHolder
         if (clipboardHolder == null || clipboardHolder.getClipboard() == null) {
-            this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "ClipboardHolder or Clipboard is null.");
+            bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.ClipboardHolder_null").getMessage());
             return;
         }
 
@@ -279,15 +279,18 @@ public class FaweAPI {
             localSession.remember(editSession);
 
         } catch (WorldEditException e) {
-
-            this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Failed to paste clipboard: " + e.getMessage());
+            bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.failed_paste_clipboard", new String[]{e.getMessage()}).getMessage());
 
         } finally {
             // Assurer que l'editSession est fermée pour éviter les fuites de ressources
             editSession.close();
 
-            if (sendMessage) this.bukkitPlayer.getPlayer().sendMessage(Main.prefix + "Clipboard paste at (" +
-                    to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ")");
+            if (sendMessage) {
+                bukkitPlayer.getPlayer().sendMessage(
+                        new Message.MessageSender("expbuild.message.selection.clipboard_paste_at",
+                                new String[]{"(" + to.getBlockX() + ", " + to.getBlockY() + ", " + to.getBlockZ() + ")"}).getMessage()
+                );
+            }
         }
     }
 

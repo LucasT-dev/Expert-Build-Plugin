@@ -17,6 +17,8 @@ expbuild:
       not_new_update: There is not a new update available
       new_update_available: There is a new update available. You are 'v' versions late, you are running on version 'v1' , version 'v2' is available !
       unable_check_update: Unable to check for updates 'error'
+      plugin_info: "Plugin version : 'v0' ; Fawe version : 'v1'"
+      null: " "
 
       day: day
       hour: hour
@@ -40,6 +42,7 @@ expbuild:
       player_not_registered: "You are not registered, execute: /fw register"
       point_add: Point add at ('point')
       point_not_save: Limit size, point not save
+      use_item_add_point: "Use 'item' for add new point"
       set_mask: "Gmask set: 'mask'"
 
     permission:
@@ -61,6 +64,9 @@ expbuild:
       player_log_command: "'player' executed 'cmd'"
       copy_block: "'num' block(s) copied"
       no_selection_save: You have no selection to save
+      ClipboardHolder_null: "ClipboardHolder or Clipboard is null."
+      failed_paste_clipboard: "Failed to paste clipboard : 'msg'"
+      clipboard_paste_at: "The clipboard has been pasted at 'co'"
 
     error:
       error_region: Region error n° 'num' ! 'error'
@@ -128,6 +134,8 @@ expbuild:
       areatimer_already_pause: "AreaTimer 'areatimer' already paused"
       areatimer_resume: "AreaTimer 'areatimer' has resumed"
       areatimer_already_resume: "AreaTimer 'areatimer' has already resumed"
+      areatimer_error_delete: "Error during the deleting"
+      areatimer_info: "Name : 'name' : \n World:  'world' \n pos 1: 'pos1' \n pos 2: 'pos2' \n Your Time : 'totalPlayer' \n Total: 'total'"
 
     gui:
       back: Back
