@@ -63,7 +63,7 @@ public class Main extends JavaPlugin {
 
 	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
 
-
+	// A supprimer a therme
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
 
 
@@ -169,8 +169,6 @@ public class Main extends JavaPlugin {
 		getCommand("silex").setExecutor(new Terraforming_Painting());
 		getCommand("terra").setExecutor(new Terraforming_Painting());
 		getCommand("vox").setExecutor(new Terraforming_Painting());
-		getCommand("1").setExecutor(new Terraforming_Painting());
-		getCommand("2").setExecutor(new Terraforming_Painting());
 		getCommand("c").setExecutor(new Terraforming_Painting());
 		getCommand("cube").setExecutor(new Terraforming_Painting());
 		getCommand("poly").setExecutor(new Terraforming_Painting());

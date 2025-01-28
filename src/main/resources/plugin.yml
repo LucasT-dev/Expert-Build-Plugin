@@ -35,14 +35,6 @@ commands:
     descrption: give all tool
     permission: exp.command.terra
 
-  1:
-    description: First position WE
-    permission: exp.command.tool
-
-  2:
-    description: Second position WE
-    permission: exp.command.tool
-
   c:
     aliases: copy
     description: copy WE
