@@ -4,11 +4,13 @@ import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
+import fr.marodeur.expertbuild.object.block.BlockData;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +24,7 @@ import java.util.List;
 
 public class CommandsInfo implements CommandExecutor, TabCompleter {
 
-	private final List<String> list = Arrays.asList("info", "reload", "sel_mode", "fly_mode");
+	private final List<String> list = Arrays.asList("info", "reload", "sel_mode", "fly_mode", "test");
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String msg, String[] args) {
@@ -49,13 +51,10 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 				return false;
 			}
 			if (args[0].equalsIgnoreCase("info")) {
-				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
 
-				sender.sendMessage(Main.prefix + "Plugin version : " + Main.getDataPlugin().getPluginVersion() + "\n" +
-						"Fawe version : " + Main.getDataPlugin().getFaweVersion());
+				new Message.MessageSender("expbuild.message.main.plugin_info", new String[]{Main.getDataPlugin().getPluginVersion(), Main.getDataPlugin().getFaweVersion()}).send(sender);
 
 				//Github Documentation
-				sender.sendMessage("§7--- §8[§5§oEXP-Build§8] §7---");
 				TextComponent github_doc = new TextComponent("§5EXP-Build §7Doc : click here");
 				github_doc.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 						new ComponentBuilder("§7Open documentation URL").create()));
@@ -119,7 +118,25 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 					new Message.MessageSender("expbuild.message.permission.console_not_execute_cmd", true).send(sender);
                 }
                 return false;
-            } else {
+            }
+
+
+			if(args[0].equalsIgnoreCase("test")) {
+
+				//SchematicDowngradeHandler.readSchematic("C:/Bureau/Serveur MC/Server local paper 1.20.6/plugins/FastAsyncWorldEdit/schematics/test_1_21.schem",
+						/*"C:/Bureau/Serveur MC/Server local paper 1.20.6/plugins/FastAsyncWorldEdit/schematics/test_1_21.schem"*/
+						//(Player) sender);
+
+				System.out.println("BlockData.getDataBlock(Material.STONE) = " + BlockData.getDataBlock(Material.STONE).categoryBlockObject());
+
+				System.out.println("BlockData.containsBlock(Material.BEACON) = " + BlockData.containsBlock(Material.BEACON));
+
+				System.out.println("BlockData.getDataBlock(Material.FEATHER) = " + BlockData.getDataBlock(Material.FEATHER).categoryBlockObject());
+
+				return false;
+
+
+			} else {
 				new Message.MessageSender("expbuild.message.commands.use", true, new String[]{"/expbuild <info, reload, sel_mode, fly_mode>"}).send(sender);
 			}
 		}

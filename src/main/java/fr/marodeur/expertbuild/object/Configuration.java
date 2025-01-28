@@ -18,11 +18,12 @@ public class Configuration {
     File file = new File("plugins/ExpertBuild/config.yml");
     FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
 
-    private final static String latestVersion = "23";
+    private final static String latestVersion = "24";
 
     private final Logger log = Logger.getLogger("Expert-Build");
 
     private String version;
+    private String prefix;
     private int max_rayon_brush;
     private int default_brush_rayon;
     private int default_air_brush;
@@ -82,6 +83,9 @@ public class Configuration {
         try {
 
             this.version = yml.getString("build.version");
+
+            this.prefix = yml.getString("build.prefix");
+
             this.max_rayon_brush = yml.getInt("build.max_brush_rayon");
             this.default_brush_rayon = yml.getInt("build.default_brush_rayon");
             this.default_air_brush = yml.getInt("build.default_air_brush");
@@ -149,6 +153,10 @@ public class Configuration {
 
     public String getVersion() {
         return this.version;
+    }
+
+    public String prefix() {
+        return prefix;
     }
     public int getMaxRayonBrush() {
         return this.max_rayon_brush;
@@ -536,6 +544,20 @@ public class Configuration {
 
         if (this.version.equals("23")) {
             //Update config file from 23 to 24
+
+            // Prefix en config
+            yml.set("build.prefix", "§8[§5§oEXP-Build§8] §l>§l§7 ");
+
+            yml.set("build.version", "24");
+            this.version = "24";
+
+            yml.save(file);
+
+            //for next update
+        }
+
+        if (this.version.equals("24")) {
+            //Update config file from 24 to 25
 
             //for next update
         }
