@@ -4,15 +4,22 @@ package fr.marodeur.expertbuild.object.builderObjects;
 import com.sk89q.worldedit.extent.clipboard.Clipboard;
 import com.sk89q.worldedit.session.ClipboardHolder;
 
+import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.Flag;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public class ClipboardParameter extends IDataProfile {
 
@@ -111,9 +118,31 @@ public class ClipboardParameter extends IDataProfile {
                 '}';
     }
 
+    public static List<String> getClipboardsSaveInFile(UUID uuid) {
 
-    public static List<String> getClipboardsSaveInFile() {
-        return clipboardsFolder;
+        if (Main.getConfiguration().getShareClipboardSaved()) {
+            return clipboardsFolder;
+        } else {
+
+            return clipboardsFolder.parallelStream()
+                    .filter(clipboardFolder -> {
+                        File ownerFile = new File(FileManager.clipboardFile.path() + "/" + clipboardFolder + "/" + "data.yml");
+
+                        if (!ownerFile.exists()) {
+                            createOwnerFile(uuid, ownerFile, true);
+                        }
+
+                        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(ownerFile);
+
+                        // Autorisation de partage des clipboard sur le serveur
+                        if (Main.getConfiguration().getShareClipboardSaved()) {
+                            return (uuid.toString().equals(yaml.getString("owner"))) || (yaml.getBoolean("freeAccess"));
+                        } else {
+                            return (uuid.toString().equals(yaml.getString("owner")));
+                        }
+                    })
+                    .collect(Collectors.toList());
+        }
     }
 
     public static void addClipboardsFolder(String clipboardFolder) {
@@ -128,21 +157,25 @@ public class ClipboardParameter extends IDataProfile {
         return clipboardsFolder.contains(folderTest);
     }
 
-    public void saveToFolder(String clipboardFolderName) {
+    public void saveToFolder(String clipboardFolderName, boolean freeAccess) {
 
         new File(FileManager.clipboardFile.path() + "/" + clipboardFolderName).mkdirs();
+
+        File ownerFile = new File(FileManager.clipboardFile.path() + "/" + clipboardFolderName + "/" + "data.yml");
 
         for (int i = 0; i < this.clipboardHolders.size(); i++) {
 
             File file = new File(FileManager.clipboardFile.path() + "/" + clipboardFolderName + "/" + getClipboardName(i) + ".schem");
             File flagFile = new File(FileManager.clipboardFile.path() + "/" + clipboardFolderName + "/" + getClipboardName(i) + ".json");
 
+
             getFlag(i).saveJsonToFile(flagFile);
 
             new FaweAPI(getPlayer()).saveClipboardToFile(file, getClipboardHolder(i).getClipboard());
 
-            addClipboardsFolder(clipboardFolderName);
+            createOwnerFile(getProfileID(), ownerFile, freeAccess);
 
+            addClipboardsFolder(clipboardFolderName);
         }
     }
 
@@ -197,6 +230,26 @@ public class ClipboardParameter extends IDataProfile {
                 }
             }
             directory.delete(); // Supprime le dossier lui-même
+        }
+    }
+
+    private static void createOwnerFile(UUID uuid, File ownerFile, boolean freeAccess) {
+
+        try {
+            ownerFile.createNewFile();
+
+            DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+            YamlConfiguration yaml = YamlConfiguration.loadConfiguration(ownerFile);
+
+            yaml.set("owner", uuid.toString());
+            yaml.set("freeAccess", freeAccess);
+            yaml.set("creation", dateFormat.format(date));
+
+            yaml.save(ownerFile);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

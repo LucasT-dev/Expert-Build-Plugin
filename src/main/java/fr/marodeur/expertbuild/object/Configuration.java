@@ -51,6 +51,8 @@ public class Configuration {
     private Material terraforming_tool_1;
     private Material terraforming_tool_2;
 
+    private boolean share_clipboard_saved;
+
 
     private int timelapse_max_block_per_tick;
     private int max_timelapse_in_same_time;
@@ -113,6 +115,8 @@ public class Configuration {
             this.max_point_saved = yml.getInt("build.max_point_saved");
             this.terraforming_tool_1 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_1")));
             this.terraforming_tool_2 = Material.matchMaterial(Objects.requireNonNull(yml.getString("build.terraforming_tool_2")));
+            this.share_clipboard_saved = yml.getBoolean("build.share_clipboard_saved");
+
 
             this.timelapse_max_block_per_tick = yml.getInt("build.timelapse_max_block_per_tick");
             this.max_timelapse_in_same_time = yml.getInt("build.max_timelapse_in_same_time");
@@ -231,6 +235,10 @@ public class Configuration {
         return terraforming_tool_2;
     }
 
+    public boolean getShareClipboardSaved() {
+        return share_clipboard_saved;
+    }
+
     public int getTimelapse_max_block_per_tick() {
         return timelapse_max_block_per_tick;
     }
@@ -282,46 +290,7 @@ public class Configuration {
     }
 
 
-    @Override
-    public String toString() {
-        return "Configuration{" +
-                "version='" + version + '\'' +
-                ", max_rayon_brush=" + max_rayon_brush +
-                ", default_brush_rayon=" + default_brush_rayon +
-                ", default_air_brush=" + default_air_brush +
-                ", default_material_brush=" + default_material_brush +
-                ", default_pattern_brush='" + default_pattern_brush + '\'' +
-                ", default_biome_brush=" + default_biome_brush +
-                ", max_brush_distance=" + max_brush_distance +
-                ", display_bezier_curve=" + display_bezier_curve +
-                ", particle_bezier_curve_type=" + particle_bezier_curve_type +
-                ", coefficient_particle_number=" + coefficient_particle_number +
-                ", display_convex_line=" + display_convex_line +
-                ", particle_convex_type_line=" + particle_convex_type_line +
-                ", spacing_between_particles=" + spacing_between_particles +
-                ", wand_click_in_air=" + wand_click_in_air +
-                ", sihft_click_with_wand=" + sihft_click_with_wand +
-                ", log_shortcut=" + log_shortcut +
-                ", wand_item=" + wand_item +
-                ", max_file_size=" + max_file_size +
-                ", max_point_saved=" + max_point_saved +
-                ", terraforming_tool_1=" + terraforming_tool_1 +
-                ", terraforming_tool_2=" + terraforming_tool_2 +
-                ", timelapse_max_block_per_tick=" + timelapse_max_block_per_tick +
-                ", arm_correction_factor=" + arm_correction_factor +
-                ", default_material='" + default_material + '\'' +
-                ", default_orga_height=" + default_orga_height +
-                ", lang='" + lang + '\'' +
-                ", state_server_1=" + state_server_1 +
-                ", server_name_1='" + server_name_1 + '\'' +
-                ", state_server_2=" + state_server_2 +
-                ", server_name_2='" + server_name_2 + '\'' +
-                ", state_server_3=" + state_server_3 +
-                ", server_name_3='" + server_name_3 + '\'' +
-                ", state_server_4=" + state_server_4 +
-                ", server_name_4='" + server_name_4 + '\'' +
-                '}';
-    }
+
 
     private boolean getFileIsUpToDate() {
 
@@ -547,6 +516,7 @@ public class Configuration {
 
             // Prefix en config
             yml.set("build.prefix", "§8[§5§oEXP-Build§8] §l>§l§7 ");
+            yml.set("build.share_clipboard_saved", false);
 
             yml.set("build.version", "24");
             this.version = "24";

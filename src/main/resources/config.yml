@@ -134,6 +134,13 @@ build:
   # Use item name
   terraforming_tool_2: CLAY_BALL
 
+  # Allows you to share with other players the brush clipboard saved in config (/fw clipboard save)
+  # Default : false
+  # Use boolean value (true / false)
+  share_clipboard_saved: false
+
+
+
   # Maximum possible number of blocks removed per tick with the /timelapse command
   # Default : 40
   # Use integer value > 1
@@ -148,6 +155,7 @@ build:
   # Default : true
   # Use boolean value (true / false)
   send_message_builder_register: true
+
 
   GOHA:
     #Arm length correction factor
