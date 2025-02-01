@@ -314,7 +314,7 @@ public class CommandTimelapse extends AbstractCommand {
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // START int trier
-        subCommandSender.addSubCommand(new SubCommandSelector().getList(2, Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "inverse_diagonal", "inverse_cylinder", "inverse_spiral", "random", "circle", "inverse_circle"))
+        subCommandSender.addSubCommand(new SubCommandSelector().getList(2, Arrays.asList("creasing", "diagonal", "random_diagonal", "cylinder", "spiral", "square_sweep", "inverse_diagonal", "inverse_cylinder", "inverse_spiral", "random", "circle", "inverse_circle"))
                 .toSubCommand("None", new ConditionArgumentBefore("start", 0)));
 
         // /timelapse start 1 shape mask
@@ -411,39 +411,48 @@ class Timelapse {
                 GlueList<BlockVectorTool> sortList = new GlueList<>();
                 sortList.addAll(blockVectorTools.stream().toList());
 
-                if (args[2].contains("creasing")) {
+                if (args[2].equalsIgnoreCase("creasing")) {
 
                     blockVectorTools = new BlockVectorTool().XZcreasing(sortList);
                 }
-                if (args[2].contains("diagonal")) {
+                if (args[2].equalsIgnoreCase("diagonal")) {
 
                     blockVectorTools = new BlockVectorTool().XZDiagonal(sortList);
                 }
-                if (args[2].contains("random_diagonal")) {
+                if (args[2].equalsIgnoreCase("random_diagonal")) {
 
                     blockVectorTools = new BlockVectorTool().XZRandomDiagonal(sortList);
                 }
-                if (args[2].contains("cylinder")) {
+                if (args[2].equalsIgnoreCase("cylinder")) {
 
                     blockVectorTools = new BlockVectorTool().XZCylinder(sortList);
                 }
-                if (args[2].contains("spiral")) {
+                if (args[2].equalsIgnoreCase("spiral")) {
 
                     blockVectorTools = new BlockVectorTool().XZSpiral(sortList);
                 }
-                if (args[2].contains("circle")) {
+                if (args[2].equalsIgnoreCase("circle")) {
 
                     blockVectorTools = new BlockVectorTool().XZCircleSweep(sortList);
                 }
-
-                if (args[2].contains("random")) {
+                if (args[2].equalsIgnoreCase("random")) {
 
                     blockVectorTools = new BlockVectorTool().XZRandom(sortList);
+                }
+
+                if (args[2].equalsIgnoreCase("square_sweep")) {
+
+                    blockVectorTools = new BlockVectorTool().XZcreasing(sortList);
+
+                    if (integer % 2 == 0) {
+                        blockVectorTools = new BlockVectorTool().reverseDeque(blockVectorTools);
+                    }
                 }
 
                 // Inverse la Queue de block a retirer
                 if (args[2].startsWith("inverse_")) {
                     blockVectorTools = new BlockVectorTool().reverseDeque(blockVectorTools);
+
                 }
             }
 
