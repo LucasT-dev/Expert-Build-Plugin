@@ -15,7 +15,6 @@ import fr.marodeur.expertbuild.commands.CommandsTimeLapse.CommandTimelapse;
 import fr.marodeur.expertbuild.commands.commandPainting.CommandPainting;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.api.fawe.function.mask.OngroundMask;
-import fr.marodeur.expertbuild.api.metrics.Metrics;
 import fr.marodeur.expertbuild.brush.*;
 import fr.marodeur.expertbuild.listeners.BrushListener;
 import fr.marodeur.expertbuild.listeners.FAWEListener;
@@ -24,14 +23,12 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
-import fr.marodeur.expertbuild.object.block.BlockData;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
 import fr.marodeur.expertbuild.object.guibuilder.InventoryManager;
 import fr.marodeur.expertbuild.object.shape.CylinderShape;
 import fr.marodeur.expertbuild.object.shape.SphereShape;
 
-import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import org.bukkit.Bukkit;
@@ -101,23 +98,18 @@ public class Main extends JavaPlugin {
 		getLogger().info("|       /\\   |     ");
 		getLogger().info("|___   /  \\  |     ");
 		getLogger().info("Version : " + dataPlugin.getPluginVersion() + " / by Marodeur");
-		getLogger().info("FAWE server version : " + WorldEdit.getVersion());
-		getLogger().info("This plugin is not affiliated with Mojang Studios");
+		getLogger().info("FAWE server version : " + dataPlugin.getFaweVersion());
+		getLogger().info("This plugin is not affiliated with Microsoft and Mojang Studios");
 
 		WorldEditPlugin = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
 
-		//bstat
-		bstatsManager(new Metrics(this, 16755));
-
 		// Check if server is in safe environments
 		if (dataPlugin.getJavaVersion() < 16) onDisable();
-
 
 		loadBrush();
 		loadShape();
 
 		registerListeners();
-
 		registerCommand();
 
 		// LOAD DATA PROFILE
@@ -136,8 +128,6 @@ public class Main extends JavaPlugin {
 
 		// LOAD MASK
 		registerMaskAndPattern();
-
-		BlockData blockData = new BlockData();
 
 
 		// UPDATE CHECKER
@@ -360,22 +350,6 @@ public class Main extends JavaPlugin {
 		shape.registerShape(new SphereShape());
 		shape.registerShape(new CylinderShape());
 
-	}
-
-	/**
-	 *
-	 * Send server use expert-build plugin and number of players connected
-	 *
-	 * @param metrics
-	 */
-	private void bstatsManager(@NotNull Metrics metrics) {
-
-		//metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
-
-		metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> {
-			// (This is useless as there is already a player chart by default.)
-			return Bukkit.getOnlinePlayers().size();
-		}));
 	}
 
 	@Override

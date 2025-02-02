@@ -1,7 +1,9 @@
 package fr.marodeur.expertbuild.object;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.metrics.Metrics;
 import org.bukkit.Bukkit;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,13 +13,16 @@ import java.util.function.Consumer;
 
 public class DataPlugin {
 
+    private static final int SPIGOT_MC_ID = 110059;
+    private static final int BSTATS_ID = 16755;
+
     private final String pluginVersion;
     public String latestVersion;
     public String lateVersion;
     private final int javaVersion;
     private final String bukkitVersion;
     private final String FaweVersion;
-    private final int MetricsId = 110059;
+
 
     private final boolean hasPlotSquared;
 
@@ -37,6 +42,9 @@ public class DataPlugin {
                 main.getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.new_update_available", true, new String[]{this.getLateVersion(), this.getPluginVersion(), this.getLatestVersion()}).getMessage());
             }
         },getMetricsId());
+
+        //bstat
+        bstatsManager(new Metrics(main, BSTATS_ID));
     }
 
 
@@ -65,7 +73,7 @@ public class DataPlugin {
     }
 
     public int getMetricsId() {
-        return MetricsId;
+        return SPIGOT_MC_ID;
     }
 
     public boolean hasPlotSquared() {
@@ -94,5 +102,21 @@ public class DataPlugin {
                 Main.getInstance().getLogger().severe(new Message.MessageSender("expbuild.message.main.unable_check_update", true, new String[]{e.getMessage()}).getMessage());
             }
         });
+    }
+
+    /**
+     *
+     * Send server use expert-build plugin and number of players connected
+     *
+     * @param metrics
+     */
+    private void bstatsManager(@NotNull Metrics metrics) {
+
+        //metrics.addCustomChart(new Metrics.SimplePie("chart_id", () -> "My value"));
+
+        metrics.addCustomChart(new Metrics.SingleLineChart("players", () -> {
+            // (This is useless as there is already a player chart by default.)
+            return Bukkit.getOnlinePlayers().size();
+        }));
     }
 }
