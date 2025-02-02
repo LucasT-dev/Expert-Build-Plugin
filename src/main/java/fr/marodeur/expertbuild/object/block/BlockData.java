@@ -322,6 +322,35 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.CHERRY, BlockCategoryEnum.SAPLING)));
 
 
+        // PALE_OAK
+        this.registerBlock("PALE_OAK_SLAB", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.SLAB)));
+        this.registerBlock("PALE_OAK_STAIRS", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("PALE_OAK_FENCE", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.FENCE)));
+        this.registerBlock("PALE_OAK_FENCE_GATE", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.FENCE_GATE)));
+        this.registerBlock("PALE_OAK_DOOR", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.DOOR)));
+        this.registerBlock("PALE_OAK_TRAPDOOR", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.TRAPDOOR)));
+        this.registerBlock("PALE_OAK_SIGN", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.SIGN)));
+        this.registerBlock("PALE_OAK_HANGING_SIGN", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.HANGING_SIGN)));
+        this.registerBlock("PALE_OAK_WALL_HANGING_SIGN", "1.20.0")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.WALL_HANGING_SIGN)));
+        this.registerBlock("PALE_OAK_PRESSURE_PLATE", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.PRESSURE_PLATE)));
+        this.registerBlock("PALE_OAK_BUTTON", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.BUTTON)));
+        this.registerBlock("PALE_OAK_LEAVES", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.LEAVES)));
+        this.registerBlock("PALE_OAK_SAPLING", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.PALE_OAK, BlockCategoryEnum.SAPLING)));
+
+
         // BAMBOO
         this.registerBlock("BAMBOO_SLAB", "1.18.1")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.BAMBOO, BlockCategoryEnum.SLAB)));
@@ -478,6 +507,14 @@ public class BlockData {
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MUD, BlockCategoryEnum.STAIRS)));
         this.registerBlock("MUD_BRICK_WALL", "1.20.4")
                 .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.MUD, BlockCategoryEnum.WALL)));
+
+        // RESIN
+        this.registerBlock("RESIN_BRICK_SLAB", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RESIN, BlockCategoryEnum.SLAB)));
+        this.registerBlock("RESIN_BRICK_STAIRS", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RESIN, BlockCategoryEnum.STAIRS)));
+        this.registerBlock("RESIN_BRICK_WALL", "1.21.4")
+                .addCategories(new CategoryBlockObject(EnumSet.of(BlockCategoryEnum.RESIN, BlockCategoryEnum.WALL)));
 
 
         // SANDSTONE

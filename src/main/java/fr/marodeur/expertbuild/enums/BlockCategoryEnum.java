@@ -46,6 +46,7 @@ public enum BlockCategoryEnum {
     JUNGLE(new TypeCategory()),
     MANGROVE(new TypeCategory()),
     OAK(new TypeCategory()),
+    PALE_OAK(new TypeCategory()),
     SPRUCE(new TypeCategory()),
     WARPED(new TypeCategory()),
 
@@ -80,6 +81,8 @@ public enum BlockCategoryEnum {
     BRICK(new TypeCategory()),
 
     MUD(new TypeCategory()),
+
+    RESIN(new TypeCategory()),
 
     SANDSTONE(new TypeCategory()),
     SMOOTH_SANDSTONE(new TypeCategory()),
