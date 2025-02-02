@@ -667,17 +667,31 @@ public class FlowerGUI {
             contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.LEVEL).toString().toUpperCase());
         }
 
-//        baseBlockProperty.getStates().forEach((property, object) -> {
-//
-//            System.out.println("KEY : " + property.getKey().getName());
-//            System.out.println("VALUES : " + object.toString());
-//
-//            System.out.println("NAME : " + property.getName().toString());
-//            property.getValues().forEach(System.out::println);
-//
-//        });
+        //Modify Property ROTATION
+        if (set.getKey().getName().equalsIgnoreCase("ROTATION")) {
 
-        //final PropertyKey FLOWER_AMOUNT = getOrCreate("FLOWER_AMOUNT");
+            if (event1.isRightClick()) {
+                int layer = Integer.parseInt(baseBlockProperty.getState(PropertyKey.ROTATION).toString());
+                baseBlockProperty = baseBlockProperty.with(PropertyKey.ROTATION, layer - 1);
+            }
+            if (event1.isLeftClick()) {
+                int layer = Integer.parseInt(baseBlockProperty.getState(PropertyKey.ROTATION).toString());
+                baseBlockProperty = baseBlockProperty.with(PropertyKey.ROTATION, layer + 1);
+            }
+
+            fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
+            contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.ROTATION).toString().toUpperCase());
+        }
+
+        // Modify Property TIP
+        if (set.getKey().getName().equalsIgnoreCase("tip")) {
+
+            boolean tip = Boolean.parseBoolean(baseBlockProperty.getState(PropertyKey.getByName("tip")).toString());
+            baseBlockProperty = baseBlock.with(PropertyKey.getByName("tip"), !tip);
+
+            fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
+            contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.getByName("tip")).toString().toUpperCase());
+        }
 
         //Modify Property FLOWER_AMOUNT
         if (set.getKey().getName().equalsIgnoreCase("flower_amount")) {
@@ -694,7 +708,31 @@ public class FlowerGUI {
             fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
             contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.getByName("flower_amount")).toString().toUpperCase());
         }
+
+        // Modify Property TIP
+        if (set.getKey().getName().equalsIgnoreCase("bottom")) {
+
+            boolean bottom = Boolean.parseBoolean(baseBlockProperty.getState(PropertyKey.getByName("bottom")).toString());
+            baseBlockProperty = baseBlock.with(PropertyKey.getByName("bottom"), !bottom);
+
+            fbp.addFlowerMaterial(baseBlockProperty, materialIndex);
+            contents.updateLore(modifySlot, 1, "Value : §7" + baseBlockProperty.getState(PropertyKey.getByName("bottom")).toString().toUpperCase());
+        }
+
+//        baseBlockProperty.getStates().forEach((property, object) -> {
+//
+//            System.out.println("KEY : " + property.getKey().getName());
+//            System.out.println("VALUES : " + object.toString());
+//
+//            System.out.println("NAME : " + property.getName().toString());
+//            property.getValues().forEach(System.out::println);
+//
+//        });
     }
+
+
+
+
 
     private static void buildBrush(@NotNull BrushBuilder brushBuilder) {
 
@@ -721,6 +759,13 @@ public class FlowerGUI {
             }
             stringBuilder.append(fbp.airBrush())
                     .append("%0");
+
+
+            String toRemove = ",is_waxed:0B,id:'minecraft:sign',front_text:}";
+            int start = stringBuilder.indexOf(toRemove);
+            if (start != -1) {
+                stringBuilder.delete(start, start + toRemove.length());
+            }
 
             brushBuilder.setPattern(new FaweAPI(brushBuilder.getPlayer()).getPattern(stringBuilder.toString()));
         }
