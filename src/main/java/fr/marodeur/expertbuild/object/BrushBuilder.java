@@ -32,7 +32,6 @@ public class BrushBuilder {
     private Boolean selMode;
     private Boolean flyMode;
     private Integer radius;
-    private int tickRT; // tick repeater
     private Pattern pattern;
 
     private UUID particleID;
@@ -49,7 +48,6 @@ public class BrushBuilder {
         this.selMode = selMode;
         this.flyMode = flyMode;
         this.radius = rayon;
-        this.tickRT = tickRT;
         this.pattern = pattern;
         this.particleID = particleID;
 
@@ -110,23 +108,15 @@ public class BrushBuilder {
     public UUID getUUID() {
         return uuid;
     }
-
-    public World getWorld() {
-        return Bukkit.getWorld(this.uuid);
-    }
-
     public AbstractBrush getBrushType() {
         return abstractBrush;
     }
-
     public Boolean getEnable() {
         return isEnable;
     }
-
     public Boolean getSelMode() {
         return selMode;
     }
-
     public Boolean getFlyMode() {
         return flyMode;
     }
@@ -135,24 +125,11 @@ public class BrushBuilder {
         return radius;
     }
 
-    public int getTickRT() {
-        return tickRT;
-    }
-
     public Pattern getPattern() {
         return pattern;
     }
-
     public UUID getParticleID() {
         return particleID;
-    }
-
-
-
-
-
-    public boolean hasPermission(String permission) {
-        return getPlayer().hasPermission(permission);
     }
 
     public Player getPlayer() {
@@ -218,11 +195,6 @@ public class BrushBuilder {
         return this;
     }
 
-    public BrushBuilder setTickRT(int tickRT) {
-        this.tickRT = tickRT;
-        return this;
-    }
-
     public BrushBuilder setPattern(Pattern pattern) {
         this.pattern = pattern;
         return this;
@@ -242,7 +214,6 @@ public class BrushBuilder {
                 ", selMode=" + selMode +
                 ", flyMode=" + flyMode +
                 ", radius=" + radius +
-                ", tickRT=" + tickRT +
                 ", pattern=" + pattern.toString() +
                 '}';
     }
@@ -260,23 +231,13 @@ public class BrushBuilder {
     public BrushBuilder sendMessage(String path, boolean prefix, String[]... var) {
 
         new Message.MessageSender(path, prefix, var).send(Bukkit.getPlayer(uuid));
-
         return this;
-
     }
 
     public BrushBuilder sendMessage(String path, String[]... var) {
-
         return sendMessage(path, true, var);
     }
 
-    /*public BrushBuilder sendMessage(String msg) {
-
-        Bukkit.getPlayer(this.uuid).sendMessage(getMainPrefix() + msg);
-
-        return this;
-
-    }*/
 
     /**
      * Register BrushBuilder of player in HashMap
@@ -301,7 +262,6 @@ public class BrushBuilder {
                 true,
                 true,
                 CONFIG.getDefaultBrushRayon(),
-                4,
                 new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),
                 UUID.randomUUID()));
     }
@@ -335,7 +295,7 @@ public class BrushBuilder {
             BrushBuilder bb = Main.getBrushBuilder(p);
 
             if (isEmpty(bb)) {
-                throw new NullPointerException(p.getClientBrandName() + " has not been registered as a builder, for this he must be an operator or have the `exp.register` permission");
+                throw new NullPointerException(p.getName() + " has not been registered as a builder, for this he must be an operator or have the `exp.register` permission");
             }
 
             return bb;
