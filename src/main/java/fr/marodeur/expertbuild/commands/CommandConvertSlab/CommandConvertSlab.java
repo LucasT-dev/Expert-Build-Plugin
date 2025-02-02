@@ -28,13 +28,13 @@ public class CommandConvertSlab extends AbstractCommand {
 
     private static final List<String> WOODEN_MATERIAL = Arrays.asList(
             "OAK_SLAB", "DARK_OAK_SLAB", "SPRUCE_SLAB", "BIRCH_SLAB", "JUNGLE_SLAB", "ACACIA_SLAB", "MANGROVE_SLAB",
-            "BAMBOO_SLAB", "CHERRY_SLAB", "WARPED_SLAB", "CRIMSON_SLAB");
+            "BAMBOO_SLAB", "CHERRY_SLAB", "WARPED_SLAB", "CRIMSON_SLAB", "PALE_OAK_SLAB");
     private static final List<String> SPECIAL_BLOCK = List.of("PURPUR_SLAB", "QUARTZ_SLAB");
 
     private static final List<String> SPECIAL_BLOCKS = List.of("STONE_BRICK_SLAB", "MOSSY_STONE_BRICK_SLAB",
             "BRICK_SLAB", "TUFF_BRICK_SLAB", "DEEPSLATE_BRICK_SLAB", "PRISMARINE_BRICK_SLAB", "MUD_BRICK_SLAB",
             "DEEPSLATE_TILE_SLAB", "NETHER_BRICK_SLAB", "RED_NETHER_BRICK_SLAB", "END_STONE_BRICK_SLAB",
-            "POLISHED_BLACKSTONE_BRICK_SLAB");
+            "POLISHED_BLACKSTONE_BRICK_SLAB", "RESIN_BRICK_SLAB");
 
     private static final List<String> EXCLUDE_BLOCK = List.of("PETRIFIED_OAK_SLAB");
 
