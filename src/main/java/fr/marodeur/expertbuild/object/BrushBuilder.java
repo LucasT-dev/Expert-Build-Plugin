@@ -9,8 +9,6 @@ import fr.marodeur.expertbuild.object.builderObjects.*;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Biome;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +31,6 @@ public class BrushBuilder {
     private Boolean isEnable;
     private Boolean selMode;
     private Boolean flyMode;
-    private Biome biome;
     private Integer radius;
     private int tickRT; // tick repeater
     private Pattern pattern;
@@ -44,14 +41,13 @@ public class BrushBuilder {
      * Create objet BrushBuilder
      */
     public BrushBuilder(UUID uuid, AbstractBrush abstractBrush, Boolean isEnable, Boolean selMode, Boolean flyMode,
-                        Biome biome, Integer rayon, int tickRT, Pattern pattern, UUID particleID) {
+                        Integer rayon, Pattern pattern, UUID particleID) {
 
         this.uuid = uuid;
         this.abstractBrush = abstractBrush;
         this.isEnable = isEnable;
         this.selMode = selMode;
         this.flyMode = flyMode;
-        this.biome = biome;
         this.radius = rayon;
         this.tickRT = tickRT;
         this.pattern = pattern;
@@ -135,11 +131,6 @@ public class BrushBuilder {
         return flyMode;
     }
 
-    public Biome getBiome() {
-        return biome;
-    }
-
-
     public Integer getRadius() {
         return radius;
     }
@@ -188,11 +179,6 @@ public class BrushBuilder {
 
     public BrushBuilder setFlyMode(Boolean flyMode) {
         this.flyMode = flyMode;
-        return this;
-    }
-
-    public BrushBuilder setBiome(Biome biome) {
-        this.biome = biome;
         return this;
     }
 
@@ -255,7 +241,6 @@ public class BrushBuilder {
                 ", isEnable=" + isEnable +
                 ", selMode=" + selMode +
                 ", flyMode=" + flyMode +
-                ", biome=" + biome +
                 ", radius=" + radius +
                 ", tickRT=" + tickRT +
                 ", pattern=" + pattern.toString() +
@@ -315,7 +300,6 @@ public class BrushBuilder {
                 false,
                 true,
                 true,
-                CONFIG.getDefault_biome_brush(),
                 CONFIG.getDefaultBrushRayon(),
                 4,
                 new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),

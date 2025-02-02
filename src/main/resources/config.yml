@@ -41,20 +41,10 @@ build:
   # Use integer value
   default_brush_rayon: 10
 
-  # Default material brush
-  # Default : STONE
-  # Use block name
-  default_material_brush: STONE
-
   # Default pattern brush
   # Default : 1
   # Id of block
   default_pattern_brush: 1
-
-  # Default biomes brush
-  # Default : PLAINS
-  # Use Biome name
-  default_biome_brush: PLAINS
 
   # Percentage of air in the flower brush
   # Default : 10

@@ -4,7 +4,6 @@ import com.sk89q.worldedit.WorldEdit;
 
 import org.bukkit.Material;
 import org.bukkit.Particle;
-import org.bukkit.block.Biome;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -27,9 +26,7 @@ public class Configuration {
     private int max_rayon_brush;
     private int default_brush_rayon;
     private int default_air_brush;
-    private Material default_material_brush;
     private String default_pattern_brush;
-    private Biome default_biome_brush;
     private int max_brush_distance;
 
     private boolean display_bezier_curve;
@@ -91,9 +88,7 @@ public class Configuration {
             this.max_rayon_brush = yml.getInt("build.max_brush_rayon");
             this.default_brush_rayon = yml.getInt("build.default_brush_rayon");
             this.default_air_brush = yml.getInt("build.default_air_brush");
-            this.default_material_brush = Material.valueOf(Objects.requireNonNull(yml.getString("build.default_material_brush")));
             this.default_pattern_brush = yml.getString("build.default_pattern_brush");
-            this.default_biome_brush = Biome.valueOf(Objects.requireNonNull(yml.getString("build.default_biome_brush")));
             this.max_brush_distance = yml.getInt("build.max_brush_distance");
 
             // Particle
@@ -171,14 +166,8 @@ public class Configuration {
     public int getDefault_air_brush() {
         return this.default_air_brush;
     }
-    public Material getDefault_material_brush() {
-        return default_material_brush;
-    }
     public String getDefault_pattern_brush() {
         return default_pattern_brush;
-    }
-    public Biome getDefault_biome_brush() {
-        return default_biome_brush;
     }
     public int getMax_brush_distance() {
         return max_brush_distance;
