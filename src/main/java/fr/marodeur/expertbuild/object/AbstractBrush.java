@@ -66,7 +66,7 @@ public abstract class AbstractBrush {
 
     void execute(BrushBuilder brushBuilder, Material tool, Object loc, Object ploc) {
 
-        if (!brushBuilder.hasPermission(this.getPermission())) {
+        if (!brushBuilder.getPlayer().hasPermission(this.getPermission())) {
             brushBuilder.sendMessage("expbuild.message.permission.no_permission_node", true, new String[]{getPermission()});
             return;
         }
