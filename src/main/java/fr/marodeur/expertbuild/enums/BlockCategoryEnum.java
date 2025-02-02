@@ -21,6 +21,7 @@ public enum BlockCategoryEnum {
     WALL_HANGING_SIGN(new ShapeCategory()),
     PRESSURE_PLATE(new ShapeCategory()),
     SIGN(new ShapeCategory()),
+    WALL_SIGN(new ShapeCategory()),
     SLAB(new ShapeCategory()),
     STAIRS(new ShapeCategory()),
     STRIPPED(new ShapeCategory()),

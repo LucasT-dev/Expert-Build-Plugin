@@ -23,6 +23,7 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.LISON.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.LISON.ScheduledWorkloadRunnable;
+import fr.marodeur.expertbuild.object.block.BlockData;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
 import fr.marodeur.expertbuild.object.guibuilder.InventoryManager;
@@ -133,6 +134,8 @@ public class Main extends JavaPlugin {
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
 
+
+		BlockData blockData = new BlockData();
 	}
 
 	private void registerListeners() {
