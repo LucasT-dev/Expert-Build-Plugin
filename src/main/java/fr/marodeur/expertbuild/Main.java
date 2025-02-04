@@ -33,11 +33,8 @@ import fr.marodeur.expertbuild.object.shape.SphereShape;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
 import java.util.*;
@@ -58,8 +55,6 @@ public class Main extends JavaPlugin {
 	public static InventoryManager inv = new InventoryManager();
 
 	public static final ScheduledWorkloadRunnable scheduledWorkloadRunnable = new ScheduledWorkloadRunnable();
-
-	private static final HashMap<UUID, BrushBuilder> BrushBuilder = new HashMap<>();
 
 	// A supprimer a therme
 	public static String prefix = ("§8[§5§oEXP-Build§8] §l>§l§7 ");
@@ -203,7 +198,7 @@ public class Main extends JavaPlugin {
 
 		Bukkit.getOnlinePlayers().forEach(player -> {
 			if (player.hasPermission("exp.register")) {
-				fr.marodeur.expertbuild.object.BrushBuilder.registerPlayer(player, false);
+				BrushBuilder.registerPlayer(player);
 
 				getLogger().info(new Message.MessageSender("expbuild.message.brush.player_registered", false, new String[]{player.getName()}).getMessage());
 
@@ -268,38 +263,6 @@ public class Main extends JavaPlugin {
 
 	public static Message getFileMessageManager() {
 		return fileMessageManager;
-	}
-
-	public static BrushBuilder getBrushBuilder(@NotNull Player p) {
-		return BrushBuilder.get(p.getUniqueId());
-	}
-
-	public static HashMap<UUID, BrushBuilder> getHashMapBrushBuilder() {
-		return BrushBuilder;
-	}
-
-	/**
-	 *
-	 * Register player in BrushBuilder, using player uuid,
-	 *
-	 * @param brushBuilder register player
-	 * @return brushBuilder
-	 */
-	public static @NotNull BrushBuilder registerBrushBuilder(BrushBuilder brushBuilder) {
-		BrushBuilder.put(brushBuilder.getUUID(), brushBuilder);
-		return brushBuilder;
-	}
-
-	public static @NotNull Boolean containsBrushBuilder(@NotNull Player p) {
-		return BrushBuilder.containsKey(p.getUniqueId());
-	}
-
-	public static void removeBrushBuilder(@NotNull Player p) {
-		BrushBuilder.remove(p.getUniqueId());
-	}
-
-	public static int getBrushBuilderSize() {
-		return BrushBuilder.size();
 	}
 
 	public static DataProfile getDataProfile() {

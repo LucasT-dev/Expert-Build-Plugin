@@ -42,15 +42,15 @@ public class GeneralListener implements Listener {
 
 		if (!p.hasPermission("exp.register")) return;
 
-		if (!Main.containsBrushBuilder(p)) {
-			BrushBuilder bb = BrushBuilder.registerPlayer(p, false);
+		if (!BrushBuilder.containsPlayerBrush(p)) {
+			BrushBuilder bb = BrushBuilder.registerPlayer(p);
 
 			if (conf.getSendMessageBuilderRegister()) {
 				bb.sendMessage("expbuild.message.brush.builder_profile_registered", true);
 			}
 
 		} else {
-			BrushBuilder.registerPlayer(p, Main.getBrushBuilder(p));
+			BrushBuilder.registerPlayer(p);
 		}
 
 		//update system
@@ -89,9 +89,9 @@ public class GeneralListener implements Listener {
 		Player p = e.getPlayer();
 
 		//Clear all particle
-		if (Main.containsBrushBuilder(p)) {
+		if (BrushBuilder.containsPlayerBrush(p)) {
 
-			BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+			BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 			GohaParameter goha_builder = brushBuilder.getGohaParameter();
 
 			goha_builder.setPregen(false)
@@ -138,7 +138,7 @@ public class GeneralListener implements Listener {
 				Repeater rp1 = (Repeater) loc.getBlock().getBlockData();
 				BlockFace blockFace = p.getFacing().getOppositeFace();
 
-				rp1.setDelay(Integer.parseInt(handItemStack.getItemMeta().getLore().get(0).substring(handItemStack.getItemMeta().getLore().get(0).length()-1)));
+				rp1.setDelay(Integer.parseInt(handItemStack.getItemMeta().getLore().getFirst().substring(handItemStack.getItemMeta().getLore().get(0).length()-1)));
 				rp1.setFacing(blockFace);
 
 				loc.getBlock().setBlockData(rp1);
@@ -227,9 +227,9 @@ public class GeneralListener implements Listener {
 	@EventHandler
 	public void onBlockFromTo(BlockFromToEvent e) {
 
-		Main.getHashMapBrushBuilder().forEach((uuid, brushBuilder) -> {
+		BrushBuilder.getBrushBuilderStream().forEach(brushBuilder -> {
 
-			TimelapseBuilderParameter timelapseBuilder = Main.getDataProfile().getTimelapseProfile(uuid);
+			TimelapseBuilderParameter timelapseBuilder = Main.getDataProfile().getTimelapseProfile(brushBuilder.getUUID());
 			Location l = e.getBlock().getLocation();
 
 			if (timelapseBuilder.hasTimelapseRunning()) {

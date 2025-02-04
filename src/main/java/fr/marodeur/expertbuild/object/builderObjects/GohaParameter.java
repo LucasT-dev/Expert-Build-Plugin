@@ -914,7 +914,7 @@ public class GohaParameter extends IDataProfile{
             AbstractShape abstractShape = new SphereShape();
             abstractShape.addParameter("radius", (int) (seven / 1.5));
 
-            bv4.addAll( abstractShape.generateShape(BrushBuilder.getBrushBuilderPlayer(getPlayer(), false), Jcerveau).toList());
+            bv4.addAll( abstractShape.generateShape(BrushBuilder.getBrushBuilderPlayer(getPlayer()), Jcerveau).toList());
 
         }
 

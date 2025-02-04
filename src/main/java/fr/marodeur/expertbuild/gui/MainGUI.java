@@ -31,7 +31,7 @@ public class MainGUI {
                     @Override
                     public void init(Player player, InventoryContents contents) {
 
-                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
                         if (brushBuilder == null) {
                             p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());

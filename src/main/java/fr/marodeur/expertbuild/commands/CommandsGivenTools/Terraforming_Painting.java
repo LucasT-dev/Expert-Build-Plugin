@@ -50,7 +50,7 @@ public class Terraforming_Painting implements CommandExecutor {
 			return false;
 		}
 
-		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
+		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 
 		if (bb == null) {
 			p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());

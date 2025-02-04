@@ -36,7 +36,7 @@ public class FAWEListener implements Listener {
 		Action action = event.getAction();
 		ItemStack it = event.getItem();
 		BukkitPlayer actor = BukkitAdapter.adapt(p);
-		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, false);
+		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 		Logger log = Logger.getLogger("Expert-Build");
 		Configuration conf = Main.getConfiguration();
 		Material mat = conf.getWand_item();

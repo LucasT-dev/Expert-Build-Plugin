@@ -60,7 +60,7 @@ public class CommandTimelapse extends AbstractCommand {
     public void execute(CommandSender executor, Command command, @NotNull String label, @NotNull String[] args) {
 
         Player p = (Player) executor;
-        TimelapseBuilderParameter timelapseBuilder = BrushBuilder.getBrushBuilderPlayer(p, false).getTimeLapseProfile();
+        TimelapseBuilderParameter timelapseBuilder = BrushBuilder.getBrushBuilderPlayer(p).getTimeLapseProfile();
 
         if (args[0].equalsIgnoreCase("start")) {
 

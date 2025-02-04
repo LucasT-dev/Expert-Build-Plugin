@@ -29,7 +29,7 @@ public class LeatherGUI {
                     @Override
                     public void init(Player player, InventoryContents contents) {
 
-                        LeatherParameter leatherParameter = BrushBuilder.getBrushBuilderPlayer(p,false).getLeatherParameter();
+                        LeatherParameter leatherParameter = BrushBuilder.getBrushBuilderPlayer(p).getLeatherParameter();
 
                         contents.set(new ItemData(0, 8, new ItemBuilder("expbuild.message.gui.back", false, Material.PLAYER_HEAD, 1)
                                         .setSkullTextures(RightArrow)

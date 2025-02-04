@@ -399,7 +399,7 @@ public class OrganicGUI {
 
                 .provider(new InventoryProvider() {
 
-                    final BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+                    final BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
                     final GohaParameter goha_builder = brushBuilder.getGohaParameter();
 
                     @Override

@@ -85,7 +85,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("sel_mode")) {
 				if (sender instanceof Player p) {
 
-					BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
+					BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 
 					if (bb.getSelMode().equals(false)) {
 						bb.setSelMode(true)
@@ -104,7 +104,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 			if (args[0].equalsIgnoreCase("fly_mode")) {
 				if (sender instanceof Player p) {
 
-					BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p, true);
+					BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 
 					if (bb.getFlyMode().equals(false)) {
 						bb.setFlyMode(true)

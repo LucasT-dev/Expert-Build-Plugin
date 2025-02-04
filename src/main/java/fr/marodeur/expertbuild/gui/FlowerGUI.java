@@ -54,13 +54,13 @@ public class FlowerGUI {
 
                     @Override
                     public void close(Player player, Inventory inventory) {
-                        buildBrush(BrushBuilder.getBrushBuilderPlayer(p, false));
+                        buildBrush(BrushBuilder.getBrushBuilderPlayer(p));
                     }
 
                     @Override
                     public void init(Player player, InventoryContents contents) {
 
-                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+                        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
                         FlowerBrushParameter fbp = brushBuilder.getFlowerBrushParameter();
 

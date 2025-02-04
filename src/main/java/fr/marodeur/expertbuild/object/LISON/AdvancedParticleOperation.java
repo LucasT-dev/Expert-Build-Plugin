@@ -41,7 +41,7 @@ public class AdvancedParticleOperation implements ScheduledWorkload {
 
         Arrays.stream(rescheduledParticleTable).forEach(rescheduledParticle -> {
 
-            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
             if (rescheduledParticle.particleClearUpdateId) {
                 this.Id = brushBuilder.getParticleID();
@@ -238,14 +238,14 @@ public class AdvancedParticleOperation implements ScheduledWorkload {
 
         private boolean analyseParticleClearOrga(Player p, UUID Id) {
 
-            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
             return brushBuilder.getGohaParameter().getParticleID().equals(Id);
         }
 
         private boolean analyseParticleClearUpdateId(Player p, UUID Id) {
 
-            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+            BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
             return brushBuilder.getParticleID().equals(Id);
 

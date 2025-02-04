@@ -27,7 +27,7 @@ public class BrushListener implements Listener {
         ItemStack it = e.getItem();
         Location loc;
         Configuration conf = Main.getConfiguration();
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         if (brushBuilder == null) {
             return;
@@ -40,7 +40,7 @@ public class BrushListener implements Listener {
 
         if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
 
-            if (!Main.containsBrushBuilder(p)) {
+            if (!BrushBuilder.containsPlayerBrush(p)) {
                 brushBuilder.sendMessage("expbuild.message.brush.player_not_registered", true);
                 return;
             }

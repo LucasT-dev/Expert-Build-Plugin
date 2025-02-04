@@ -46,7 +46,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
     public abstract String getPermission();
 
     public BrushBuilder getBrushBuilder(Player p) {
-        return BrushBuilder.getBrushBuilderPlayer(p, false);
+        return BrushBuilder.getBrushBuilderPlayer(p);
     }
 
     public abstract List<ExecutorType> getExecutorType();
@@ -102,8 +102,8 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         // player has perm but not brushbuilder create
         if (this.optionalConditionExecution(sender).haveBrushBuilderProfile) {
-            if (!Main.containsBrushBuilder((Player) sender)) {
-                BrushBuilder.registerPlayer((Player) sender, false);
+            if (!BrushBuilder.containsPlayerBrush((Player) sender)) {
+                BrushBuilder.registerPlayer((Player) sender);
             }
         }
 
@@ -811,7 +811,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         }
 
         private BrushBuilder getBrushBuilder() {
-            return BrushBuilder.getBrushBuilderPlayer(getPlayer(), false);
+            return BrushBuilder.getBrushBuilderPlayer(getPlayer());
         }
 
         private boolean verifyOptionalCondition() {
@@ -855,7 +855,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
 
         private boolean executeHaveBrushBuilderProfile() {
 
-            if (Main.containsBrushBuilder(this.getPlayer())) {
+            if (BrushBuilder.containsPlayerBrush(this.getPlayer())) {
                 return true;
             } else {
                 new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"'exp.register'"}).send(this.getPlayer());

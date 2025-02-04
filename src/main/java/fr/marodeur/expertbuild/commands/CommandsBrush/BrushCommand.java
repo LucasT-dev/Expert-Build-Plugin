@@ -539,7 +539,7 @@ public class BrushCommand extends AbstractCommand {
             case "register" -> {
 
                 if (args.length <= 1) {
-                    BrushBuilder.registerPlayer(p, false);
+                    BrushBuilder.registerPlayer(p);
                 }
 
                 if (args.length == 2) {
@@ -547,7 +547,7 @@ public class BrushCommand extends AbstractCommand {
                     Bukkit.getOnlinePlayers().stream()
                             .filter(player -> player.getName().equals(args[1]))
                             .forEach(player ->
-                                    p.sendMessage("debug" + BrushBuilder.getBrushBuilderPlayer(player, false).toString()));
+                                    p.sendMessage("debug" + BrushBuilder.getBrushBuilderPlayer(player).toString()));
                 }
             }
 
@@ -730,8 +730,8 @@ public class BrushCommand extends AbstractCommand {
 
     private void clipboardCommand(Player p, String @NotNull [] args, ValidArgument validArgument) {
 
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, true);
-        ClipboardParameter clipboardParameter = BrushBuilder.getBrushBuilderPlayer(p, false).getClipboardParameter();
+        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        ClipboardParameter clipboardParameter = brushBuilder.getClipboardParameter();
 
         if (args[1].equalsIgnoreCase("autoRotate")) {
 

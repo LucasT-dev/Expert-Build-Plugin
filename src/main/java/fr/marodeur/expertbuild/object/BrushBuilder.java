@@ -14,9 +14,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class BrushBuilder {
 
+    private static final HashMap<UUID, BrushBuilder> BRUSH_BUILDER_HASH_MAP = new HashMap<>();
     private static final Configuration CONFIG;
 
     static {
@@ -242,21 +244,18 @@ public class BrushBuilder {
     /**
      * Register BrushBuilder of player in HashMap
      *
-     * @param p Player
-     * @param sendError Boolean
      * @return this
      */
-    public static BrushBuilder registerPlayer(@NotNull Player p, Boolean sendError) {
+    public static BrushBuilder registerPlayer(@NotNull Player p) {
 
-        if (Main.containsBrushBuilder(p)) {
+        if (containsPlayerBrush(p)) {
             p.sendMessage(new Message.MessageSender("expbuild.message.brush.player_already_registered", true).getMessage());
-            return getBrushBuilderPlayer(p, sendError);
+            return getBrushBuilderPlayer(p);
         }
 
         Main.getDataProfile().registerPlayer(p.getUniqueId());
 
-
-        return Main.registerBrushBuilder(new BrushBuilder(p.getUniqueId(),
+        BRUSH_BUILDER_HASH_MAP.put(p.getUniqueId(), new BrushBuilder(p.getUniqueId(),
                 new NoneBrush(),
                 false,
                 true,
@@ -264,21 +263,12 @@ public class BrushBuilder {
                 CONFIG.getDefaultBrushRayon(),
                 new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),
                 UUID.randomUUID()));
+
+        return BrushBuilder.getBrushBuilderPlayer(p);
     }
 
-        /**
-         * Using before player de-connection
-         * When the player login, he retrieves his BrushBuilder profile
-         *
-         * @param p Player
-         * @param brushBuilder BrushBuilder
-         * @return this
-         */
-    public static @NotNull BrushBuilder registerPlayer(@NotNull Player p, BrushBuilder brushBuilder) {
-
-        Main.removeBrushBuilder(p);
-
-        return Main.registerBrushBuilder(brushBuilder);
+    public static boolean containsPlayerBrush(Player p) {
+        return BRUSH_BUILDER_HASH_MAP.containsKey(p.getUniqueId());
     }
 
     /**
@@ -286,27 +276,21 @@ public class BrushBuilder {
      * Get objet BrushBuild associated at the player
      *
      * @param p Player
-     * @param sendError Boolean
      */
-    public static BrushBuilder getBrushBuilderPlayer(@NotNull Player p, Boolean sendError) {
+    public static BrushBuilder getBrushBuilderPlayer(Player p) {
 
-        //if (Main.containsBrushBuilder(p)) {
+        BrushBuilder brushBuilder = BRUSH_BUILDER_HASH_MAP.get(p.getUniqueId());
 
-            BrushBuilder bb = Main.getBrushBuilder(p);
+        if (brushBuilder == null) {
+            throw new NullPointerException(p.getName() + " has not been registered as a builder, for this he must be an operator or have the `exp.register` permission");
+        }
+        return brushBuilder;
+    }
 
-            if (isEmpty(bb)) {
-                throw new NullPointerException(p.getName() + " has not been registered as a builder, for this he must be an operator or have the `exp.register` permission");
-            }
+    public static Stream<BrushBuilder> getBrushBuilderStream() {
 
-            return bb;
+        return BRUSH_BUILDER_HASH_MAP.values().parallelStream();
 
-        //} else {
-
-//            if (sendError) {
-//                LOG.severe(new Message.MessageSender("expbuild.message.error.error_brushbuilder", true, new String[]{p.getName()}).getMessage());
-//            }
-
-        //}
     }
 
     private static boolean isEmpty(BrushBuilder bb) {
