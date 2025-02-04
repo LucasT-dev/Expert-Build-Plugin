@@ -3,6 +3,7 @@ package fr.marodeur.expertbuild.api.fawe;
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
+import com.sk89q.worldedit.command.tool.DistanceWand;
 import com.sk89q.worldedit.extension.input.ParserContext;
 import com.sk89q.worldedit.extension.platform.permission.ActorSelectorLimits;
 import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
@@ -20,9 +21,8 @@ import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.regions.RegionSelector;
 import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
-
 import com.sk89q.worldedit.world.block.BaseBlock;
-import fr.marodeur.expertbuild.Main;
+
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.*;
 
@@ -64,6 +64,10 @@ public class FaweAPI {
 
     private RegionSelector getRegionSelector() {
         return getLocalSession().getRegionSelector(this.bukkitPlayer.getWorld());
+    }
+
+    public boolean getFarwandActived() {
+        return getLocalSession().getTool(bukkitPlayer) instanceof DistanceWand;
     }
 
 

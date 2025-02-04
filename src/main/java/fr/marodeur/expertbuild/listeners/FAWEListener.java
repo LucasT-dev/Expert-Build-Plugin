@@ -51,114 +51,120 @@ public class FAWEListener implements Listener {
 
 		if (it.getType() == mat && p.hasPermission("exp.selection.airpos")) {
 
-			if (action == Action.LEFT_CLICK_AIR && !p.isSneaking()) {
 
-				if (bb.getFlyMode()) {
+			if (!new FaweAPI(p).getFarwandActived()) {
 
-					new FaweAPI(p).setPrimaryPos(BlockVector3.at(
-							p.getLocation().getX(),
-							p.getLocation().getY(),
-							p.getLocation().getZ()));
+				if (action == Action.LEFT_CLICK_AIR && !p.isSneaking()) {
 
-					if (new FaweAPI(p).isCompleteSelection()) {
+					if (bb.getFlyMode()) {
 
-						bb.sendMessage("expbuild.message.selection.set_pos_1_with_area",
-                                true, new String[]{
-								(int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume()) });
+						new FaweAPI(p).setPrimaryPos(BlockVector3.at(
+								p.getLocation().getX(),
+								p.getLocation().getY(),
+								p.getLocation().getZ()));
 
-					} else {
+						if (new FaweAPI(p).isCompleteSelection()) {
 
-						bb.sendMessage("expbuild.message.selection.set_pos_1",
-                                true, new String[]{
-										(int) p.getLocation().getX() + ", "
-												+ (int) p.getLocation().getY() + ", "
-												+ (int) p.getLocation().getZ()
-								});
-					}
-					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//pos1"}).getMessage());
-				}
-			}
-
-			if (action == Action.RIGHT_CLICK_AIR && !p.isSneaking()) {
-
-				if (bb.getFlyMode()) {
-
-					new FaweAPI(p).setSecondaryPos(BlockVector3.at(
-							p.getLocation().getX(),
-							p.getLocation().getY(),
-							p.getLocation().getZ()));
-
-					if (new FaweAPI(p).isCompleteSelection()) {
-
-						bb.sendMessage("expbuild.message.selection.set_pos_2_with_area",
-                                true, new String[]{(int) p.getLocation().getX() + ", "
-										+ (int) p.getLocation().getY() + ", "
-										+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())});
+							bb.sendMessage("expbuild.message.selection.set_pos_1_with_area",
+									true, new String[]{
+											(int) p.getLocation().getX() + ", "
+													+ (int) p.getLocation().getY() + ", "
+													+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())});
 
 						} else {
 
-						bb.sendMessage("expbuild.message.selection.set_pos_2",
-                                true, new String[]{
-										(int) p.getLocation().getX() + ", "
-												+ (int) p.getLocation().getY() + ", "
-												+ (int) p.getLocation().getZ()
-								});
+							bb.sendMessage("expbuild.message.selection.set_pos_1",
+									true, new String[]{
+											(int) p.getLocation().getX() + ", "
+													+ (int) p.getLocation().getY() + ", "
+													+ (int) p.getLocation().getZ()
+									});
+						}
+						if (conf.getlog_shortcut())
+							log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//pos1"}).getMessage());
 					}
-					if (conf.getlog_shortcut()) log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//pos2"}).getMessage());
 				}
-			}
 
-			if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
+				if (action == Action.RIGHT_CLICK_AIR && !p.isSneaking()) {
 
-				try {
+					if (bb.getFlyMode()) {
 
-					Region region = actor.getSelection();
+						new FaweAPI(p).setSecondaryPos(BlockVector3.at(
+								p.getLocation().getX(),
+								p.getLocation().getY(),
+								p.getLocation().getZ()));
 
-					if (region instanceof ConvexPolyhedralRegion) {
+						if (new FaweAPI(p).isCompleteSelection()) {
 
-						List<BlockVector3> BlockVector3 = new ArrayList<>(((ConvexPolyhedralRegion) region).getVertices());
+							bb.sendMessage("expbuild.message.selection.set_pos_2_with_area",
+									true, new String[]{(int) p.getLocation().getX() + ", "
+											+ (int) p.getLocation().getY() + ", "
+											+ (int) p.getLocation().getZ(), String.valueOf(actor.getSelection().getVolume())});
 
-						if (BlockVector3.size() == 3 && conf.getDisplay_convex_line()) {
+						} else {
 
-							for (int i = 1; i < BlockVector3.size(); i++) {
+							bb.sendMessage("expbuild.message.selection.set_pos_2",
+									true, new String[]{
+											(int) p.getLocation().getX() + ", "
+													+ (int) p.getLocation().getY() + ", "
+													+ (int) p.getLocation().getZ()
+									});
+						}
+						if (conf.getlog_shortcut())
+							log.info(new Message.MessageSender("expbuild.message.selection.player_log_command", false, new String[]{p.getName(), "//pos2"}).getMessage());
+					}
+				}
+
+				if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
+
+					try {
+
+						Region region = actor.getSelection();
+
+						if (region instanceof ConvexPolyhedralRegion) {
+
+							List<BlockVector3> BlockVector3 = new ArrayList<>(((ConvexPolyhedralRegion) region).getVertices());
+
+							if (BlockVector3.size() == 3 && conf.getDisplay_convex_line()) {
+
+								for (int i = 1; i < BlockVector3.size(); i++) {
+
+									new AdvancedParticleOperation(p)
+											.lineParticle(
+													new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i)),
+													new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i - 1)),
+													conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+													new AdvancedParticleOperation.RescheduledParticle[]{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true)});
+
+								}
+
+							} else if (BlockVector3.size() > 3 && conf.getDisplay_convex_line()) {
 
 								new AdvancedParticleOperation(p)
 										.lineParticle(
-												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i)),
-												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i-1)),
+												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 1)),
+												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 2)),
 												conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
-												new AdvancedParticleOperation.RescheduledParticle[] { new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true) });
+												new AdvancedParticleOperation.RescheduledParticle[]{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true)});
 
 							}
 
-						} else if (BlockVector3.size() > 3 && conf.getDisplay_convex_line()) {
+							if (conf.isDisplay_bezier_curve()) {
 
-							new AdvancedParticleOperation(p)
-									.lineParticle(
-											new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 1)),
-											new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 2)),
-											conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
-											new AdvancedParticleOperation.RescheduledParticle[] { new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true) });
+								bb.setParticleID();
 
+								new AdvancedParticleOperation(p)
+										.bezierLineParticle(
+												BlockVector3,
+												conf.getParticle_bezier_curve_type(), conf.getCoefficient_particle_number(),
+												new AdvancedParticleOperation.RescheduledParticle[]
+														{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true),
+																new AdvancedParticleOperation.RescheduledParticle().setParticleClearUpdateId(true)});
+							}
 						}
-
-						if (conf.isDisplay_bezier_curve()) {
-
-							bb.setParticleID();
-
-							new AdvancedParticleOperation(p)
-									.bezierLineParticle(
-											BlockVector3,
-											conf.getParticle_bezier_curve_type(), conf.getCoefficient_particle_number(),
-											new AdvancedParticleOperation.RescheduledParticle[]
-													{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true),
-															new AdvancedParticleOperation.RescheduledParticle().setParticleClearUpdateId(true)});
-						}
+					} catch (IncompleteRegionException e) {
+						log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"1", e.toString()}).getMessage());
 					}
-				} catch (IncompleteRegionException e) {
-					log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"1", e.toString()}).getMessage());
 				}
 			}
 		}
@@ -199,10 +205,10 @@ public class FAWEListener implements Listener {
 
 		if (cmd.equals("//sel")) {
 
-			if (Main.containsBrushBuilder(p)) {
+			if (BrushBuilder.containsPlayerBrush(p)) {
 
 				//Clear all particle
-				BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
+				BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 				GohaParameter gohaParameter = brushBuilder.getGohaParameter();
 
 				gohaParameter.setPregen(false)
