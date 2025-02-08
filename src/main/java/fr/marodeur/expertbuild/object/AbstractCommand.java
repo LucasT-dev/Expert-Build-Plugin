@@ -1140,7 +1140,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         public boolean isTypeCategory(String arg) {
             return BlockCategoryEnum.getStreamArray()
                     .filter(blockCategoryEnum -> blockCategoryEnum.getCategoryType() instanceof TypeCategory)
-                    .toList().contains(arg);
+                    .toList().contains(BlockCategoryEnum.valueOf(arg.toUpperCase()));
         }
         public BlockCategoryEnum getTypeCategory(String arg) {
             return BlockCategoryEnum.valueOf(arg.toUpperCase());
@@ -1155,7 +1155,7 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         public boolean isShapeCategory(String arg) {
             return BlockCategoryEnum.getStreamArray()
                     .filter(blockCategoryEnum -> blockCategoryEnum.getCategoryType() instanceof ShapeCategory)
-                    .toList().contains(arg);
+                    .toList().contains(BlockCategoryEnum.valueOf(arg));
         }
         public BlockCategoryEnum getShapeCategory(String arg) {
             return BlockCategoryEnum.valueOf(arg.toUpperCase());

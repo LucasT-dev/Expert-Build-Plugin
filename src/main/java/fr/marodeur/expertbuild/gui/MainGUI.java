@@ -33,11 +33,6 @@ public class MainGUI {
 
                         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
-                        if (brushBuilder == null) {
-                            p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());
-                            return;
-                        }
-
                         contents.set(new ItemData(7, new ItemBuilder("expbuild.message.gui.organic_gui_title", false, Material.BONE, 1)
                                         .addLore("expbuild.message.gui.organic_item", false)
                                         .build(),

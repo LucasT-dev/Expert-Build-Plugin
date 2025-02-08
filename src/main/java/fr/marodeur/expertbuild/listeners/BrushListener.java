@@ -29,10 +29,6 @@ public class BrushListener implements Listener {
         Configuration conf = Main.getConfiguration();
         BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
-        if (brushBuilder == null) {
-            return;
-        }
-
         if (it == null) return;
 
         loc = p.getTargetBlock(null, conf.getMax_brush_distance()).getLocation().clone();

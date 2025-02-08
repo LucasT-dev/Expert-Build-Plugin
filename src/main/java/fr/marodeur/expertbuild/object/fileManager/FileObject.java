@@ -146,7 +146,7 @@ public class FileObject<T> {
 
    public boolean isEmpty() {
 
-       BufferedReader br = null;
+       BufferedReader br;
        try {
            br = new BufferedReader(new FileReader(this.getFilePath()));
            if (br.readLine() == null) {

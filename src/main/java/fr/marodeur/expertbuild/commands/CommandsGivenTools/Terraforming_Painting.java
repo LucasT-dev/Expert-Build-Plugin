@@ -52,11 +52,6 @@ public class Terraforming_Painting implements CommandExecutor {
 
 		BrushBuilder bb = BrushBuilder.getBrushBuilderPlayer(p);
 
-		if (bb == null) {
-			p.sendMessage(new Message.MessageSender("expbuild.message.permission.no_permission_node", true, new String[]{"exp.register"}).getMessage());
-			return false;
-		}
-
 		int slot = p.getInventory().getHeldItemSlot();
 
 		ItemStack itArrow = new ItemBuilder(Material.ARROW, 1).build();

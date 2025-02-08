@@ -52,7 +52,7 @@ public class FAWEListener implements Listener {
 		if (it.getType() == mat && p.hasPermission("exp.selection.airpos")) {
 
 
-			if (!new FaweAPI(p).getFarwandActived()) {
+			if (!new FaweAPI(p).getFarwandActive()) {
 
 				if (action == Action.LEFT_CLICK_AIR && !p.isSneaking()) {
 
@@ -215,7 +215,6 @@ public class FAWEListener implements Listener {
 						.setParticleID()
 						.setStartLoc(null);
 			}
-
 		}
 	}
 }
