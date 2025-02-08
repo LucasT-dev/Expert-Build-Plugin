@@ -66,7 +66,7 @@ public class FaweAPI {
         return getLocalSession().getRegionSelector(this.bukkitPlayer.getWorld());
     }
 
-    public boolean getFarwandActived() {
+    public boolean getFarwandActive() {
         return getLocalSession().getTool(bukkitPlayer) instanceof DistanceWand;
     }
 
@@ -169,10 +169,10 @@ public class FaweAPI {
         Region region = this.bukkitPlayer.getSelection();
         LocalSession session = this.bukkitPlayer.getSession();
 
-        BlockArrayClipboard clipboard;
-        ForwardExtentCopy copy;
-
         try (EditSession editSession = session.createEditSession(this.bukkitPlayer)) {
+
+            BlockArrayClipboard clipboard;
+            ForwardExtentCopy copy;
 
             clipboard = new BlockArrayClipboard(region);
             clipboard.setOrigin(origin.toBlockVector3());
@@ -182,24 +182,26 @@ public class FaweAPI {
             copy.setCopyingBiomes(copingBiomes);
             copy.setCopyingEntities(copingEntities);
 
-
             Operations.complete(copy);
+
+            if (saveInClipboard) {
+                session.setClipboard(new ClipboardHolder(clipboard));
+            }
+
+            if (sendMessage)
+                bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.copy_block", true, new String[]{String.valueOf(region.getVolume())}).getMessage());
+
+            return new ClipboardHolder(clipboard);
         }
-
-        if (saveInClipboard) {
-            session.setClipboard(new ClipboardHolder(clipboard));
-        }
-
-        if (sendMessage) bukkitPlayer.getPlayer().sendMessage(new Message.MessageSender("expbuild.message.selection.copy_block", true, new String[]{String.valueOf(region.getArea())}).getMessage());
-
-        return new ClipboardHolder(clipboard);
     }
 
     public Iterator<BlockVector3> clipboardIterator() {
 
         Region region = this.bukkitPlayer.getSelection();
 
-        return new BlockArrayClipboard(region).iterator();
+        try (BlockArrayClipboard clipboard = new BlockArrayClipboard(region)) {
+            return clipboard.iterator();
+        }
     }
 
     public BlockArrayClipboard getBlockArrayClipboard() {

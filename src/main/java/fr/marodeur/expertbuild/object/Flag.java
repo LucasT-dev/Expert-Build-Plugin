@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.GlueList;
 
 import java.io.File;
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class Flag {
 
-    private GlueList<IndividualFlag> flags;
+    private final GlueList<IndividualFlag> flags;
 
     public Flag(String acceptableValue) {
         flags = new GlueList<>();
@@ -114,6 +115,7 @@ public class Flag {
             fileWriter.write(jsonArray.toString());
             fileWriter.flush();
         } catch (IOException e) {
+            Main.getInstance().getLogger().severe("Failed to save JSON from file:" + filePath.getName() + " : " + e.getMessage());
         }
     }
 
@@ -147,7 +149,7 @@ public class Flag {
             }
 
         } catch (IOException e) {
-            System.err.println("Failed to load JSON from file: " + e.getMessage());
+            Main.getInstance().getLogger().severe("Failed to load JSON from file:" + filePath + " : " + e.getMessage());
         }
         return newFlag;
     }
