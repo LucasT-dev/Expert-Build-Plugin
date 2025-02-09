@@ -11,18 +11,27 @@
 
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <finalName>${project.name}-2.11.1-v${project.version}</finalName>
+        <finalName>${project.name}-2.11.2-v${project.version}</finalName>
         <sourceDirectory>${basedir}</sourceDirectory>
         <resources>
+
             <resource>
                 <filtering>true</filtering>
                 <targetPath>.</targetPath>
                 <directory>${basedir}/src/main/resources/</directory>
                 <includes>
-                    <include>plugin.yml</include>
-                    <include>config.yml</include>
+                    <include>**/*.yml</include>
                 </includes>
             </resource>
+
+            <!-- Inclusion les fichiers YML dans le projet (lang) -->
+            <resource>
+                <directory>${basedir}/src/main/java/</directory>
+                <includes>
+                    <include>**/*.yml</include>
+                </includes>
+            </resource>
+
         </resources>
         <plugins>
             <plugin>
@@ -46,8 +55,8 @@
     </build>
 
     <properties>
-        <maven.compiler.source>${java.version}</maven.compiler.source>
-        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
