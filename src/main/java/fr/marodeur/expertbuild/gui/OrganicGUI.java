@@ -5,6 +5,7 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.builderObjects.GohaParameter;
 import fr.marodeur.expertbuild.object.guibuilder.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -30,6 +31,21 @@ public class OrganicGUI {
                 .ignoreSlot(List.of(0,1,3,4,6,7,9,13,19,21,27,28,30,31,33,34,35,36,38,40,45,47,49,51,52,53))
                 .updateTask(false)
                 .listener(new EventBuilder<>(InventoryClickEvent.class, event -> {
+
+                    final BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+                    final GohaParameter goha_builder = brushBuilder.getGohaParameter();
+
+                    if (goha_builder.getPregen()) {
+
+                        goha_builder.setParticleID();
+
+                        Bukkit.getScheduler().runTaskLater(Main.getInstance(), () -> {
+
+                            goha_builder.getAllPoint()
+                                    .generateAllParticle();
+
+                        }, 2);
+                    }
 
                     /*
                     BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p, false);
@@ -591,9 +607,9 @@ public class OrganicGUI {
                                                 .buildBlock();
                                     }
 
-                                    goha_builder.setPregen(false)
-                                            .setParticleID()
-                                            .setStartLoc(null);
+//                                    goha_builder.setPregen(false)
+//                                            .setParticleID()
+//                                            .setStartLoc(null);
 
                                     contents.updateLore(43, 0, "expbuild.message.gui.click_pregen", false);
 
@@ -823,6 +839,9 @@ public class OrganicGUI {
                                         contents.updateLore(48, 3, "expbuild.message.gui.yaw_level", false, new String[]{String.valueOf(goha_builder.getTibiaGYAngle())});
                                     }
                                 }));
+
+
+
                     }
                 })
                 .build()

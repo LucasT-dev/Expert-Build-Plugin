@@ -127,11 +127,11 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 						/*"C:/Bureau/Serveur MC/Server local paper 1.20.6/plugins/FastAsyncWorldEdit/schematics/test_1_21.schem"*/
 						//(Player) sender);
 
-				System.out.println("BlockData.getDataBlock(Material.STONE) = " + BlockData.getDataBlock(Material.STONE).categoryBlockObject());
-
-				System.out.println("BlockData.containsBlock(Material.BEACON) = " + BlockData.containsBlock(Material.BEACON));
-
-				System.out.println("BlockData.getDataBlock(Material.FEATHER) = " + BlockData.getDataBlock(Material.FEATHER).categoryBlockObject());
+//				System.out.println("BlockData.getDataBlock(Material.STONE) = " + BlockData.getDataBlock(Material.STONE).categoryBlockObject());
+//
+//				System.out.println("BlockData.containsBlock(Material.BEACON) = " + BlockData.containsBlock(Material.BEACON));
+//
+//				System.out.println("BlockData.getDataBlock(Material.FEATHER) = " + BlockData.getDataBlock(Material.FEATHER).categoryBlockObject());
 
 				return false;
 

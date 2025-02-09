@@ -3,7 +3,7 @@ package fr.marodeur.expertbuild.listeners;
 import fr.marodeur.expertbuild.Main;
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.*;
-import fr.marodeur.expertbuild.object.LISON.AdvancedParticleOperation;
+import fr.marodeur.expertbuild.object.lison.AdvancedParticleOperation;
 import fr.marodeur.expertbuild.object.builderObjects.GohaParameter;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;

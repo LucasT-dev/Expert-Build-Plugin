@@ -1,4 +1,4 @@
-package fr.marodeur.expertbuild.object.LISON;
+package fr.marodeur.expertbuild.object.lison;
 
 import java.util.ArrayDeque;
 import java.util.Deque;

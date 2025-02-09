@@ -419,7 +419,6 @@ public class FlowerGUI {
 
             if (event1.isRightClick()) {
                 int candle = Integer.parseInt(baseBlockProperty.getState(PropertyKey.CANDLES).toString());
-                System.out.println("candle = " + candle);
                 baseBlockProperty = baseBlockProperty.with(PropertyKey.CANDLES, candle - 1);
             }
             if (event1.isLeftClick()) {

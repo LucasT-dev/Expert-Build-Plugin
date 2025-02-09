@@ -814,7 +814,6 @@ public class BlockData {
             return dataBlockHashMap.get(material);
 
         else {
-            System.out.println(" material does not exist " + material);
             throw new RuntimeException("Error material does not exist");
         }
     }

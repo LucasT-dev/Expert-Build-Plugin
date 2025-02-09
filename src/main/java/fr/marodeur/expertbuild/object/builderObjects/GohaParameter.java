@@ -7,7 +7,7 @@ import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.AbstractShape;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
 import fr.marodeur.expertbuild.object.BrushBuilder;
-import fr.marodeur.expertbuild.object.LISON.AdvancedParticleOperation;
+import fr.marodeur.expertbuild.object.lison.AdvancedParticleOperation;
 
 import fr.marodeur.expertbuild.object.shape.SphereShape;
 import org.bukkit.Location;

@@ -4,7 +4,7 @@ build:
 
   # Version of your configuration file, normally equivalent to the plugin version.
   # For reasons of safety and proper operation, do not modify this value !!!
-  version: 23
+  version: 24
 
   # Prefix plugin :
   # Default : "§8[§5§oEXP-Build§8] §l>§l§7 "
