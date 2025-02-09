@@ -1,4 +1,4 @@
-package fr.marodeur.expertbuild.object.LISON;
+package fr.marodeur.expertbuild.object.lison;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;

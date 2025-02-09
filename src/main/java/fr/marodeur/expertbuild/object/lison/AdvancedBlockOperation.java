@@ -1,4 +1,4 @@
-package fr.marodeur.expertbuild.object.LISON;
+package fr.marodeur.expertbuild.object.lison;
 
 import fr.marodeur.expertbuild.api.GlueList;
 import fr.marodeur.expertbuild.object.BlockVectorTool;
