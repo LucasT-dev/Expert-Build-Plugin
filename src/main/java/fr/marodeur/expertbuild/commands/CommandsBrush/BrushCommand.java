@@ -65,7 +65,7 @@ public class BrushCommand extends AbstractCommand {
         Pattern pattern;
         Integer radius;
 
-        if (args.length == 1 && !args[0].equalsIgnoreCase("bb") && !args[0].equalsIgnoreCase("blendball")) {
+        if (args.length == 1 && !args[0].equalsIgnoreCase("bb") && !args[0].equalsIgnoreCase("blendball") && !args[0].equalsIgnoreCase("clipboard3D")) {
 
             if (this.getValidArgument().isInteger(args[0], 1, CONFIG.getMaxRayonBrush())) {
                 int rad = this.getValidArgument().getInteger(args[0]);
@@ -233,15 +233,12 @@ public class BrushCommand extends AbstractCommand {
             // TYPE : Brush integer
             case "blendball", "bb" -> {
 
-                System.out.println("args.length = " + args.length);
-
                 if (args.length >= 2) {
 
                     if (this.getValidArgument().isInteger(args[1], 0, CONFIG.getMaxRayonBrush())) {
                         radius = this.getValidArgument().getInteger(args[1]);
                         brushBuilder.setRadius(radius);
                     } else {
-                        System.out.println(" invalid int ");
                         this.getValidArgument().sendMessageInvalidInteger(executor, args[1], 0, CONFIG.getMaxRayonBrush());
                         break;
                     }
