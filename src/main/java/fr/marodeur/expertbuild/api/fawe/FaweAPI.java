@@ -23,7 +23,12 @@ import com.sk89q.worldedit.regions.selector.RegionSelectorType;
 import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.block.BaseBlock;
 
+import com.sk89q.worldedit.world.block.BlockCategory;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import fr.marodeur.expertbuild.api.GlueList;
+import fr.marodeur.expertbuild.api.fawe.function.blockMask.StainedGlassCategory;
+import fr.marodeur.expertbuild.api.fawe.function.blockMask.StainedGlassPaneCategory;
+import fr.marodeur.expertbuild.api.fawe.function.blockMask.StrippedCategory;
 import fr.marodeur.expertbuild.object.*;
 
 import org.bukkit.Chunk;
@@ -35,6 +40,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 public class FaweAPI {
@@ -411,5 +417,88 @@ public class FaweAPI {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+
+    public static void loadBlockCategoriesMask() {
+
+
+        // STAINED GLASS PANE CATEGORY
+
+        StainedGlassCategory stainedGlassCategory = new StainedGlassCategory("stained_glass");
+
+        stainedGlassCategory.getAll().addAll(Arrays.asList(
+                BlockTypes.WHITE_STAINED_GLASS,
+                BlockTypes.GLASS,
+                BlockTypes.WHITE_STAINED_GLASS,
+                BlockTypes.LIGHT_GRAY_STAINED_GLASS,
+                BlockTypes.GRAY_STAINED_GLASS,
+                BlockTypes.BLACK_STAINED_GLASS,
+                BlockTypes.BROWN_STAINED_GLASS,
+                BlockTypes.RED_STAINED_GLASS,
+                BlockTypes.ORANGE_STAINED_GLASS,
+                BlockTypes.YELLOW_STAINED_GLASS,
+                BlockTypes.LIME_STAINED_GLASS,
+                BlockTypes.GREEN_STAINED_GLASS,
+                BlockTypes.CYAN_STAINED_GLASS,
+                BlockTypes.LIGHT_BLUE_STAINED_GLASS,
+                BlockTypes.BLUE_STAINED_GLASS,
+                BlockTypes.PURPLE_STAINED_GLASS,
+                BlockTypes.MAGENTA_STAINED_GLASS,
+                BlockTypes.PINK_STAINED_GLASS)
+        );
+
+        BlockCategory.REGISTRY.register("minecraft:stained_glass", stainedGlassCategory);
+
+
+        // STAINED GLASS PANE CATEGORY
+
+        StainedGlassPaneCategory stainedGlassPaneCategory = new StainedGlassPaneCategory("stained_glass_pane");
+
+        stainedGlassPaneCategory.getAll().addAll(Arrays.asList(
+                BlockTypes.WHITE_STAINED_GLASS_PANE,
+                BlockTypes.GLASS_PANE,
+                BlockTypes.WHITE_STAINED_GLASS_PANE,
+                BlockTypes.LIGHT_GRAY_STAINED_GLASS_PANE,
+                BlockTypes.GRAY_STAINED_GLASS_PANE,
+                BlockTypes.BLACK_STAINED_GLASS_PANE,
+                BlockTypes.BROWN_STAINED_GLASS_PANE,
+                BlockTypes.RED_STAINED_GLASS_PANE,
+                BlockTypes.ORANGE_STAINED_GLASS_PANE,
+                BlockTypes.YELLOW_STAINED_GLASS_PANE,
+                BlockTypes.LIME_STAINED_GLASS_PANE,
+                BlockTypes.GREEN_STAINED_GLASS_PANE,
+                BlockTypes.CYAN_STAINED_GLASS_PANE,
+                BlockTypes.LIGHT_BLUE_STAINED_GLASS_PANE,
+                BlockTypes.BLUE_STAINED_GLASS_PANE,
+                BlockTypes.PURPLE_STAINED_GLASS_PANE,
+                BlockTypes.MAGENTA_STAINED_GLASS_PANE,
+                BlockTypes.PINK_STAINED_GLASS_PANE)
+        );
+
+        BlockCategory.REGISTRY.register("minecraft:stained_glass_pane", stainedGlassPaneCategory);
+
+
+        // STRIPPED CATEGORY
+
+        StrippedCategory strippedCategory = new StrippedCategory("stripped");
+
+        strippedCategory.getAll().addAll(Arrays.asList(
+                BlockTypes.STRIPPED_OAK_WOOD, BlockTypes.STRIPPED_OAK_LOG,
+                BlockTypes.STRIPPED_SPRUCE_WOOD, BlockTypes.STRIPPED_SPRUCE_LOG,
+                BlockTypes.STRIPPED_BIRCH_WOOD, BlockTypes.STRIPPED_BIRCH_LOG,
+                BlockTypes.STRIPPED_JUNGLE_WOOD, BlockTypes.STRIPPED_JUNGLE_LOG,
+                BlockTypes.STRIPPED_ACACIA_WOOD, BlockTypes.STRIPPED_ACACIA_LOG,
+                BlockTypes.STRIPPED_DARK_OAK_WOOD, BlockTypes.STRIPPED_DARK_OAK_LOG,
+                BlockTypes.STRIPPED_MANGROVE_WOOD, BlockTypes.STRIPPED_MANGROVE_LOG,
+                BlockTypes.STRIPPED_CHERRY_WOOD, BlockTypes.STRIPPED_CHERRY_LOG,
+                BlockTypes.STRIPPED_WARPED_HYPHAE, BlockTypes.STRIPPED_WARPED_STEM,
+                BlockTypes.STRIPPED_CRIMSON_HYPHAE, BlockTypes.STRIPPED_CRIMSON_STEM,
+                BlockTypes.STRIPPED_BAMBOO_BLOCK
+        ));
+
+        BlockCategory.REGISTRY.register("minecraft:stripped", strippedCategory);
+
     }
 }

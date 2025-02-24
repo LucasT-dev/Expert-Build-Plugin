@@ -1,10 +1,8 @@
 package fr.marodeur.expertbuild;
 
-import com.sk89q.worldedit.world.block.BlockCategory;
-
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.SquarePatternParser;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.TypeChangeParser;
-import fr.marodeur.expertbuild.api.fawe.function.blockMask.StrippedCategoryMask;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
 import fr.marodeur.expertbuild.commands.CommandAutoCb;
 import fr.marodeur.expertbuild.commands.CommandConvertSlab.CommandConvertSlab;
@@ -124,7 +122,6 @@ public class Main extends JavaPlugin {
 
 		// LOAD MASK
 		registerMaskAndPattern();
-
 
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
@@ -249,7 +246,11 @@ public class Main extends JavaPlugin {
 
 		try {
 			// BlockCategory mask
-			BlockCategory.REGISTRY.register("minecraft:stripped", new StrippedCategoryMask("stripped") );
+			//BlockCategory.REGISTRY.register("minecraft:stripped", new StrippedCategoryMask("stripped") );
+
+
+			FaweAPI.loadBlockCategoriesMask();
+
 		} catch (IllegalStateException ignored) {
 
 		}
