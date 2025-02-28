@@ -2,6 +2,7 @@ package fr.marodeur.expertbuild.object;
 
 import com.sk89q.worldedit.WorldEdit;
 
+import fr.marodeur.expertbuild.Main;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,8 +17,6 @@ public class Configuration {
 
     File file = new File("plugins/ExpertBuild/config.yml");
     FileConfiguration yml = YamlConfiguration.loadConfiguration(file);
-
-    private final static String latestVersion = "24";
 
     private final Logger log = Logger.getLogger("Expert-Build");
 
@@ -40,6 +39,7 @@ public class Configuration {
     private int period_particle;
 
     private boolean wand_click_in_air;
+    private boolean default_on_the_fly_selection;
     private boolean sihft_click_with_wand;
     private boolean log_shortcut;
     private Material wand_item;
@@ -103,6 +103,7 @@ public class Configuration {
             this.period_particle = yml.getInt("build.period_particle");
 
             this.wand_click_in_air = yml.getBoolean("build.wand_click_in_air");
+            this.default_on_the_fly_selection = yml.getBoolean("build.default_on_the_fly_selection");
             this.sihft_click_with_wand = yml.getBoolean("build.sihft_click_with_wand");
             this.log_shortcut = yml.getBoolean("build.logShortcut");
             this.wand_item = Material.matchMaterial(WorldEdit.getInstance().getConfiguration().wandItem.replace("minecraft:", ""));
@@ -202,6 +203,11 @@ public class Configuration {
     public boolean isWand_click_in_air() {
         return wand_click_in_air;
     }
+
+    public boolean getDefault_on_the_fly_selection() {
+        return default_on_the_fly_selection;
+    }
+
     public boolean isSihft_click_with_wand() {
         return sihft_click_with_wand;
     }
@@ -289,7 +295,7 @@ public class Configuration {
 
             this.version = this.yml.getString("build.version");
 
-            return !this.version.equals(latestVersion);
+            return !this.version.equals(Main.getDataPlugin().getLatestConfigVersion());
 
         } catch (NullPointerException ignorred) {
             yml.set("build.version", "1.18.1.6");
@@ -517,6 +523,19 @@ public class Configuration {
 
         if (this.version.equals("24")) {
             //Update config file from 24 to 25
+
+            // Default player on the fly selection mode
+            yml.set("build.default_on_the_fly_selection", true);
+
+            yml.set("build.version", "25");
+            this.version = "25";
+
+            yml.save(file);
+            //for next update
+        }
+
+        if (this.version.equals("25")) {
+            //Update config file from 25 to 26
 
             //for next update
         }

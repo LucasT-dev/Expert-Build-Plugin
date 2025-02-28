@@ -5,6 +5,7 @@ import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.lison.AdvancedParticleOperation;
 import fr.marodeur.expertbuild.object.builderObjects.GohaParameter;
+
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitPlayer;
@@ -117,72 +118,75 @@ public class FAWEListener implements Listener {
 
 				if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK && !p.isSneaking()) {
 
-					try {
+					if (bb.getFlyMode()) {
 
-						Region region = actor.getSelection();
+						try {
 
-						if (region instanceof ConvexPolyhedralRegion) {
+							Region region = actor.getSelection();
 
-							List<BlockVector3> BlockVector3 = new ArrayList<>(((ConvexPolyhedralRegion) region).getVertices());
+							if (region instanceof ConvexPolyhedralRegion) {
 
-							if (BlockVector3.size() == 3 && conf.getDisplay_convex_line()) {
+								List<BlockVector3> BlockVector3 = new ArrayList<>(((ConvexPolyhedralRegion) region).getVertices());
 
-								for (int i = 1; i < BlockVector3.size(); i++) {
+								if (BlockVector3.size() == 3 && conf.getDisplay_convex_line()) {
+
+									for (int i = 1; i < BlockVector3.size(); i++) {
+
+										new AdvancedParticleOperation(p)
+												.lineParticle(
+														new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i)),
+														new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i - 1)),
+														conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
+														new AdvancedParticleOperation.RescheduledParticle[]{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true)});
+
+									}
+
+								} else if (BlockVector3.size() > 3 && conf.getDisplay_convex_line()) {
 
 									new AdvancedParticleOperation(p)
 											.lineParticle(
-													new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i)),
-													new BlockVectorTool().toBlockVectorTool(BlockVector3.get(i - 1)),
+													new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 1)),
+													new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 2)),
 													conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
 													new AdvancedParticleOperation.RescheduledParticle[]{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true)});
 
 								}
 
-							} else if (BlockVector3.size() > 3 && conf.getDisplay_convex_line()) {
+								if (conf.isDisplay_bezier_curve()) {
 
-								new AdvancedParticleOperation(p)
-										.lineParticle(
-												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 1)),
-												new BlockVectorTool().toBlockVectorTool(BlockVector3.get(BlockVector3.size() - 2)),
-												conf.getParticle_convex_type_line(), conf.getSpacing_between_particles(),
-												new AdvancedParticleOperation.RescheduledParticle[]{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true)});
+									bb.setParticleID();
 
+									new AdvancedParticleOperation(p)
+											.bezierLineParticle(
+													BlockVector3,
+													conf.getParticle_bezier_curve_type(), conf.getCoefficient_particle_number(),
+													new AdvancedParticleOperation.RescheduledParticle[]
+															{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true),
+																	new AdvancedParticleOperation.RescheduledParticle().setParticleClearUpdateId(true)});
+								}
 							}
-
-							if (conf.isDisplay_bezier_curve()) {
-
-								bb.setParticleID();
-
-								new AdvancedParticleOperation(p)
-										.bezierLineParticle(
-												BlockVector3,
-												conf.getParticle_bezier_curve_type(), conf.getCoefficient_particle_number(),
-												new AdvancedParticleOperation.RescheduledParticle[]
-														{new AdvancedParticleOperation.RescheduledParticle().setParticleClearRegion(true),
-																new AdvancedParticleOperation.RescheduledParticle().setParticleClearUpdateId(true)});
-							}
+						} catch (IncompleteRegionException e) {
+							log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"1", e.toString()}).getMessage());
 						}
-					} catch (IncompleteRegionException e) {
-						log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"1", e.toString()}).getMessage());
 					}
 				}
 			}
 		}
+//		if (it.getType() == mat && p.hasPermission("exp.selection.clearselection")) {
+//
+//			if (action == Action.RIGHT_CLICK_BLOCK) {
+//				try {
+//
+//					actor.getSelection();
+//
+//				} catch (IncompleteRegionException e) {
+//					log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"3", e.toString()}).getMessage());
+//				}
+//			}
+//		}
 		if (it.getType() == mat && p.hasPermission("exp.selection.clearselection")) {
 
-			if (action == Action.RIGHT_CLICK_BLOCK) {
-				try {
-
-					actor.getSelection();
-
-				} catch (IncompleteRegionException e) {
-					log.info(new Message.MessageSender("expbuild.message.error.error_region", false, new String[]{"3", e.toString()}).getMessage());
-				}
-			}
-		}
-		if (p.hasPermission("exp.selection.clearselection")) {
-
-			if (action == Action.RIGHT_CLICK_AIR && p.isSneaking() && it.getType() == mat) {
+			if (action == Action.RIGHT_CLICK_AIR && p.isSneaking()) {
 
 				if (!conf.isSihft_click_with_wand() || bb.getSelMode().equals(false)) {
 					return;

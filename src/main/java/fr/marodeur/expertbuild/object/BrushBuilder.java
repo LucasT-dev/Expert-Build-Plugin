@@ -259,7 +259,7 @@ public class BrushBuilder {
                 new NoneBrush(),
                 false,
                 true,
-                true,
+                CONFIG.getDefault_click_fly_selection(),
                 CONFIG.getDefaultBrushRayon(),
                 new FaweAPI(p).getPattern(CONFIG.getDefault_pattern_brush()),
                 UUID.randomUUID()));

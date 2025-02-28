@@ -99,6 +99,12 @@ build:
   # Use boolean value (true / false)
   wand_click_in_air: true
 
+  # By default, on-the-fly selection is enabled for the player?
+  # If wand_click_in_air is true, player execute /expbuild fly_mode for disable/enable
+  # Default : true
+  # Use boolean value : (true / false)
+  default_on_the_fly_selection: true
+
   # Player can clear selection using shift click with wand
   # Default : false
   # Use boolean value (true / false)

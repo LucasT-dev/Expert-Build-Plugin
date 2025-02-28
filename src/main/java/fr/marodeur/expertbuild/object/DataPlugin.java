@@ -16,6 +16,8 @@ public class DataPlugin {
     private static final int SPIGOT_MC_ID = 110059;
     private static final int BSTATS_ID = 16755;
 
+    private static final String LATEST_CONFIG_VERSION = "25";
+
     private final String pluginVersion;
     public String latestVersion;
     public String lateVersion;
@@ -50,6 +52,10 @@ public class DataPlugin {
 
     public String getPluginVersion() {
         return pluginVersion;
+    }
+
+    public String getLatestConfigVersion() {
+        return LATEST_CONFIG_VERSION;
     }
 
     public String getLatestVersion() {
