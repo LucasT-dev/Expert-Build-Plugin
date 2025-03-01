@@ -27,19 +27,20 @@ public class BrushListener implements Listener {
         ItemStack it = e.getItem();
         Location loc;
         Configuration conf = Main.getConfiguration();
-        BrushBuilder brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
+        BrushBuilder brushBuilder;
 
         if (it == null) return;
+
+        if (! BrushBuilder.containsPlayerBrush(p)) {
+            return;
+        }
+
+        brushBuilder = BrushBuilder.getBrushBuilderPlayer(p);
 
         loc = p.getTargetBlock(null, conf.getMax_brush_distance()).getLocation().clone();
 
 
         if (action == Action.LEFT_CLICK_AIR && it.getType() == Material.HONEYCOMB) {
-
-            if (!BrushBuilder.containsPlayerBrush(p)) {
-                brushBuilder.sendMessage("expbuild.message.brush.player_not_registered", true);
-                return;
-            }
 
             if (!p.hasPermission("exp.gui.main")) return;
 
