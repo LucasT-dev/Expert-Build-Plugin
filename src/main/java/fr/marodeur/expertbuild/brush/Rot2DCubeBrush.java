@@ -69,7 +69,7 @@ public class Rot2DCubeBrush extends AbstractBrush {
         point.add(BlockVector2.at(l3.getBlockX(), l3.getBlockZ()));
 
 
-        Polygonal2DRegionSelector polygonal2DRegionSelector = new Polygonal2DRegionSelector(BukkitAdapter.adapt(l.getWorld()), point, l.getBlockY(), l.getBlockY() + radiusCube);
+        Polygonal2DRegionSelector polygonal2DRegionSelector = new Polygonal2DRegionSelector(BukkitAdapter.adapt(l.getWorld()), point, l.getBlockY(), l.getBlockY() + radiusCube*2);
 
         polygonal2DRegionSelector.getRegion().forEach(bv3 ->  this.addBlock(new BlockVectorTool(bv3.x(), bv3.y(), bv3.z())));
 
