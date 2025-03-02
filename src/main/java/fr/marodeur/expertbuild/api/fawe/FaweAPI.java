@@ -34,7 +34,6 @@ import fr.marodeur.expertbuild.object.*;
 import org.bukkit.Chunk;
 import org.bukkit.Warning;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -77,16 +76,12 @@ public class FaweAPI {
     }
 
 
-    public FaweAPI setSelectionType(@NotNull RegionSelectorType regionSelectorType) {
-
+    public void setSelectionType(RegionSelectorType regionSelectorType) {
         this.getLocalSession().setRegionSelector(this.bukkitPlayer.getWorld(), regionSelectorType.createSelector());
-        return this;
     }
 
-    public FaweAPI setPrimaryPos(BlockVector3 bv3) {
-
+    public void setPrimaryPos(BlockVector3 bv3) {
         this.getRegionSelector().selectPrimary(bv3, ActorSelectorLimits.forActor(this.bukkitPlayer));
-        return this;
     }
 
     public BlockVector3 getPrimaryPos() {
