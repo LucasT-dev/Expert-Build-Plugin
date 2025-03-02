@@ -65,7 +65,7 @@ public class BrushCommand extends AbstractCommand {
         Pattern pattern;
         Integer radius;
 
-        if (args.length == 1 && !args[0].equalsIgnoreCase("bb") && !args[0].equalsIgnoreCase("blendball") && !args[0].equalsIgnoreCase("clipboard3D")) {
+        if (args.length == 1 && !args[0].equalsIgnoreCase("bb") && !args[0].equalsIgnoreCase("blendball") && !args[0].equalsIgnoreCase("clipboard3D") && !args[0].equalsIgnoreCase("none")) {
 
             if (this.getValidArgument().isInteger(args[0], 1, CONFIG.getMaxRayonBrush())) {
                 int rad = this.getValidArgument().getInteger(args[0]);
