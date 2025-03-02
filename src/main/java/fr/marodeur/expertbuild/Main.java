@@ -243,11 +243,7 @@ public class Main extends JavaPlugin {
 		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new SquarePatternParser(getWorldEditPlugin().getWorldEdit()));
 		WorldEditPlugin.getWorldEdit().getPatternFactory().register(new TypeChangeParser(getWorldEditPlugin().getWorldEdit()));
 
-
 		try {
-			// BlockCategory mask
-			//BlockCategory.REGISTRY.register("minecraft:stripped", new StrippedCategoryMask("stripped") );
-
 
 			FaweAPI.loadBlockCategoriesMask();
 

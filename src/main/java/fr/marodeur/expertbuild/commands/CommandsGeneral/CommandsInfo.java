@@ -1,16 +1,15 @@
 package fr.marodeur.expertbuild.commands.CommandsGeneral;
 
 import fr.marodeur.expertbuild.Main;
+import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
-import fr.marodeur.expertbuild.object.block.BlockData;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -122,6 +121,11 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 
 			if(args[0].equalsIgnoreCase("test")) {
+
+				if (sender instanceof Player p) {
+
+					//new FaweAPI(p).convertSchem(p);
+				}
 
 				//SchematicDowngradeHandler.readSchematic("C:/Bureau/Serveur MC/Server local paper 1.20.6/plugins/FastAsyncWorldEdit/schematics/test_1_21.schem",
 						/*"C:/Bureau/Serveur MC/Server local paper 1.20.6/plugins/FastAsyncWorldEdit/schematics/test_1_21.schem"*/
