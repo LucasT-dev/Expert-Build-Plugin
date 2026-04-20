@@ -122,8 +122,8 @@ public class CommandTimelapse extends AbstractCommand {
 
                 // FAWE LIMIT
                 if (actor.getLimit().MAX_CHANGES()) {
-                    if (r.getVolume() > actor.getLimit().MAX_CHANGES & actor.getLimit().MAX_CHANGES != -1) {
-                        timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses", true, new String[]{Long.toString(actor.getLimit().MAX_CHANGES)});
+                    if (r.getVolume() > actor.getLimit().MAX_CHANGES.get() && actor.getLimit().MAX_CHANGES.get() != -1) {
+                        timelapseBuilder.sendMessage("expbuild.message.commands.too_many_timelapses", true, new String[]{Long.toString(actor.getLimit().MAX_CHANGES.get())});
                         return;
                     }
                 }
