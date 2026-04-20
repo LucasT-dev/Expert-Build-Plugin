@@ -1,7 +1,6 @@
 package fr.marodeur.expertbuild.commands.CommandsGeneral;
 
 import fr.marodeur.expertbuild.Main;
-import fr.marodeur.expertbuild.api.fawe.FaweAPI;
 import fr.marodeur.expertbuild.object.BrushBuilder;
 import fr.marodeur.expertbuild.object.Message;
 
@@ -121,6 +120,7 @@ public class CommandsInfo implements CommandExecutor, TabCompleter {
 
 
 			if(args[0].equalsIgnoreCase("test")) {
+
 
 				if (sender instanceof Player p) {
 

@@ -220,7 +220,6 @@ public class BrushBuilder {
                 '}';
     }
 
-
     //OPERATION
 
     public void executeBrush(BrushBuilder brushBuilder, Material tool, Object loc, Object ploc) {

@@ -1,7 +1,6 @@
 package fr.marodeur.expertbuild.object.guibuilder;
 
 import fr.marodeur.expertbuild.Main;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -14,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Inventory {
 
-    Component title;
+    String title;
     private InventoryProvider inventoryProvider;
     private static InventoryManager manager;
     private org.bukkit.inventory.Inventory inventories;
@@ -103,9 +102,7 @@ public class Inventory {
 
     public void placeItem(InventoryContents contents) {
 
-
         contents.inventoryData().forEach(itemData -> this.inventories.setItem(itemData.slot(), itemData.itemBuilder()));
-
 
     }
 
@@ -118,9 +115,7 @@ public class Inventory {
         }
     }
 
-
-
-    public Component title() {
+    public String title() {
         return title;
     }
 
@@ -180,15 +175,15 @@ public class Inventory {
 
         }
 
-        public InventoryBuilder setTitle(Component title) {
+        public InventoryBuilder setTitle(String title) {
             this.inventory.title = title;
             return this;
         }
 
-        public InventoryBuilder setTitle(String title) {
-            this.inventory.title = Component.text(title);
-            return this;
-        }
+//        public InventoryBuilder setTitle(String title) {
+//            this.inventory.title = Component.text(title);
+//            return this;
+//        }
 
 
         public InventoryBuilder setSize(int size) {

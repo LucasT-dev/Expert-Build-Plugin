@@ -31,6 +31,10 @@ import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -772,6 +776,23 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
             return this;
         }
 
+        public SubCommandSelector getSchematicList(@NotNull String[] args, int argsIndex) {
+            this.argsIndex = argsIndex;
+
+            if (args.length == argsIndex  + 1 ) {
+
+                try (Stream<Path> paths = Files.walk(Paths.get("plugins/FastAsyncWorldEdit/schematics"))) {
+                    paths
+                            .filter(Files::isRegularFile)
+                            .forEach(path -> this.subCommand.add(path.getFileName().toString()));
+
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+                return this;
+        }
+
 
         public List<SubCommandSender.SubCommand> toSubCommand(String permission) {
             List<SubCommandSender.SubCommand> subCommandsList = new ArrayList<>();
@@ -1164,7 +1185,6 @@ public abstract class AbstractCommand implements TabCompleter, CommandExecutor {
         public void sendMessageInvalidShapeCategory(@NotNull CommandSender sender, String arg) {
             new Message.MessageSender("expbuild.message.error.invalid_argument", true, new String[]{arg, "ShapeCategory"}).send(sender);
         }
-
 
 
 

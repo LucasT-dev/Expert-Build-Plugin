@@ -2,7 +2,6 @@ package fr.marodeur.expertbuild.object.guibuilder;
 
 import fr.marodeur.expertbuild.object.ItemBuilder;
 import fr.marodeur.expertbuild.object.Message;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -86,22 +85,27 @@ public class InventoryContents implements Cloneable{
     public void updateLore(@Nonnegative int slot, @Nonnegative int line, String lore) {
 
         if (this.containsSlot(slot)) {
-
             ItemData itemData = this.getItemData(slot);
+            ItemStack item = itemData.itemBuilder();
 
-            ItemStack it = itemData.itemBuilder();
+            if (!item.hasItemMeta()) return;
 
-            List<String> lores = it.getLore();
+            ItemMeta meta = item.getItemMeta();
+            if (meta == null) return;
 
-            if (line <= (lores.size()-1)) {
+            List<String> loreList = meta.hasLore() ? meta.getLore() : new ArrayList<>();
 
-                lores.set(line, lore);
-
-                List<Component> componentList = new ArrayList<>();
-                lores.forEach(string -> componentList.add(Component.newline().content(string)));
-
-                it.lore(componentList);
+            // Assure la taille de la liste
+            while (loreList.size() <= line) {
+                loreList.add("");
             }
+
+            // Met à jour la ligne ciblée
+            loreList.set(line, lore);
+
+            meta.setLore(loreList);
+            item.setItemMeta(meta);
+
         }
     }
     public void updateLore(int slot, @Nonnegative int line, String path, boolean prefix, String[]... var) {

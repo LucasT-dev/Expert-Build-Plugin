@@ -35,10 +35,7 @@ import org.bukkit.Chunk;
 import org.bukkit.Warning;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -95,22 +92,19 @@ public class FaweAPI {
 
     }
 
-    public FaweAPI setSecondaryPos(BlockVector3 bv3) {
+    public void setSecondaryPos(BlockVector3 bv3) {
 
         this.getRegionSelector().selectSecondary(bv3, ActorSelectorLimits.forActor(bukkitPlayer));
-        return this;
     }
 
-    public FaweAPI clearSelection() {
+    public void clearSelection() {
 
         this.getRegionSelector().clear();
-        return this;
     }
 
-    public FaweAPI refreshChunk(@NotNull Chunk chunk) {
+    public void refreshChunk(Chunk chunk) {
 
         this.bukkitPlayer.getWorldForEditing().refreshChunk(chunk.getX(), chunk.getZ());
-        return this;
     }
 
 

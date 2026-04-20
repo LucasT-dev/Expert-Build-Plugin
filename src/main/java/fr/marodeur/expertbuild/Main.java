@@ -1,6 +1,7 @@
 package fr.marodeur.expertbuild;
 
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
+import fr.marodeur.expertbuild.api.fawe.factory.parser.ColorPatternParser;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.SquarePatternParser;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.TypeChangeParser;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
@@ -117,7 +118,7 @@ public class Main extends JavaPlugin {
 
 		registerPlayerBuilder();
 
-		// LISON
+		// Particle manager
 		new LightweightInteractiveSystemforOptimizedParticleNavigation().loadSchedule();
 
 		// LOAD MASK

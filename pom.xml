@@ -6,12 +6,12 @@
 
     <groupId>fr.marodeur</groupId>
     <artifactId>expertbuild</artifactId>
-    <version>1.18.1.25</version>
+    <version>1.18.1.26</version>
     <name>Expert-Build</name>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <finalName>${project.name}-2.11.2-v${project.version}</finalName>
+        <finalName>${project.name}-2.15.0-v${project.version}</finalName>
         <sourceDirectory>${basedir}</sourceDirectory>
         <resources>
 
@@ -101,7 +101,7 @@
             <dependency>
                 <groupId>com.intellectualsites.bom</groupId>
                 <artifactId>bom-newest</artifactId> <!--  Ref: https://github.com/IntellectualSites/bom -->
-                <version>1.45</version>
+                <version>1.48</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -136,14 +136,14 @@
         <dependency>
             <groupId>com.fastasyncworldedit</groupId>
             <artifactId>FastAsyncWorldEdit-Core</artifactId>
-            <version>2.11.2</version>
+            <version>2.15.0</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>com.fastasyncworldedit</groupId>
             <artifactId>FastAsyncWorldEdit-Bukkit</artifactId>
-            <version>2.11.2</version>
+            <version>2.15.0</version>
 
             <scope>provided</scope>
             <exclusions>
