@@ -1,7 +1,6 @@
 package fr.marodeur.expertbuild;
 
 import fr.marodeur.expertbuild.api.fawe.FaweAPI;
-import fr.marodeur.expertbuild.api.fawe.factory.parser.ColorPatternParser;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.SquarePatternParser;
 import fr.marodeur.expertbuild.api.fawe.factory.parser.TypeChangeParser;
 import fr.marodeur.expertbuild.commands.AreaTimerCommand;
@@ -22,7 +21,6 @@ import fr.marodeur.expertbuild.object.*;
 import fr.marodeur.expertbuild.object.lison.LightweightInteractiveSystemforOptimizedParticleNavigation;
 import fr.marodeur.expertbuild.object.lison.ScheduledWorkload;
 import fr.marodeur.expertbuild.object.lison.ScheduledWorkloadRunnable;
-import fr.marodeur.expertbuild.object.block.BlockData;
 import fr.marodeur.expertbuild.object.builderObjects.DataProfile;
 import fr.marodeur.expertbuild.object.fileManager.FileManager;
 import fr.marodeur.expertbuild.object.guibuilder.InventoryManager;
@@ -96,10 +94,10 @@ public class Main extends JavaPlugin {
 		getLogger().info("FAWE server version : " + dataPlugin.getFaweVersion());
 		getLogger().info("This plugin is not affiliated with Microsoft and Mojang Studios");
 
-		WorldEditPlugin = (WorldEditPlugin)getServer().getPluginManager().getPlugin("WorldEdit");
+		WorldEditPlugin = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
 
 		// Check if server is in safe environments
-		if (dataPlugin.getJavaVersion() < 16) onDisable();
+		if (dataPlugin.getJavaVersion() < 25) onDisable();
 
 		loadBrush();
 		loadShape();
@@ -127,8 +125,7 @@ public class Main extends JavaPlugin {
 		// UPDATE CHECKER
 		getServer().getConsoleSender().sendMessage(new Message.MessageSender("expbuild.message.main.checking_update", true).getMessage());
 
-
-		BlockData blockData = new BlockData();
+		//BlockData blockData = new BlockData();
 	}
 
 	private void registerListeners() {

@@ -125,4 +125,18 @@ public class DataPlugin {
             return Bukkit.getOnlinePlayers().size();
         }));
     }
+
+
+    @Override
+    public String toString() {
+        return "DataPlugin{" +
+                "pluginVersion='" + pluginVersion + '\'' +
+                ", latestVersion='" + latestVersion + '\'' +
+                ", lateVersion='" + lateVersion + '\'' +
+                ", javaVersion=" + javaVersion +
+                ", bukkitVersion='" + bukkitVersion + '\'' +
+                ", FaweVersion='" + FaweVersion + '\'' +
+                ", hasPlotSquared=" + hasPlotSquared +
+                '}';
+    }
 }
